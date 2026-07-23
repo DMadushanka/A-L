@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="si">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2023 ‌බෞද්ධ ශිෂ්ටාචාරය I පත්‍රය</title>
+<meta property="og:type" content="website">
+<meta property="og:title" content="2023 ‌බෞද්ධ ශිෂ්ටාචාරය I පත්‍රය">
+<meta property="og:description" content="2023 ‌බෞද්ධ ශිෂ්ටාචාරය I පත්‍රය">
+<meta property="og:image" content="BC4.png">
+<meta property="og:image:type" content="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@500;600;700&family=Noto+Sans+Sinhala:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#f1e6cd;
+    --paper-1:#e9dab5;
+    --paper-2:#e0cd9f;
+    --line:#c7ad78;
+    --ink:#3a2c18;
+    --ink-dim:#7a6743;
+    --seal:#93342b;
+    --seal-soft:#b8564a;
+    --leaf:#4c6b41;
+    --good:#3f7a4e;
+    --bad:#a13f34;
+    --radius:6px;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(ellipse at 50% -10%, rgba(147,52,43,0.05), transparent 45%),
+      var(--paper);
+    background-image:
+      repeating-linear-gradient(90deg, rgba(122,103,67,0.035) 0px, rgba(122,103,67,0.035) 1px, transparent 1px, transparent 34px);
+    color:var(--ink);
+    font-family:'Noto Sans Sinhala','Noto Sans',sans-serif;
+    min-height:100vh;
+    display:flex;
+    justify-content:center;
+    padding:28px 14px 60px;
+  }
+  .stage{ width:100%; max-width:740px; }
+
+  .masthead{ text-align:center; margin-bottom:20px; }
+  .masthead .kicker{
+    font-size:11.5px;
+    letter-spacing:.16em;
+    color:var(--seal);
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:8px;
+    font-weight:600;
+  }
+  .masthead h1{
+    font-family:'Noto Serif Sinhala',serif;
+    font-weight:700;
+    font-size:clamp(22px,4.6vw,30px);
+    margin:0 0 6px;
+    color:var(--ink);
+  }
+  .masthead p{ margin:0; color:var(--ink-dim); font-size:13.5px; }
+  .rule{
+    width:70px; height:2px; background:var(--seal); margin:14px auto 0; border-radius:2px;
+  }
+
+  /* Leaf-strip navigator: horizontal scroll of numbered tabs */
+  .leaf-strip{
+    display:flex;
+    gap:6px;
+    overflow-x:auto;
+    padding:12px 10px;
+    margin:22px 0 20px;
+    background:var(--paper-1);
+    border:1px solid var(--line);
+    border-radius:999px;
+    scrollbar-width:thin;
+  }
+  .leaf-strip::-webkit-scrollbar{ height:4px; }
+  .leaf-strip::-webkit-scrollbar-thumb{ background:var(--line); border-radius:3px; }
+  .leaf-tab{
+    flex:0 0 auto;
+    width:32px; height:32px;
+    border-radius:50%;
+    background:var(--paper);
+    border:1px solid var(--line);
+    color:var(--ink-dim);
+    font-size:12.5px;
+    display:flex; align-items:center; justify-content:center;
+    cursor:pointer;
+    transition:all .12s ease;
+  }
+  .leaf-tab:hover{ border-color:var(--seal); color:var(--seal); }
+  .leaf-tab.current{ background:var(--seal); border-color:var(--seal); color:var(--paper); font-weight:700; }
+  .leaf-tab.answered{ background:var(--paper-2); color:var(--seal); border-color:var(--seal-soft); }
+  .leaf-tab.answered.wrong{ border-color:var(--bad); color:var(--bad); }
+
+  /* Card = ola leaf */
+  .card{
+    position:relative;
+    background:var(--paper-1);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:34px 28px 24px;
+  }
+  .card::before{
+    content:'';
+    position:absolute;
+    top:14px; left:50%; transform:translateX(-50%);
+    width:14px; height:14px;
+    border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--line);
+  }
+  .card::after{
+    content:'';
+    position:absolute;
+    top:21px; left:8%; right:8%;
+    height:1px;
+    background:repeating-linear-gradient(90deg, var(--line) 0 6px, transparent 6px 11px);
+  }
+  .qmeta{
+    display:flex; justify-content:space-between; align-items:baseline;
+    margin-bottom:16px;
+    padding-top:6px;
+  }
+  .qnum{
+    font-family:'Noto Serif Sinhala',serif;
+    color:var(--seal);
+    font-size:15px;
+    font-weight:700;
+  }
+  .qcount{ color:var(--ink-dim); font-size:12.5px; }
+  .qtext{
+    font-size:17px;
+    line-height:1.75;
+    margin:0 0 22px;
+    color:var(--ink);
+  }
+  .options{ display:flex; flex-direction:column; gap:9px; }
+  .opt{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    text-align:left;
+    width:100%;
+    padding:12px 14px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:8px;
+    color:var(--ink);
+    font-family:inherit;
+    font-size:15px;
+    line-height:1.55;
+    cursor:pointer;
+    transition:border-color .12s ease, background .12s ease;
+  }
+  .opt:hover{ border-color:var(--leaf); background:#eee3c8; }
+  .opt .tag{
+    flex-shrink:0;
+    width:25px;height:25px;
+    border-radius:50%;
+    border:1px solid var(--line);
+    background:var(--paper-1);
+    display:flex;align-items:center;justify-content:center;
+    font-size:11.5px; color:var(--ink-dim);
+    margin-top:1px;
+    font-weight:600;
+  }
+  .opt.selected{ border-color:var(--seal); background:#f1ddd2; }
+  .opt.selected .tag{ background:var(--seal); border-color:var(--seal); color:var(--paper); }
+  .opt[disabled]{ cursor:default; }
+  .opt.correct{ border-color:var(--good); background:#dfeee0; }
+  .opt.correct .tag{ background:var(--good); border-color:var(--good); color:#fff; }
+  .opt.incorrect{ border-color:var(--bad); background:#f3ddd8; }
+  .opt.incorrect .tag{ background:var(--bad); border-color:var(--bad); color:#fff; }
+
+  .navrow{
+    display:flex; justify-content:space-between; align-items:center;
+    margin-top:24px;
+  }
+  .btn{
+    font-family:'Noto Sans Sinhala',sans-serif;
+    font-size:14px;
+    padding:10px 18px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:var(--ink);
+    cursor:pointer;
+    transition:all .12s ease;
+  }
+  .btn:hover{ border-color:var(--leaf); color:var(--leaf); }
+  .btn:disabled{ opacity:.35; cursor:not-allowed; }
+  .btn.primary{
+    background:var(--seal);
+    color:var(--paper);
+    border-color:var(--seal);
+    font-weight:600;
+  }
+  .btn.primary:hover{ background:var(--seal-soft); border-color:var(--seal-soft); color:var(--paper); }
+
+  /* Results */
+  .results-head{ text-align:center; margin-bottom:18px; }
+  .score-plate{
+    display:inline-flex; flex-direction:column; align-items:center;
+    padding:16px 30px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    border-radius:12px;
+    margin-bottom:12px;
+  }
+  .score-plate .num{ font-family:'Noto Serif Sinhala',serif; font-size:30px; font-weight:700; color:var(--seal); }
+  .score-plate .frac{ font-size:12px; color:var(--ink-dim); margin-top:2px; }
+  .score-sub{ color:var(--ink-dim); font-size:13.5px; }
+
+  .review-item{ border-top:1px solid var(--line); padding:16px 0; }
+  .review-item:first-child{ border-top:none; }
+  .review-item .rq{ font-size:14.5px; line-height:1.6; margin-bottom:8px; }
+  .review-item .rline{ font-size:13px; display:flex; gap:6px; margin-bottom:3px; }
+  .review-item .rline .lab{ color:var(--ink-dim); min-width:78px; flex-shrink:0; font-size:11.5px; padding-top:2px;}
+  .review-item .rline.wrong .val{ color:#93342b; }
+  .review-item .rline.right .val{ color:#2f6b3c; }
+  .badge{
+    display:inline-block; font-size:10.5px; padding:2px 10px; border-radius:999px;
+    margin-left:8px; vertical-align:middle; font-weight:600;
+  }
+  .badge.ok{ background:#dfeee0; color:#2f6b3c; }
+  .badge.no{ background:#f3ddd8; color:#93342b; }
+
+  .filter-row{ display:flex; gap:8px; justify-content:center; margin:16px 0 6px; flex-wrap:wrap; }
+  .chip{
+    font-size:11.5px; padding:7px 14px; border-radius:999px;
+    border:1px solid var(--line); background:transparent; color:var(--ink-dim);
+    cursor:pointer;
+  }
+  .chip.active{ background:var(--seal); color:var(--paper); border-color:var(--seal); font-weight:600;}
+
+  footer.note{ text-align:center; color:var(--ink-dim); font-size:12px; margin-top:24px; line-height:1.8; }
+
+  @media (max-width:480px){
+    .card{ padding:26px 16px 18px; }
+    .qtext{ font-size:15.5px; }
+    .opt{ font-size:14px; }
+  }
+  @media (prefers-reduced-motion: reduce){ *{ transition:none !important; } }
+</style>
+</head>
+<body>
+<div class="stage">
+
+  <div class="masthead">
+    <span class="kicker">A/L · ‌බෞද්ධ ශිෂ්ටාචාරය · 2023 I පත්‍රය</span>
+    <h1>2023 ‌බෞද්ධ ශිෂ්ටාචාරය I පත්‍රය</h1>
+    <p>ප්‍රශ්න 50 · එක් වරකට එකක් · අවසානයේ සම්පූර්ණ විග්‍රහයක්</p>
+    <div class="rule"></div>
+  </div>
+
+  <div id="leafStrip" class="leaf-strip"></div>
+
+  <div id="quizArea"></div>
+
+  <footer class="note">තට්ටු කිරීමෙන් පිළිතුරු තෝරන්න · ඕනෑම මොහොතක ප්‍රශ්නයක් වෙනස් කළ හැක</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+{q:"භාරතීය සමාජයේ කුලවාදය තහවුරු කිරීම සඳහා බ්‍රාහ්මණයන් විසින් ඉදිරිපත් කරන ලද ප්‍රධානතම ආගමික ඉගැන්වීම වූයේ,",o:["වර්ණ ධර්ම සංකල්පයයි.","ස්ව ධර්ම සංකල්පයයි.","ආශ්‍රම ධර්ම සංකල්පයයි.","ආපද් ධර්ම සංකල්පයයි.","යාග සංකල්පයයි."],c:0},
+{q:"වානප්‍රස්ත ආශ්‍රමයේදී කළ යුතු ප්‍රධාන කාර්යය වූයේ,",o:["වේද අධ්‍යයනයයි.","කම්සැප විඳීමයි.","වනගතව තවුස්දම් පිරීමයි.","යාග කර්ම කිරීමයි.","සංචාරක ජීවිතයක් ගත කිරීමයි."],c:2},
+{q:"පහත සඳහන් ප්‍රකාශ අතුරින් බුද්ධකාලීන භාරතීය කාන්තාව පිළිබඳ බ්‍රාහ්මණ ඉගැන්වීම්වලට අදාළ වඩාත් ම නිවැරදි ප්‍රකාශය තෝරන්න.",o:["ස්වාමියා මළ පසු භාර්යාව සති පූජාව පැවැත්වීම අනිවාර්ය විය.","කාන්තාවට ආගමික කටයුතුවලට සහභාගි වීමට හැකි වූයේ සැමියා සමග පමණි.","ජීවිතාන්තය දක්වා පුරුෂාධිපත්‍යයට යටත්ව වාසය කළ යුතු ය.","කාන්තාවට ප්‍රමාණවත් ආර්ථික නිදහසක් හිමි විය.","විවාහයෙන් පසු පිරිමි දරුවෙකු බිහි කිරීම අනිවාර්ය විය."],c:2},
+{q:"බුද්ධකාලීන ශ්‍රමණ ගුරුකුල සතුව පැවති සුවිශේෂ ලක්ෂණ කිහිපයක් අතුරින් ආජීවක සම්ප්‍රදායේ අනන්‍යතාව වඩාත් තහවුරු වන කරුණ ඇතුළත් වරණය තෝරන්න.",o:["පරම අවිහිංසාවාදී වීම","ජටාවක් හිසේ දැරීම","කේශවලින් සකස් කරගත් කම්බිලියක් හැඳීම","එක් සළුවක් පමණක් දරා සිටීම","අතෙහි දණ්ඩක් දරා සිටීම"],c:2},
+{q:"පඨවි, ආපෝ, තේජෝ, වායෝ, සුඛ, දුක්ඛ සහ ජීව යනුවෙන් ස්ථිර වූ, නො බිඳෙන, සප්ත පදාර්ථයක් ඇතැයි දක්වමින් ශාස්වතවාදී දර්ශනයක් ඉදිරිපත් කළ බුද්ධකාලීන භාරතීය ශාස්තෘවරයා කවුද?",o:["මක්ඛලී ගෝසාල","පකුධ කච්චායන","අජිත කේසකම්බලි","පූරණ කස්සප","නිගණ්ඨනාතපුත්ත"],c:1},
+{q:"බුද්ධකාලීන භාරතයේ ක්‍රියාත්මක වූ රාජ්‍ය පාලන ප්‍රතිපත්ති කිහිපයක් පහත දැක් වේ. A - තීරණ ගැනීමේ විධායක බලය රජු සතු විය. B - රාජ්‍ය පාලනය ක්‍රියාත්මක වූයේ නියෝජිත මන්ත්‍රී මණ්ඩලයකිනි. C - නව නීති පැනවූයේ ප්‍රජාතාන්ත්‍රික පදනමක් මත ය. D - මහජන ගැටලුවලදී වුව ද මත විමසීමකින් තොරව තීරණ ගැනීම සිදුවිය. E - අටව වැදෑරුම් අධිකරණ පටිපාටියක් පැවතීම. ඉහත සඳහන් ප්‍රකාශ අතුරින් ගණතන්ත්‍ර පාලනයට අදාළ රාජ්‍ය පාලන ප්‍රතිපත්ති පමණක් ඇතුළත් වරණය තෝරන්න.",o:["A සහ B","A සහ C","B සහ C","C සහ E","D සහ E"],c:2},
+{q:"පින්ඩෝල භාරද්වාජ තෙරුන්ගෙන් ධර්මය අසා තෙරුවන් සරණ ගිය බුද්ධකාලීන භාරතීය පාලකයා සහ ඔහුගේ රාජ්‍යය ඇතුළත් වරණය තෝරන්න.",o:["බිම්බිසාර රජු - මගධ රාජ්‍යය","කොසොල් රජු - කෝසල රාජ්‍යය","උදේන රජු - වත්ස රාජ්‍යය","චණ්ඩපජ්ජෝත රජු - අවන්ති රාජ්‍යය","අජාසත් රජු - මගධ රාජ්‍යය"],c:2},
+{q:"බුද්ධකාලීන භාරතීය සමාජය නාගරීකරණය වීමේ ප්‍රතිඵලයක් නො වන කරුණ ඇතුළත් වරණය තෝරන්න.",o:["සුරාසැල් හා ගණිකා වෘත්තිය බිහිවීම","නව වාණිජ ප්‍රජාවක් බිහිවීම","වෙළඳ නගර නිර්මාණය වීම","ශුද්‍ර කුලයේ වර්ධනය වීම","නගර ආශ්‍රිත ජනගහන වර්ධනය සීමා වීම"],c:4},
+{q:"\"සිවුපස් සිය නැණින් දැන දන්විය කුමනින් දුරලයි අනුසසින්...\" යනාදී පද්‍යයෙන් කියවෙන්නේ බුදුරජාණන් වහන්සේ සතුව පැවති කිනම් ගුණය ද?",o:["සම්මාසම්බුද්ධ","සුගත","ලෝකවිදූ","බුද්ධ","භගවා"],c:0},
+{q:"බුදුරජාණන් වහන්සේ ධර්ම සන්නිවේදනයේදී විවිධ වූ ශිල්ප අනුගමනය කළ බව බුද්ධ චරිතය තුළින් ප්‍රකට වේ. එහිලා රාහුලෝවාද සහ කසීභාරද්වාජ යන සූත්‍රවලින් ප්‍රකට වන්නේ බුදුරජාණන් වහන්සේ ........................... භාවිත කළ බව ය.",o:["උපමානුසාරී දේශනා ක්‍රමය","සෘජු දේශනා ක්‍රමය","ප්‍රශ්නෝත්තර ක්‍රමය","පරියාය ක්‍රමය","සාකච්ඡා ක්‍රමය"],c:0},
+{q:"බුදුරජාණන් වහන්සේගේ චරිතයෙන් ප්‍රකට වන සුවිශේෂ ලක්ෂණ. A - කේසපුත්ත නියම් ගමේදී කාලාමයන්ට විමර්ශනශීලීව තීරණ ගැනීමට අනුශාසනා කිරීම. B - කෝපවන්නන් හමුවේ කෝප නො වීම සහ කෙලෙස්වලින් අකම්පිතව සිටීම. C - විවිධ පුද්ගලයන් විසින් සිදුකරන ලද අපහාස පරිභව හමුවේ අකම්පිතව සිටීම. D - තමන් වහන්සේ පිළිබඳව වුව ද විමසා බැලීමෙන් පසු පිළිගැනීමට මග පෙන්වීම. E - දැඩි නීතිරීති මගින් සිය ශ්‍රාවකයන් පාලනය කිරීමට උත්සාහ නො කිරීම. ඉහත කරුණු අතුරින් බුදුරජාණන් වහන්සේ චින්තන නිදහස අගය කළ බව ප්‍රකට වන ප්‍රකාශ ඇතුළත් වරණය තෝරන්න.",o:["A සහ B පමණි.","A සහ C පමණි.","A සහ D පමණි.","A සහ E පමණි.","B සහ C පමණි."],c:2},
+{q:"\"නූතන විද්‍යාත්මක චින්තනයට පිළිගත හැකි ආගමක් වේ නම් ඒ බුදු දහමයි\" මෙම ප්‍රකාශය කවරෙකු විසින් කරන ලද්දක් ද?",o:["එඩ්වින් ආර්නෝල්ඩ්","ඇල්බට් අයින්ස්ටයින්","බර්ට්‍රන්ඩ් රසල්","ලක්ෂ්මී නරසු","මැක්ස් මුලර්"],c:1},
+{q:"බුද්ධකාලීන ශ්‍රාවකයන් වහන්සේලා සම්බන්ධ ප්‍රකාශ. A - සූකරඛත ලෙනෙහිදී 'දීඝනඛ' පරිබ්‍රාජකයාට දේශනා කළ වේදනා පරිග්ගහ සූත්‍රය අසා රහත් විය. B - බුදුරජාණන් වහන්සේගේ දකුණත් සවු තනතුර ලැබූහ. C - බුදුරජාණන් වහන්සේගේ වමත් සවු තනතුර ලැබූහ. D - භික්ෂුණී ශාසනය පිහිටුවීමට පුරෝගාමීව කටයුතු කළහ. E - ශ්‍රී සද්ධර්මය මැනවින් මතක තබාගැනීම නිසා ධර්ම සේනාපති තනතුර ලැබූහ. ඉහත ප්‍රකාශ අතුරින් සැරියුත් මහරහතන් වහන්සේගේ චරිතය සම්බන්ධ තොරතුරු පමණක් ඇතුළත් වරණය කුමක් ද?",o:["A, B සහ D","A, B සහ E","A, C සහ E","B, D සහ E","C, D සහ E"],c:1},
+{q:"සමාජ ප්‍රභවය හා විකාශය පිළිබඳ බෞද්ධ විග්‍රහය සඳහන් වන දීඝ නිකායේ අග්ගඤ්ඤ සූත්‍රයෙහි එන විවරණයට අනුව නිවැරදි ප්‍රකාශය ඇතුළත් වරණය තෝරන්න.",o:["කෙත්වතුවල පාලකයා තේරීම වාසිෂ්ඨයන්ගේ වගකීමක් විය.","ප්‍රථම යුගයේ මානවයා පිරිසිදු මනසකින් යුක්තව ජීවත් විය.","විවිධ වූ කර්මාන්තයන්හි නිරතවූවන් ක්ෂත්‍රිය නම් විය.","පව් බැහැර කිරීමේ අදහසින් වනගතවූවෝ අන්‍යයන් ද පවින් වැළැක්වීමට ක්‍රියා කළහ.","තමන් අකැමැති පාලකුම් පලවා හැරීමේ අයිතියක් ජනතාවට නැති විය."],c:1},
+{q:"ලෝක පාලක ධර්ම යන්නෙන් අදහස් කරනුයේ,",o:["රාජ්‍ය ව්‍යවස්ථාවයි.","වැරදිකරුවන්ට දඬුවම් දීමයි.","නීති රීති ක්‍රියාත්මක කිරීමයි.","පව් කිරීමට ලජ්ජා-බිය වීමයි.","අපරාධ සිදුවීමට ඇති අවස්ථා වළක්වාලීමයි."],c:3},
+{q:"බෞද්ධ දේශපාලන චින්තනයට අනුව ප්‍රජාතන්ත්‍රවාදී පාලන තන්ත්‍රයක් පවත්වා ගෙන යාමේදී පාලකයාගේ වගකීමක් ලෙස නො සැලකිය හැක්කේ,",o:["නීති රීති කඩ නො කොට ආරක්ෂා කිරීමයි.","ජනතා පරමාධිපත්‍යයට අනුව රාජ්‍ය පාලකයා පත්කර ගැනීමයි.","රාජ්‍ය දේපළ ආරක්ෂා කිරීමයි.","නිසි පරිදි රජයට බදු ගෙවීමයි.","අරගල මගින් ආධිපත්‍ය පාලනයක් පලවා හැරීමට කටයුතු කිරීමයි."],c:3},
+{q:"බෞද්ධ දේශපාලන මූලධර්ම ඇතුළත් ප්‍රධාන මූලාශ්‍රයක් වන කූටදන්ත සූත්‍රගත ඉගැන්වීම්වලට අයත් නො වන පාලන ප්‍රතිපත්තියක් වන්නේ,",o:["රට තුළ ආර්ථික සමෘද්ධිය ඇති කිරීමයි.","අපරාධ ඇති වීමට ඉඩ නො තැබීමයි.","දිළිඳුකම නැති කිරීමට ක්‍රියා කිරීමයි.","වැඩිහිටියන්ට ගරු බුහුමන් කිරීමයි.","රාජ්‍ය සේවය ශක්තිමත් කිරීමයි."],c:3},
+{q:"මිනිසාට සිය ජීවිතය පවත්වාගෙන යාම සඳහා ප්‍රමාණවත් ධනයක් නොමැති වීම සමාජ ගැටලු නිර්මාණය වීමට ඉවහල් වන බව බුදුසමය පෙන්වා දෙයි. චක්කවත්තිසීහනාද සූත්‍රගත ඉගැන්වීම්වලට අනුව දිළිඳුකම පදනම් කොටගෙන ක්‍රමිකව සිදුවන විවිධ අපරාධවලට අයත් නො වන කරුණක් ඇතුළත් වරණය තෝරන්න.",o:["සොරකමට පෙළඹීම","සුදු ක්‍රීඩාවට පෙළඹීම","බොරු කීමට පෙළඹීම","හිංසනයට පෙළඹීම","අවි ආයුධ භාවිතයට පෙළඹීම"],c:1},
+{q:"සම්පත් පරිභෝජනයට අදාළ ප්‍රකාශ. A - තමාගේ සුඛ විහරණය සඳහා ධනය යෙදවිය යුතු ය. B - හිත මිතුරන්ගේ සුඛ විහරණය සඳහා ධනය යෙදවිය යුතු ය. C - අඹු-දරුවන්ගේ සුඛ විහරණය සඳහා ධනය යෙදවිය යුතු ය. D - මවුපියන්ගේ සුඛ විහරණය සඳහා ධනය යෙදවිය යුතු ය. E - දැසි දස් කම්කරුවන්ගේ සුඛ විහරණය සඳහා ධනය යෙදවිය යුතු ය. සම්පත් පරිභෝජනය පිළිබඳ බෞද්ධ ඉගැන්වීම් අනුව ඉහත ප්‍රකාශ අතුරින් නිවැරදි වන්නේ,",o:["A පමණි.","A සහ B පමණි.","A, B සහ C පමණි.","A, B, C සහ D පමණි.","A, B, C, D සහ E යන සියල්ල ම ය."],c:4},
+{q:"බුදු දහම පුද්ගලයාට ධනය උපයා ගැනීම සහ ධන පරිභෝජනය පිළිබඳ උපදෙස් ලබා දෙයි. ධන පරිභෝජනයේදී තමා පමණක් පරිභෝජනය කිරීම අනුමත නො කරන අතර එය සමාජයේ යහපත උදෙසා යෙදීම බුදුසමය අගය කර ඇති බව පෙනේ. එම ඉගැන්වීම් ඇතුළත් ආර්ථික මූලධර්මය හැඳින්වෙන්නේ,",o:["පංච බලි නමිනි.","පරිත්‍යාගය නමිනි.","සතර සංගහවත්ථු නමිනි.","සමජීවිකතා නමිනි.","දානය නමිනි."],c:0},
+{q:"\"මේ දහම්හු සපුරා ලද්දාහු සමාදන් කොට ගන්නා ලද්දාහු අවාද පිණිස දුක් පිණිස පවත්නාහුයයි යම් කලෙක තෙපි තුමු ම දැනගන්නාහු නම්, එකල්හි තෙපි එය දුරු කරව්...\" යනාදී ප්‍රකාශයෙන් කියවෙන්නේ,",o:["පව් බැහැර කිරීම පිළිබඳ දේශනාවකි.","දුක් දුරු කිරීම පිළිබඳ අනුශාසනාවකි.","හොඳ නරක පිළිබඳ නිර්ණායකයකි.","අත්තුපනායික ධර්ම පිළිබඳ නිර්ණායකයකි.","සිල් සමාදන් විය යුතු ආකාරය පිළිබඳ උපදේශයකි."],c:2},
+{q:"ලෝභ, දෝෂ සහ මෝහ යන මනෝභාවයන් පදනම් කරගෙන පුද්ගලයකු විසින් කරනු ලබන අකුසල් දහම් දස අකුසල් නමින් බෞද්ධ සාහිත්‍යයෙහි දැක් වේ. ඒවා අතුරින් මනස මූලික කොටගෙන කරනු ලබන අකුසල් දහම් අනුපිළිවෙළින් සඳහන් වරණය තෝරන්න.",o:["සතුන් මැරීම, බොරු කීම සහ දැඩි ලෝභය","සොරකම් කිරීම, කාමයෙහි වරදවා හැසිරීම සහ දැඩි තරහව","දැඩි තරහව, විෂම ලෝභය සහ මිථ්‍යාදෘෂ්ටිය","බොරු කීම, දැඩි තරහව සහ සොරකම්","දැඩි ලෝභය, දැඩි තරහව සහ මිථ්‍යාදෘෂ්ටිය"],c:4},
+{q:"බොහෝ සැප සම්පත් අපේක්ෂා නො කොට අවම පරිභෝජනයෙන් තෘප්තිමත්ව කටයුතු කිරීම බුදු දහමෙහි හැඳින්වෙන්නේ .......................... නමිනි.",o:["සුභරතාව","අල්පේච්ඡතාව","අල්ප කෘත්‍යතාව","සන්තුට්ඨිතාව","අප්පකිච්චතාව"],c:3},
+{q:"මිනිසා විසින් සිදුකොට ඇති පාරිසරික විනාශය අවම කර ගැනීමට අදාළ කරගත හැකි ඉගැන්වීම් රැසක් බෞද්ධ සාහිත්‍යය තුළ සඳහන්ව තිබේ. ඒ අනුව භික්ෂු ජීවිතය හා පරිසර සංරක්ෂණය අතර ඇති සබඳතාව ප්‍රකට කරන අවස්ථාවක් ලෙස .......................... දැක්විය හැකි ය.",o:["ආරාම ඉදි කිරීම","වන රෝපණය කිරීම","මංමාවත් ඉදි කිරීම","ළිං පොකුණු තැනීම","පරිසරය අපවිත්‍ර වන කිසිදු ක්‍රියාවක නො යෙදීම"],c:4},
+{q:"වීතරාගී උතුමන් වහන්සේලා සෞන්දර්යය රසාස්වාදය කළ ආකාරය ථේර-ථේරී-ගාථාවලින් තහවුරු වේ. එහිලා අරණෙහි නදී තීරය බවුන් වැඩීමට තෝරා ගනිමින් එහි සුන්දරත්වය අත්විඳින ලද්දේ,",o:["සප්පක මහරහතන් වහන්සේ ය.","වනවච්ඡ මහරහතන් වහන්සේ ය.","කාළුදායී මහරහතන් වහන්සේ ය.","ගෝධික මහරහතන් වහන්සේ ය.","තාලපුට මහරහතන් වහන්සේ ය."],c:0},
+{q:"ධාර්මිකව ධනය ඉපැයිය යුතු මාර්ග ලෙස පශු පාලනය, වෙළඳාම, ගොවිතැන් කිරීම, රාජ්‍ය සේවය සහ විවිධ ශිල්ප කර්මාන්තයන්හි යෙදීම යනාදී වෘත්තීන් බුදුසමයෙහි දක්වා තිබේ. මෙහිදී 'මානකූට' නමැති වංචනික ක්‍රියාවෙන් ධනය උත්පාදනය නො කළ යුතු යැයි අවධාරණය කොට ඇත්තේ,",o:["රාජ්‍ය සේවයෙනි.","ගොවිතැනෙනි.","වෙළඳාමෙනි.","පශු පාලනයෙනි.","විවිධ ශිල්ප කර්මාන්තයන්හි යෙදීමෙනි."],c:2},
+{q:"තමන් උපයාගනු ලබන ධන සම්පත් නිසි පරිදි කළමනාකරණය හා සංරක්ෂණය කොට පරිභෝග කළ යුතු ය. වැය පක්ෂය අය පක්ෂයට වඩා වැඩි නො වන සේ සමතුලිතව පරිභෝජනය කළ යුතු අතර, එය හැඳින්වෙන්නේ,",o:["පංච බලි නමිනි.","අප්පච්චක්ඛ නමිනි.","උදුම්බරඛාදක නමිනි.","සමජීවිකතා නමිනි.","ආරක්ඛ සම්පදා නමිනි."],c:3},
+{q:"මිනිසා සුඛකාමී සත්ත්වයක ලෙස සලකන බුදුසමය ලෞකික වූත්, ලෝකෝත්තර වූත් සැප රැසක් ඇති බව උගන්වයි. මේවා අතුරින් \"අත්හැරීමේ සුවය\" හඳුන්වන්නේ,",o:["සාමිස සුඛ නමිනි.","නිරාමිස සුඛ නමිනි.","කාම සුඛ නමිනි.","නෙක්ඛම්ම සුඛ නමිනි.","අනවජ්ජ සුඛ නමිනි."],c:3},
+{q:"සිඟාල ගෘහපති පුත්‍රයා අරභයා දේශිත සිඟාලෝවාද සූත්‍රයෙහි එන සදිසා වන්දනය තුළින් නිරූපිත අන්තර්පුද්ගල යුතුකම් හා වගකීම් කිහිපයක්. A - මැනවින් හික්මවීම. B - දැක හුනස්නෙන් නැගී සිටීම. C - පවින් වැළැක්වීම. D - යහපත් කටයුතුවල නිරත කරවීම. E - අවමන් නො කිරීම. ඉහත ප්‍රකාශ අතුරින් දකුණු දිශාව නියෝජනය කරන ගුරු-ශිෂ්‍ය යුතුකම් ඇතුළත් වරණය තෝරන්න.",o:["A සහ B පමණි.","A සහ C පමණි.","A සහ D පමණි.","B සහ D පමණි.","B සහ E පමණි."],c:0},
+{q:"පුද්ගලයා උපයන ධන සම්පත් විනාශ වීමට හේතු වන සාධක හයක් සිඟාලෝවාද සූත්‍රයේ, අපායමුඛවලින් විස්තර කරයි. එහි \"සමජ්ජාභිචරණ\" යනුවෙන් අදහස් කරනුයේ,",o:["දූ කෙළියෙහි යෙදීමයි.","නො කල්හි වීථි සංචාරය කිරීමයි.","පාප මිත්‍ර සේවනයයි.","රහ මෙර පානයයි.","ගීත-නාට්‍ය සංදර්ශනවල ඇලීමයි."],c:4},
+{q:"ගිහි සමාජයේ අභිවෘද්ධිය සඳහා මංගල සූත්‍රයෙන් ඉගැන් වූ කරුණු අතුරින් පවුලක එදිනෙදා යහපැවැත්මට අදාළ කරගත හැකි ඉගැන්වීමක් නො වන්නේ,",o:["අසේවනා ච බාලානං යන්න ය.","මාතා පිතු උපට්ඨානං යන්න ය.","ඤාතකානං ච සංගහෝ යන්න ය.","මජ්ජපානා ච සඤ්ඤමෝ යන්න ය.","නිබ්බාන සච්ඡිකිරියා ච යන්න ය."],c:4},
+{q:"\"අවරිත්වා බ්‍රහ්මචරියං අලද්ධා යොබ්බනෙ ධනං ජිණ්ණ කොඤ්චාව ඣායන්ති ඛීණ මච්ඡෙව පල්ලලෙ\" මෙම ධම්ම පද ගාථාවෙන් පෙන්වා දෙන පරිදි දිය සිඳී ගිය, මසුන් නොමැති විලක් දෙස දුකින් බලා සිටින මහලු කොස්වාලිහිණියකුට සමාන වන්නේ,",o:["තරුණ කල බ්‍රහ්මචරියාව නො රැක, ධනය නො ලබා, තැවෙන වයස්ගත ගිහියන් ය.","දරුවන්ගේ ආදර සැලකිලි නො ලබා දුකින් සිටින වයස්ගත දෙමවුපියන් ය.","බ්‍රහ්ම චරියාව නො රැක මහලු වියට පත්ව තැවෙන භික්ෂූන් ය.","සතර අගතියට හසු වී නිසි පරිදි මහජන සේවය නො කළ විශ්‍රාමික රාජ්‍ය සේවකයන් ය.","දුර්ජන තත්ත්වයන්ට අභිමුඛ වී ධනය විනාශ කරගත් පුද්ගලයන් ය."],c:0},
+{q:"පරාභව සූත්‍රයට අනුව පහත සඳහන් හේතු අතුරින් පුද්ගලයාගේ පිරිහීමට හේතු නො වන කරුණක් ඇතුළත් වරණය කුමක් ද?",o:["අලසව කටයුතු කිරීම","තමන් සතු සම්පත් අනුන් සමග බෙදා හදා ගැනීම","මහලු දෙමවුපියන්ට නො සැලකීම","අසත්පුරුෂ ධර්ම ප්‍රිය කිරීම","මානය කරණකොට සිය ඥාතීන් පහත්කොට සැලකීම"],c:1},
+{q:"ස්වකීය ශ්‍රාවකයන් වහන්සේලා ධර්මදූත සේවාවන්හි යෙදවූ බුදුරජාණන් වහන්සේ, තමන් වහන්සේ ද ධර්මදූත සේවාවෙහි නියැලෙමින් යථාර්ථචාරී ශාස්තෘ ගුණය ප්‍රකට කළහ. මෙවැනි අවස්ථාවක් බුදුරජාණන් වහන්සේ .......................... වැඩමවීමෙන් තහවුරු වේ.",o:["කිඹුල්වත් පුරයට","උරුවේල දනව්වට","අලව් පුරයට","ගෝසිංග වනයට","පාරිලෙය්‍ය වනයට"],c:2},
+{q:"ථේරවාද බෞද්ධ ධර්ම සංගායනා පැවැත්වීම පිළිබඳව පූර්වාදර්ශයන් බුදුරදුන් ජීවමාන සමයේදී ම සපයා දී ඇති බවට සාක්ෂි දක්නට ලැබේ. ඒ අනුව එම සාධක ඇතුළත් මූලාශ්‍රය වන්නේ,",o:["චුල්ලවග්ගපාලියයි.","මහාපරිනිබ්බාණ සූත්‍රයයි.","පාසාදික සූත්‍රයයි.","සමන්තපාසාදිකාවයි.","මහාවංසයයි."],c:2},
+{q:"ථේරවාද බෞද්ධ ධර්ම සංගායනාවන්හිදී ගනු ලැබූ තීරණ. A - ඡන්න තෙරුන්ට බ්‍රහ්ම දණ්ඩනය පැනවීම. B - පනවන ලද ශික්ෂා වෙනස් නො කර පවත්වාගෙන යාමට තීරණය කිරීම. C - උබ්බාහිකාවක් මගින් උද්ගතව තිබූ ගැටලුව විසඳීම. D - නැවතී තිබූ විනය කර්ම යළි ආරම්භ කිරීම. E - ධර්මය රන් පත්වල ලියා තැබීම. ඉහත ප්‍රකාශ අතුරින් පළමු ධර්ම සංගායනාවට අදාළ ප්‍රතිඵල පමණක් ඇතුළත් වරණය තෝරන්න.",o:["A සහ B","A සහ C","B සහ D","C සහ E","D සහ E"],c:0},
+{q:"දෙවන ධර්ම සංගායනාවට ප්‍රධාන සාධකයක් වූ වජ්ජිපුත්තක භික්ෂූන් ඉදිරිපත් කළ දස වස්තුවෙන් කිහිපයක්. A - සිංගිලෝණ කප්ප. B - ද්වංගුල කප්ප. C - ගාමන්තර කප්ප. D - අමථිත කප්ප. E - ජලෝගි කප්ප. මෙකී කරුණු අතුරින් ආහාරපාන සම්බන්ධයෙන් ඉදිරිපත් කොට ඇත්තේ,",o:["A පමණි.","A සහ B පමණි.","A, B සහ C පමණි.","A, B, C සහ D පමණි.","A, B, C, D සහ E යන සියල්ල ම ය."],c:3},
+{q:"අශෝක රජු යුද්ධ මාර්ගයෙන් රටවල් දිනා ගැනීමේ ප්‍රතිපත්තිය අත්හැර ධර්ම මාර්ගයට අවතීර්ණ වූ බව ඔහු විසින් පිහිටුවන ලද ශිලා ලේඛනවලින් තහවුරු වේ. ඒ අනුව අශෝකගේ ධර්මවිජය ප්‍රතිපත්තිය පිළිබඳව සඳහන් නිවැරදි ප්‍රකාශය ඇතුළත් වරණය තෝරන්න.",o:["මිනිස් ඝාතන නිසා තමන් දැඩි කම්පනයට පත් වූ බව 13 වන ගිරි ලිපියේ සඳහන් වේ.","ධර්ම මහාමාත්‍යවරුන් පිටත්කර හරින ලද ප්‍රදේශ පිළිබඳව කාලිසි ගිරි ලිපියේ සඳහන් වේ.","දිග් විජයෙන් කළකිරුණු තමන් ධර්ම විජයෙන් ලොව ජයගන්නා බව කාලිසි ගිරි ලිපියේ සඳහන් වේ.","අනෙකුත් ආගම්වලට පහසුකම් සපයමින් ආගමික සහනශීලී ප්‍රතිපත්තියක් අනුගමනය කළ බව සාංචි හා සාරානාත් යන ලිපිවල සඳහන් වේ.","භේද භින්න වී සිටි භික්ෂූන් සමගි කරවා ශාසන ශෝධනයක් සිදු කළ බව බරාබර් ලිපිවල සඳහන් වේ."],c:0},
+{q:"රණකාමී අශෝක රජතුමා තමන් සිදුකළ මහා මිනිස් ඝාතන පිළිබඳ කලකිරී සිටියදී නිග්‍රෝධ සාමණේරයන් දැක පැහැදී බුදු දහම වැළඳගෙන, ධර්මාශෝකබවට පත්ව බුදුසසුනේ ව්‍යාප්තියට සිදු කළ ප්‍රධාන ම කාර්යය වූයේ,",o:["ශ්‍රමණ පරිබ්‍රාජකයන් සසුනින් බැහැර කිරීමයි.","සිල්වත් සංඝයා ඒකරාශී කිරීමයි.","ටැම්ලිපි, ගිරිලිපි සහ පුවරු ලිපි ආදියෙන් අශෝක ධර්මය ව්‍යාප්ත කිරීමයි.","රටවල් නවයකට බුදුදහම ව්‍යාප්ත කිරීමයි.","මොග්ගලීපුත්තතිස්ස මහරහතන් ලවා කථාවත්ථුප්පකරණය රචනා කරවීමයි."],c:3},
+{q:"බුදුසසුනේ චිරස්ථිතිය හා ව්‍යාප්තිය සඳහා කටයුතු කළ භාරත දේශයේ රජවරුන් අතුරින් කණිෂ්ක රජු විසින් සිදු කරන ලද ශාසනික සේවාවක් වන්නේ,",o:["බුදුරදුන් විවිධ ස්ථානවලදී දෙසූ ධර්මය සහ විනය ඒකරාශී කරවා පිටක වශයෙන් සංස්කරණය කිරීමට දායකත්වය සැපයීමයි.","අවිනයවාදී භික්ෂූන්ගේ අකැප පිළිගැනීම් විනිශ්චය කරවා ප්‍රතික්ෂේප කොට භික්ෂු විනය යළි ප්‍රතිෂ්ඨාපනය කරවීමට සහාය දැක්වීමයි.","නිකාය රාශියකට බෙදී සිටි භික්ෂු සංඝයා සමගි කරවා ථෙරිය සම්ප්‍රදාය තුළට ඒකරාශී කරවීමයි.","මගධ රාජ්‍ය මූලකොට විදේශ ධර්මදූත සේවා පිටත් කර යැවීමයි.","බුද්ධ ධර්මය සංස්කෘත භාෂාවෙන් සංගායනා කරවා විභාෂා අටුවා රචනා කිරීමට දායක වීමයි."],c:4},
+{q:"පහත සඳහන් වන්නේ භාරතයේ පැවති සුප්‍රසිද්ධ බෞද්ධ විශ්වවිද්‍යාල සම්බන්ධ ප්‍රකාශ. A - දීපංකර ශ්‍රී ඥාන මහා පඬි හිමියන් මෙහි විශ්වවිද්‍යාලයාධිපති තනතුර හෙබවූහ. B - මෙම විශ්වවිද්‍යාලය ගොඩනැගීමට මූලිකව ක්‍රියා කළේ ධර්මපාල රජු ය. C - විද්‍යාගෘහ නමින් හැඳින් වූ සඳලුතලයෙන් හා ඇතුල්වීමේ දොරටු සහිත සුවිසල් දේශන ශාලාවක් මධ්‍ය කොට ගොඩනැගිලි නිමවා ඇත. D - මෙම විශ්වවිද්‍යාලය තුළ සම්මිතීය නිකායික ඉගැන්වීම්වලට ප්‍රධාන තැනක් හිමි විය. E - මෙම විශ්වවිද්‍යාලය හීනයාන අධ්‍යාපන මධ්‍යස්ථානයක් වශයෙන් සංවර්ධනය විය. මෙයින් වික්‍රමශීලා විශ්වවිද්‍යාලය හා සම්බන්ධව නිවැරදි ප්‍රකාශය/ප්‍රකාශ වන්නේ,",o:["A පමණි.","A සහ B පමණි.","A, B සහ C පමණි.","A, B, C සහ D පමණි.","A, B, C, D සහ E යන සියල්ල ම ය."],c:2},
+{q:"ප්‍රාග් බෞද්ධ ලක්දිව සම්භාවනාවට පත් දෙවිවරුන් අතුරින් නුග ගසට සහ තල් ගසට අරක්ගෙන සිටිතැයි විශ්වාස කළේ,",o:["පුරදේව සහ කම්මාර දේව ය.","වෛශ්‍රවණ සහ විරූපාක්ෂ ය.","ජූතින්ධර සහ පච්චිමරාජිනි ය.","වෛශ්‍රවණ සහ ව්‍යාධ දේව ය.","කම්මාර දේව සහ සුමන ය."],c:3},
+{q:"ලක්දිව රජු බෞද්ධයකු පමණක් නොව බෝධිසත්ත්වයකු ද විය යුතු යැයි ප්‍රකාශ කරන ලද්දේ,",o:["දුටුගැමුණු රජතුමා විසින් ය.","සද්ධාතිස්ස රජතුමා විසින් ය.","දෙවන පරාක්‍රමබාහු රජතුමා විසින් ය.","IV වන මිහිඳු රජතුමා විසින් ය.","මහසෙන් රජතුමා විසින් ය."],c:3},
+{q:"පහත සඳහන් විහාරාරාම අතුරින් අනුරාධපුර මහා විහාරයට අයත් අනුබද්ධ ආයතනයක් වූයේ කුමක් ද?",o:["වීරංකුරාරාමය","දක්ඛිණ ගිරිය","අශෝකාරාමය","උත්තරාරාමය","ග්‍රන්ථකර පිරිවෙණ"],c:4},
+{q:"උපතේ සිට මරණය දක්වා සෑම වැදගත් අවස්ථාවක ම නිසි චාරිත්‍ර විධි ඉටු කිරීම ශ්‍රී ලාංකේය සිංහල බෞද්ධ ජන සමාජයේ ප්‍රමුඛ ලක්ෂණයකි. පුද්ගල ජීවිතයක මුල් කාල පරිච්ඡේදයේ සිදු කරනු ලබන චාරිත්‍ර: A - ඉඳුල් කට ගෑම. B - නම් තැබීම. C - ශාස්ත්‍ර ශාලාවකට භාර දීම. D - දොරට වැඩීම. E - අකුරු කියවීම. ඉහත කරුණු අතුරින් චාරිත්‍ර ඉටු කිරීමේ අනුපිළිවෙල ඇතුළත් වරණය තෝරන්න.",o:["A, B, D, E, C","B, C, D, E, A","B, D, A, E, C","B, D, C, A, E","D, A, B, E, C"],c:2},
+{q:"ක්‍රි.ව. 6 වන සියවසේදී චීනයට පැමිණි බෝධිධර්ම හිමියන් එරට ව්‍යාප්ත කරන ලද බෞද්ධ සම්ප්‍රදායක් ලෙස සැලකෙන්නේ,",o:["තියෙන් තායි සම්ප්‍රදායයි.","සන්රොන් සම්ප්‍රදායයි.","නිචිරෙන් සම්ප්‍රදායයි.","ජෝඩෝෂු සම්ප්‍රදායයි.","චාන් සම්ප්‍රදායයි."],c:4},
+{q:"බුද්ධ ප්‍රතිමා නිර්මාණයට පෙර බුදුරජාණන් වහන්සේ වෙනුවට යොදා ගත් සංකේතයක් නො වන්නේ,",o:["බෝධියයි.","ස්තූපයයි.","සිරිපතුලයි.","ආසනයයි.","ධර්මචක්‍රයයි."],c:1},
+{q:"භාරතයේ බුද්ධ ප්‍රතිමා නිර්මාණ සම්ප්‍රදායන් කිහිපයක් දැකිය හැකි අතර ගන්ධාර හා මථුරා සම්ප්‍රදායන් එහිලා ප්‍රමුඛ වේ. පහත දැක්වෙන්නේ එම සම්ප්‍රදායන් දෙකටම අයත් ලක්ෂණ. A - ශාන්ත ගති ලක්ෂණ දැක්වීම. B - හිසකෙස් ශෛලිගත ය. C - මහා කරුණා ලීලාව දක්වයි. D - අත් සිරුරට ලංව ඇත. E - නෙත් අඩවන් ය, තොල් සිහින් ය. ඉහත ලක්ෂණ අතුරින් මථුරා සම්ප්‍රදායට අයත් බුද්ධ ප්‍රතිමා ලක්ෂණ පමණක් ඇතුළත් වරණය තෝරන්න.",o:["A සහ B","A සහ C","B සහ C","C සහ D","D සහ E"],c:1},
+{q:"දඹදෙණි යුගයේදී ගද්‍ය හා පද්‍ය සාහිත්‍ය කෘති රැසක් බිහි වී තිබේ. ඒ අතර තත්කාලීනව වඩාත් සම්භාවනාවට පත්ව තිබූ පද්‍ය සාහිත්‍ය කෘතිය වන්නේ,",o:["සද්ධර්මරත්නාවලියයි.","කව්සිළුමිණයි.","පූජාවලියයි.","ථූපවංසයයි.","බුත්සරණයි."],c:1},
+{q:"ශ්‍රී ලංකාවේ නාඩගම් සම්ප්‍රදාය දේශීය සංස්කෘතියෙහි ආභාසයෙන් සංවර්ධනයට පත්ව තිබේ. එහිලා ලක්දිව ප්‍රචලිතව පැවති නාඩගම්: A - සඳකිඳුරු නාඩගම. B - විදුර නාඩගම. C - හේමමාලි නාඩගම. D - මනමේ නාඩගම. E - වෙස්සන්තර නාඩගම. ඉහත නාඩගම් අතුරින් ජාතක කථා තේමා කොටගෙන නිර්මාණය කළ නාඩගම්/නාඩගම ඇතුළත් වරණය තෝරන්න.",o:["A පමණි.","A සහ B පමණි.","A, B සහ C පමණි.","A, B, D සහ E පමණි.","A, B, C, D සහ E යන සියල්ල ම ය."],c:3}
+];
+
+const OPT_LABELS = ["1","2","3","4","5"];
+let current = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+let submitted = false;
+let reviewFilter = 'all';
+
+const quizArea = document.getElementById('quizArea');
+const leafStrip = document.getElementById('leafStrip');
+
+function buildStrip(){
+  leafStrip.innerHTML = '';
+  QUESTIONS.forEach((_, i)=>{
+    const b = document.createElement('button');
+    b.className = 'leaf-tab';
+    b.textContent = (i+1);
+    b.addEventListener('click', ()=>{ current = i; render(); });
+    leafStrip.appendChild(b);
+  });
+  refreshStrip();
+}
+
+function refreshStrip(){
+  const tabs = leafStrip.children;
+  for(let i=0;i<tabs.length;i++){
+    const t = tabs[i];
+    t.classList.remove('current','answered','wrong');
+    if(submitted){
+      if(answers[i] !== null){
+        t.classList.add('answered');
+        if(answers[i] !== QUESTIONS[i].c) t.classList.add('wrong');
+      }
+    } else {
+      if(i === current){
+        t.classList.add('current');
+        t.scrollIntoView({behavior:'smooth', inline:'center', block:'nearest'});
+      }
+      else if(answers[i] !== null) t.classList.add('answered');
+    }
+  }
+}
+
+function selectAnswer(qi, oi){
+  if(submitted) return;
+  answers[qi] = oi;
+  refreshStrip();
+  renderQuestion();
+}
+
+function renderQuestion(){
+  const q = QUESTIONS[current];
+  const chosen = answers[current];
+  const optsHtml = q.o.map((text, oi)=>{
+    const sel = chosen === oi ? 'selected' : '';
+    return `<button class="opt ${sel}" onclick="selectAnswer(${current},${oi})">
+      <span class="tag">${OPT_LABELS[oi]}</span><span>${text}</span>
+    </button>`;
+  }).join('');
+
+  quizArea.innerHTML = `
+    <div class="card">
+      <div class="qmeta">
+        <span class="qnum">ප්‍රශ්නය ${current+1}</span>
+        <span class="qcount">${current+1} / ${QUESTIONS.length}</span>
+      </div>
+      <p class="qtext">${q.q}</p>
+      <div class="options">${optsHtml}</div>
+      <div class="navrow">
+        <button class="btn" onclick="goPrev()" ${current===0?'disabled':''}>← පෙර ප්‍රශ්නය</button>
+        ${current === QUESTIONS.length-1
+          ? `<button class="btn primary" onclick="trySubmit()">ලකුණු බලන්න</button>`
+          : `<button class="btn primary" onclick="goNext()">ඊළඟ ප්‍රශ්නය →</button>`}
+      </div>
+    </div>
+  `;
+}
+
+function goPrev(){ if(current>0){ current--; render(); } }
+function goNext(){ if(current<QUESTIONS.length-1){ current++; render(); } }
+
+function trySubmit(){
+  const unanswered = answers.filter(a=>a===null).length;
+  if(unanswered > 0){
+    const proceed = confirm('ඔබ ප්‍රශ්න ' + unanswered + 'කට තවම පිළිතුරු දී නැත. එසේම ඉදිරියට යන්නද?');
+    if(!proceed) return;
+  }
+  submitted = true;
+  current = -1;
+  render();
+}
+
+function restart(){
+  answers = new Array(QUESTIONS.length).fill(null);
+  submitted = false;
+  current = 0;
+  reviewFilter = 'all';
+  render();
+}
+
+function renderResults(){
+  let score = 0;
+  QUESTIONS.forEach((q,i)=>{ if(answers[i] === q.c) score++; });
+  const pct = Math.round((score/QUESTIONS.length)*100);
+
+  let verdict;
+  if(pct >= 80) verdict = 'විශිෂ්ටයි — විභාගයට සූදානම් මට්ටමකි.';
+  else if(pct >= 60) verdict = 'හොඳයි — තව ටිකක් සමාලෝචනය කරන්න.';
+  else if(pct >= 40) verdict = 'මූලික අවබෝධයක් තිබේ — නැවත කියවා බලන්න.';
+  else verdict = 'මේ පාඩම් කොටස් නැවත හොඳින් අධ්‍යයනය කරන්න.';
+
+  const filterRow = `
+    <div class="filter-row">
+      <button class="chip ${reviewFilter==='all'?'active':''}" onclick="setFilter('all')">සියල්ල · ${QUESTIONS.length}</button>
+      <button class="chip ${reviewFilter==='wrong'?'active':''}" onclick="setFilter('wrong')">වැරදි · ${QUESTIONS.length-score}</button>
+      <button class="chip ${reviewFilter==='right'?'active':''}" onclick="setFilter('right')">නිවැරදි · ${score}</button>
+    </div>`;
+
+  let reviewHtml = '';
+  QUESTIONS.forEach((q,i)=>{
+    const isCorrect = answers[i] === q.c;
+    if(reviewFilter==='wrong' && isCorrect) return;
+    if(reviewFilter==='right' && !isCorrect) return;
+    const yourAns = answers[i]===null ? 'පිළිතුරු නොදුන්නා' : (OPT_LABELS[answers[i]] + '. ' + q.o[answers[i]]);
+    const correctAns = OPT_LABELS[q.c] + '. ' + q.o[q.c];
+    reviewHtml += `
+      <div class="review-item">
+        <div class="rq">${i+1}. ${q.q} <span class="badge ${isCorrect?'ok':'no'}">${isCorrect?'නිවැරදි':'වැරදි'}</span></div>
+        ${!isCorrect ? `<div class="rline wrong"><span class="lab">ඔබේ පිළිතුර</span><span class="val">${yourAns}</span></div>` : ''}
+        <div class="rline right"><span class="lab">නිවැරදි</span><span class="val">${correctAns}</span></div>
+      </div>`;
+  });
+
+  quizArea.innerHTML = `
+    <div class="card">
+      <div class="results-head">
+        <div class="score-plate"><div class="num">${pct}%</div><div class="frac">${score} / ${QUESTIONS.length}</div></div>
+        <p class="score-sub">${verdict}</p>
+      </div>
+      ${filterRow}
+      <div id="reviewList">${reviewHtml || '<p style="text-align:center;color:var(--ink-dim);padding:20px 0;">මෙම කාණ්ඩයේ ප්‍රශ්න නැත</p>'}</div>
+      <div class="navrow" style="justify-content:center;margin-top:26px;">
+        <button class="btn primary" onclick="restart()">නැවත උත්සාහ කරන්න</button>
+      </div>
+    </div>
+  `;
+}
+
+function setFilter(f){ reviewFilter = f; renderResults(); }
+
+function render(){
+  refreshStrip();
+  if(submitted) renderResults();
+  else renderQuestion();
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+buildStrip();
+render();
+</script>
+</body>
+</html>
