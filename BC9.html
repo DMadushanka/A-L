@@ -1,0 +1,1690 @@
+<!DOCTYPE html>
+<html lang="si">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>බෞද්ධ ශිෂ්ටාචාරය IX — I පත්‍රය</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="බෞද්ධ ශිෂ්ටාචාරය IX — I පත්‍රය">
+  <meta property="og:description" content="▶ [ 🚀 ප්‍රශ්න පත්‍රය ආරම්භ කිරීමට මෙතැන ක්ලික් කරන්න ➔ ]">
+  <meta property="og:image" content="BC9.png">
+  <meta property="og:image:type" content="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@500;600;700;800&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #05140d;
+      --bg-gradient-1: rgba(0, 255, 157, 0.15);
+      --bg-gradient-2: rgba(255, 215, 0, 0.12);
+      --bg-gradient-3: rgba(0, 184, 255, 0.10);
+
+      --panel: #0d2419;
+      --panel-2: #143525;
+      --panel-3: #1f4c37;
+
+      --orange-primary: #00ff9d;
+      --orange-light: #6effc7;
+      --amber-glow: #ffd700;
+      --flame-red: #00b8ff;
+
+      --good: #00e676;
+      --good-soft: #69f0ae;
+      --good-bg: rgba(0, 230, 118, 0.16);
+
+      --bad: #ff2a6d;
+      --bad-soft: #ff7597;
+      --bad-bg: rgba(255, 42, 109, 0.16);
+
+      --text: #eefdf6;
+      --text-dim: #9ed4bc;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Noto Sans Sinhala', 'Noto Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 14px 60px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: -1;
+      opacity: 0.85;
+      animation: floatGlow 12s ease-in-out infinite alternate;
+    }
+
+    body::before {
+      top: -10%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #00ff9d, transparent 70%);
+    }
+
+    body::after {
+      bottom: -10%;
+      right: -10%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, #00b8ff, transparent 70%);
+      animation-delay: -6s;
+    }
+
+    @keyframes floatGlow {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(40px, 50px) scale(1.15);
+      }
+
+      100% {
+        transform: translate(-30px, 30px) scale(0.95);
+      }
+    }
+
+    .stage {
+      width: 100%;
+      max-width: 740px;
+    }
+
+    .masthead {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .masthead .kicker {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      color: var(--amber-glow);
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      background: rgba(0, 255, 157, 0.12);
+      padding: 4px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(0, 255, 157, 0.25);
+    }
+
+    .masthead h1 {
+      font-family: 'Noto Serif Sinhala', serif;
+      font-weight: 800;
+      font-size: clamp(22px, 4.8vw, 30px);
+      margin: 6px 0 8px;
+      background: linear-gradient(135deg, #ffffff 0%, var(--orange-light) 40%, var(--amber-glow) 70%, var(--orange-primary) 100%);
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shineText 5s linear infinite;
+    }
+
+    @keyframes shineText {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .masthead p {
+      margin: 0;
+      color: var(--text-dim);
+      font-size: 13.5px;
+    }
+
+    .scorebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(13, 36, 25, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 157, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 255, 157, 0.1);
+      border-radius: 999px;
+      padding: 10px 20px;
+      margin: 18px 0 16px;
+      position: sticky;
+      top: 12px;
+      z-index: 10;
+    }
+
+    .scorebar .tally {
+      display: flex;
+      gap: 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+
+    .scorebar .tally .ok {
+      color: var(--good-soft);
+    }
+
+    .scorebar .tally .no {
+      color: var(--bad-soft);
+    }
+
+    .lantern-strip {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 14px 10px;
+      margin-bottom: 22px;
+      background: var(--panel);
+      border: 1px solid var(--panel-3);
+      border-radius: 16px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .lantern {
+      width: 16px;
+      height: 19px;
+      border-radius: 6px 6px 9px 9px;
+      background: var(--panel-3);
+      border: none;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+
+    .lantern::before {
+      content: '';
+      position: absolute;
+      top: -3px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 6px;
+      height: 3px;
+      background: var(--panel-3);
+      border-radius: 2px;
+      transition: background 0.2s ease;
+    }
+
+    .lantern:hover {
+      transform: translateY(-3px) scale(1.15);
+      background: var(--orange-primary);
+    }
+
+    .lantern.current {
+      background: linear-gradient(180deg, var(--amber-glow), var(--orange-primary));
+      box-shadow: 0 0 12px rgba(0, 255, 157, 0.9), 0 0 4px var(--amber-glow);
+      animation: pulseLantern 1.6s infinite alternate;
+    }
+
+    .lantern.current::before {
+      background: var(--amber-glow);
+    }
+
+    .lantern.correct {
+      background: linear-gradient(180deg, var(--good-soft), var(--good));
+      box-shadow: 0 0 8px rgba(0, 230, 118, 0.4);
+    }
+
+    .lantern.correct::before {
+      background: var(--good-soft);
+    }
+
+    .lantern.wrong {
+      background: linear-gradient(180deg, var(--bad-soft), var(--bad));
+      box-shadow: 0 0 8px rgba(255, 42, 109, 0.4);
+    }
+
+    .lantern.wrong::before {
+      background: var(--bad-soft);
+    }
+
+    @keyframes pulseLantern {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 8px rgba(0, 255, 157, 0.7);
+      }
+
+      100% {
+        transform: scale(1.2);
+        box-shadow: 0 0 18px rgba(255, 215, 0, 1);
+      }
+    }
+
+    .card {
+      background: linear-gradient(145deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--panel-3);
+      border-radius: var(--radius);
+      padding: 30px 28px 26px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 157, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--orange-primary), var(--amber-glow), var(--flame-red));
+      background-size: 200% 100%;
+      animation: gradientMove 4s ease infinite;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 0%;
+      }
+
+      50% {
+        background-position: 100% 0%;
+      }
+
+      100% {
+        background-position: 0% 0%;
+      }
+    }
+
+    .qmeta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+
+    .qnum {
+      font-family: 'Noto Serif Sinhala', serif;
+      color: var(--amber-glow);
+      font-size: 15.5px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .qnum::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--orange-primary);
+      box-shadow: 0 0 8px var(--orange-primary);
+    }
+
+    .qcount {
+      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .qtext {
+      font-size: 17.5px;
+      line-height: 1.8;
+      margin: 0 0 24px;
+      color: var(--text);
+      white-space: pre-line;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 11px;
+    }
+
+    .opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      text-align: left;
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(20, 53, 37, 0.7);
+      border: 1px solid var(--panel-3);
+      border-radius: 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15.5px;
+      line-height: 1.6;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .opt:hover:not([disabled]) {
+      border-color: var(--orange-primary);
+      background: linear-gradient(90deg, rgba(0, 255, 157, 0.15) 0%, rgba(20, 53, 37, 0.9) 100%);
+      transform: translateX(4px);
+      box-shadow: 0 4px 14px rgba(0, 255, 157, 0.15);
+    }
+
+    .opt .tag {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 255, 157, 0.3);
+      background: var(--panel-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12.5px;
+      color: var(--amber-glow);
+      margin-top: 1px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .opt:hover:not([disabled]) .tag {
+      background: var(--orange-primary);
+      color: #05140d;
+      border-color: var(--orange-primary);
+    }
+
+    .opt[disabled] {
+      cursor: default;
+    }
+
+    .opt.correct {
+      border-color: var(--good);
+      background: var(--good-bg);
+      animation: popSuccess 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 15px rgba(0, 230, 118, 0.25);
+    }
+
+    .opt.correct .tag {
+      background: var(--good);
+      border-color: var(--good);
+      color: #042416;
+    }
+
+    .opt.incorrect {
+      border-color: var(--bad);
+      background: var(--bad-bg);
+      animation: shakeError 0.35s ease;
+      box-shadow: 0 0 15px rgba(255, 42, 109, 0.25);
+    }
+
+    .opt.incorrect .tag {
+      background: var(--bad);
+      border-color: var(--bad);
+      color: #2e050e;
+    }
+
+    @keyframes popSuccess {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.025);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes shakeError {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-6px);
+      }
+
+      40% {
+        transform: translateX(6px);
+      }
+
+      60% {
+        transform: translateX(-4px);
+      }
+
+      80% {
+        transform: translateX(4px);
+      }
+    }
+
+    .feedback-line {
+      margin-top: 16px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 600;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .feedback-line.show {
+      display: block;
+    }
+
+    .feedback-line.ok {
+      background: var(--good-bg);
+      color: var(--good-soft);
+      border: 1px solid rgba(0, 230, 118, 0.4);
+    }
+
+    .feedback-line.no {
+      background: var(--bad-bg);
+      color: var(--bad-soft);
+      border: 1px solid rgba(255, 42, 109, 0.4);
+    }
+
+    .navrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin: 24px 0 10px;
+    }
+
+    .feat-box {
+      background: rgba(20, 53, 37, 0.75);
+      border: 1px solid var(--panel-3);
+      border-radius: 16px;
+      padding: 16px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .feat-box:hover {
+      transform: translateY(-4px);
+      border-color: var(--orange-primary);
+      box-shadow: 0 6px 18px rgba(0, 255, 157, 0.15);
+    }
+
+    .feat-icon {
+      font-size: 28px;
+    }
+
+    .feat-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .feat-desc {
+      font-size: 11.5px;
+      color: var(--text-dim);
+    }
+
+    .start-btn {
+      font-family: 'Noto Sans Sinhala', sans-serif;
+      font-size: 18px !important;
+      font-weight: 800 !important;
+      padding: 16px 38px !important;
+      border-radius: 999px !important;
+      background: linear-gradient(135deg, #00ff9d 0%, #00b8ff 50%, #ffd700 100%) !important;
+      background-size: 200% auto !important;
+      color: #042416 !important;
+      border: none !important;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(0, 255, 157, 0.5), 0 0 20px rgba(255, 215, 0, 0.4) !important;
+      animation: pulseStartBtn 2s infinite, shineGrad 3s linear infinite !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+
+    @keyframes pulseStartBtn {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 8px 25px rgba(0, 255, 157, 0.5);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 14px 40px rgba(0, 255, 157, 0.85), 0 0 25px rgba(255, 215, 0, 0.6);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 8px 25px rgba(0, 255, 157, 0.5);
+      }
+    }
+
+    @keyframes shineGrad {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .start-btn:hover {
+      transform: scale(1.08) translateY(-3px) !important;
+      box-shadow: 0 16px 45px rgba(0, 255, 157, 0.95) !important;
+    }
+
+    .btn {
+      font-family: 'Noto Sans Sinhala', sans-serif;
+      font-size: 14.5px;
+      padding: 11px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--panel-3);
+      background: var(--panel-2);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: var(--orange-primary);
+      color: var(--amber-glow);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 255, 157, 0.2);
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--orange-primary) 0%, var(--flame-red) 100%);
+      color: #042416;
+      border: none;
+      font-weight: 800;
+      box-shadow: 0 4px 16px rgba(0, 255, 157, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn.primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn.primary:hover:not(:disabled)::before {
+      left: 100%;
+    }
+
+    .btn.primary:hover:not(:disabled) {
+      box-shadow: 0 6px 22px rgba(0, 255, 157, 0.6);
+      color: #042416;
+    }
+
+    .btn.sound-toggle {
+      font-size: 12.5px;
+      padding: 7px 14px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .results-head {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .score-plate {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 22px 40px;
+      border: 1px solid rgba(0, 255, 157, 0.3);
+      background: linear-gradient(145deg, var(--panel-2) 0%, var(--panel-3) 100%);
+      border-radius: 22px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 255, 157, 0.2);
+    }
+
+    .score-plate .num {
+      font-family: 'Noto Serif Sinhala', serif;
+      font-size: 38px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, var(--amber-glow));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .score-plate .frac {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .score-sub {
+      color: var(--text-dim);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .review-item {
+      border-top: 1px solid var(--panel-3);
+      padding: 18px 0;
+    }
+
+    .review-item:first-child {
+      border-top: none;
+    }
+
+    .review-item .rq {
+      font-size: 15px;
+      line-height: 1.65;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .review-item .rline {
+      font-size: 13.5px;
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .review-item .rline .lab {
+      color: var(--text-dim);
+      min-width: 85px;
+      flex-shrink: 0;
+      font-size: 12px;
+      padding-top: 2px;
+    }
+
+    .review-item .rline.wrong .val {
+      color: var(--bad-soft);
+    }
+
+    .review-item .rline.right .val {
+      color: var(--good-soft);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-left: 8px;
+      vertical-align: middle;
+      font-weight: 700;
+    }
+
+    .badge.ok {
+      background: var(--good-bg);
+      color: var(--good-soft);
+      border: 1px solid rgba(0, 230, 118, 0.3);
+    }
+
+    .badge.no {
+      background: var(--bad-bg);
+      color: var(--bad-soft);
+      border: 1px solid rgba(255, 42, 109, 0.3);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 18px 0 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--panel-3);
+      background: var(--panel-2);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .chip:hover {
+      border-color: var(--orange-primary);
+      color: var(--text);
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, var(--orange-primary), var(--flame-red));
+      color: #042416;
+      border-color: transparent;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(0, 255, 157, 0.3);
+    }
+
+    footer.note {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 12.5px;
+      margin-top: 24px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 22px 18px 20px;
+      }
+
+      .qtext {
+        font-size: 16px;
+      }
+
+      .opt {
+        font-size: 14.5px;
+        padding: 12px 14px;
+      }
+
+      .scorebar {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="stage">
+
+  <div class="masthead">
+    <span class="kicker">A/L · බුද්ධ ධර්ම ශිෂ්ටාචාරය</span>
+    <h1>බෞද්ධ ශිෂ්ටාචාරය IX — ප්‍රශ්න පත්‍රය</h1>
+    <p>ප්‍රශ්න 50 · ක්ෂණික පිළිතුරු සමාලෝචනය හා ලකුණු ගණනය</p>
+  </div>
+
+  <div class="scorebar">
+    <div class="tally">
+      <span class="ok">✓ නිවැරදි: <span id="okCount">0</span></span>
+      <span class="no">✗ වැරදි: <span id="noCount">0</span></span>
+    </div>
+    <button class="btn sound-toggle" id="soundBtn" onclick="toggleSound()">🔊 හඬ: ක්‍රියාත්මකයි</button>
+  </div>
+
+  <div id="lanternStrip" class="lantern-strip"></div>
+
+  <div id="quizArea"></div>
+
+  <footer class="note">පිළිතුරු තෝරන්න — නිවැරදි/වැරදි බව සහ ලකුණු ප්‍රමාණය ක්ෂණිකව යාවත්කාලීන වේ</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    "q": "1. වේදික සාහිත්‍යගත නිර්මාණවාදී සංකල්පයට ඇතුළත් නොවන කුල නාම දෙකකි",
+    "o": [
+      "ශාක්‍ය හා බ්‍රාහ්මණ.",
+      "ශාක්‍ය හා ක්ෂත්‍රිය.",
+      "ශාක්‍ය හා වෛශ්‍ය.",
+      "ශාක්‍ය හා ශූද්‍ර.",
+      "ශාක්‍ය හා කෝලිය."
+    ],
+    "c": 4
+  },
+  {
+    "q": "2. බ්‍රාහ්මණ ඉගැන්වීම් අනුව ජන්මය සාධක පදනම් කොට ගෙන මානව වර්ගයා උසස් පහත් ලෙස වර්ගීකරණය කිරීම විවේචනයට ලක් කොට මිනිසාගේ ශාරීරික සමානතා ගෙනහැර දක්වමින් බුදුරජාණන් වහන්සේ විසින් වාසෙට්ඨ සූත්‍රයේ දී ඉදිරිපත් කොට ඇති සාධක,",
+    "o": [
+      "ආචාර විද්‍යාත්මක වේ.",
+      "ජීව විද්‍යාත්මක වේ.",
+      "සමාජ විද්‍යාත්මක වේ.",
+      "පාරිසරික වේ.",
+      "ඓතිහාසික වේ."
+    ],
+    "c": 1
+  },
+  {
+    "q": "3. ස්වධර්ම සංකල්පයට අනුව බ්‍රාහ්මණ වර්ණය විසින් පමණක් ඉටු කළ යුතු ස්වධර්ම දෙකක් ලෙස හඳුනා ගත හැක්කේ,",
+    "o": [
+      "යාග කරවීම හා යාග කිරීමයි.",
+      "යාග කරවීම හා දන් දීමයි.",
+      "යාග කරවීම හා කෘෂි කර්මාන්තයයි.",
+      "යාග කරවීම හා වේද අධ්‍යයනයයි.",
+      "යාග කරවීම හා දන් පිළිගැනීමයි."
+    ],
+    "c": 4
+  },
+  {
+    "q": "4. ආපද්ධර්මය පිළිබඳ බ්‍රාහ්මණ නිර්වචනයට අනුව වැරදි ප්‍රකාශය වන්නේ,",
+    "o": [
+      "'බ්‍රාහ්මණයා විසින් ක්ෂත්‍රියයාට අයත් කාර්යයන් කළ හැකි ය' යන්නයි.",
+      "'බ්‍රාහ්මණයා විසින් වෛශ්‍යයාට අයත් කාර්යයන් කළ හැකි ය' යන්නයි.",
+      "'ක්ෂත්‍රියයා විසින් බ්‍රාහ්මණයාට අයත් කාර්යයන් කළ හැකි ය' යන්නයි.",
+      "'ක්ෂත්‍රියයා විසින් වෛශ්‍යයාට අයත් කාර්යයන් කළ හැකි ය' යන්නයි.",
+      "'වෛශ්‍යයා විසින් ශූද්‍රයාට අයත් කාර්යයන් කළ හැකි ය' යන්නයි."
+    ],
+    "c": 2
+  },
+  {
+    "q": "5. බ්‍රාහ්මණ ඉගැන්වීම් අනුව කාන්තාව වනාහි ආගමික, සාමාජික ආදි සියලු අයිතිවාසිකම් අහිමි, ලාමක පැවතුම් ඇති, තැනැත්තියක ලෙස හැඳින්වුව ද භාරතීය ඉතිහාසයේ ඇතැම් යුගවල දී ඇය පුරුෂයා මෙන් ම සියලු වරප්‍රසාද භුක්ති විඳි අයුරු ඓතිහාසික තොරතුරුවලින් පැහැදිලි වේ. තවද කාන්තාව සියලු සැප සම්පත් ලබා දෙන සෞභාග්‍යයේ සංකේතයක් ලෙස පිදුම් ලැබූ බව ද සාධක මගින් තහවුරු වේ. ඒ අනුව භාරතීය ඉතිහාසයේ කාන්තාව පූජනීයත්වයට පත්ව තිබූ බවට පැහැදිලි පුරාවිද්‍යාත්මක සාධක හමුවන්නේ,",
+    "o": [
+      "ප්‍රාග් වේදික යුගයේ දී ය.",
+      "වේද මන්ත්‍ර යුගයේ දී ය.",
+      "ආරණ්‍යක යුගයේ දී ය.",
+      "උපනිෂද් යුගයේ දී ය.",
+      "වෛදික යුගයේ දී ය."
+    ],
+    "c": 0
+  },
+  {
+    "q": "6. කිසිදු වෙනසක් කළ නොහැකි සදාතනික ආත්ම පදාර්ථයක් ඇතැයි ඉගැන්වූ ශාස්තෘවරයා වූයේ,",
+    "o": [
+      "පකුධ කච්චායනතුමන් ය.",
+      "අජිත කේසකම්බලිතුමන් ය.",
+      "පූරණ කස්සපතුමන් ය.",
+      "මක්ඛලිගෝසාලතුමන් ය.",
+      "නිගණ්ඨනාතපුත්තතුමන් ය."
+    ],
+    "c": 0
+  },
+  {
+    "q": "7. දේව නිර්මාණවාදය ප්‍රතික්ෂේප කිරීමට ශ්‍රමණ සංස්කෘතිය විසින් හඳුන්වා දෙන ලද ප්‍රධාන ඉගැන්වීමක් ලෙස සැලකිය හැක්කේ,",
+    "o": [
+      "ඊශ්වර නිර්මාණවාදයයි.",
+      "අනිශ්වරවාදයයි.",
+      "නියතිපරිණාමවාදයයි.",
+      "බ්‍රහ්මන්-ආත්මන් ඒකත්වයයි.",
+      "අමරාවික්ඛේපවාදයයි."
+    ],
+    "c": 1
+  },
+  {
+    "q": "8. කර්මය පිළිබඳ ඉගැන්වීම බුදුසමයේ මෙන් ම ජෛන සමයේ ද මූලික සිද්ධාන්තයකි. මෙහිලා පහත සඳහන් ප්‍රකාශ අතුරින් බුදුසමයට වඩාත් ගැලපෙන ප්‍රකාශය වන්නේ,",
+    "o": [
+      "'පෙර කරන ලද කර්මයෙන් සියල්ල සිදු වේ' යන්නයි.",
+      "'පෙර කරන ලද කර්මයෙන් කිසිවක් සිදු නොවේ' යන්නයි.",
+      "'කර්ම බීජ සියල්ල ආත්මයෙහි බැඳී ගමන් කරයි' යන්නයි.",
+      "'කාය කර්මය වඩාත් ප්‍රමුඛ ය' යන්නයි.",
+      "'මනෝ කර්මය වඩාත් ප්‍රමුඛ ය' යන්නයි."
+    ],
+    "c": 4
+  },
+  {
+    "q": "9. බුද්ධකාලීන භාරතයේ පැවැති සොළොස්මහා ජනපද අතුරින් රාජාණ්ඩු ගණයට අයත් නොවූ ජනපදය වන්නේ",
+    "o": [
+      "මගධ ජනපදයයි.",
+      "වජ්ජි ජනපදයයි.",
+      "කෝසල ජනපදයයි.",
+      "අවන්ති ජනපදයයි.",
+      "වත්ස ජනපදයයි."
+    ],
+    "c": 1
+  },
+  {
+    "q": "10. ඊශ්වර නිර්මාණවාදය බැහැර කිරීමෙහිලා වඩාත් ගැලපෙන බෞද්ධ ඉගැන්වීම ලෙස හඳුනා ගත හැක්කේ,",
+    "o": [
+      "කර්මවාදයයි.",
+      "අනාත්මවාදයයි.",
+      "හේතුඵලවාදයයි.",
+      "පටිච්චසමුප්පන්නවාදයයි.",
+      "අනිත්‍ය පිළිබඳ සිද්ධාන්තයයි."
+    ],
+    "c": 3
+  },
+  {
+    "q": "11. සමාජ ප්‍රභවය හා විකාශය පිළිබඳ බෞද්ධ ආකල්පය පැහැදිලි කරන අග්ගඤ්ඤ සූත්‍රාගත විග්‍රහයට අනුව, පහත සඳහන් ප්‍රකාශ අතුරින් වඩාත් ම නිවැරදි ප්‍රකාශය වනුයේ, එය",
+    "o": [
+      "පාරිසරික සාධක කරණකොටගෙන සිදු වී ඇති බවයි.",
+      "මනෝවිද්‍යාත්මක සාධක කරණකොටගෙන සිදු වී ඇති බවයි.",
+      "මනෝවිද්‍යාත්මක හා පාරිසරික සාධක කරණකොටගෙන සිදු වී ඇති බවයි.",
+      "සර්වබලධාරී දෙවියකුගේ බලපෑමකින් තොරව ඉබේ සිදු වී ඇති බවයි.",
+      "පටිච්චසමුප්පාද මූලධර්මයට අනුව පාරිසරික හා මනෝවිද්‍යාත්මක සාධක පදනම් කොට ගෙන සිදු වී ඇති බවයි."
+    ],
+    "c": 4
+  },
+  {
+    "q": "12. වෛදික සාහිත්‍යයට අනුව සත්ත්වයා හා ලෝකය සර්වබලධාරී දෙවියෙකු විසින් මවා පාලනය කරනු ඇතැයි පැරණි භාරතීයයෝ විශ්වාස කළ හ. මෙම විශ්වාසය හැඳින්විය හැක්කේ,",
+    "o": [
+      "නියතිවාදය ලෙස ය.",
+      "බහුදේවවාදය ලෙස ය.",
+      "ඊශ්වර නිර්මාණවාදය ලෙස ය.",
+      "මූල හේතුවාදය ලෙස ය.",
+      "නිත්‍යාත්මවාදය ලෙස ය."
+    ],
+    "c": 2
+  },
+  {
+    "q": "13. ජනතාවගේ සිතුම් පැතුම් හා හැකියා හඳුනාගෙන කෘෂිකර්මාන්තයට උනන්දු වන අයට බීජවට හා ආහාර ද වෙළඳාමට උනන්දු වන අයට ප්‍රාග්ධනය ද රාජ්‍ය සේවය රුචිවූවන්ට බත් වැටුප් ආදිය ද ලබා දීමට අනුබල දෙන බෞද්ධ දේශපාලන මූලධර්මය අන්තර්ගත වන්නේ,",
+    "o": [
+      "ජාතක පාලියේ ය.",
+      "චක්කවත්තිසීහනාද සූත්‍රයේ ය.",
+      "මහා පරිනිබ්බාණ සූත්‍රයේ ය.",
+      "අග්ගඤ්ඤ සූත්‍රයේ ය.",
+      "කූටදන්ත සූත්‍රයේ ය."
+    ],
+    "c": 4
+  },
+  {
+    "q": "14. සමාජ සදාචාරය හා සමාජයේ යහපැවැත්ම පිණිස බෞද්ධ ඉගැන්වීම්වලින් ලැබිය හැකි ආලෝකය ඉමහත් ය. දාන, සීල, භාවනා වශයෙන් මූලික ව ඉගැන්වෙන බෞද්ධ සාරධර්ම ආර්ය මාර්ගයෙහිලා සීල, සමාධි, පඤ්ඤා යන ත්‍රිශික්ෂාවෙහි ඇතුළත් වේ. මේ අතර සමාජ සදාචාරය හා යහපැවැත්ම පිණිස අත්‍යවශ්‍ය බෞද්ධ සාරධර්මයක් ලෙස සැලකිය හැක්කේ,",
+    "o": [
+      "දානයයි.",
+      "සීලයයි.",
+      "භාවනාවයි.",
+      "යෝනිසෝමනසිකාරයයි.",
+      "චිත්තෙකාග්ගතාවයි."
+    ],
+    "c": 1
+  },
+  {
+    "q": "15. සිඟාලෝවාද සූත්‍රයේ දැක්වෙන සදිසාවට අයත් යුතුකම් හා වගකීම්වල ඇතුළත් පවින් වැළැක්වීම",
+    "o": [
+      "මහණ බමුණන්ගේ හා දෙමාපියන්ගේ යුතුකමකි.",
+      "මහණ බමුණන්ගේ හා ගුරුවරුන්ගේ යුතුකමකි.",
+      "මහණ බමුණන්ගේ හා සේවකයන්ගේ යුතුකමකි.",
+      "මහණ බමුණන්ගේ හා කල්යාණ මිතුරන්ගේ යුතුකමකි.",
+      "මහණ බමුණන්ගේ හා ස්වාමි පුරුෂයන්ගේ යුතුකමකි."
+    ],
+    "c": 0
+  },
+  {
+    "q": "16. රාජ්‍ය පාලනයෙහිලා වැඩිහිටියන්ට ගරු බුහුමන් කිරීමත්, ඔවුන්ගේ අවවාද අනුශාසනා ලබා ගැනීමත් අත්‍යවශ්‍ය කරුණක් කළ යුතු බව",
+    "o": [
+      "සතර සංග්‍රහ වස්තුවලින් අවධාරණය කෙරේ.",
+      "සතර අගතිවලින් අවධාරණය කෙරේ.",
+      "සප්ත අපරිහානිය ධර්මවලින් අවධාරණය කෙරේ.",
+      "දසරාජධර්මවලින් අවධාරණය කෙරේ.",
+      "දසසක්විතිවත්වලින් අවධාරණය කෙරේ."
+    ],
+    "c": 2
+  },
+  {
+    "q": "17. “ධර්මය ම ඇසුරු කොට ධර්මයට ම සත්කාර කරමින්, ධර්මයට ගරු කරමින්, ධර්මයට බුහුමන් කරමින්, ධර්මය ම පුදමින්, ධර්මයට යටත් පැවැත්ම දක්වමින්...... ධර්මය ම අධිපති කොට ගෙන අන්තඃපුර ජනයා කෙරෙහි ද බල සේනාව කෙරෙහි ද ක්ෂත්‍රියයන් කෙරෙහි ද බ්‍රාහ්මණ ගෘහපතියන් කෙරෙහි ද නියම්ගම් ජනපද වැසි ජනයා කෙරෙහි ද, මහණ බමුණන් කෙරෙහි ද මෘග පක්ෂීන් කෙරෙහි ද දැහැමි රැකවරණය සංවිධානය කරව.” ඉහත ඡේදයෙහි සක්විතිවත්,",
+    "o": [
+      "එකක් ඇතුළත් වේ.",
+      "හතක් ඇතුළත් වේ.",
+      "අටක් ඇතුළත් වේ.",
+      "නවයක් ඇතුළත් වේ.",
+      "දහය ම ඇතුළත් වේ."
+    ],
+    "c": 0
+  },
+  {
+    "q": "18. නීතිගරුකත්වය හා සාමය පිළිබඳ බෞද්ධ ඉගැන්වීම්වලට අනුව පහත සඳහන් ප්‍රකාශ අතුරින් වඩාත් ම නිවැරදි ලෙස සැලකිය හැකි ප්‍රකාශය වන්නේ,",
+    "o": [
+      "නීතිගරුකත්වය අපරිහානිය ධර්මයක් ලෙස බුදුසමයේ ඇගයීමට ලක් නොවන බවයි.",
+      "බුදුසමය දඬුවම ප්‍රතික්ෂේප කරන බවයි.",
+      "දඬුවම් දීම සමාජ සදාචාරය පිණිස අත්‍යවශ්‍ය සාධකයක් බවයි.",
+      "වරදට පෙලඹෙන හේතු නැති කොට අපරාධ නැති කළ යුතු බවයි.",
+      "සදාචාර සම්පන්න වීම මගින් ම සමාජ අපරාධ සියල්ල දුරු කළ යුතු බවයි."
+    ],
+    "c": 3
+  },
+  {
+    "q": "19. බෞද්ධ ශ්‍රාවක සමාජය ආධ්‍යාත්මික සංවර්ධනය පදනම් කර ගනිමින් විවිධ වර්ගීකරණවලට ලක් කර තිබේ. ඒ අතුරින් ආර්ය ශ්‍රාවකයන් වර්ග කර ඇත්තේ,",
+    "o": [
+      "භික්ඛු, භික්ඛුණී, උපාසක, උපාසිකා වශයෙනි.",
+      "සෝවාන්, සකදාගාමී, අනාගාමී, අරහන්ත වශයෙනි.",
+      "බුදු, පසේබුදු, මහරහත්, සක්විති රජ වශයෙනි.",
+      "අර්ථ, ධර්ම, නිරුක්ති, පටිභානලාභීන් වශයෙනි.",
+      "පඨම, දුතිය, තතිය, චතුත්ථ ඣානලාභීන් වශයෙනි."
+    ],
+    "c": 1
+  },
+  {
+    "q": "20. සිත, කය, වචනය යන තිදොරින් සිදුවන සාවද්‍ය ක්‍රියා දහයක් ඇති බවත්, ඒවා දස අකුසල නමින් හැඳින්වෙන බවත්, බුදුදහමෙහි දැක්වේ. මෙම අකුසල දහය සිදු වන්නේ,",
+    "o": [
+      "කයින් තුනක් ද වචනයෙන් තුනක් ද මනසින් හතරක් ද වශයෙනි.",
+      "කයින් හතරක් ද වචනයෙන් තුනක් ද මනසින් තුනක් ද වශයෙනි.",
+      "කයින් තුනක් ද වචනයෙන් හතරක් ද මනසින් තුනක් ද වශයෙනි.",
+      "කයින් හතරක් ද වචනයෙන් හතරක් ද මනසින් දෙකක් ද වශයෙනි.",
+      "කයින් හතරක් ද වචනයෙන් දෙකක් ද මනසින් හතරක් ද වශයෙනි."
+    ],
+    "c": 2
+  },
+  {
+    "q": "21. බෞද්ධ විග්‍රහයට අනුව සචේතනික වූත්, ආචාරාත්මක වූත් හොඳ නරක පුද්ගල ක්‍රියා කිසියම් නිර්ණායකයක් පදනම් කොට ගෙන විනිශ්චය කරනු ලබයි. මෙහිලා එවැනි නිර්ණායකයක් ලෙස නොසැලකිය හැකි ධර්මපර්යාය වන්නේ,",
+    "o": [
+      "'සියලු සංස්කාර ධර්මයෝ අනිත්‍ය ය' යන්නයි.",
+      "'විපාකය අමිහිරි නම් නොකළ යුතු ය' යන්නයි.",
+      "'තමා උපමා කොට කල්පනා කළ යුතු ය' යන්නයි.",
+      "'තමන්, අනුන් හා උභය පක්ෂයට සිදුවන යහපත අයහපත සලකා බැලිය යුතු ය' යන්නයි.",
+      "'තම හෘද සාක්ෂියට අනුව තීරණය කළ යුතු ය' යන්නයි."
+    ],
+    "c": 0
+  },
+  {
+    "q": "22. ආයතනයක අරමුණු හා පරමාර්ථ සාධනය කර ගැනීම සඳහා දක්ෂ හා විචක්ෂණ ලෙස භෞතික හා මානව සම්පත් ඵලදායීව යොදා ගැනීම කළමනාකරණය ලෙස අර්ථ දැක්විය හැකි ය. බුදුසමය තුළ ද විධිමත් කළමනාකරණ ක්‍රමවේද භාවිත කර ඇති බව මූලාශ්‍රගත තොරතුරුවලින් අනාවරණය වේ. බුදුරදුන් අනුදත් සාංඝික දේපළ ක්‍රමය ද සාර්ථක කළමනාකරණ සිද්ධාන්තයක් ලෙස හඳුනාගත හැකි අතර එය,",
+    "o": [
+      "මානව සම්පත් කළමනාකරණයට උදාහරණයක් ලෙස දැක්විය හැකි ය.",
+      "ආධ්‍යාත්මික කළමනාකරණයට උදාහරණයක් ලෙස දැක්විය හැකි ය.",
+      "භෞතික සම්පත් කළමනාකරණයට උදාහරණයක් ලෙස දැක්විය හැකි ය.",
+      "පිරිස් කළමනාකරණයට උදාහරණයක් ලෙස දැක්විය හැකි ය.",
+      "පරිසර කළමනාකරණයට උදාහරණයක් ලෙස දැක්විය හැකි ය."
+    ],
+    "c": 2
+  },
+  {
+    "q": "23. බුදුරජාණන් වහන්සේ හා වීතරාගී භික්ෂු භික්ෂුණීන් ලොව සොඳුරු දෑ වින්දනය කළ අයුරු බෞද්ධ මූලාශ්‍රවල දක්වා තිබේ. සෞන්දර්යය පිළිබඳ බෞද්ධ විග්‍රහයට අනුව මෙය,",
+    "o": [
+      "අනුප්‍රාසාත්මක වින්දනයකි.",
+      "සෞන්දර්යාත්මක වින්දනයකි.",
+      "උපාදානාත්මක වින්දනයකි.",
+      "යාථාභූත වින්දනයකි.",
+      "නිරාමිස වින්දනයකි."
+    ],
+    "c": 4
+  },
+  {
+    "q": "24. \"සුවාමීනි, මහා ප්‍රජාපතී ගෝතමී භාග්‍යවතුන් වහන්සේට බොහෝ උපකාර කළා ය. ඇය කුඩා මෑණියෝ ය. සුළු මෑණියෝ ය. බුදුරජාණන් වහන්සේට කිරි දුන් තැනැත්තී ය. මව කළුරිය කළ කල්හි සිය තනයෙන් කිරි පෙව්වා ය. එහෙයින් කාන්තාව වෙත පැවිද්ද ලබා දෙන්නේ නම් යෙහෙකැයි\" චුල්ලවග්ග පාලියේ එන ඉහත සඳහන් ප්‍රකාශය ආනන්ද හිමියන් විසින් සිදු කරන ලද්දේ මහා ප්‍රජාපතී ගෝතමිය ඇතුළු පිරිසට බුදුසසුනේ පැවිදි බව ලබා දීම පිණිස බුදුරදුන්ගෙන් ඉල්ලා සිටි අවස්ථාවේ දී ය. මෙම සිදුවීම සිදුවූයේ,",
+    "o": [
+      "සැවැත්නුවර ජේතවනාරාමයේ දී ය.",
+      "කොසඹෑනුවර ඝෝසිතාරාමයේ දී ය.",
+      "රජගහනුවර වේළුවනාරාමයේ දී ය.",
+      "විශාලා මහනුවර කූටාගාර ශාලාවේ දී ය.",
+      "කපිලවත්ථුපුර නිග්‍රෝධාරාමයේ දී ය."
+    ],
+    "c": 3
+  },
+  {
+    "q": "25. එක් එක් අංශවල විශේෂ දක්ෂතා ඇති ශ්‍රාවකයන් හඳුනාගත් බුදුරජාණන් වහන්සේ ඔවුන් අග තනතුරුවලට පත් කළහ. මේ අනුව ධූතාංගධාරීන් අතුරින් අගතැන් පත්වූයේ,",
+    "o": [
+      "අඤ්ඤාකොණ්ඩඤ්ඤ මහරහතන් ය.",
+      "සැරියුත් මහරහතන් ය.",
+      "මුගලන් මහරහතන් ය.",
+      "චූලපන්ථක මහරහතන් ය.",
+      "මහාකාශ්‍යප මහරහතන් ය."
+    ],
+    "c": 4
+  },
+  {
+    "q": "26. බොහෝ දෙවි මිනිසුන්ගේ පැසසුමට ලක් වූ බුදුරජාණන් වහන්සේ චිඤ්චාමානවිකා, මාගන්දියා, සුන්දරී පරිබ්‍රාජිකා වැන්නවුන්ගේ නින්දා අපහාසවලට ද ලක් වූහ. සැපයේ දී උද්දාමයටත් දුකේ දී කම්පාවටත් පත් නොවූ උන් වහන්සේ සියල්ල මැදහත් සිතින් විඳ දරා ගත්හ. මෙයින් ප්‍රකට වන්නේ බුදුරජාණන් වහන්සේගේ,",
+    "o": [
+      "මහා කරුණාවයි.",
+      "අරහං ගුණයයි.",
+      "භගවා ගුණයයි.",
+      "තාදී ගුණයයි.",
+      "උපේක්ෂාවයි."
+    ],
+    "c": 3
+  },
+  {
+    "q": "27. ශ්‍රී ලාංකික කුල දරුවන් පැවිදි උපසම්පදා කිරීමට භික්ෂු සංඝයාට බලය ලබා දීමත් සමග භාවිතයට පැමිණි උපසම්පදා ක්‍රමය හඳුන්වනු ලබන්නේ,",
+    "o": [
+      "ඤත්තිචතුත්ථකම්ම උපසම්පදාව නමිනි.",
+      "සරණාගමන උපසම්පදාව නමිනි.",
+      "පඤ්චවාචික උපසම්පදාව නමිනි.",
+      "දූතේන උපසම්පදාව නමිනි.",
+      "ඕවාද පටිග්ගහණ උපසම්පදාව නමිනි."
+    ],
+    "c": 0
+  },
+  {
+    "q": "28. \"මහණ මහලු පැවිද්ද\" යනු",
+    "o": [
+      "සාමණේරභාවයට පත්වීමයි.",
+      "මහලු වියේ දී පැවිදි බවට ඇතුළු වීමයි.",
+      "අධිශීලයට හෙවත් උපසම්පදාවට පත්වීමයි.",
+      "මහලු වියේ දී උපසම්පදාවට පත්වීමයි.",
+      "උපසම්පදා තත්ත්වයට පත් නොවී සිටීමයි."
+    ],
+    "c": 1
+  },
+  {
+    "q": "29. \"ස්ත්‍රියක සෙවීමට වඩා තමා ගැන සෙවීම උතුම් ය\"යි බුදුරජාණන් වහන්සේ විසින් දේශනා කරන ලද්දේ,",
+    "o": [
+      "පක්කුසාති පුත්‍රයාට ය.",
+      "යසකුල පුත්‍රයාගේ යහළුවන්ට ය.",
+      "උපතිස්ස කෝලිත දෙදෙනාට ය.",
+      "භද්දවග්ගිය කුමාරවරුන්ට ය.",
+      "නන්ද කුමාරයාට ය."
+    ],
+    "c": 3
+  },
+  {
+    "q": "30. භික්ෂු සංඝයා කැමති නම්, ඛුද්දානුඛුද්දක ශික්ෂාපද වෙනස් කර ගන්න යැයි බුදුරජාණන් වහන්සේ පරිනිර්වාණයට ආසන්න සමයේ දී දේශනා කළ බව ආනන්ද හිමියෝ ප්‍රථම සංගීති අවස්ථාවේ දී සංඝයාට දැනුම් දුන්හ. ඒ පිළිබඳව සිදු කළ සාකච්ඡාවේ දී ඛුද්දානුඛුද්දක ශික්ෂා පද සම්බන්ධයෙන් ගනු ලැබූ තීරණය වූයේ,",
+    "o": [
+      "පාරාජිකා හැර අන් සියලු ශික්ෂාපද ඛුද්දානුඛුද්දක ශික්ෂා ගණයට අයත් වන බව ය.",
+      "පාරාජිකා හා සංඝාදිසේස හැර අන් සියලු ශික්ෂාපද ඛුද්දානුඛුද්දක ශික්ෂා ගණයට අයත් වන බව ය.",
+      "පාරාජිකා, සංඝාදිසේස හා අනිසත හැර අන් සියලු ශික්ෂාපද ඛුද්දානුඛුද්දක ශික්ෂා ගණයට අයත් වන බව ය.",
+      "කිසිදු ශික්ෂාපද කොටසක් ඛුද්දානුඛුද්දක වශයෙන් වෙන් නොකළ යුතු බව ය.",
+      "ඛුද්දානුඛුද්දක ශික්ෂාපද පිළිබඳව බුදුරදුන්ගෙන් නොවිමසීම ආනන්ද හිමියන්ගේ වරදක් බව ය."
+    ],
+    "c": 3
+  },
+  {
+    "q": "31. දේශීය හා විදේශීය සිසුන් විශාල සංඛ්‍යාවක් අධ්‍යාපනය ලැබූ නාලන්දා විශ්වවිද්‍යාලයේ දසදහසකට අධික සිසුන් සංඛ්‍යාවකට එක්වර නේවාසික පහසුකම් සැපයූ බව වාර්තාවලින් තහවුරු වේ. එසේ කිරීමට සිදු වූයේ,",
+    "o": [
+      "සියලු සිසුන් නේවාසික විය යුතු යැයි විශ්වවිද්‍යාලයේ නීතියක් ක්‍රියාත්මක වූ නිසා ය.",
+      "ජනාකීර්ණ ප්‍රදේශයක විශ්වවිද්‍යාලය පිහිටීම නිසා ය.",
+      "ප්‍රමාණවත් නේවාසික පහසුකම් විශ්වවිද්‍යාලය සතුව තිබීම නිසා ය.",
+      "සියලු ම සිසුන් විදේශිකයන් වීම නිසා ය.",
+      "වෙනත් නේවාසික විශ්වවිද්‍යාල මේ යුගයේ භාරතයේ නොතිබීම නිසා ය."
+    ],
+    "c": 0
+  },
+  {
+    "q": "32. දස අකැප වස්තුවට අයත් වූ 'ආවිජ්ජනකප්ප' යන්නෙන් අදහස් වූයේ,",
+    "o": [
+      "කැප අකැප බවක් නොවිමසා ගුරු පරපුරින් පුහුණු කළ දේ පිළිගැනීම කැප බව ය.",
+      "නොපැසුණු රා වැළඳීම කැප බව ය.",
+      "කිරිත් නොවූ දීත් නොවූ කිරි වැළඳීම කැප බවයි.",
+      "ඉරහැරී සෙවණැල්ල අඟල් දෙකක් දික්වන තුරු දන් වැළඳීම කැප බව ය.",
+      "එක් ගමක දී වරක් දන් වළඳා වෙනත් ගමකට ගොස් නැවත වරක් දන් වැළඳීම කැප බව ය."
+    ],
+    "c": 0
+  },
+  {
+    "q": "33. තෙවන ධර්ම සංගායනාවෙන් අනතුරුව රටවල් නවයකට ධර්මදූතයන් වහන්සේලා පිටත් කර යැවිය යුතු යැයි තීරණය කරන ලද්දේ,",
+    "o": [
+      "මොග්ගලීපුත්තතිස්ස තෙරුන්ගේ යෝජනාවකට අනුව ය.",
+      "ධර්මාශෝක අධිරාජයාගේ ඉල්ලීමකට අනුව ය.",
+      "මහා ධම්මරක්ඛිත හිමියන්ගේ ඉල්ලීමකට අනුව ය.",
+      "සෝණ, උත්තර හිමිවරුන්ගේ ඉල්ලීමකට අනුව ය.",
+      "මිහිඳු හිමියන්ගේ ඉල්ලීමකට අනුව ය."
+    ],
+    "c": 0
+  },
+  {
+    "q": "34. සිරි සඟබෝ රජු වරදකරුවන්ට මරණ දඬුවම ලබා දෙන බව හැඟවීමට සොහොන් බිමෙන් රහසින් මළ සිරුරු ගෙන්වා මහජනයාට පෙනෙන තැනක එල්ලා තබා වැරදිකරුවන්ට අවවාද දී මුදා හැරියේ,",
+    "o": [
+      "ඒ යුගයේ ලංකාවේ මාඝාත ආඥාව ක්‍රියාත්මකව පැවැති නිසා ය.",
+      "රජු පංචශීල ප්‍රතිපදාව මත පිහිටා පාලනය ගෙන ගිය නිසා ය.",
+      "රජු රාජ්‍ය පාලනයේ දුර්වලයකු වූ නිසා ය.",
+      "රජුගේ චර පුරුෂයන් කළ වැරදි සඟවා තබා ගැනීමට අවශ්‍ය වූ නිසා ය.",
+      "දඬුවම් දීම බෞද්ධ ප්‍රතිපදාවට නොගැලපෙන නිසා ය."
+    ],
+    "c": 1
+  },
+  {
+    "q": "35. මළවුන් ඇදහීමට නව අර්ථකථනයක් එක් කරමින් මිහිඳු හිමියන් විසින් සිදු කරන ලද දේශනාව වූයේ,",
+    "o": [
+      "චූලහත්ථිපදෝපම සූත්‍ර දේශනාවයි.",
+      "පේතවත්ථු විමානවත්ථු දේශනාවයි.",
+      "ආසිවිසෝපම සූත්‍ර දේශනාවයි.",
+      "සච්චසංයුත්ත සූත්‍ර දේශනාවයි.",
+      "ධම්මචක්කප්පවත්තන සූත්‍ර දේශනාවයි."
+    ],
+    "c": 1
+  },
+  {
+    "q": "36. පණ්ඩුකාභය රජු චිත්තරාජ යක්ෂයාට අභය වැවේ පහළ ප්‍රදේශයේ වාසස්ථානයක් කරවා දී කෘතවේදීත්වය පළ කිරීමට ප්‍රමුඛතම හේතුව වූයේ,",
+    "o": [
+      "කුඩා කල රජුගේ ජීවිතය ආරක්ෂා කළ නිසා ය.",
+      "රජුට යුද්ධය ජය ගැනීමට සහාය වූ නිසා ය.",
+      "රජුගේ දාසයෙකු ලෙස සේවය කළ නිසා ය.",
+      "රජුගේ පියාගේ ආරක්ෂකයකු වීම නිසා ය.",
+      "රජුගේ මවගේ ආරක්ෂකයකු වීම නිසා ය."
+    ],
+    "c": 0
+  },
+  {
+    "q": "37. වළගම්බා රජු විසින් ඉදිකොට පූජා කළ අභයගිරි විහාරය පිළිගත් තිස්ස තෙරුන් මහා විහාරයෙන් නෙරපා දැමීමට තීරණය කරන ලද්දේ, එම තෙරණුවන්",
+    "o": [
+      "මහා විහාරික භික්ෂූන්ගේ අවවාද නොපිළිගත් නිසා ය.",
+      "දේශපාලනයට සම්බන්ධ වී සිටීම නිසා ය.",
+      "විනය විරෝධීව කටයුතු කිරීම නිසා ය.",
+      "වළගම්බා රජුට පක්ෂපාතීව ක්‍රියා කළ නිසා ය.",
+      "මහා විහාරයට එරෙහිව ගොඩනැගූ නව ආරාමයක් පිළිගැනීම නිසා ය."
+    ],
+    "c": 2
+  },
+  {
+    "q": "38. මහාසේන රජතුමාගේ ක්‍රියා කලාපය නිසා ථේරවාද සංඝ සමාජය මහා නිකාය හා ධම්ම රුචික නිකාය වශයෙන් දෙකඩ විය. මෙසේ එකම භික්ෂු සම්ප්‍රදාය දෙකඩ කිරීමෙන් රජු අපේක්ෂා කරන ලද්දේ,",
+    "o": [
+      "විනය නීති දැඩි ලෙස ආරක්ෂා කිරීමට පෙළඹවීමයි.",
+      "ආරාමික පාලනය විධිමත් කිරීමයි.",
+      "ආරාම සතු දේපළ ආරක්ෂා කිරීමට පෙළඹවීමයි.",
+      "ගිහි-පැවිදි සම්බන්ධය වඩාත් තහවුරු කිරීමයි.",
+      "භික්ෂූන්ගේ සමාජ කාර්යභාරය විධිමත් කිරීමයි."
+    ],
+    "c": 0
+  },
+  {
+    "q": "39. ශ්‍රී ලංකාව හා බුරුමය අතර සංස්කෘතික සබඳතා වැඩි දියුණු වූ යුගයක් ලෙස පළමුවන විජයබාහු රාජ්‍ය සමය හඳුන්වා දිය හැකි ය. මෙකල ශාසනික වශයෙන් වැදගත් වූ ප්‍රධාන සිදුවීමක් වූයේ,",
+    "o": [
+      "බුරුමයෙන් භික්ෂූන් පිරිසක් ගෙන්වා ශාසන ශෝධනයක් සිදු කිරීමයි.",
+      "උත්තරජීව හා ඡප්පට තෙරවරුන් ලංකාවට පැමිණීමයි.",
+      "බුරුමයේ සීහළ සංඝ නිකාය ආරම්භ කිරීමයි.",
+      "බුරුම භික්ෂූන් පිරිසක් උපසම්පදාව පිණිස ලංකාවට පැමිණීමයි.",
+      "බුරුමයේ කල්යාණි සීමාව පිහිටුවීමයි."
+    ],
+    "c": 3
+  },
+  {
+    "q": "40. බුරුම පාලකයන් අතුරින් රජ වීමට පෙර පැවිදි වී සිටියේ,",
+    "o": [
+      "ධම්මචේතිය රජතුමා ය.",
+      "කෙයාන්සිතූ රජතුමා ය.",
+      "අනවරථ රජතුමා ය.",
+      "මින්දොන් මින් රජතුමා ය.",
+      "මොන්තුන් රජතුමා ය."
+    ],
+    "c": 0
+  },
+  {
+    "q": "41. බුරුම දේශයට බුදුසමය හඳුන්වා දීම පිළිබඳව සඳහන් වන ශ්‍රී ලාංකේය මූලාශ්‍රයක් වන්නේ,",
+    "o": [
+      "මහාවංසයයි.",
+      "ථූප වංසයයි.",
+      "බෝධි වංසයයි.",
+      "ධාතු වංසයයි.",
+      "අත්තනගලු වංසයයි."
+    ],
+    "c": 0
+  },
+  {
+    "q": "42. ප්‍රාග් බෞද්ධ යුගයේ ජපානය තුළ පැවති ආගමික විශ්වාසය ලෙස සැලකෙන්නේ,",
+    "o": [
+      "නාත් වන්දනාවයි.",
+      "කොන්ෆියුසියස් දහමයි.",
+      "ෂින්තෝ දහමයි.",
+      "තාවෝ දහමයි.",
+      "බෙන් දහමයි."
+    ],
+    "c": 2
+  },
+  {
+    "q": "43. හාන් අධිරාජ්‍ය සමයේ දී චීන දේශයට බුදුදහම හඳුන්වා දීමට මූලිකව ක්‍රියා කළ ධර්මදූතයන් වහන්සේලා දෙකම වූයේ,",
+    "o": [
+      "කාශ්‍යප මාතංග හා ධර්මරක්ෂ හිමිවරුන් ය.",
+      "ෆාහියන් හා හියුංසාං හිමිවරුන් ය.",
+      "බෝධිධර්ම හා ගුණභද්‍ර හිමිවරුන් ය.",
+      "සෝණ හා උත්තර හිමිවරුන් ය.",
+      "කුමාරජීව හා පරමාර්ථ හිමිවරුන් ය."
+    ],
+    "c": 0
+  },
+  {
+    "q": "44. ජපන් බුදුසමයේ ස්වර්ණමය යුගය ලෙස සැලකෙන්නේ ෂෝතොකුතයිෂි හෙවත් උමායදෝ කුමරුන්ගේ පාලන සමයයි. බුදුසමයේ සංවර්ධනය උදෙසා එතුමා හඳුන්වා දුන් නව ව්‍යවස්ථාවේ ඇතුළත් වගන්ති සංඛ්‍යාව වූයේ,",
+    "o": [
+      "දොළොසකි.",
+      "දහහතරකි.",
+      "පහළොවකි.",
+      "දහහතකි.",
+      "විස්සකි."
+    ],
+    "c": 3
+  },
+  {
+    "q": "45. පුරාවිද්‍යාත්මක සාධකවලට අනුව මුල්වරට බුද්ධ ප්‍රතිමාව නිර්මාණය කරන ලද සම්ප්‍රදාය ලෙස සලකනු ලබන්නේ,",
+    "o": [
+      "මථුරා සම්ප්‍රදායයි.",
+      "ගන්ධාර සම්ප්‍රදායයි.",
+      "අමරාවතී සම්ප්‍රදායයි.",
+      "පල්ලව සම්ප්‍රදායයි.",
+      "ගුප්ත සම්ප්‍රදායයි."
+    ],
+    "c": 1
+  },
+  {
+    "q": "46. ලක්දිව හිඳි පිළිමවල වඩාත් ප්‍රකට මුද්‍රා ලක්ෂණය වන්නේ,",
+    "o": [
+      "විතර්ක මුද්‍රාවයි.",
+      "වරද මුද්‍රාවයි.",
+      "භූමි ස්පර්ශ මුද්‍රාවයි.",
+      "ධර්මචක්‍ර මුද්‍රාවයි.",
+      "ධ්‍යාන මුද්‍රාවයි."
+    ],
+    "c": 4
+  },
+  {
+    "q": "47. බුද්ධ ප්‍රතිමාව මානව රූපාකාරව නිර්මාණය කිරීමට පෙර බුදුරදුන් වෙනුවට විවිධ සංකේත භාවිත කොට තිබේ. ඒ සඳහා භාවිත නොකළ සංකේතයක් වන්නේ,",
+    "o": [
+      "ඌර්ණරෝම ධාතුවයි.",
+      "සිරිපතුලයි.",
+      "ධර්ම චක්‍රයයි.",
+      "ආසනයයි.",
+      "බෝධියයි."
+    ],
+    "c": 0
+  },
+  {
+    "q": "48. ස්තූපයේ ආරක්ෂාව සඳහා සිංහල කලාකරුවා විසින් නිර්මාණය කරන ලද ගෘහ විශේෂය හැඳින්වූයේ,",
+    "o": [
+      "අටදාගේ නමිනි.",
+      "හැටදාගේ නමිනි.",
+      "චේතියඝරය නමිනි.",
+      "වටදාගේ නමිනි.",
+      "ගෙඩිගේ නමිනි."
+    ],
+    "c": 3
+  },
+  {
+    "q": "49. ලක්දිව වංශකථා සාහිත්‍යයට අනුව මහින්දාගමනයෙන් පසු මෙරට ඉදි වූ ප්‍රථම ස්තූපය වන ථූපාරාමයෙහි නිදන් කොට ඇති ධාතුන් වහන්සේ වන්නේ,",
+    "o": [
+      "අකු ධාතුවයි.",
+      "පටි ධාතුවයි.",
+      "ලලාට ධාතුවයි.",
+      "ග්‍රීවා ධාතුවයි.",
+      "පාත්‍රා ධාතුවයි."
+    ],
+    "c": 0
+  },
+  {
+    "q": "50. බුදුරජාණන් වහන්සේගේ ගුණ තේමා කර ගනිමින් ගුරුළුගෝමීන් විසින් රචනා කරන ලද අමාවතුර ග්‍රන්ථයට තේමා වී ඇත්තේ,",
+    "o": [
+      "අරහං ගුණයයි.",
+      "සම්මා සම්බුද්ධ ගුණයයි.",
+      "සුගත ගුණයයි.",
+      "පුරිසදම්ම සාරථි ගුණයයි.",
+      "සත්ථා දේවමනුස්සානං ගුණයයි."
+    ],
+    "c": 3
+  }
+];
+
+const OPT_LABELS = ["(1)", "(2)", "(3)", "(4)", "(5)"];
+let current = -2;
+let answers = new Array(QUESTIONS.length).fill(null);
+let okCount = 0, noCount = 0;
+let soundOn = true;
+let audioCtx = null;
+
+function startQuiz() {
+  current = 0;
+  render();
+}
+
+function renderStartScreen() {
+  quizArea.innerHTML = `
+    <div class="card start-card" style="text-align:center; padding: 38px 24px;">
+      <div style="margin-bottom:16px;">
+        <span class="kicker" style="font-size:12.5px; padding:6px 18px; letter-spacing:0.14em;">✨ A/L MCQ HUB — ONLINE PAPER ✨</span>
+      </div>
+      
+      <h2 style="font-family:'Noto Serif Sinhala',serif; font-size:clamp(22px, 5.2vw, 32px); margin:12px 0; background:linear-gradient(135deg, #ffffff 0%, var(--amber-glow) 50%, var(--orange-primary) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:800; line-height:1.4;">
+        බෞද්ධ ශිෂ්ටාචාරය IX — I ප්‍රශ්න පත්‍රය
+      </h2>
+      
+      <p style="color:var(--text-dim); font-size:15px; max-width:540px; margin:0 auto 28px; line-height:1.75;">
+        උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය ප්‍රශ්න 50 සඳහා පිළිතුරු සපයා ඔබගේ දැනුම ක්ෂණිකව පරික්ෂා කරගන්න!
+      </p>
+
+      <div class="feature-grid">
+        <div class="feat-box">
+          <span class="feat-icon">📝</span>
+          <span class="feat-title">ප්‍රශ්න 50 යි</span>
+          <span class="feat-desc">සම්පූර්ණ ප්‍රශ්න පත්‍රය</span>
+        </div>
+        <div class="feat-box">
+          <span class="feat-icon">⚡</span>
+          <span class="feat-title">ක්ෂණික පරික්ෂාව</span>
+          <span class="feat-desc">තෝරූ සැනින් පිළිතුරු</span>
+        </div>
+        <div class="feat-box">
+          <span class="feat-icon">🔊</span>
+          <span class="feat-title">ශබ්ද සංඥා</span>
+          <span class="feat-desc">Audio FX Feedback</span>
+        </div>
+        <div class="feat-box">
+          <span class="feat-icon">📊</span>
+          <span class="feat-title">සමාලෝචනය</span>
+          <span class="feat-desc">ලකුණු විග්‍රහය</span>
+        </div>
+      </div>
+
+      <div style="margin-top:36px;">
+        <button class="start-btn" onclick="startQuiz()">
+          <span>ප්‍රශ්න පත්‍රය ආරම්භ කරන්න</span>
+          <span style="font-size:22px;">🚀</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function ensureAudio() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { audioCtx = null; }
+  }
+  return audioCtx;
+}
+
+function playTone(freq, start, dur, type, vol) {
+  const ctx = ensureAudio();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, ctx.currentTime + start);
+  gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + start + 0.015);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(ctx.currentTime + start);
+  osc.stop(ctx.currentTime + start + dur + 0.02);
+}
+
+function playCorrectSound() {
+  if (!soundOn) return;
+  playTone(523.25, 0, 0.12, 'sine', 0.2);
+  playTone(659.25, 0.08, 0.14, 'sine', 0.2);
+  playTone(783.99, 0.16, 0.22, 'sine', 0.2);
+}
+
+function playWrongSound() {
+  if (!soundOn) return;
+  playTone(220, 0, 0.16, 'sawtooth', 0.15);
+  playTone(174.61, 0.1, 0.24, 'sawtooth', 0.15);
+}
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundBtn').textContent = soundOn ? '🔊 හඬ: ක්‍රියාත්මකයි' : '🔇 හඬ: නැත';
+}
+
+const quizArea = document.getElementById('quizArea');
+const lanternStrip = document.getElementById('lanternStrip');
+const okCountEl = document.getElementById('okCount');
+const noCountEl = document.getElementById('noCount');
+
+function buildStrip() {
+  lanternStrip.innerHTML = '';
+  QUESTIONS.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'lantern';
+    b.title = 'ප්‍රශ්නය ' + (i + 1);
+    b.addEventListener('click', () => { current = i; render(); });
+    lanternStrip.appendChild(b);
+  });
+  refreshStrip();
+}
+
+function refreshStrip() {
+  const items = lanternStrip.children;
+  for (let i = 0; i < items.length; i++) {
+    const el = items[i];
+    el.classList.remove('current', 'correct', 'wrong');
+    if (answers[i] !== null) {
+      el.classList.add(answers[i] === QUESTIONS[i].c ? 'correct' : 'wrong');
+    }
+    if (i === current) el.classList.add('current');
+  }
+}
+
+function updateTally() {
+  okCountEl.textContent = okCount;
+  noCountEl.textContent = noCount;
+}
+
+function selectAnswer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const isCorrect = oi === QUESTIONS[qi].c;
+  if (isCorrect) { okCount++; playCorrectSound(); }
+  else { noCount++; playWrongSound(); }
+  updateTally();
+  refreshStrip();
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  const chosen = answers[current];
+  const answered = chosen !== null;
+
+  const optsHtml = q.o.map((text, oi) => {
+    let cls = '';
+    if (answered) {
+      if (oi === q.c) cls = 'correct';
+      else if (oi === chosen) cls = 'incorrect';
+    }
+    const disabledAttr = answered ? 'disabled' : '';
+    return `<button class="opt ${cls}" ${disabledAttr} onclick="selectAnswer(${current},${oi})">
+      <span class="tag">${OPT_LABELS[oi]}</span><span>${text}</span>
+    </button>`;
+  }).join('');
+
+  let feedbackHtml = '';
+  if (answered) {
+    const isCorrect = chosen === q.c;
+    feedbackHtml = `<div class="feedback-line show ${isCorrect ? 'ok' : 'no'}">
+      ${isCorrect ? '✓ නිවැරදියි! ඉතා හොඳයි.' : '✗ වැරදියි — නිවැරදි පිළිතුර කොළ පාටින් දක්වා ඇත.'}
+    </div>`;
+  }
+
+  quizArea.innerHTML = `
+    <div class="card">
+      <div class="qmeta">
+        <span class="qnum">ප්‍රශ්නය ${current + 1}</span>
+        <span class="qcount">${current + 1} / ${QUESTIONS.length}</span>
+      </div>
+      <div class="qtext">${q.q}</div>
+      <div class="options">${optsHtml}</div>
+      ${feedbackHtml}
+      <div class="navrow">
+        <button class="btn" onclick="goPrev()" ${current === 0 ? 'disabled' : ''}>← පෙර ප්‍රශ්නය</button>
+        ${current === QUESTIONS.length - 1
+          ? `<button class="btn primary" onclick="showResults()" ${answered ? '' : 'disabled'}>ප්‍රතිඵල බලන්න</button>`
+          : `<button class="btn primary" onclick="goNext()" ${answered ? '' : 'disabled'}>ඊළඟ ප්‍රශ්නය →</button>`}
+      </div>
+    </div>
+  `;
+}
+
+function goPrev() { if (current > 0) { current--; render(); } }
+function goNext() { if (current < QUESTIONS.length - 1) { current++; render(); } }
+
+function restart() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  okCount = 0; noCount = 0;
+  updateTally();
+  current = 0;
+  render();
+}
+
+let reviewFilter = 'all';
+function showResults() { current = -1; render(); }
+
+function renderResults() {
+  const score = okCount;
+  const pct = Math.round((score / QUESTIONS.length) * 100);
+
+  let verdict;
+  if (pct >= 80) verdict = 'විශිෂ්ටයි! — විභාගයට සාර්ථකව මුහුණ දීමට ඉහළ සුදානමක් ඇත.';
+  else if (pct >= 60) verdict = 'හොඳයි! — තවදුරටත් කරුණු පුනරීක්ෂණය කරන්න.';
+  else if (pct >= 40) verdict = 'මූලික අවබෝධයක් ඇත — තවත් නිබන්ධන පරිශීලනය කරන්න.';
+  else verdict = 'මෙම පාඩම් කොටස් නැවත අවධානයෙන් අධ්‍යයනය කරන්න.';
+
+  const filterRow = `
+    <div class="filter-row">
+      <button class="chip ${reviewFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">සියල්ල · ${QUESTIONS.length}</button>
+      <button class="chip ${reviewFilter === 'wrong' ? 'active' : ''}" onclick="setFilter('wrong')">වැරදි · ${noCount}</button>
+      <button class="chip ${reviewFilter === 'right' ? 'active' : ''}" onclick="setFilter('right')">නිවැරදි · ${okCount}</button>
+    </div>`;
+
+  let reviewHtml = '';
+  QUESTIONS.forEach((q, i) => {
+    const isCorrect = answers[i] === q.c;
+    if (reviewFilter === 'wrong' && isCorrect) return;
+    if (reviewFilter === 'right' && !isCorrect) return;
+    const yourAns = answers[i] === null ? 'පිළිතුරු නොදුන්නා' : (OPT_LABELS[answers[i]] + ' ' + q.o[answers[i]]);
+    const correctAns = OPT_LABELS[q.c] + ' ' + q.o[q.c];
+    reviewHtml += `
+      <div class="review-item">
+        <div class="rq">${q.q} <span class="badge ${isCorrect ? 'ok' : 'no'}">${isCorrect ? 'නිවැරදි' : 'වැරදි'}</span></div>
+        ${!isCorrect ? `<div class="rline wrong"><span class="lab">ඔබේ පිළිතුර</span><span class="val">${yourAns}</span></div>` : ''}
+        <div class="rline right"><span class="lab">නිවැරදි පිළිතුර</span><span class="val">${correctAns}</span></div>
+      </div>`;
+  });
+
+  quizArea.innerHTML = `
+    <div class="card">
+      <div class="results-head">
+        <div class="score-plate">
+          <div class="num">${pct}%</div>
+          <div class="frac">${score} / ${QUESTIONS.length} නිවැරදියි</div>
+        </div>
+        <p class="score-sub">${verdict}</p>
+      </div>
+      ${filterRow}
+      <div id="reviewList">${reviewHtml || '<p style="text-align:center;color:var(--text-dim);padding:20px 0;">මෙම කාණ්ඩයේ ප්‍රශ්න නැත</p>'}</div>
+      <div class="navrow" style="justify-content:center;margin-top:28px;">
+        <button class="btn primary" onclick="restart()">නැවත උත්සාහ කරන්න 🔄</button>
+      </div>
+    </div>
+  `;
+}
+
+function setFilter(f) { reviewFilter = f; renderResults(); }
+
+function render() {
+  refreshStrip();
+  if (current === -2) renderStartScreen();
+  else if (current === -1) renderResults();
+  else renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildStrip();
+updateTally();
+render();
+</script>
+</body>
+
+</html>
