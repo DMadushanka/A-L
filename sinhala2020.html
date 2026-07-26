@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="si">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>සිංහල භාෂාව 2020 — I කොටස (MCQ)</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="සිංහල භාෂාව 2020 — I කොටස MCQ">
+  <meta property="og:description" content="▶ [ 🚀 සිංහල 2020 MCQ ප්‍රශ්න පත්‍රය ආරම්භ කිරීමට මෙතැන ක්ලික් කරන්න ➔ ]">
+  <meta property="og:image" content="sinhala2020.png">
+  <meta property="og:image:type" content="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@500;600;700;800&family=Noto+Sans+Sinhala:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #09110d;
+      --bg-gradient-1: rgba(0, 255, 135, 0.15);
+      --bg-gradient-2: rgba(255, 190, 11, 0.12);
+      --bg-gradient-3: rgba(0, 229, 255, 0.10);
+
+      --panel: #112018;
+      --panel-2: #182e22;
+      --panel-3: #223f2f;
+
+      --emerald-neon: #00ff87;
+      --gold-amber: #ffbe0b;
+      --cyan-accent: #00e5ff;
+
+      --good: #00ff87;
+      --good-soft: #69f0ae;
+      --good-bg: rgba(0, 255, 135, 0.16);
+
+      --bad: #ff2a6d;
+      --bad-soft: #ff7597;
+      --bad-bg: rgba(255, 42, 109, 0.16);
+
+      --text: #f0fff6;
+      --text-dim: #94b5a3;
+      --radius: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-dark);
+      color: var(--text);
+      font-family: 'Noto Sans Sinhala', 'Noto Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 24px 14px 60px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    body::before,
+    body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(90px);
+      z-index: -1;
+      opacity: 0.85;
+      animation: floatGlow 12s ease-in-out infinite alternate;
+    }
+
+    body::before {
+      top: -10%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, #00ff87, transparent 70%);
+    }
+
+    body::after {
+      bottom: -10%;
+      right: -10%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, #ffbe0b, transparent 70%);
+      animation-delay: -6s;
+    }
+
+    @keyframes floatGlow {
+      0% {
+        transform: translate(0, 0) scale(1);
+      }
+
+      50% {
+        transform: translate(40px, 50px) scale(1.15);
+      }
+
+      100% {
+        transform: translate(-30px, 30px) scale(0.95);
+      }
+    }
+
+    .stage {
+      width: 100%;
+      max-width: 760px;
+    }
+
+    .masthead {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .masthead .kicker {
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      color: var(--gold-amber);
+      text-transform: uppercase;
+      display: inline-block;
+      margin-bottom: 8px;
+      font-weight: 700;
+      background: rgba(255, 190, 11, 0.12);
+      padding: 4px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 190, 11, 0.25);
+    }
+
+    .masthead h1 {
+      font-family: 'Noto Serif Sinhala', serif;
+      font-weight: 800;
+      font-size: clamp(22px, 4.8vw, 32px);
+      margin: 6px 0 8px;
+      background: linear-gradient(135deg, #ffffff 0%, var(--emerald-neon) 40%, var(--gold-amber) 70%, var(--cyan-accent) 100%);
+      background-size: 250% auto;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: shineText 5s linear infinite;
+    }
+
+    @keyframes shineText {
+      0% {
+        background-position: 0% 50%;
+      }
+
+      50% {
+        background-position: 100% 50%;
+      }
+
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .masthead p {
+      margin: 0;
+      color: var(--text-dim);
+      font-size: 13.5px;
+    }
+
+    .scorebar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(17, 32, 24, 0.85);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 255, 135, 0.25);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 15px rgba(0, 255, 135, 0.1);
+      border-radius: 999px;
+      padding: 10px 20px;
+      margin: 18px 0 16px;
+      position: sticky;
+      top: 12px;
+      z-index: 10;
+    }
+
+    .scorebar .tally {
+      display: flex;
+      gap: 16px;
+      font-size: 13.5px;
+      font-weight: 700;
+    }
+
+    .scorebar .tally .ok {
+      color: var(--good-soft);
+    }
+
+    .scorebar .tally .no {
+      color: var(--bad-soft);
+    }
+
+    .lantern-strip {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 14px 10px;
+      margin-bottom: 22px;
+      background: var(--panel);
+      border: 1px solid var(--panel-3);
+      border-radius: 16px;
+      box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .lantern {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      background: var(--panel-3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-dim);
+      font-size: 11px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .lantern:hover {
+      transform: translateY(-2px) scale(1.15);
+      background: var(--emerald-neon);
+      color: #09110d;
+    }
+
+    .lantern.current {
+      background: linear-gradient(180deg, var(--gold-amber), var(--emerald-neon));
+      color: #09110d;
+      box-shadow: 0 0 12px rgba(0, 255, 135, 0.9), 0 0 4px var(--gold-amber);
+      animation: pulseLantern 1.6s infinite alternate;
+    }
+
+    .lantern.correct {
+      background: linear-gradient(180deg, var(--good-soft), var(--good));
+      color: #042416;
+      box-shadow: 0 0 8px rgba(0, 255, 135, 0.4);
+    }
+
+    .lantern.wrong {
+      background: linear-gradient(180deg, var(--bad-soft), var(--bad));
+      color: #2e050e;
+      box-shadow: 0 0 8px rgba(255, 42, 109, 0.4);
+    }
+
+    @keyframes pulseLantern {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 8px rgba(0, 255, 135, 0.7);
+      }
+
+      100% {
+        transform: scale(1.2);
+        box-shadow: 0 0 18px rgba(255, 190, 11, 1);
+      }
+    }
+
+    .card {
+      background: linear-gradient(145deg, var(--panel) 0%, var(--panel-2) 100%);
+      border: 1px solid var(--panel-3);
+      border-radius: var(--radius);
+      padding: 30px 28px 26px;
+      box-shadow: 0 14px 35px rgba(0, 0, 0, 0.5), 0 0 20px rgba(0, 255, 135, 0.05);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--emerald-neon), var(--gold-amber), var(--cyan-accent));
+      background-size: 200% 100%;
+      animation: gradientMove 4s ease infinite;
+    }
+
+    @keyframes gradientMove {
+      0% {
+        background-position: 0% 0%;
+      }
+
+      50% {
+        background-position: 100% 0%;
+      }
+
+      100% {
+        background-position: 0% 0%;
+      }
+    }
+
+    .qmeta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 16px;
+    }
+
+    .qnum {
+      font-family: 'Noto Serif Sinhala', serif;
+      color: var(--gold-amber);
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .qnum::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--emerald-neon);
+      box-shadow: 0 0 8px var(--emerald-neon);
+    }
+
+    .qcount {
+      color: var(--text-dim);
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .qtext {
+      font-size: 18px;
+      line-height: 1.8;
+      margin: 0 0 24px;
+      color: var(--text);
+      white-space: pre-line;
+      font-weight: 600;
+    }
+
+    .options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .opt {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      text-align: left;
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(24, 46, 34, 0.7);
+      border: 1px solid var(--panel-3);
+      border-radius: 14px;
+      color: var(--text);
+      font-family: inherit;
+      font-size: 15.5px;
+      line-height: 1.6;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    .opt:hover:not([disabled]) {
+      border-color: var(--emerald-neon);
+      background: linear-gradient(90deg, rgba(0, 255, 135, 0.15) 0%, rgba(24, 46, 34, 0.9) 100%);
+      transform: translateX(4px);
+      box-shadow: 0 4px 14px rgba(0, 255, 135, 0.15);
+    }
+
+    .opt .tag {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid rgba(0, 255, 135, 0.3);
+      background: var(--panel-3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12.5px;
+      color: var(--gold-amber);
+      margin-top: 1px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .opt:hover:not([disabled]) .tag {
+      background: var(--emerald-neon);
+      color: #09110d;
+      border-color: var(--emerald-neon);
+    }
+
+    .opt[disabled] {
+      cursor: default;
+    }
+
+    .opt.correct {
+      border-color: var(--good);
+      background: var(--good-bg);
+      animation: popSuccess 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      box-shadow: 0 0 15px rgba(0, 255, 135, 0.25);
+    }
+
+    .opt.correct .tag {
+      background: var(--good);
+      border-color: var(--good);
+      color: #042416;
+    }
+
+    .opt.incorrect {
+      border-color: var(--bad);
+      background: var(--bad-bg);
+      animation: shakeError 0.35s ease;
+      box-shadow: 0 0 15px rgba(255, 42, 109, 0.25);
+    }
+
+    .opt.incorrect .tag {
+      background: var(--bad);
+      border-color: var(--bad);
+      color: #2e050e;
+    }
+
+    @keyframes popSuccess {
+      0% {
+        transform: scale(1);
+      }
+
+      50% {
+        transform: scale(1.025);
+      }
+
+      100% {
+        transform: scale(1);
+      }
+    }
+
+    @keyframes shakeError {
+
+      0%,
+      100% {
+        transform: translateX(0);
+      }
+
+      20% {
+        transform: translateX(-6px);
+      }
+
+      40% {
+        transform: translateX(6px);
+      }
+
+      60% {
+        transform: translateX(-4px);
+      }
+
+      80% {
+        transform: translateX(4px);
+      }
+    }
+
+    .explain-box {
+      margin-top: 18px;
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-size: 14.5px;
+      line-height: 1.75;
+      display: none;
+      animation: fadeIn 0.35s ease;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .explain-box.show {
+      display: block;
+    }
+
+    .explain-box.ok {
+      background: rgba(0, 255, 135, 0.12);
+      color: #b9f6ca;
+      border: 1px solid rgba(0, 255, 135, 0.35);
+    }
+
+    .explain-box.no {
+      background: rgba(255, 42, 109, 0.12);
+      color: #ff80ab;
+      border: 1px solid rgba(255, 42, 109, 0.35);
+    }
+
+    .navrow {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 24px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 14px;
+      margin: 24px 0 10px;
+    }
+
+    .feat-box {
+      background: rgba(24, 46, 34, 0.75);
+      border: 1px solid var(--panel-3);
+      border-radius: 16px;
+      padding: 16px 10px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.25s ease, border-color 0.25s ease;
+    }
+
+    .feat-box:hover {
+      transform: translateY(-4px);
+      border-color: var(--emerald-neon);
+      box-shadow: 0 6px 18px rgba(0, 255, 135, 0.15);
+    }
+
+    .feat-icon {
+      font-size: 28px;
+    }
+
+    .feat-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--text);
+    }
+
+    .feat-desc {
+      font-size: 11.5px;
+      color: var(--text-dim);
+    }
+
+    .start-btn {
+      font-family: 'Noto Sans Sinhala', sans-serif;
+      font-size: 18px !important;
+      font-weight: 800 !important;
+      padding: 16px 38px !important;
+      border-radius: 999px !important;
+      background: linear-gradient(135deg, #00ff87 0%, #00e5ff 50%, #ffbe0b 100%) !important;
+      background-size: 200% auto !important;
+      color: #09110d !important;
+      border: none !important;
+      cursor: pointer;
+      box-shadow: 0 8px 30px rgba(0, 255, 135, 0.5), 0 0 20px rgba(255, 190, 11, 0.4) !important;
+      animation: pulseStartBtn 2s infinite, shineGrad 3s linear infinite !important;
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+    }
+
+    @keyframes pulseStartBtn {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 8px 25px rgba(0, 255, 135, 0.5);
+      }
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 14px 40px rgba(0, 255, 135, 0.85), 0 0 25px rgba(255, 190, 11, 0.6);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 8px 25px rgba(0, 255, 135, 0.5);
+      }
+    }
+
+    @keyframes shineGrad {
+      0% {
+        background-position: 0% 50%;
+      }
+      50% {
+        background-position: 100% 50%;
+      }
+      100% {
+        background-position: 0% 50%;
+      }
+    }
+
+    .start-btn:hover {
+      transform: scale(1.08) translateY(-3px) !important;
+      box-shadow: 0 16px 45px rgba(0, 255, 135, 0.95) !important;
+    }
+
+    .btn {
+      font-family: 'Noto Sans Sinhala', sans-serif;
+      font-size: 14.5px;
+      padding: 11px 22px;
+      border-radius: 999px;
+      border: 1px solid var(--panel-3);
+      background: var(--panel-2);
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .btn:hover:not(:disabled) {
+      border-color: var(--emerald-neon);
+      color: var(--gold-amber);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 255, 135, 0.2);
+    }
+
+    .btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      transform: none !important;
+      box-shadow: none !important;
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--emerald-neon) 0%, var(--cyan-accent) 100%);
+      color: #09110d;
+      border: none;
+      font-weight: 800;
+      box-shadow: 0 4px 16px rgba(0, 255, 135, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn.primary::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s ease;
+    }
+
+    .btn.primary:hover:not(:disabled)::before {
+      left: 100%;
+    }
+
+    .btn.primary:hover:not(:disabled) {
+      box-shadow: 0 6px 22px rgba(0, 255, 135, 0.6);
+      color: #09110d;
+    }
+
+    .btn.sound-toggle {
+      font-size: 12.5px;
+      padding: 7px 14px;
+      background: rgba(0, 0, 0, 0.3);
+    }
+
+    .results-head {
+      text-align: center;
+      margin-bottom: 22px;
+    }
+
+    .score-plate {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 22px 40px;
+      border: 1px solid rgba(0, 255, 135, 0.3);
+      background: linear-gradient(145deg, var(--panel-2) 0%, var(--panel-3) 100%);
+      border-radius: 22px;
+      margin-bottom: 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 25px rgba(0, 255, 135, 0.2);
+    }
+
+    .score-plate .num {
+      font-family: 'Noto Serif Sinhala', serif;
+      font-size: 38px;
+      font-weight: 800;
+      background: linear-gradient(135deg, #ffffff, var(--gold-amber));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .score-plate .frac {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .score-sub {
+      color: var(--text-dim);
+      font-size: 14.5px;
+      line-height: 1.6;
+    }
+
+    .review-item {
+      border-top: 1px solid var(--panel-3);
+      padding: 18px 0;
+    }
+
+    .review-item:first-child {
+      border-top: none;
+    }
+
+    .review-item .rq {
+      font-size: 15px;
+      line-height: 1.65;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .review-item .rline {
+      font-size: 13.5px;
+      display: flex;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .review-item .rline .lab {
+      color: var(--text-dim);
+      min-width: 85px;
+      flex-shrink: 0;
+      font-size: 12px;
+      padding-top: 2px;
+    }
+
+    .review-item .rline.wrong .val {
+      color: var(--bad-soft);
+    }
+
+    .review-item .rline.right .val {
+      color: var(--good-soft);
+    }
+
+    .review-item .rexplain {
+      font-size: 13px;
+      color: var(--gold-amber);
+      background: rgba(255, 190, 11, 0.08);
+      padding: 8px 12px;
+      border-radius: 8px;
+      margin-top: 6px;
+      border-left: 3px solid var(--gold-amber);
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 10px;
+      border-radius: 999px;
+      margin-left: 8px;
+      vertical-align: middle;
+      font-weight: 700;
+    }
+
+    .badge.ok {
+      background: var(--good-bg);
+      color: var(--good-soft);
+      border: 1px solid rgba(0, 255, 135, 0.3);
+    }
+
+    .badge.no {
+      background: var(--bad-bg);
+      color: var(--bad-soft);
+      border: 1px solid rgba(255, 42, 109, 0.3);
+    }
+
+    .filter-row {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 18px 0 10px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      font-size: 12px;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--panel-3);
+      background: var(--panel-2);
+      color: var(--text-dim);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .chip:hover {
+      border-color: var(--emerald-neon);
+      color: var(--text);
+    }
+
+    .chip.active {
+      background: linear-gradient(135deg, var(--emerald-neon), var(--cyan-accent));
+      color: #09110d;
+      border-color: transparent;
+      font-weight: 800;
+      box-shadow: 0 4px 12px rgba(0, 255, 135, 0.3);
+    }
+
+    footer.note {
+      text-align: center;
+      color: var(--text-dim);
+      font-size: 12.5px;
+      margin-top: 24px;
+      line-height: 1.8;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 22px 18px 20px;
+      }
+
+      .qtext {
+        font-size: 16px;
+      }
+
+      .opt {
+        font-size: 14.5px;
+        padding: 12px 14px;
+      }
+
+      .scorebar {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="stage">
+
+  <div class="masthead">
+    <span class="kicker">A/L · සිංහල භාෂාව හා සාහිත්‍යය</span>
+    <h1>සිංහල භාෂාව 2020 — I කොටස MCQ</h1>
+    <p>ප්‍රශ්න 20 · ක්ෂණික පිළිතුරු, ව්‍යාකරණ විග්‍රහ හා ලකුණු ගණනය</p>
+  </div>
+
+  <div class="scorebar">
+    <div class="tally">
+      <span class="ok">✓ නිවැරදි: <span id="okCount">0</span></span>
+      <span class="no">✗ වැරදි: <span id="noCount">0</span></span>
+    </div>
+    <button class="btn sound-toggle" id="soundBtn" onclick="toggleSound()">🔊 හඬ: ක්‍රියාත්මකයි</button>
+  </div>
+
+  <div id="lanternStrip" class="lantern-strip"></div>
+
+  <div id="quizArea"></div>
+
+  <footer class="note">පිළිතුරු තෝරන්න — ව්‍යාකරණ විග්‍රහය සහ ලකුණු ප්‍රමාණය ක්ෂණිකව යාවත්කාලීන වේ</footer>
+</div>
+
+<script>
+const QUESTIONS = [
+  {
+    "q": "1.1. සිංහල අක්ෂර මාලාවෙහි එන 'ය' යන්න කවර ගණයකට අයත් අක්ෂරයක් ද?",
+    "o": [
+      "(1) මූර්ධජ අඝෝෂ ඌෂ්ම",
+      "(2) තාලුජ අඝෝෂ අර්ධ ස්වර",
+      "(3) තාලුජ ඝෝෂ අර්ධ ස්වර",
+      "(4) කණ්ඨෝෂ්ඨජ අඝෝෂ",
+      "(5) දන්තෝෂ්ඨජ ඝෝෂ අර්ධ ස්වර"
+    ],
+    "c": 2,
+    "e": "තාලුජ ඝෝෂ අර්ධ ස්වර (සිංහල අක්ෂර මාලාවට අනුව 'ය' යනු තල්ලෙන් උපදින, නාදයක් සහිතව උච්චාරණය වන අර්ධ ස්වරයකි)."
+  },
+  {
+    "q": "1.2. නිවැරදි අක්ෂර වින්‍යාසය සහිත පද පෙළිය තෝරන්න.",
+    "o": [
+      "(1) ප්‍රස්තාවනා, උච්චාරණ, නෂ්ටාවශේෂ, නික්ලේශී, පළතුරු",
+      "(2) ප්‍රස්ථාවනා, උච්චාරණ, නෂ්ටාවශිෂ්ට, නික්ලේශී, පලතුරු",
+      "(3) ප්‍රස්තාවනා, උච්චාරණ, නෂ්ටාවශිෂ්ට, නික්ලේශී, පළතුරු",
+      "(4) ප්‍රස්ථාවනා, උච්චාරණ, නෂ්ටාවශිෂ්ට, නික්ලේශී, පළතුරු",
+      "(5) ප්‍රස්තාවනා, උච්චාරණ, නෂ්ටාවශිෂ්ට, නික්ලේශී, පලතුරු"
+    ],
+    "c": 4,
+    "e": "ප්‍රස්තාවනා, උච්චාරණ, නෂ්ටාවශිෂ්ට, නික්ලේශී, පලතුරු (මෙහි අක්ෂර වින්‍යාසය, විශේෂයෙන් ණ/න හා ල/ළ භාවිතය සම්මත රීතිවලට අනුකූල ය)."
+  },
+  {
+    "q": "1.3. අකාරාදී පිළිවෙළ අනුව නිවැරදි ව ලියා ඇති පද පෙළිය තෝරන්න.",
+    "o": [
+      "(1) ජානමිතිය, ජංගම පුස්තකාලය, ජගන්මාතා, ඥාන විභාගය",
+      "(2) ඥාන විභාගය, ජානමිතිය, ජංගම පුස්තකාලය, ජගන්මාතා",
+      "(3) ජගන්මාතා, ජානමිතිය, ජංගම පුස්තකාලය, ඥාන විභාගය",
+      "(4) ජංගම පුස්තකාලය, ජගන්මාතා, ඥාන විභාගය, ජානමිතිය",
+      "(5) ජගන්මාතා, ජංගම පුස්තකාලය, ඥාන විභාගය, ජානමිතිය"
+    ],
+    "c": 2,
+    "e": "ජගන්මාතා, ජානමිතිය, ජංගම පුස්තකාලය, ඥාන විභාගය (ස්වර පිල්ලම් හා අනුස්වාරය (ං) යෙදෙන සම්මත අකාරාදී පිළිවෙළට මෙය නිවැරදි ය)."
+  },
+  {
+    "q": "1.4. පහත සඳහන් ප්‍රකාශ අතුරෙන් නිවැරදි ප්‍රකාශය තෝරන්න.",
+    "o": [
+      "(1) මහාප්‍රාණ අක්ෂරයක් වචනයක මුල නො යෙදේ.",
+      "(2) මහාප්‍රාණ අක්ෂර දෙකක් වචනයක එක ළඟ නො යෙදේ.",
+      "(3) මහාප්‍රාණ අක්ෂරයකට පසු ව අනුස්වාරය භාවිත නො වේ.",
+      "(4) මහාප්‍රාණ අක්ෂරයකට මුලින් විසර්ගය නො යෙදේ.",
+      "(5) අල්පප්‍රාණ අක්ෂරයකට මුලින් මහාප්‍රාණ අක්ෂරයක් යෙදේ."
+    ],
+    "c": 1,
+    "e": "මහාප්‍රාණ අක්ෂර දෙකක් වචනයක එක ළඟ නො යෙදේ (සිංහල හා සංස්කෘත ව්‍යාකරණ රීති අනුව එක ම පදයක මහාප්‍රාණ අකුරු දෙකක් ළඟින් නොයෙදීම පිළිගත් රීතියකි)."
+  },
+  {
+    "q": "1.5. එකිනෙකට අනුරූප වන සේ යෙදුණු වචන යුගල සහිත වරණය තෝරන්න.",
+    "o": [
+      "(1) සමරු දෙසුම, මඟුල් බණ, වෙද මැදුර, රස ගුලාව",
+      "(2) සමරු දේශනය, වෛද්‍ය මන්දිරය, විද්‍යා පිබිදුම, සූර්ය එළිය",
+      "(3) ආලෝක දහර, සාංවත්සරික උලෙළ, උයන් ක්‍රීඩා, සඳ පහන",
+      "(4) දිය කෙළිය, ස්වර සංකේත, සාපේක්ෂ ගතකම, විෂය දැනුම",
+      "(5) තෘණ පඳුරු, මේඝ නද, ගුවන් යාත්‍රාව, ස්වේච්ඡා භට"
+    ],
+    "c": 0,
+    "e": "සමරු දෙසුම, මඟුල් බණ, වෙද මැදුර, රස ගුලාව (මෙම වරණයේ ඇති සියලුම පද යුගල පිරිසිදු සිංහල හෙවත් හෙළ වදන්වලින් සැදුණු ඒවා වේ)."
+  },
+  {
+    "q": "1.6. තත්සම පද පමණක් යෙදී ඇති වරණය තෝරන්න.",
+    "o": [
+      "(1) ජලය, විදුලිය, වාතය, සුළඟ",
+      "(2) විද්‍යුතය, ධ්වනිය, නාදය, නිද්‍රාව",
+      "(3) පද්‍ය, සූක්ෂ්ම, පිළිවෙත, මඬුල්ල",
+      "(4) පුෂ්පය, පරාගය, රෝමස්පෘශ, දම්කඳ",
+      "(5) සගලෙළ, අභියාචනය, වලාකුළු, වායුධාරාව"
+    ],
+    "c": 1,
+    "e": "විද්‍යුතය, ධ්වනිය, නාදය, නිද්‍රාව (මෙම වරණයේ ඇති සියලුම පද සංස්කෘත භාෂාවෙන් සිංහලයට බිඳී ආ 'තත්සම' පද වේ)."
+  },
+  {
+    "q": "1.7. තද්භව වචන පමණක් යෙදී ඇති වරණය තෝරන්න.",
+    "o": [
+      "(1) සංසාරය, නිර්වාණය, බුදුසසුන, මෙහෙය",
+      "(2) ජනගහනය, චේතනාව, මෝහනය, සැඳෑ අඳුර",
+      "(3) දියදම, ගමන්මඟ, ගුවන්ගැබ, විපුල් මුහුණ",
+      "(4) සොබාදහම, අයුක්තිය, අටලෝදහම, ගුණදායක",
+      "(5) මියුරු නාදය, බව තිමිර, තාලරූප, හස්තලීලා"
+    ],
+    "c": 2,
+    "e": "දියදම, ගමන්මඟ, ගුවන්ගැබ, විපුල් මුහුණ (මෙම සියලුම පද සංස්කෘත/පාලි භාෂාවලින් සිංහලයට පරිණාමය වූ 'තද්භව' පද වේ)."
+  },
+  {
+    "q": "1.8. අව්‍යය සමාස, විශේෂණ සමාස, විභක්ති සමාස, අන්‍යාර්ථ සමාස අනුපිළිවෙළින් යෙදී ඇති වචන පෙළිය තෝරන්න.",
+    "o": [
+      "(1) පාපියුම්, සුවඳ, සරාසඳ, දසබල",
+      "(2) සරාසඳ, පාපියුම්, සුවඳ, දසබල",
+      "(3) සුවඳ, දසබල, පාපියුම්, සරාසඳ",
+      "(4) දසබල, සුවඳ, පාපියුම්, සරාසඳ",
+      "(5) සුවඳ, පාපියුම්, සරාසඳ, දසබල"
+    ],
+    "c": 4,
+    "e": "සුවඳ (අව්‍යය), පාපියුම් (විශේෂණ), සරාසඳ (විභක්ති) සහ දසබල (අන්‍යාර්ථ) සමාස වේ."
+  },
+  {
+    "q": "1.9. කෘදන්තයක් නො වන වචනයක් අන්තර්ගත වරණය තෝරන්න.",
+    "o": [
+      "(1) කැඩු, බැලු, බිණු, මැරු",
+      "(2) කැඩුම්, බැලුම්, බිණුම්, රැකුම්",
+      "(3) පිසමන්, වියමන්, කියමන්, ලියමන්",
+      "(4) නටන, බණන, බලන, බසින",
+      "(5) නැටිලි, පැහිලි, බැලිලි, පැතලි"
+    ],
+    "c": 4,
+    "e": "නැටිලි, පැහිලි, බැලිලි, පැතලි (මෙහි 'පැතලි' යනු ක්‍රියා මූලයකින් ප්‍රත්‍යයක් එකතු වී සැදුණු කෘදන්තයක් නොව, එය නාම විශේෂණයකි)."
+  },
+  {
+    "q": "1.10. පහත සඳහන් උද්ධෘතවල තද කළු අකුරෙන් මුද්‍රිත පද අයත් ක්‍රියා වර්ගය පිළිවෙළින් දක්වා ඇති වරණය තෝරන්න.\n(අ) \"බලා පලා යව අස්වන් ගුරුළු කෙත\"\n(ආ) \"සිඳිත මඩිත එක ලෙස පැතිරෙයි සුවඳ\"\n(ඉ) \"ගමවෙන් ගමට දිව මාලිග යැදේවා!\"\n(ඊ) \"දමලා යන නරක කුණු කය...\"",
+    "o": [
+      "(1) විධික්‍රියා, පූර්වක්‍රියා, අසම්භාව්‍යක්‍රියා, ආශිර්වාදක්‍රියා",
+      "(2) පූර්වක්‍රියා, විධික්‍රියා, ආශිර්වාදක්‍රියා, අසම්භාව්‍යක්‍රියා",
+      "(3) අසම්භාව්‍යක්‍රියා, විධික්‍රියා, ආශිර්වාදක්‍රියා, පූර්වක්‍රියා",
+      "(4) ආශිර්වාදක්‍රියා, අසම්භාව්‍යක්‍රියා, පූර්වක්‍රියා, විධික්‍රියා",
+      "(5) විධික්‍රියා, අසම්භාව්‍යක්‍රියා, ආශිර්වාදක්‍රියා, පූර්වක්‍රියා"
+    ],
+    "c": 4,
+    "e": "යව (විධික්‍රියා), සිඳිත (අසම්භාව්‍යක්‍රියා), යැදේවා (ආශිර්වාදක්‍රියා), දමලා (පූර්වක්‍රියා) වේ."
+  },
+  {
+    "q": "1.11. තද්ධිතයක් නො වන පදයක් අන්තර්ගත වරණය තෝරන්න.",
+    "o": [
+      "(1) තොටි, නැවි, පිනි, සැවි",
+      "(2) කෙවි, ගැමි, රැවි, ලෙවි",
+      "(3) දෑහමි, නැකැති, ඇඳිරි, සිඟිති",
+      "(4) වකුටු, කරටි, පහටි, පැණිති",
+      "(5) අරටු, ඉගටි, කඩිති, කළටි"
+    ],
+    "c": 0,
+    "e": "තොටි, නැවි, පිනි, සැවි (මෙහි 'පිනි' යනු ප්‍රත්‍යයක් එකතු වී සෑදුණු තද්ධිත පදයක් නොව මූලික නාම පද ප්‍රකෘතියකි)."
+  },
+  {
+    "q": "1.12. උපසර්ගයක් යෙදී නොමැති වචනයක් සහිත වරණය තෝරන්න.",
+    "o": [
+      "(1) සමාගම, සමුපකාර, සංචරණ, සංවර්ධන",
+      "(2) අනුකූල, අනුනායක, අනුරූප, අනුශාසන",
+      "(3) විරූප, විදේශ, විගමන, විශාල",
+      "(4) අවතරණ, අවමාන, අවධාරණ, අවනම්බු",
+      "(5) කුකවි, කුකුළු, කුදිටු, කුමන්ත්‍රණ"
+    ],
+    "c": 4,
+    "e": "කුකවි, කුකුළු, කුදිටු, කුමන්ත්‍රණ (මෙහි 'කුකුළු' යනු 'කු' උපසර්ගය යෙදී සෑදුණු පදයක් නොව ස්වාධීන නාම පදයකි)."
+  },
+  {
+    "q": "1.13. නිපාතයක් නො වන පදයක් සහිත වරණය තෝරන්න.",
+    "o": [
+      "(1) අතර, අන්ත, අනුව, අනේ",
+      "(2) එක්කෝ, එපා, එහෙත්, දැන්",
+      "(3) හෙයින්, හෙවත්, හොත්, හෝ",
+      "(4) පරිදි, පසු, පිණිස, පිළිබඳ",
+      "(5) නැවත, නිතර, කරා, නාම"
+    ],
+    "c": 0,
+    "e": "අතර, අන්ත, අනුව, අනේ (මෙහි 'අන්ත' යනු නිපාතයක් නොව නාම පදයකි)."
+  },
+  {
+    "q": "1.14. \"අතිශයෝක්ති අලංකාරය භාවිතයෙහි ලා ප්‍රබුද්ධ කවිහු උද්‍යෝගිමත් වෙති.\" යන වාක්‍යයෙහි වචන යෙදී ඇති පිළිවෙළ අනුව තද කළු අකුරින් දක්වා ඇති පද අයත් වන්නේ කුමන ව්‍යාකරණාංගවලට ද?",
+    "o": [
+      "(1) සන්ධි, උපසර්ග, තද්ධිත",
+      "(2) සන්ධි, තද්ධිත, උපසර්ග",
+      "(3) උපසර්ග, තද්ධිත, සන්ධි",
+      "(4) තද්ධිත, සන්ධි, උපසර්ග",
+      "(5) උපසර්ග, සන්ධි, තද්ධිත"
+    ],
+    "c": 0,
+    "e": "අතිශයෝක්ති [අතිශය+උක්ති]=සන්ධි, ප්‍රබුද්ධ [ප්‍ර+බුද්ධ]=උපසර්ග, උද්‍යෝගිමත් [උද්‍යෝගි+මත්]=තද්ධිත වේ."
+  },
+  {
+    "q": "1.15. සමාන ව්‍යාකරණ ලක්ෂණ ඇතුළත් නො වන ක්‍රියා රූප සහිත වරණය තෝරන්න.",
+    "o": [
+      "(1) කියවු, කරවු, පෙන්වු, දෑවු",
+      "(2) පැවසුවා ය, පෙන්වුවා ය, විමසුවා ය, වැනසුවා ය",
+      "(3) කියුහ, දැක්වූහ, පැවසූහ, ලියූහ",
+      "(4) ඇසූ, නැසූ, පිසූ, විසු",
+      "(5) කරයි, දුවයි, බලයි, කියයි"
+    ],
+    "c": 0,
+    "e": "කියවු, කරවු, පෙන්වු, දෑවු (මෙහි මුල් පද තුන ම අණ කිරීමේ අර්ථය දෙන බහුවචන 'විධි ක්‍රියා' වන නමුදු, 'දෑවු' යනු අතීත කාල ක්‍රියා පදයක්/කෘදන්තයක් බැවින් මෙහි සමාන ව්‍යාකරණ ලක්ෂණ නිරූපණය නොවේ)."
+  },
+  {
+    "q": "1.16. සමාසයක් නො වන වචනයක් ඇතුළත් වරණය තෝරන්න.",
+    "o": [
+      "(1) අකුසල්, අපහපත්, උපකාර, යාවජීව",
+      "(2) ගත්කරු, බුදුගුණ, මල්පොකුර, සඳඑළිය",
+      "(3) අරමුණු, පොල්තෙල්, බදුනකුට, සිල්රෙදි",
+      "(4) පොතපත, මල්දම්, රියපොළ, හිරුසඳ",
+      "(5) කළුකෙස්, දිගගවුම, නිලුපුල්, රතුමල්"
+    ],
+    "c": 0,
+    "e": "අකුසල්, අපහපත්, උපකාර, යාවජීව (මෙහි 'උපකාර' යනු සමාසයක් නොව, 'උප' උපසර්ගය යෙදී සැදුණු උපසර්ගික පදයකි)."
+  },
+  {
+    "q": "1.17. එක ම වර්ගයට අයත් සන්ධි පද ඇතුළත් වරණය තෝරන්න.",
+    "o": [
+      "(1) අරුණාලෝක, නරේන්ද්‍ර, ස්වෝත්සාහ, මනාධිකරණය",
+      "(2) ලෝකෝත්තර, පුරුෂෝත්තම, විද්‍යෝදය, බහුපකාර",
+      "(3) ජාතිකානුරාගය, දෘෂ්ටි, බ්‍රහ්මරණ, බුද්ධීන්‍ද්‍රිය",
+      "(4) අග්‍රාමාත්‍ය, ආත්මාභිමාන, උපමාලංකාර, අමාත්‍යාංශය",
+      "(5) මලසුන, අල්ලස්, ඉන්නල, උනුන්"
+    ],
+    "c": 3,
+    "e": "අග්‍රාමාත්‍ය, ආත්මාභිමාන, උපමාලංකාර, අමාත්‍යාංශය (මෙම සියලුම පද 'අ' සහ 'අ' ස්වර එක් වී 'ආ' ස්වරය සෑදෙන ස්වර (දීර්ඝ) සන්ධි ගණයට අයත් වේ)."
+  },
+  {
+    "q": "1.18. ව්‍යාකරණානුකූල ව නො ගැළපෙන වරණය කුමක් ද?",
+    "o": [
+      "(1) දකුණත, යහනත, සුරිඳු, හිඟුරු",
+      "(2) මැටිබඳුන්, කිරිබත්, රන්කම්, මිරිස්කුඩු",
+      "(3) විසින්, බඳු, නොහොත්, කෙරෙන්",
+      "(4) අප, උප, අදි, අති",
+      "(5) ස්වර්ණමය, රන්මුවා, සිල්වත්, බිමත්"
+    ],
+    "c": 3,
+    "e": "අප, උප, අදි, අති (සිංහලයේ සම්මත උපසර්ග 20 ට අයත් වන්නේ 'අධි' යන්න මිස 'අදි' යන්න නොවන බැවින් මෙය ව්‍යාකරණානුකූල නොවේ)."
+  },
+  {
+    "q": "1.19. ව්‍යාකරණානුකූල ව නිවැරදි වාක්‍යය තෝරන්න.",
+    "o": [
+      "(1) සත්පුරුෂයන් ලෝකය සුවපත් කරති.",
+      "(2) කොවිඩ් 19 නොහොත් කොරෝනා රෝගය ලක්ෂ ගණනකගේ ජීවිත බිලිගෙන ඇත.",
+      "(3) විශ්‍රාමික ගුරුවරයෙක් වූ නැන්දා මාතා සමාජ සේවකයෙක් ද වෙයි.",
+      "(4) ඒ වලව්වේ හාමු මහතා ධනවතෙක් ද බලවතෙක් ද ගුණවතකු ද විය.",
+      "(5) ජනතාව හමුවේ දේශපාලකයන් ආදර්ශවත් ව කටයුතු කළ යුතු ය."
+    ],
+    "c": 4,
+    "e": "ජනතාව හමුවේ දේශපාලකයන් ආදර්ශවත් ව කටයුතු කළ යුතු ය. (සිංහල ව්‍යාකරණ රීති අනුව 'යුතු ය', 'හැකි ය' යන පදවලින් අවසන් වන වාක්‍යවල උක්තය [දේශපාලකයන්] කර්ම විභක්තියෙන් තැබීම නිවැරදි ය)."
+  },
+  {
+    "q": "1.20. ලේඛන ව්‍යවහාරයට අනුකූල වාක්‍යය සහිත වරණය තෝරන්න.",
+    "o": [
+      "(1) ඇමති මණ්ඩලයේ පදවි භාර ගන්න ඇතුළත් ඉදිරිපත් වෙන්නේ නැහැ.",
+      "(2) කාගේවත් වරදක් කියන්නට කමක් ඇත්තේ නැතැයි මා විසින් කීවා.",
+      "(3) කොළඹට පැමිණි මොහු පිටරට යනු පිණිස නැව් නැඟුමට යෙදුණා.",
+      "(4) ඔවුන් නිසා දැන් ගම්වලත් ඒ සිරිත පැතිරෙනවා.",
+      "(5) මේ කතාව ඉදිරිපත් කරන්නේ ගැමියකුගේ දෘෂ්ටිකෝණයෙනි."
+    ],
+    "c": 4,
+    "e": "මේ කතාව ඉදිරිපත් කරන්නේ ගැමියකුගේ දෘෂ්ටිකෝණයෙනි. (මෙය කතා කරන භාෂාවේ යෙදුම්වලින් තොර වූ, සම්මත ලිඛිත භාෂාවට වඩාත් උචිත වාක්‍යය යි)."
+  }
+];
+
+const OPT_LABELS = ["(1)", "(2)", "(3)", "(4)", "(5)"];
+let current = -2;
+let answers = new Array(QUESTIONS.length).fill(null);
+let okCount = 0, noCount = 0;
+let soundOn = true;
+let audioCtx = null;
+
+function startQuiz() {
+  current = 0;
+  render();
+}
+
+function renderStartScreen() {
+  quizArea.innerHTML = `
+    <div class="card start-card" style="text-align:center; padding: 38px 24px;">
+      <div style="margin-bottom:16px;">
+        <span class="kicker" style="font-size:12.5px; padding:6px 18px; letter-spacing:0.14em;">✨ A/L MCQ HUB — SINHALA 2020 ✨</span>
+      </div>
+      
+      <h2 style="font-family:'Noto Serif Sinhala',serif; font-size:clamp(22px, 5.2vw, 32px); margin:12px 0; background:linear-gradient(135deg, #ffffff 0%, var(--gold-amber) 50%, var(--emerald-neon) 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent; font-weight:800; line-height:1.4;">
+        සිංහල භාෂාව 2020 — I කොටස MCQ
+      </h2>
+      
+      <p style="color:var(--text-dim); font-size:15px; max-width:540px; margin:0 auto 28px; line-height:1.75;">
+        උසස් පෙළ සිංහල භාෂාව 2020 ප්‍රශ්න 20 සඳහා පිළිතුරු සපයා නිවැරදි ව්‍යාකරණ විග්‍රහයන් සමඟ ඔබේ දැනුම ක්ෂණිකව පරික්ෂා කරගන්න!
+      </p>
+
+      <div class="feature-grid">
+        <div class="feat-box">
+          <span class="feat-icon">📚</span>
+          <span class="feat-title">ප්‍රශ්න 20 යි</span>
+          <span class="feat-desc">සම්පූර්ණ I කොටස</span>
+        </div>
+        <div class="feat-box">
+          <span class="feat-icon">💡</span>
+          <span class="feat-title">ව්‍යාකරණ විග්‍රහ</span>
+          <span class="feat-desc">නිවැරදි පැහැදිලි කිරීම්</span>
+        </div>
+        <div class="feat-box">
+          <span class="feat-icon">🔊</span>
+          <span class="feat-title">ශබ්ද සංඥා</span>
+          <span class="feat-desc">Audio FX Feedback</span>
+        </div>
+        <div class="feat-box">
+          <span class="feat-icon">📊</span>
+          <span class="feat-title">සමාලෝචනය</span>
+          <span class="feat-desc">ලකුණු විග්‍රහය</span>
+        </div>
+      </div>
+
+      <div style="margin-top:36px;">
+        <button class="start-btn" onclick="startQuiz()">
+          <span>ප්‍රශ්න පත්‍රය ආරම්භ කරන්න</span>
+          <span style="font-size:22px;">🚀</span>
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function ensureAudio() {
+  if (!audioCtx) {
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { audioCtx = null; }
+  }
+  return audioCtx;
+}
+
+function playTone(freq, start, dur, type, vol) {
+  const ctx = ensureAudio();
+  if (!ctx) return;
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  osc.type = type;
+  osc.frequency.value = freq;
+  gain.gain.setValueAtTime(0, ctx.currentTime + start);
+  gain.gain.linearRampToValueAtTime(vol, ctx.currentTime + start + 0.015);
+  gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + start + dur);
+  osc.connect(gain);
+  gain.connect(ctx.destination);
+  osc.start(ctx.currentTime + start);
+  osc.stop(ctx.currentTime + start + dur + 0.02);
+}
+
+function playCorrectSound() {
+  if (!soundOn) return;
+  playTone(523.25, 0, 0.12, 'sine', 0.2);
+  playTone(659.25, 0.08, 0.14, 'sine', 0.2);
+  playTone(783.99, 0.16, 0.22, 'sine', 0.2);
+}
+
+function playWrongSound() {
+  if (!soundOn) return;
+  playTone(220, 0, 0.16, 'sawtooth', 0.15);
+  playTone(174.61, 0.1, 0.24, 'sawtooth', 0.15);
+}
+
+function toggleSound() {
+  soundOn = !soundOn;
+  document.getElementById('soundBtn').textContent = soundOn ? '🔊 හඬ: ක්‍රියාත්මකයි' : '🔇 හඬ: නැත';
+}
+
+const quizArea = document.getElementById('quizArea');
+const lanternStrip = document.getElementById('lanternStrip');
+const okCountEl = document.getElementById('okCount');
+const noCountEl = document.getElementById('noCount');
+
+function buildStrip() {
+  lanternStrip.innerHTML = '';
+  QUESTIONS.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'lantern';
+    b.textContent = i + 1;
+    b.title = 'ප්‍රශ්නය ' + (i + 1);
+    b.addEventListener('click', () => { current = i; render(); });
+    lanternStrip.appendChild(b);
+  });
+  refreshStrip();
+}
+
+function refreshStrip() {
+  const items = lanternStrip.children;
+  for (let i = 0; i < items.length; i++) {
+    const el = items[i];
+    el.classList.remove('current', 'correct', 'wrong');
+    if (answers[i] !== null) {
+      el.classList.add(answers[i] === QUESTIONS[i].c ? 'correct' : 'wrong');
+    }
+    if (i === current) el.classList.add('current');
+  }
+}
+
+function updateTally() {
+  okCountEl.textContent = okCount;
+  noCountEl.textContent = noCount;
+}
+
+function selectAnswer(qi, oi) {
+  if (answers[qi] !== null) return;
+  answers[qi] = oi;
+  const isCorrect = oi === QUESTIONS[qi].c;
+  if (isCorrect) { okCount++; playCorrectSound(); }
+  else { noCount++; playWrongSound(); }
+  updateTally();
+  refreshStrip();
+  renderQuestion();
+}
+
+function renderQuestion() {
+  const q = QUESTIONS[current];
+  const chosen = answers[current];
+  const answered = chosen !== null;
+
+  const optsHtml = q.o.map((text, oi) => {
+    let cls = '';
+    if (answered) {
+      if (oi === q.c) cls = 'correct';
+      else if (oi === chosen) cls = 'incorrect';
+    }
+    const disabledAttr = answered ? 'disabled' : '';
+    return `<button class="opt ${cls}" ${disabledAttr} onclick="selectAnswer(${current},${oi})">
+      <span class="tag">${OPT_LABELS[oi]}</span><span>${text}</span>
+    </button>`;
+  }).join('');
+
+  let explainHtml = '';
+  if (answered) {
+    const isCorrect = chosen === q.c;
+    explainHtml = `<div class="explain-box show ${isCorrect ? 'ok' : 'no'}">
+      <div style="font-weight:700; margin-bottom:4px;">${isCorrect ? '✓ නිවැරදියි!' : '✗ වැරදියි — නිවැරදි පිළිතුර: ' + OPT_LABELS[q.c]}</div>
+      <div>💡 <strong>ව්‍යාකරණ විග්‍රහය:</strong> ${q.e}</div>
+    </div>`;
+  }
+
+  quizArea.innerHTML = `
+    <div class="card">
+      <div class="qmeta">
+        <span class="qnum">ප්‍රශ්නය ${current + 1}</span>
+        <span class="qcount">${current + 1} / ${QUESTIONS.length}</span>
+      </div>
+      <div class="qtext">${q.q}</div>
+      <div class="options">${optsHtml}</div>
+      ${explainHtml}
+      <div class="navrow">
+        <button class="btn" onclick="goPrev()" ${current === 0 ? 'disabled' : ''}>← පෙර ප්‍රශ්නය</button>
+        ${current === QUESTIONS.length - 1
+          ? `<button class="btn primary" onclick="showResults()" ${answered ? '' : 'disabled'}>ප්‍රතිඵල බලන්න</button>`
+          : `<button class="btn primary" onclick="goNext()" ${answered ? '' : 'disabled'}>ඊළඟ ප්‍රශ්නය →</button>`}
+      </div>
+    </div>
+  `;
+}
+
+function goPrev() { if (current > 0) { current--; render(); } }
+function goNext() { if (current < QUESTIONS.length - 1) { current++; render(); } }
+
+function restart() {
+  answers = new Array(QUESTIONS.length).fill(null);
+  okCount = 0; noCount = 0;
+  updateTally();
+  current = 0;
+  render();
+}
+
+let reviewFilter = 'all';
+function showResults() { current = -1; render(); }
+
+function renderResults() {
+  const score = okCount;
+  const pct = Math.round((score / QUESTIONS.length) * 100);
+
+  let verdict;
+  if (pct >= 80) verdict = 'විශිෂ්ටයි! — සිංහල ව්‍යාකරණ පිළිබඳ ඉහළ සුදානමක් ඇත.';
+  else if (pct >= 60) verdict = 'හොඳයි! — තවදුරටත් අක්ෂර වින්‍යාස හා ව්‍යාකරණ රීති පුනරීක්ෂණය කරන්න.';
+  else if (pct >= 40) verdict = 'මූලික අවබෝධයක් ඇත — තවත් ප්‍රශ්න පත්‍ර පරිශීලනය කරන්න.';
+  else verdict = 'සිංහල ව්‍යාකරණ පාඩම් කොටස් නැවත අවධානයෙන් අධ්‍යයනය කරන්න.';
+
+  const filterRow = `
+    <div class="filter-row">
+      <button class="chip ${reviewFilter === 'all' ? 'active' : ''}" onclick="setFilter('all')">සියල්ල · ${QUESTIONS.length}</button>
+      <button class="chip ${reviewFilter === 'wrong' ? 'active' : ''}" onclick="setFilter('wrong')">වැරදි · ${noCount}</button>
+      <button class="chip ${reviewFilter === 'right' ? 'active' : ''}" onclick="setFilter('right')">නිවැරදි · ${okCount}</button>
+    </div>`;
+
+  let reviewHtml = '';
+  QUESTIONS.forEach((q, i) => {
+    const isCorrect = answers[i] === q.c;
+    if (reviewFilter === 'wrong' && isCorrect) return;
+    if (reviewFilter === 'right' && !isCorrect) return;
+    const yourAns = answers[i] === null ? 'පිළිතුරු නොදුන්නා' : (OPT_LABELS[answers[i]] + ' ' + q.o[answers[i]]);
+    const correctAns = OPT_LABELS[q.c] + ' ' + q.o[q.c];
+    reviewHtml += `
+      <div class="review-item">
+        <div class="rq">${q.q} <span class="badge ${isCorrect ? 'ok' : 'no'}">${isCorrect ? 'නිවැරදි' : 'වැරදි'}</span></div>
+        ${!isCorrect ? `<div class="rline wrong"><span class="lab">ඔබේ පිළිතුර</span><span class="val">${yourAns}</span></div>` : ''}
+        <div class="rline right"><span class="lab">නිවැරදි පිළිතුර</span><span class="val">${correctAns}</span></div>
+        <div class="rexplain">💡 ${q.e}</div>
+      </div>`;
+  });
+
+  quizArea.innerHTML = `
+    <div class="card">
+      <div class="results-head">
+        <div class="score-plate">
+          <div class="num">${pct}%</div>
+          <div class="frac">${score} / ${QUESTIONS.length} නිවැරදියි</div>
+        </div>
+        <p class="score-sub">${verdict}</p>
+      </div>
+      ${filterRow}
+      <div id="reviewList">${reviewHtml || '<p style="text-align:center;color:var(--text-dim);padding:20px 0;">මෙම කාණ්ඩයේ ප්‍රශ්න නැත</p>'}</div>
+      <div class="navrow" style="justify-content:center;margin-top:28px;">
+        <button class="btn primary" onclick="restart()">නැවත උත්සාහ කරන්න 🔄</button>
+      </div>
+    </div>
+  `;
+}
+
+function setFilter(f) { reviewFilter = f; renderResults(); }
+
+function render() {
+  refreshStrip();
+  if (current === -2) renderStartScreen();
+  else if (current === -1) renderResults();
+  else renderQuestion();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+buildStrip();
+updateTally();
+render();
+</script>
+</body>
+
+</html>
