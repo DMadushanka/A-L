@@ -1,0 +1,1576 @@
+<!DOCTYPE html>
+<html lang="si">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>දේශපාලන විද්‍යාව 2018 — I කොටස (MCQ 30)</title>
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="දේශපාලන විද්‍යාව 2018 — I කොටස MCQ 30">
+  <meta property="og:description" content="▶ [ 🚀 දේශපාලන විද්‍යාව 2018 MCQ ප්‍රශ්න පත්‍රය ආරම්භ කිරීමට මෙතැන ක්ලික් කරන්න ➔ ]">
+  <meta property="og:image" content="pl2018.png">
+  <meta property="og:image:type" content="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Sinhala:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #090b15;
+      --bg-card: rgba(18, 22, 41, 0.75);
+      --bg-card-solid: #121629;
+      --border-card: rgba(139, 92, 246, 0.22);
+      
+      --purple-primary: #8b5cf6;
+      --purple-light: #a78bfa;
+      --purple-glow: rgba(139, 92, 246, 0.4);
+
+      --gold-accent: #fbbf24;
+      --gold-glow: rgba(251, 191, 36, 0.35);
+
+      --cyan-bright: #38bdf8;
+      
+      --good: #10b981;
+      --good-soft: #34d399;
+      --good-bg: rgba(16, 185, 129, 0.16);
+      --good-border: rgba(16, 185, 129, 0.4);
+
+      --bad: #f43f5e;
+      --bad-soft: #fb7185;
+      --bad-bg: rgba(244, 63, 94, 0.16);
+      --bad-border: rgba(244, 63, 94, 0.4);
+
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-sub: #cbd5e1;
+
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 10px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Noto Sans Sinhala', 'Plus Jakarta Sans', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 24px 14px 60px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Dynamic Glowing Background Blobs */
+    body::before, body::after {
+      content: '';
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: -1;
+      opacity: 0.7;
+      animation: floatGlow 14s ease-in-out infinite alternate;
+    }
+
+    body::before {
+      top: -12%;
+      left: -8%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, var(--purple-glow), transparent 70%);
+    }
+
+    body::after {
+      bottom: -10%;
+      right: -8%;
+      width: 580px;
+      height: 580px;
+      background: radial-gradient(circle, var(--gold-glow), transparent 70%);
+      animation-delay: -7s;
+    }
+
+    @keyframes floatGlow {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(25px, -35px) scale(1.08); }
+      100% { transform: translate(-20px, 20px) scale(0.95); }
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 880px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    /* Header Styling */
+    .header-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 24px 28px;
+      box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .header-title-box {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--purple-primary), var(--gold-accent));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      box-shadow: 0 8px 20px var(--purple-glow);
+    }
+
+    .header-text h1 {
+      font-size: 1.35rem;
+      font-weight: 800;
+      background: linear-gradient(90deg, #ffffff, var(--purple-light), var(--gold-accent));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.2px;
+    }
+
+    .header-text p {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .ctrl-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .ctrl-btn:hover {
+      background: rgba(139, 92, 246, 0.2);
+      border-color: var(--purple-primary);
+      transform: translateY(-1px);
+    }
+
+    .timer-badge {
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: var(--gold-accent);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', monospace;
+    }
+
+    /* Question Nav Strip */
+    .nav-strip-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .strip-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(34px, 1fr));
+      gap: 8px;
+    }
+
+    .strip-btn {
+      width: 100%;
+      height: 36px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.04);
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    .strip-btn:hover {
+      border-color: var(--purple-light);
+      color: #fff;
+    }
+
+    .strip-btn.curr {
+      border-color: var(--gold-accent);
+      box-shadow: 0 0 12px var(--gold-glow);
+      color: var(--gold-accent);
+      transform: scale(1.08);
+    }
+
+    .strip-btn.ok {
+      background: var(--good-bg);
+      border-color: var(--good-border);
+      color: var(--good-soft);
+    }
+
+    .strip-btn.no {
+      background: var(--bad-bg);
+      border-color: var(--bad-border);
+      color: var(--bad-soft);
+    }
+
+    .strip-btn.flagged::after {
+      content: '★';
+      position: absolute;
+      top: -4px;
+      right: -2px;
+      font-size: 10px;
+      color: var(--gold-accent);
+    }
+
+    /* Main Quiz Content Card */
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 32px 36px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+
+    .q-meta-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .q-tag {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--purple-light);
+      background: rgba(139, 92, 246, 0.12);
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+
+    .q-counter {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .q-text {
+      font-size: 1.15rem;
+      font-weight: 700;
+      line-height: 1.7;
+      color: var(--text-main);
+      margin-bottom: 24px;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .opt-btn {
+      width: 100%;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: var(--radius-md);
+      padding: 16px 20px;
+      color: var(--text-sub);
+      font-size: 1rem;
+      font-weight: 500;
+      line-height: 1.6;
+      font-family: inherit;
+      cursor: pointer;
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .opt-btn:hover:not(:disabled) {
+      background: rgba(139, 92, 246, 0.12);
+      border-color: var(--purple-light);
+      color: #ffffff;
+      transform: translateX(4px);
+    }
+
+    .opt-badge {
+      width: 28px;
+      height: 28px;
+      min-width: 28px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.85rem;
+      font-weight: 700;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.2s ease;
+    }
+
+    .opt-btn:hover:not(:disabled) .opt-badge {
+      background: var(--purple-primary);
+      color: #fff;
+      border-color: var(--purple-light);
+    }
+
+    .opt-btn.correct {
+      background: var(--good-bg) !important;
+      border-color: var(--good) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 20px rgba(16, 185, 129, 0.25);
+    }
+
+    .opt-btn.correct .opt-badge {
+      background: var(--good) !important;
+      color: #ffffff !important;
+      border-color: var(--good-soft) !important;
+    }
+
+    .opt-btn.incorrect {
+      background: var(--bad-bg) !important;
+      border-color: var(--bad) !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 20px rgba(244, 63, 94, 0.25);
+    }
+
+    .opt-btn.incorrect .opt-badge {
+      background: var(--bad) !important;
+      color: #ffffff !important;
+      border-color: var(--bad-soft) !important;
+    }
+
+    .opt-btn:disabled {
+      cursor: default;
+    }
+
+    /* Explanation Box */
+    .explain-card {
+      background: rgba(139, 92, 246, 0.08);
+      border: 1px solid rgba(139, 92, 246, 0.25);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      margin-bottom: 26px;
+      animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .explain-card.ok {
+      background: rgba(16, 185, 129, 0.08);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+
+    .explain-card.no {
+      background: rgba(244, 63, 94, 0.08);
+      border-color: rgba(244, 63, 94, 0.3);
+    }
+
+    .explain-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .explain-card.ok .explain-title { color: var(--good-soft); }
+    .explain-card.no .explain-title { color: var(--bad-soft); }
+
+    .explain-desc {
+      font-size: 0.92rem;
+      line-height: 1.65;
+      color: var(--text-sub);
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Navigation Row */
+    .nav-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      padding: 12px 24px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .btn:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .btn.primary {
+      background: linear-gradient(135deg, var(--purple-primary), #7c3aed);
+      border: 1px solid var(--purple-light);
+      color: #ffffff;
+      box-shadow: 0 4px 16px var(--purple-glow);
+    }
+
+    .btn.primary:hover:not(:disabled) {
+      background: linear-gradient(135deg, #9333ea, var(--purple-primary));
+      box-shadow: 0 6px 24px var(--purple-glow);
+      transform: translateY(-2px);
+    }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    /* Start Screen */
+    .welcome-box {
+      text-align: center;
+      padding: 20px 10px;
+    }
+
+    .welcome-badge {
+      display: inline-block;
+      background: rgba(251, 191, 36, 0.12);
+      border: 1px solid rgba(251, 191, 36, 0.3);
+      color: var(--gold-accent);
+      padding: 6px 18px;
+      border-radius: 20px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .welcome-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      line-height: 1.4;
+      margin-bottom: 16px;
+      background: linear-gradient(135deg, #ffffff, var(--purple-light));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-text {
+      font-size: 1rem;
+      color: var(--text-muted);
+      line-height: 1.7;
+      max-width: 620px;
+      margin: 0 auto 32px;
+    }
+
+    .features-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 36px;
+      text-align: left;
+    }
+
+    .feature-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .feature-icon {
+      font-size: 1.5rem;
+      background: rgba(139, 92, 246, 0.15);
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--purple-light);
+    }
+
+    .feature-info h4 {
+      font-size: 0.92rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .feature-info p {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Results Screen */
+    .results-card {
+      text-align: center;
+    }
+
+    .results-header {
+      margin-bottom: 32px;
+    }
+
+    .gauge-wrapper {
+      width: 140px;
+      height: 140px;
+      margin: 0 auto 20px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge-circle {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg {
+      fill: none;
+      stroke: rgba(255, 255, 255, 0.08);
+      stroke-width: 10;
+    }
+
+    .gauge-fill {
+      fill: none;
+      stroke: url(#scoreGradient);
+      stroke-width: 10;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s ease-out;
+    }
+
+    .gauge-text {
+      position: absolute;
+      font-size: 2.2rem;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-main);
+    }
+
+    .results-verdict {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--gold-accent);
+      margin-bottom: 8px;
+    }
+
+    .results-sub {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: var(--text-main);
+    }
+
+    .stat-lbl {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .filter-chips {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 24px;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      padding: 8px 18px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .chip.active {
+      background: var(--purple-primary);
+      border-color: var(--purple-light);
+      color: #fff;
+      box-shadow: 0 4px 12px var(--purple-glow);
+    }
+
+    .review-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      text-align: left;
+    }
+
+    .review-item {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-md);
+      padding: 20px;
+    }
+
+    .review-q-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      font-weight: 700;
+      font-size: 1.02rem;
+      color: var(--text-main);
+      margin-bottom: 14px;
+    }
+
+    .badge {
+      padding: 4px 12px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .badge.ok {
+      background: var(--good-bg);
+      color: var(--good-soft);
+      border: 1px solid var(--good-border);
+    }
+
+    .badge.no {
+      background: var(--bad-bg);
+      color: var(--bad-soft);
+      border: 1px solid var(--bad-border);
+    }
+
+    .review-ans-line {
+      font-size: 0.9rem;
+      padding: 8px 14px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      display: flex;
+      gap: 8px;
+    }
+
+    .review-ans-line.user {
+      background: var(--bad-bg);
+      color: var(--bad-soft);
+      border: 1px solid var(--bad-border);
+    }
+
+    .review-ans-line.correct {
+      background: var(--good-bg);
+      color: var(--good-soft);
+      border: 1px solid var(--good-border);
+    }
+
+    .review-explain {
+      font-size: 0.88rem;
+      color: var(--text-sub);
+      background: rgba(139, 92, 246, 0.08);
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-top: 12px;
+      border-left: 3px solid var(--purple-primary);
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 14px 10px 40px; }
+      .card { padding: 22px 18px; }
+      .header-card { padding: 18px 20px; }
+      .q-text { font-size: 1.05rem; }
+      .opt-btn { padding: 14px 16px; font-size: 0.94rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app-container">
+
+    <!-- Header Section -->
+    <header class="header-card">
+      <div class="header-title-box">
+        <div class="header-icon">⚖️</div>
+        <div class="header-text">
+          <h1>දේශපාලන විද්‍යාව 2018</h1>
+          <p>අ.පො.ස. (උසස් පෙළ) — I කොටස MCQ 30 පුනරීක්ෂණය</p>
+        </div>
+      </div>
+      <div class="header-controls">
+        <button class="ctrl-btn" id="soundBtn" onclick="toggleSound()" title="ශබ්ද පාලනය">🔊</button>
+        <div class="timer-badge" id="timerDisplay">⏱️ 00:00</div>
+      </div>
+    </header>
+
+    <!-- Top Question Jump Strip -->
+    <div class="nav-strip-card" id="stripCard">
+      <div class="strip-grid" id="stripGrid"></div>
+    </div>
+
+    <!-- Main Dynamic Quiz Container -->
+    <main id="quizArea"></main>
+
+  </div>
+
+  <script>
+    // 30 Multiple Choice Questions from 2018 Political Science Paper
+    const QUESTIONS = [
+      {
+        q: "1. අංක 1 සිට 15 තෙක් ඇති ප්‍රශ්න සඳහා ඒ ඒ ප්‍රශ්නයේ මාතෘකාවට අදාළ ව ප්‍රකාශ පහක් දක්වා ඇත. එම ප්‍රකාශ අතුරෙන් නිවැරදි වන්නේ ප්‍රකාශ හතරක් පමණි. නිවැරදි ප්‍රකාශ ඇතුළත් කාණ්ඩය තෝරන්න.<br><br><b>දේශපාලන විද්‍යාව අධ්‍යයනය කිරීම ප්‍රයෝජනවත් වන්නේ:</b><br>A - දේශපාලන ක්‍රමයේ ක්‍රියාකාරිත්වය සහ එමගින් ජනතාවට වන බලපෑම තේරුම් ගැනීමට ය.<br>B - යහපාලනයේ සහ අයහපත් පාලනයේ වෙනස්කම් තේරුම් ගැනීමට ය.<br>C - රාජ්‍යයේ සහ ආණ්ඩුවේ ආකෘතික පදනම පිළිබඳව දැනගැනීමට ය.<br>D - ආණ්ඩුවේ බලධාරීන් තීරණ ගැනීම හා සම්බන්ධ ක්‍රියාවලිය පිළිබඳව තේරුම් ගැනීමට ය.<br>E - දේශීය හා ජාත්‍යන්තර තලයන්හි බල අරගලය තේරුම්ගැනීමට මාර්ග සහ විධික්‍රම තේරුම් ගැනීමට ය.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 0,
+        e: "ජාත්‍යන්තර බල අරගලය පිළිබඳ හැදෑරීම ජාත්‍යන්තර සබඳතා විෂයට අයත් වන අතර දේශපාලන විද්‍යාව හදාරන්නේ රාජ්‍යය, ආණ්ඩුව, යහපාලනය හා තීරණ ගැනීමේ ක්‍රියාවලිය තේරුම් ගැනීමටයි (E සාවද්‍ය වේ)."
+      },
+      {
+        q: "2. <b>දේශපාලනය:</b><br>A - ආණ්ඩුව පිළිබඳ කලාව මෙන්ම විද්‍යාව ද වේ.<br>B - අයෙකු විසින් බලධාරීන්ට බලය යොදවා බෙදාහරින විධික්‍රමය වේ.<br>C - සමාජ ආර්ථික හා දේශපාලන ගැටලු අරභයා පවතින ප්‍රතිවිරෝධ අදහස් අතර ඇතිවන ගැටුම්වල ප්‍රතිඵලය වේ.<br>D - ආගමික අගය කිරීම් පදනම් කරගත් සමාජයක් ගොඩනැගීමේ සදාචාරාත්මක ක්‍රියාවලියක් වේ.<br>E - දේශපාලන විද්‍යාවේ ප්‍රායෝගික පැත්ත ලෙස සැලකේ.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 1,
+        e: "දේශපාලනය යනු හුදෙක් ආගමික අගය කිරීම් පදනම් කරගත් සදාචාරාත්මක ක්‍රියාවලියක් නොවන බැවින් D ප්‍රකාශය සාවද්‍ය වේ."
+      },
+      {
+        q: "3. <b>මිනිසුන් රාජ්‍ය ලෙස සංවිධානය වී ඇත්තේ ඇයි?</b><br>A - සමාජය තුළ පවතින විෂමතා ආරක්ෂා කර පවත්වා ගෙන යාමට ය.<br>B - සමාජය පාලනය කිරීම සඳහා පාලන ක්‍රමයක් ගොඩනගා ගැනීමට ය.<br>C - ජාතික ආරක්ෂාව සුරක්ෂිත කොට පවත්වා ගෙන යාමට ය.<br>D - සමාජයේ ආර්ථික කාර්යයන් විධිමත් ලෙස සංවිධානය කර ගැනීමට ය.<br>E - ජනතා පරමාධිපත්‍ය ක්‍රියාවට නැංවීමට අවශ්‍ය ආයතනයක් ලබා ගැනීමට ය.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 4,
+        e: "සමාජයේ පවතින විෂමතා හා අසමානතා ආරක්ෂා කිරීම රාජ්‍යයක අරමුණක් නොවන බැවින් A ප්‍රකාශය සාවද්‍ය වේ."
+      },
+      {
+        q: "4. <b>දේශපාලන වශයෙන් සංවිධානය වූ සමාජයකට ආණ්ඩුවක් අවශ්‍ය වන්නේ ඇයි?</b><br>A - සමාජ ඒකාග්‍රතාව ආරක්ෂා කිරීම, ප්‍රවර්ධනය කිරීම සහ පවත්වා ගෙන යාම සඳහා ය.<br>B - සමාජයේ විවිධ කොටස්වල අභිලාෂ පමණක් ආරක්ෂා කිරීම, ප්‍රවර්ධනය කිරීම සහ පවත්වා ගෙන යාම සඳහා ය.<br>C - ජනතාවගේ අයිතිවාසිකම් ආරක්ෂා කිරීම, ප්‍රවර්ධනය කිරීම සහ පවත්වා ගෙන යාම සඳහා ය.<br>D - නීතිය, සාධාරණත්වය, ආරක්ෂාව සහ සමාජ සාධාරණත්වය සැලසීම හා පවත්වා ගෙන යාම සඳහා ය.<br>E - ආර්ථික කාර්යක්ෂමතාව ප්‍රවර්ධනය කිරීම හා බාහිර සම්බන්ධතා කළමනාකරණය කිරීම සඳහා ය.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 3,
+        e: "විවිධ කොටස්වල අභිලාෂ 'පමණක්' ආරක්ෂා කිරීම ආණ්ඩුවක අරමුණ නොවන අතර පොදු යහපත සුරැකීම එහි පරමාර්ථය වන බැවින් B සාවද්‍ය වේ."
+      },
+      {
+        q: "5. <b>ස්වාධිපත්‍ය බලය:</b><br>A - රාජ්‍යයේ බලය පිළිබඳව සැලකිලිමත් වන දේශපාලන න්‍යාය වේ.<br>B - දේශීය සහ ජාත්‍යන්තර දේශපාලනය හසුරුවන ප්‍රධානතම න්‍යායාත්මක සංකල්පය වේ.<br>C - සමාජයේ සහ අනෙක් සමාජ සංවිධානවලට ඉහළින් රාජ්‍යය අප්‍රකාශිතව පත් කරන දේශපාලන සිද්ධාන්තය වේ.<br>D - රාජ්‍ය කැමැත්ත ක්‍රියාත්මක කිරීමට අවශ්‍ය ප්‍රධානත්වය සපයන දේශපාලන න්‍යාය වේ.<br>E - සංධීය දේශපාලන ක්‍රමයක් තුළ පවා අන්‍යය සහ බෙදිය නොහැකි බවට සලකනු ලැබේ.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 0,
+        e: "සංධීය (Federal) ක්‍රමයකදී ස්වාධිපත්‍ය බලතල මධ්‍යම සහ ප්‍රාන්ත ආණ්ඩු අතර බෙදී යන බැවින් 'බෙදිය නොහැකි' යන E ප්‍රකාශය සාවද්‍ය වේ."
+      },
+      {
+        q: "6. <b>ධනවාදය:</b><br>A - ආරම්භක අවස්ථාවේ දී ගොඩනැගුවේ රාජ්‍ය නිර්බාධවාදී මූලධර්මය පදනම් කරගෙන ය.<br>B - පූර්ණ වෙළෙඳපොළ තරගය වර්ධනය කිරීම ඉලක්ක කොටගෙන ඇත.<br>C - 'වෙළෙඳපොළ ආර්ථිකය පාලනය නොකරන විට නියාමනයෙන් සමතුලිතතාවය කරා ගමන් කරනු ඇත' යන විශ්වාසය මත ගොඩනගා ඇත.<br>D - නිදහස් වෙළෙඳපොළ ධනවාදය සහ රාජ්‍ය ධනවාදය යන ආකෘති යටතේ නූතන ලෝකය තුළ ක්‍රියාත්මක වේ.<br>E - ආර්ථික වර්ධනය සමග යළි බෙදාහැරීම යන ප්‍රතිපත්තිය මගින් සමාජ සාධාරණත්වය ඇති කිරීම ගැන සැලකිලිමත් වේ.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 0,
+        e: "ආර්ථික වර්ධනය සමඟ යළි බෙදාහැරීම මගින් සමාජ සාධාරණත්වය ඇති කිරීම සමාජ ප්‍රජාතන්ත්‍රවාදයේ ලක්ෂණයක් වන අතර ධනවාදයේ ලක්ෂණයක් නොවන බැවින් E සාවද්‍ය වේ."
+      },
+      {
+        q: "7. <b>සමාජවාදය:</b><br>A - සමාන පුරවැසිභාවය සහ සමාන ඉඩප්‍රස්ථා යන මූලධර්මය පදනම් කරගත් සමාජ ක්‍රමයක් වේ.<br>B - නිෂ්පාදනය සහ බෙදාහැරීමේ මාධ්‍යයන් රාජ්‍ය අයිතිය පදනම් කරගත් ආර්ථික ක්‍රමයක් වේ.<br>C - ලිබරල් ප්‍රජාතන්ත්‍රවාදයට විකල්ප දේශපාලන ක්‍රමයක් වේ.<br>D - බහු පක්ෂ ක්‍රමයක් පදනම් කරගෙන ක්‍රියාවට නැංවෙන පාලන ක්‍රමයක් වේ.<br>E - ධනවාදය මගින් නිර්මාණය කර ඇති සමාජ අසමානත්වය පිළිබඳ ප්‍රශ්නයට විසඳුම් සෙවීමට උත්සාහ දරන දේශපාලන මතවාදයක් වේ.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 1,
+        e: "බහු පක්ෂ ක්‍රමයක් පැවැත්ම සමාජවාදයේ මූලික ලක්ෂණයක් නොවන (ප්‍රධාන වශයෙන් තනි පක්ෂ ක්‍රමයක් පැවැතීම) බැවින් D සාවද්‍ය වේ."
+      },
+      {
+        q: "8. <b>සමාජ ප්‍රජාතන්ත්‍රවාදය:</b><br>A - වෙළෙඳපොළ ආර්ථික ක්‍රමය සහ විප්ලවකාරී සමාජවාදය විකල්පයක් වන ආර්ථික මාදිලියක් වේ.<br>B - වෙළෙඳපොළ ආර්ථික ක්‍රමය සහ සමාජ සාධාරණත්වය අතර එකඟතාවක් නිර්මාණය කිරීම පිළිබඳ ව සැලකිලිමත් වේ.<br>C - 'සමාජ වෙනස් වීම විප්ලවය මගින් කළ යුතු ය' යන මාක්ස්ගේ න්‍යාය පිළිගන්නා දේශපාලන න්‍යායක් වේ.<br>D - වෙළෙඳපොළ ආර්ථික ක්‍රමය, නියාමනාත්මක සමාජවාදය සහ සුබසාධක රාජ්‍ය ක්‍රමය යන මුල්ගල් තුන මත ගොඩනගා ඇත.<br>E - ප්‍රජාතන්ත්‍රවාදී මාර්ග මගින් සමාජවාදී සමාජ ක්‍රමයක් නිර්මාණය කිරීම ඉලක්ක කරගෙන ඇත.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 2,
+        e: "සමාජ වෙනස්වීම විප්ලවය මගින් සිදු කළ යුතුය යන්න මාක්ස්වාදී අදහසක් වන අතර සමාජ ප්‍රජාතන්ත්‍රවාදය ප්‍රතිසංස්කරණවාදී ප්‍රජාතන්ත්‍රවාදී මාවත පිළිගන්නා බැවින් C සාවද්‍ය වේ."
+      },
+      {
+        q: "9. <b>කැබිනට් ආණ්ඩුක්‍රමයේ මූලික ලක්ෂණ:</b><br>A - සත්‍ය සහ නාමික වශයෙන් හඳුන්වන ද්විත්ව විධායකයක පැවැත්ම<br>B - නාමික විධායකය විසින් ව්‍යවස්ථාදායකයේ සාමාජිකයින් අතුරෙන් සත්‍ය විධායකය පත් කිරීම<br>C - සත්‍ය විධායකය සෑමවිටම ව්‍යවස්ථාදායකයට වගකීම<br>D - විධායකය සහ ව්‍යවස්ථාදායකය අතර බලතල හා කාර්යයන් විධිමත් අයුරින් බෙදා නොතිබීම<br>E - නිශ්චිත නිල කාලයක් සඳහා ජනතාව විසින් සෘජුව පත් කරනු ලබන නාමික විධායකයක් තිබීම",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 0,
+        e: "නාමික විධායකය (උදා: බ්‍රිතාන්‍යයේ රජු/රැජින හෝ ශ්‍රී ලංකාවේ පෙර සිටි අග්‍රාණ්ඩුකාර) ජනතාව විසින් සෘජුව පත් කරගන්නා ලද්දෙක් නොවන බැවින් E සාවද්‍ය වේ."
+      },
+      {
+        q: "10. <b>ජනාධිපති ආණ්ඩුක්‍රමයේ මූලික ලක්ෂණ:</b><br>A - එකිනෙකට වෙනස් මැතිවරණ දෙකකින් විධායකය සහ ව්‍යවස්ථාදායකය සෘජුව තෝරා පත්කර ගැනීම<br>B - විධායකය සහ ව්‍යවස්ථාදායකය අතර බලතල බෙදීම<br>C - සංවරණ හා තුලන මූලධර්මය මත විධායකය සහ ව්‍යවස්ථාදායකය සිය බලතල ක්‍රියාවට නැංවීම<br>D - විධායකය සහ ව්‍යවස්ථාදායකය අතර පවතින සමීප සහයෝගීතාව<br>E - විධායකය සෘජුව ව්‍යවස්ථාදායකයට වගනොකීම",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 1,
+        e: "ජනාධිපති ආණ්ඩුක්‍රමය තුළ විධායකය සහ ව්‍යවස්ථාදායකය වෙන් වෙන්ව පවතින බැවින් පාර්ලිමේන්තු ක්‍රමයේ මෙන් සමීප සහයෝගීතාවක් (D) දැකිය නොහැක."
+      },
+      {
+        q: "11. <b>අර්ධ ජනාධිපති ආණ්ඩුක්‍රමයක මූලික ලක්ෂණ:</b><br>A - ජනාධිපති සහ අගමැති ප්‍රමුඛ කැබිනට් මණ්ඩලයකින් සමන්විත ද්විත්ව විධායකයක් පැවැත්ම<br>B - ජනතාව විසින් ජනාධිපතිවරයා තෝරාපත් කිරීම සහ ජනාධිපතිවරයා විසින් අගමැති සහ කැබිනට් මණ්ඩලය පත් කරනු ලැබීම<br>C - අගමැති සහ කැබිනට් මණ්ඩලය ව්‍යවස්ථාදායකයට සෘජුව වගකීම<br>D - ජනාධිපතිවරයා රාජ්‍යයේ විධායක බලය ක්‍රියාවට නැංවීමේ උත්තරීතර ආයතනය වීම<br>E - අගමැතිවරයා ආණ්ඩුවේ නායකත්වය දැරීම",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 1,
+        e: "අර්ධ ජනාධිපති ක්‍රමයේ විධායක බලය ජනාධිපති සහ අගමැති අතර බෙදී යන බැවින් ජනාධිපතිවරයා 'උත්තරීතර තනි ආයතනය' (D) ලෙස සැලකීම සාවද්‍ය වේ."
+      },
+      {
+        q: "12. <b>ඒකාධිපති ආණ්ඩුක්‍රමයක මූලික ලක්ෂණ:</b><br>A - පාලකයා විසින් අත්තනෝමතික ලෙස රාජ්‍ය බලය ක්‍රියාපට නැංවීම<br>B - ජනතාවගේ ආගමික විශ්වාස පාලකයා කඩකරන විට පාලකයා තනතුරින් ඉවත් කිරීමට ජනතාවට හැකි වීම<br>C - ජනතා කැමැත්ත නොසලකා හරිමින් පාලකයාගේ කැමැත්ත සමාජය මත පටවා තිබීම<br>D - තනි දේශපාලන පක්ෂයක පැවැත්ම හෝ දේශපාලන පක්ෂ මුළුමනින්ම නොපැවතීම<br>E - රාජ්‍යය සහ සිවිල් සමාජය අතර වෙනසක් නොපැවතීම",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 3,
+        e: "ඒකාධිපති ක්‍රමයකදී පාලකයා තනතුරෙන් ඉවත් කිරීමට ජනතාවට ප්‍රජාතන්ත්‍රවාදී නෛතික ක්‍රමවේද නොමැති බැවින් B ප්‍රකාශය සාවද්‍ය වේ."
+      },
+      {
+        q: "13. <b>ඒකීය ආණ්ඩුක්‍රමයක මූලික ලක්ෂණ:</b><br>A - මධ්‍යය සහ පරිධිය අතර බලතල බෙදාහැරීමක් පදනම් කරගෙන රාජ්‍ය බලය ක්‍රියාවට නැංවීම<br>B - මධ්‍යම ආණ්ඩුව විසින් පවරනු ලබන බලය සහිත පළාත් ආණ්ඩුක්‍රමයක පැවැත්ම<br>C - ඒකීය පුරවැසිභාවයක් පැවැත්ම<br>D - රාජ්‍ය බලය ක්‍රියාවට නැංවීම පිළිබඳ මධ්‍යම ආණ්ඩුවේ ඒකාධිකාරිත්වය<br>E - සියලු ම උප ජාතික ආණ්ඩුවලට ඉහළින් තිබෙන මධ්‍යම ආණ්ඩුවේ අනන්‍ය ආධිපත්‍යය",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 4,
+        e: "මධ්‍යය හා පරිධිය අතර ස්වාධීන බලතල බෙදා හැරීම (A) සංධීය ක්‍රමයේ ලක්ෂණයක් වන අතර ඒකීය ක්‍රමයේ පවතින්නේ මධ්‍යම ආණ්ඩුව විසින් බලය විමධ්‍යගත කිරීම පමණි."
+      },
+      {
+        q: "14. <b>සංධීය ආණ්ඩුක්‍රමයක මූලික ලක්ෂණ:</b><br>A - ආණ්ඩුව ජාතික සහ උප-ජාතික වශයෙන් මට්ටම් දෙකකින් ව්‍යූහගත කර තිබීම<br>B - ස්වාධිපති බලය මධ්‍යය සහ පරිධිය අතර බෙදා තිබීම<br>C - සංධීය ක්‍රමය බිහිවීම පදනම් සපයන ලිඛිත ආණ්ඩුක්‍රම ව්‍යවස්ථාවක් තිබීම<br>D - නීතිමය හෝ දේශපාලන වශයෙන් එකිනෙකට යටත් නොවන සමාන පාර්ශ්වකරුවන් සිටීම<br>E - රාජ්‍ය බලය ක්‍රියාවට නැංවීමේ මහා කාර්යක්ෂමතාවක් පැවැත්ම",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 0,
+        e: "සංධීය ක්‍රමයේ ආණ්ඩු තල දෙකක් පැවැත්ම හා නීති සම්පාදනයේ සංකීර්ණතාව නිසා 'මහා කාර්යක්ෂමතාවක් පැවැත්ම' (E) සාවද්‍ය වේ."
+      },
+      {
+        q: "15. <b>නූතන ප්‍රජාතන්ත්‍රවාදී ආණ්ඩුක්‍රම තුළ දේශපාලන විධායකය:</b><br>A - ආණ්ඩුක්‍රම යන්ත්‍රණයේ අත්‍යවශ්‍ය අංගයක් වන අතර එය නොමැතිව කිසිදු ආණ්ඩුක්‍රමයක් ක්‍රියාත්මක විය නොහැකි ය.<br>B - ඡන්දදායකයන් විසින් තෝරාපත් නොකරන ලද අය විසින් ද දැරිය හැකි වේ.<br>C - කැබිනට්, ජනාධිපති සහ අර්ධ-ජනාධිපති යන ආකෘති අනුව සංවිධානය කර තිබේ.<br>D - නීති සහ රාජ්‍ය ප්‍රතිපත්ති ක්‍රියාපට නැංවීම පිළිබඳව වගකිව යුතු වේ.<br>E - එක් පුද්ගලයෙකුගෙන් හෝ පුද්ගලයින් කිහිප දෙනෙකුගෙන් හෝ සමන්විත කුඩා මණ්ඩලයක් වේ.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 3,
+        e: "නූතන ප්‍රජාතන්ත්‍රවාදයන්හි දේශපාලන විධායකය (Political Executive) මහජන ඡන්දයෙන් පත්වන නියෝජිතයන්ගෙන් සමන්විත වන බැවින් B සාවද්‍ය වේ."
+      },
+      {
+        q: "16. <b>නූතන ප්‍රජාතන්ත්‍රවාදී ආණ්ඩුක්‍රම තුළ ව්‍යවස්ථාදායකය සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "සාමාන්‍යයෙන් සමන්විත වන්නේ ජනතාව නියෝජනය කරන ගිහි දේශපාලනඥයන්ගෙනි.",
+          "සමස්ත ජාතියම නියෝජනය කරන නියෝජිතයින්ගෙන් සමන්විත විශාල මණ්ඩලයක් වේ.",
+          "විවාද කිරීමේ ප්‍රධාන ජාතික සභාව ලෙස සැලකේ.",
+          "ආණ්ඩුවේ කාර්යයන්ට සමානාත්මතාව සැපයීමේ වගකීම දරනු ලැබේ.",
+          "ජාතික ආදායම සම්පාදනය කිරීමේ හා ක්‍රියාවට නැංවීමේ වගකීම දරනු ලැබේ."
+        ],
+        c: 3,
+        e: "ආණ්ඩුවේ කාර්යයන්ට සමානාත්මතාව සැපයීම ව්‍යවස්ථාදායකයේ කාර්යයක් නොවන බැවින් (4) සාවද්‍ය වේ."
+      },
+      {
+        q: "17. <b>නූතන දේශපාලන ක්‍රම තුළ අධිකරණය සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "ආණ්ඩුවෙන් ස්වාධීන වූ රාජ්‍ය ආයතනයක් වේ.",
+          "ආණ්ඩුක්‍රම ව්‍යවස්ථාව නීතිය හෝ ව්‍යවස්ථාදායකය පනවන පනත් හෝ මගින් පිහිටුවනු ලැබේ.",
+          "ඉහළ සහ පහළ වශයෙන් ස්ථර දෙකක් අනුව සංවිධානය කරනු ලැබේ.",
+          "නීතිය විනිශ්චය කිරීමේ බලය පැවරෙන ආණ්ඩුවේ ශාඛාව වේ.",
+          "විධායකයේ අධීක්ෂණයට යටත්ව තම කාර්යයන් ඉටු කළ යුතු වේ."
+        ],
+        c: 4,
+        e: "ප්‍රජාතන්ත්‍රවාදී ක්‍රමයක අධිකරණය විධායකයේ අධීක්ෂණයෙන් තොරව ස්වාධීනව ක්‍රියා කළ යුතු බැවින් (5) සාවද්‍ය වේ."
+      },
+      {
+        q: "18. <b>නීතිය සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "රාජ්‍යය විසින් පනවනු ලබන පොදු රීති පද්ධතියක් වේ.",
+          "මිනිසුන්ගේ ආධ්‍යාත්මික ජීවිතය පාලනය කිරීම පිළිබඳව සැලකිලිමත් වේ.",
+          "සියලු දෙනාටම සමානව අදාළ වන බව පිළිගැනේ.",
+          "දේශපාලන ක්‍රමයක් තුළ මිනිසුන්ට කළ හැකි හා කළ නොහැකි දේ විධානය කරන ප්‍රධාන දර්ශකය වේ.",
+          "ජනතාවගේ නිදහස ආරක්ෂා කරන ප්‍රධාන ආරක්ෂකයා ලෙස සැලකේ."
+        ],
+        c: 1,
+        e: "මිනිසුන්ගේ ආධ්‍යාත්මික ජීවිතය පාලනය කරන්නේ ආගම හා සදාචාරය මගින් වන අතර නීතිය මගින් බාහිර හැසිරීම් පාලනය කරන බැවින් (2) සාවද්‍ය වේ."
+      },
+      {
+        q: "19. <b>ආණ්ඩුක්‍රම ව්‍යවස්ථාව සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "ආණ්ඩුක්‍රමයට නීතිමය පදනම සපයන නීති අන්තර්ගත ලියවිල්ල වේ.",
+          "ප්‍රජාතන්ත්‍රවාදී ආණ්ඩුක්‍රමයේ අත්‍යවශ්‍ය අංගයක් ලෙස සලකනු ලැබේ.",
+          "දේශපාලකයින්ගේ සදාචාරය හා යුතුකම් ආරක්ෂා කරන ලියවිල්ලක් ලෙස සලකනු ලැබේ.",
+          "රාජ්‍යය සහ පුරවැසියන් අතර සම්බන්ධතාවය පෙන්නුම් කරන ප්‍රධාන නීතිමය ලියවිල්ල වේ.",
+          "ව්‍යවස්ථානුකූලවාදයේ වර්ධනයට පදනම සපයන ලියවිල්ල වේ."
+        ],
+        c: 2,
+        e: "ආණ්ඩුක්‍රම ව්‍යවස්ථාව යනු නෛතික ලියවිල්ලක් මිස හුදු දේශපාලඥයන්ගේ සදාචාරය ආරක්ෂා කරන ලියවිල්ලක් නොවන බැවින් (3) සාවද්‍ය වේ."
+      },
+      {
+        q: "20. <b>සිවිල් සමාජය සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "පොදුවේ පිළිගත් අර්ථ නිරූපණයක් නොමැති සංකල්පයක් වේ.",
+          "රාජ්‍ය පාලනයෙන් පරිබාහිරව පවතින සමාජ ජීවිතයේ එක් පැතිකඩක් එමගින් විස්තර කරනු ලැබේ.",
+          "දේශපාලන සමාජයට අනන්‍ය වන බව පිළිගනු ලැබේ.",
+          "විශේෂිත වූ මෙන්ම සීමිත අරමුණු කිහිපයක් උදෙසා පවතින සාමුහික සමාජ සංවිධානයක් ලෙස විස්තර කරනු ලැබේ.",
+          "ස්වේච්ඡා සංවිධානවලින් සහ සමාජ කණ්ඩායම්වලින් ගොඩනැගී ඇත."
+        ],
+        c: 2,
+        e: "සිවිල් සමාජය (Civil Society) යනු දේශපාලන සමාජයෙන්/රාජ්‍යයෙන් ස්වාධීනව පරිබාහිරව පවතින පරිමණ්ඩලයක් බැවින් (3) සාවද්‍ය වේ."
+      },
+      {
+        q: "21. <b>පුරවැසිභාවය සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "රටක ජීවත් වන සියලු දෙනාට ම හිමි නීතිමය අයිතිවාසිකමක් වේ.",
+          "දේශපාලන සමාජයක ජීවත් වන පුරවැසියන්ට විශේෂිත ජාතිකත්වයක් ආරෝපණය කරන නීතිමය තත්ත්වයක් වේ.",
+          "උත්පත්තිය මගින් හෝ ලියාපදිංචි වීම මගින් හිමිකර ගත හැකි නීතිමය තත්ත්වයක් වේ.",
+          "භුක්ති විඳින අයට දේශපාලන සමාජයක සමාන සහ පූර්ණ සාමාජිකත්වය හිමිකර දෙන නීතිමය තත්ත්වයක් වේ.",
+          "රාජ්‍යය සහ පුරවැසියන් අතර සම්බන්ධතාවය නිරූපණය කරන නීතිමය තත්ත්වයක් වේ."
+        ],
+        c: 0,
+        e: "රටක ජීවත්වන විදේශිකයන්, සරණාගතයන් ආදී සියල්ලන්ටම පුරවැසිභාවය හිමි නොවන බැවින් (1) සාවද්‍ය වේ."
+      },
+      {
+        q: "22. <b>නියෝජනය සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "ප්‍රජාතන්ත්‍රවාදී ආණ්ඩුක්‍රමය තුළ පාලකයින් සහ පාලිතයින් එකට සම්බන්ධ කරන ප්‍රධාන පාලම වේ.",
+          "තෝරාපත් කිරීමට සහභාගි වන අය සහ තේරීපත් වන අය අතර පවතින සම්බන්ධතාවය පෙන්නුම් කරන නිර්ණායකයක් වේ.",
+          "ක්‍රියාවට නැංවිය හැක්කේ මැතිවරණ මගින් පමණි.",
+          "භාරකාරත්වය, නියෝජනය කිරීම, අවසර දීම සහ සාදෘශ්‍යය (පෙනී සිටීම) යනුවෙන් විවිධ ක්‍රම හතරකින් යුක්ත වේ.",
+          "දේශපාලන ක්‍රමයක දේශපාලන, ආර්ථික හා සමාජ කොටස්වලට සාධාරණ නියෝජනයක් සහතික කරන එකම ක්‍රමය වේ."
+        ],
+        c: 2,
+        e: "නියෝජනය මැතිවරණවලට අමතරව වෙනත් විවිධ ක්‍රමවේද හරහාද (උදා: පත්කිරීම්, නාමකරණයන්) සිදුවිය හැකි බැවින් (3) සාවද්‍ය වේ."
+      },
+      {
+        q: "23. <b>දේපොළ සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "පෞද්ගලික, පොදු සහ රාජ්‍ය වශයෙන් වර්ග කිහිපයකින් සමන්විත වේ.",
+          "දේපළ අයිතිය හෝ හිමිකම් පිළිබඳ අයිතිය ලෙස නීතියෙන් පිළිගෙන ඇත.",
+          "චංචල හා නිශ්චල වශයෙන් කොටස් දෙකකට වර්ග කර ඇත.",
+          "හිමිකමට, භුක්තිවිඳීමට, පැවරීමට, පාලනය කිරීමට, ආදායම් ඉපැයීමට සහ විකිණීමට ඇති අයිතිය යන ගුණාංගවලින් යුක්ත වේ.",
+          "කොමියුනිස්ට් පාලන ක්‍රම තුළ පවා මූලික මිනිස් අයිතියක් ලෙස පිළිගෙන ඇත."
+        ],
+        c: 4,
+        e: "කොමියුනිස්ට් ආකෘතිය තුළ පෞද්ගලික දේපළ අයිතිය ප්‍රතික්ෂේප කරනු ලබන බැවින් (5) සාවද්‍ය වේ."
+      },
+      {
+        q: "24. <b>අයිතිවාසිකම් සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "මානව අභිමානය තහවුරු කරන්නා වූ මනුෂ්‍යයන්ට හිමි දෙයක් වේ.",
+          "බැඳීම් හා සම්බන්ධ වන බවට හඳුනාගෙන ඇත.",
+          "නීතිමය හා සදාචාරාත්මක ලෙස දෙයාකාර ස්වරූපයක් ගනී.",
+          "පුද්ගලයින්ගේ පෞද්ගලික වර්ධනය සහ ඔවුන්ගේ සාමුහික පැවැත්ම උදෙසා අත්‍යවශ්‍ය යැයි පිළිගෙන ඇත.",
+          "සාධනීය හා නිෂේධනීය වශයෙන් කොටස් දෙකකට වර්ග කර ඇත."
+        ],
+        c: 4,
+        e: "'සාධනීය හා නිෂේධනීය' යන්න ප්‍රධාන වශයෙන් නිදහස (Liberty) පිළිබඳ සංකල්පයට යොදාගන්නා අතර අයිතිවාසිකම් සඳහා භාවිත නොවන බැවින් (5) සාවද්‍ය වේ."
+      },
+      {
+        q: "25. <b>දේශපාලන පක්ෂය සම්බන්ධයෙන් සාවද්‍ය ප්‍රකාශය තෝරන්න:</b>",
+        o: [
+          "මැතිවරණ තරඟයක් මගින් හෝ වෙනත් මාර්ග මගින් හෝ ආණ්ඩු බලය ලබාගැනීම හෝ බලපෑම් කිරීම අරමුණු කොටගෙන සංවිධානය වූ පුද්ගල කණ්ඩායම් වේ.",
+          "ආණ්ඩුක්‍රම පාලන ක්‍රම තුළ පවා ක්‍රියාත්මක වීමේ නිදහස භුක්ති විඳියි.",
+          "ජාතික, ක්‍රියාකාරී හා සාමාන්‍ය යනුවෙන් ත්‍රිවිධාකාර සාමාජිකයන්ගෙන් සමන්විත වේ.",
+          "ප්‍රජාතන්ත්‍රවාදී දේශපාලන ක්‍රම තුළ ජනතාවගේ දේශපාලන අභිලාෂයන් නියෝජනය කරන ප්‍රධාන ආයතනයක් වේ.",
+          "කේඩර සහ ජනතා පක්ෂ, නියෝජිත සහ අනුකූලතා, ව්‍යවස්ථානුකූල සහ විප්ලවකාරී, වාමාංශික හා දක්ෂිණාංශික වශයෙන් වර්ග කරනු ලැබේ."
+        ],
+        c: 1,
+        e: "ඒකාධිපති හෝ අධිකාරවාදී ආණ්ඩුක්‍රම පාලන තුළ විපක්ෂ දේශපාලන පක්ෂවලට ක්‍රියාත්මක වීමේ නිදහස නොමැති බැවින් (2) සාවද්‍ය වේ."
+      },
+      {
+        q: "26. අංක 26 සිට 30 තෙක් ඇති ප්‍රශ්න සඳහා ඒ ඒ ප්‍රශ්නයේ මාතෘකාවට අදාළව ප්‍රකාශ පහක් දී ඇත. ඒවායින් නිවැරදි වන්නේ ප්‍රකාශ හතරක් පමණි. නිවැරදි ප්‍රකාශ කාණ්ඩය තෝරන්න.<br><br><b>1833 කෝල්බෲක්-කැමරන් කොමිසම මගින් යෝජනා කරනු ලැබූයේ:</b><br>A - ආණ්ඩුකාරවරයාට අතිරේක බලතල පැවරීම මගින් ආණ්ඩුකාරවරයාගේ තත්ත්වය ශක්තිමත් කිරීම<br>B - විධායක සහ ව්‍යවස්ථාදායක කාර්යයන් කිරීම සඳහා ආණ්ඩුකාරයාට සහාය වීම පිණිස විධායක සහ ව්‍යවස්ථාදායක සභා පිහිටුවීම<br>C - නිදහස් ශ්‍රම වෙළෙඳපොළ වර්ධනය වීමට මග පෑදීම උදෙසා රාජකාරි ක්‍රමය අහෝසි කිරීම<br>D - උඩරට සහ පහතරට පළාත් එක් කිරීම මගින් ලංකාව ඒකීය පාලන ක්‍රමයක් යටතට ගෙන ඒම<br>E - වෙළෙඳපොළ ආර්ථිකය වර්ධනය කිරීම උදෙසා රාජ්‍ය වෙළෙඳ ඒකාධිකාරය අහෝසි කිරීම",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 4,
+        e: "කෝල්බෲක් කොමිසමේ අරමුණ වූයේ ආණ්ඩුකාරවරයාගේ අත්තනෝමතික බලතල සීමා කිරීම මිස බලතල වැඩි කිරීම නොවන බැවින් A සාවද්‍ය වේ."
+      },
+      {
+        q: "27. <b>1911-1924 කාලය තුළ ක්‍රියාත්මක කළ ව්‍යවස්ථා ප්‍රතිසංස්කරණ මගින්:</b><br>A - මැතිවරණ දේශපාලනය හරහා ආණ්ඩුකරණයට සහභාගි වීමට ජනතාවට දොර විවෘත කරනු ලැබී ය.<br>B - අයවැය කටයුතු සඳහා සහාය වීමට මුදල් කාරක සභා පිහිටුවනු ලැබී ය.<br>C - ව්‍යවස්ථාදායක සභාවේ නිලනොලත් සාමාජිකයින්ගේ සංඛ්‍යාව අඩු කෙරිණ.<br>D - ආණ්ඩුකාරවරයාගේ බලතල නොනැසී පවත්වා ගෙන යනු ලැබී ය.<br>E - ව්‍යවස්ථාදායක සභාවේ නිලනොලත් සාමාජිකයින්ගේ බලතල අනුක්‍රමයෙන් වැඩි කෙරිණ.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 2,
+        e: "1911-1924 ප්‍රතිසංස්කරණ මගින් ව්‍යවස්ථාදායක සභාවේ නිල නොලත් සාමාජික සංඛ්‍යාව වැඩි කළ බැවින් 'අඩු කෙරිණි' යන C සාවද්‍ය වේ."
+      },
+      {
+        q: "28. <b>ලංකා ජාතික සංගමය:</b><br>A - බටහිර අධ්‍යාපනය ලත් උගත් මධ්‍යම පාන්තික කණ්ඩායමක් විසින් පිහිටුවන ලද සංවිධානයක් විය.<br>B - බ්‍රිතාන්‍ය යටත් විජිත පාලනය තුළ ව්‍යවස්ථා ප්‍රතිසංස්කරණ ලබා ගැනීම අරමුණු කරගත්තේ ය.<br>C - කුල, වාර්ගික, ආගමික ආදී විවිධ අනන්‍යතාවන් හේතුවෙන් අභ්‍යන්තරව දුබල වූ සංවිධානයක් විය.<br>D - බ්‍රිතාන්‍ය පාලනයට එරෙහිව පැන නැගුන කම්කරු අරගලවලට ප්‍රතිරෝධයක් ලෙස සංවිධානය කරනු ලදී.<br>E - සාමාන්‍ය ජනතාවගේ අවශ්‍යතාවලට වඩා සමාජ ප්‍රභූන්ගේ අවශ්‍යතා ගැන වැඩියෙන් සැලකිලිමත් වූ සංවිධානයක් විය.",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 1,
+        e: "ලංකා ජාතික සංගමය පිහිටුවන ලද්දේ ව්‍යවස්ථාපිත ප්‍රභූ දේශපාලන ඉල්ලීම් සඳහා මිස කම්කරු අරගලවලට ප්‍රතිරෝධයක් ලෙස නොවන බැවින් D සාවද්‍ය වේ."
+      },
+      {
+        q: "29. <b>ඩොනමෝර් ආණ්ඩුක්‍රමයේ සුවිශේෂී ලක්ෂණ වූයේ:</b><br>A - ස්වදේශික සහ යටත්විජිත නියෝජිතයින්ගෙන් සමන්විත වූ අමාත්‍ය මණ්ඩලයක් පැවැත්ම<br>B - ව්‍යවස්ථාදායක සහ විධායක බලතල දෙවර්ගයම පැවරූ ව්‍යවස්ථාදායකයක් තිබීම<br>C - සාමාන්‍ය අවස්ථාවලදී නාමික විධායකයෙකු ලෙස ක්‍රියා කළ යුතු බවට අපේක්ෂා කළ ආණ්ඩුකාරවරයෙකු සිටීම<br>D - රාජ්‍ය මන්ත්‍රණ සභාවේ සියලු ම මන්ත්‍රීවරුන්ගෙන් සමන්විත විධායක කාරක සභා හතක් පැවැත්ම<br>E - අධිරාජ්‍ය ආණ්ඩුවේ අභිලාෂ වෙනුවෙන් පෙනී සිටි මුළු බලපත්ර නමින් හැඳින්වුන රාජ්‍ය නිලධාරීන් තිදෙනෙකු සිටීම",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 2,
+        e: "ඩොනමෝර් ආණ්ඩුකාරවරයා නාමික විධායකයෙකු නොවූ අතර ඔහුට විශේෂ නිෂේධ බලතල හා හදිසි බලතල පැවැති බැවින් C සාවද්‍ය වේ."
+      },
+      {
+        q: "30. <b>1931 දී සර්වජන ඡන්ද බලය ප්‍රදානය කිරීම කෙරෙහි ඩොනමෝර් කොමිසමට බලපෑ සාධක:</b><br>A - සමාජයේ අවවරප්‍රසාදිත කොටස් සවිබල ගැන්වීමේ අවශ්‍යතාව<br>B - ආණ්ඩුකරණය තුළ සමාජ ප්‍රභූන්ගේ කතිපයාධිකාරී නායකත්වය දුර්වල කිරීමේ අවශ්‍යතාව<br>C - දේශපාලනඥයින් ඡන්දදායකයින්ට ඇති වගකීම වැඩි කිරීමේ අවශ්‍යතාව<br>D - සාමාන්‍ය ජනතාවට වඩාත් සක්‍රීය ලෙස දේශපාලනයට සහභාගි වීමට මාවත පෑදීමේ අවශ්‍යතාව<br>E - ජනතාව දේශපාලන වශයෙන් සවිබල ගැන්වීම මගින් යටත් විජිත පාලනයට එරෙහි නැගීම ශක්තිමත් කිරීමේ අවශ්‍යතාව",
+        o: [
+          "A B C D",
+          "A B C E",
+          "A B D E",
+          "A C D E",
+          "B C D E"
+        ],
+        c: 0,
+        e: "යටත්විජිත පාලනයට එරෙහි නැගී සිටීම් ශක්තිමත් කිරීම බ්‍රිතාන්‍ය කොමිසමක අරමුණක් විය නොහැකි බැවින් E ප්‍රකාශය සාවද්‍ය වේ."
+      }
+    ];
+
+    const OPT_NUMS = ['(1)', '(2)', '(3)', '(4)', '(5)'];
+
+    // State Variables
+    let currentIdx = -2; // -2: Welcome Screen, -1: Results Screen, >=0: Question Index
+    let userAnswers = new Array(QUESTIONS.length).fill(null);
+    let flaggedQuestions = new Array(QUESTIONS.length).fill(false);
+    let soundEnabled = true;
+    let timerSeconds = 0;
+    let timerInterval = null;
+    let reviewFilter = 'all';
+
+    // Web Audio Synthesizer Sound FX
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playSound(type) {
+      if (!soundEnabled) return;
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+
+        if (type === 'correct') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(523.25, now); // C5
+          osc.frequency.exponentialRampToValueAtTime(659.25, now + 0.12); // E5
+          osc.frequency.exponentialRampToValueAtTime(783.99, now + 0.25); // G5
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.35);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.35);
+        } else if (type === 'wrong') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(220, now); // A3
+          osc.frequency.exponentialRampToValueAtTime(164.81, now + 0.2); // E3
+          gain.gain.setValueAtTime(0.15, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.25);
+        } else if (type === 'click') {
+          const osc = audioCtx.createOscillator();
+          const gain = audioCtx.createGain();
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(440, now);
+          osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+          gain.gain.setValueAtTime(0.08, now);
+          gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+          osc.connect(gain);
+          gain.connect(audioCtx.destination);
+          osc.start(now);
+          osc.stop(now + 0.06);
+        }
+      } catch (e) { console.log(e); }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundBtn').innerText = soundEnabled ? '🔊' : '🔇';
+    }
+
+    function startTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+      timerInterval = setInterval(() => {
+        timerSeconds++;
+        const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+        const s = String(timerSeconds % 60).padStart(2, '0');
+        document.getElementById('timerDisplay').innerText = `⏱️ ${m}:${s}`;
+      }, 1000);
+    }
+
+    function stopTimer() {
+      if (timerInterval) clearInterval(timerInterval);
+    }
+
+    function toggleFlag(qIdx) {
+      flaggedQuestions[qIdx] = !flaggedQuestions[qIdx];
+      playSound('click');
+      renderStrip();
+      if (currentIdx >= 0) renderQuestion();
+    }
+
+    function startQuiz() {
+      userAnswers.fill(null);
+      flaggedQuestions.fill(false);
+      timerSeconds = 0;
+      currentIdx = 0;
+      startTimer();
+      playSound('click');
+      render();
+    }
+
+    function selectAnswer(qIdx, optionIdx) {
+      if (userAnswers[qIdx] !== null) return; // Already answered
+      userAnswers[qIdx] = optionIdx;
+      
+      const q = QUESTIONS[qIdx];
+      if (optionIdx === q.c) playSound('correct');
+      else playSound('wrong');
+
+      renderStrip();
+      renderQuestion();
+    }
+
+    function goPrev() {
+      if (currentIdx > 0) {
+        currentIdx--;
+        playSound('click');
+        render();
+      }
+    }
+
+    function goNext() {
+      if (currentIdx < QUESTIONS.length - 1) {
+        currentIdx++;
+        playSound('click');
+        render();
+      }
+    }
+
+    function jumpToQuestion(idx) {
+      currentIdx = idx;
+      playSound('click');
+      render();
+    }
+
+    function finishQuiz() {
+      stopTimer();
+      currentIdx = -1;
+      playSound('click');
+      render();
+    }
+
+    // Nav Strip Renderer
+    function renderStrip() {
+      const grid = document.getElementById('stripGrid');
+      const stripCard = document.getElementById('stripCard');
+
+      if (currentIdx === -2) {
+        stripCard.style.display = 'none';
+        return;
+      }
+      stripCard.style.display = 'block';
+
+      grid.innerHTML = QUESTIONS.map((q, i) => {
+        let cls = '';
+        if (i === currentIdx) cls += ' curr';
+        if (userAnswers[i] !== null) {
+          if (userAnswers[i] === q.c) cls += ' ok';
+          else cls += ' no';
+        }
+        if (flaggedQuestions[i]) cls += ' flagged';
+
+        return `<button class="strip-btn ${cls}" onclick="jumpToQuestion(${i})">${i + 1}</button>`;
+      }).join('');
+    }
+
+    // Welcome Screen
+    function renderWelcomeScreen() {
+      const quizArea = document.getElementById('quizArea');
+      quizArea.innerHTML = `
+        <div class="card welcome-box">
+          <span class="welcome-badge">2018 AL POLITICAL SCIENCE</span>
+          <h2 class="welcome-title">දේශපාලන විද්‍යාව I කොටස<br>ස්වයං ඇගයීම් ප්‍රශ්න පත්‍රය (2018)</h2>
+          <p class="welcome-text">
+            මෙම ප්‍රශ්න පත්‍රය උසස් පෙළ දේශපාලන විද්‍යාව 2018 I කොටස සඳහා වන MCQ ප්‍රශ්න 30 කින් සමන්විත වේ. 
+            එක් එක් ප්‍රශ්නයට පිළිතුරු සපයා නිවැරදි විග්‍රහයන් සහ ලකුණු තත්ත්වය ක්ෂණිකව ලබා ගන්න.
+          </p>
+
+          <div class="features-list">
+            <div class="feature-item">
+              <div class="feature-icon">📝</div>
+              <div class="feature-info">
+                <h4>බහුවරණ ප්‍රශ්න 30</h4>
+                <p>සියලුම MCQ ප්‍රශ්න ඇතුළත් වේ</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">💡</div>
+              <div class="feature-info">
+                <h4>පූර්ණ විග්‍රහයන්</h4>
+                <p>සෑම ප්‍රශ්නයකටම පැහැදිලි කිරීම්</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">⏱️</div>
+              <div class="feature-info">
+                <h4>කාල ගණකය</h4>
+                <p>වේගය පරීක්ෂා කර ගැනීමේ පහසුකම</p>
+              </div>
+            </div>
+            <div class="feature-item">
+              <div class="feature-icon">🔖</div>
+              <div class="feature-info">
+                <h4>ලකුණු කිරීම් (Bookmark)</h4>
+                <p>සැක සහිත ප්‍රශ්න පසුව බලන්න</p>
+              </div>
+            </div>
+          </div>
+
+          <button class="btn primary" style="padding: 16px 36px; font-size: 1.1rem;" onclick="startQuiz()">
+            ප්‍රශ්න පත්‍රය ආරම්භ කරන්න 🚀
+          </button>
+        </div>
+      `;
+    }
+
+    // Render Question Screen
+    function renderQuestion() {
+      const quizArea = document.getElementById('quizArea');
+      const q = QUESTIONS[currentIdx];
+      const answered = userAnswers[currentIdx] !== null;
+      const userChoice = userAnswers[currentIdx];
+      const isFlagged = flaggedQuestions[currentIdx];
+
+      const optsHtml = q.o.map((optText, oi) => {
+        let cls = '';
+        if (answered) {
+          if (oi === q.c) cls = 'correct';
+          else if (oi === userChoice) cls = 'incorrect';
+        }
+        const disabled = answered ? 'disabled' : '';
+
+        return `
+          <button class="opt-btn ${cls}" ${disabled} onclick="selectAnswer(${currentIdx}, ${oi})">
+            <span class="opt-badge">${OPT_NUMS[oi]}</span>
+            <span>${optText}</span>
+          </button>
+        `;
+      }).join('');
+
+      let explainHtml = '';
+      if (answered) {
+        const isOk = userChoice === q.c;
+        explainHtml = `
+          <div class="explain-card ${isOk ? 'ok' : 'no'}">
+            <div class="explain-title">
+              ${isOk ? '✓ නිවැරදියි!' : '✗ වැරදියි — නිවැරදි පිළිතුර: ' + OPT_NUMS[q.c]}
+            </div>
+            <div class="explain-desc">💡 <strong>විග්‍රහය:</strong> ${q.e}</div>
+          </div>
+        `;
+      }
+
+      quizArea.innerHTML = `
+        <div class="card">
+          <div class="q-meta-bar">
+            <div style="display:flex; align-items:center; gap:10px;">
+              <span class="q-tag">ප්‍රශ්නය ${currentIdx + 1}</span>
+              <button class="ctrl-btn" onclick="toggleFlag(${currentIdx})" style="padding:4px 10px; font-size:0.8rem;">
+                ${isFlagged ? '★ ලකුණු කළා' : '☆ ලකුණු කරන්න'}
+              </button>
+            </div>
+            <span class="q-counter">${currentIdx + 1} / ${QUESTIONS.length}</span>
+          </div>
+
+          <div class="q-text">${q.q}</div>
+          <div class="options-grid">${optsHtml}</div>
+          ${explainHtml}
+
+          <div class="nav-row">
+            <button class="btn" onclick="goPrev()" ${currentIdx === 0 ? 'disabled' : ''}>← පෙර ප්‍රශ්නය</button>
+            ${currentIdx === QUESTIONS.length - 1
+              ? `<button class="btn primary" onclick="finishQuiz()" ${answered ? '' : 'disabled'}>ප්‍රතිඵල බලන්න 🏆</button>`
+              : `<button class="btn primary" onclick="goNext()" ${answered ? '' : 'disabled'}>ඊළඟ ප්‍රශ්නය →</button>`
+            }
+          </div>
+        </div>
+      `;
+    }
+
+    // Render Results Screen
+    function renderResultsScreen() {
+      const quizArea = document.getElementById('quizArea');
+      let okCount = 0;
+      let noCount = 0;
+      let unCount = 0;
+
+      userAnswers.forEach((ans, i) => {
+        if (ans === null) unCount++;
+        else if (ans === QUESTIONS[i].c) okCount++;
+        else noCount++;
+      });
+
+      const total = QUESTIONS.length;
+      const pct = Math.round((okCount / total) * 100);
+
+      const radius = 54;
+      const circumference = 2 * Math.PI * radius;
+      const dashoffset = circumference - (pct / 100) * circumference;
+
+      let verdict = '';
+      if (pct >= 80) verdict = 'විශිෂ්ටයි! — දේශපාලන විද්‍යාව පිළිබඳ ඉහළ සුදානමක් ඇත.';
+      else if (pct >= 60) verdict = 'හොඳයි! — තවදුරටත් සිද්ධාන්ත හා ව්‍යවස්ථා සංශෝධන පුනරීක්ෂණය කරන්න.';
+      else if (pct >= 40) verdict = 'මූලික අවබෝධයක් ඇත — තවත් ප්‍රශ්න පත්‍ර පරිශීලනය කරන්න.';
+      else verdict = 'දේශපාලන විද්‍යාව පාඩම් කොටස් නැවත අවධානයෙන් අධ්‍යයනය කරන්න.';
+
+      const m = String(Math.floor(timerSeconds / 60)).padStart(2, '0');
+      const s = String(timerSeconds % 60).padStart(2, '0');
+
+      let reviewItemsHtml = '';
+      QUESTIONS.forEach((q, i) => {
+        const uAns = userAnswers[i];
+        const isOk = uAns === q.c;
+        const isFlag = flaggedQuestions[i];
+
+        if (reviewFilter === 'wrong' && isOk) return;
+        if (reviewFilter === 'right' && !isOk) return;
+        if (reviewFilter === 'flagged' && !isFlag) return;
+
+        const yourAnsStr = uAns === null ? 'පිළිතුරු නොදුන්නා' : `${OPT_NUMS[uAns]} ${q.o[uAns]}`;
+        const correctAnsStr = `${OPT_NUMS[q.c]} ${q.o[q.c]}`;
+
+        reviewItemsHtml += `
+          <div class="review-item">
+            <div class="review-q-header">
+              <span>${q.q}</span>
+              <span class="badge ${isOk ? 'ok' : 'no'}">${isOk ? 'නිවැරදි' : 'වැරදි'}</span>
+            </div>
+            ${!isOk ? `
+              <div class="review-ans-line user">
+                <strong>ඔබේ පිළිතුර:</strong> <span>${yourAnsStr}</span>
+              </div>
+            ` : ''}
+            <div class="review-ans-line correct">
+              <strong>නිවැරදි පිළිතුර:</strong> <span>${correctAnsStr}</span>
+            </div>
+            <div class="review-explain">💡 ${q.e}</div>
+          </div>
+        `;
+      });
+
+      quizArea.innerHTML = `
+        <div class="card results-card">
+          <div class="results-header">
+            <div class="gauge-wrapper">
+              <svg class="gauge-circle" viewBox="0 0 120 120">
+                <defs>
+                  <linearGradient id="scoreGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#8b5cf6" />
+                    <stop offset="100%" stop-color="#fbbf24" />
+                  </linearGradient>
+                </defs>
+                <circle class="gauge-bg" cx="60" cy="60" r="${radius}" />
+                <circle class="gauge-fill" cx="60" cy="60" r="${radius}" 
+                  stroke-dasharray="${circumference}" 
+                  stroke-dashoffset="${dashoffset}" />
+              </svg>
+              <div class="gauge-text">${pct}%</div>
+            </div>
+
+            <div class="results-verdict">${verdict}</div>
+            <div class="results-sub">ඔබ ප්‍රශ්න ${total} කින් ${okCount} ක් නිවැරදිව පිළිතුරු දුන්නා.</div>
+          </div>
+
+          <div class="stats-row">
+            <div class="stat-card">
+              <div class="stat-val" style="color:var(--good-soft);">${okCount}</div>
+              <div class="stat-lbl">නිවැරදි පිළිතුරු</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val" style="color:var(--bad-soft);">${noCount}</div>
+              <div class="stat-lbl">වැරදි පිළිතුරු</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-val">${m}:${s}</div>
+              <div class="stat-lbl">ගත වූ කාලය</div>
+            </div>
+          </div>
+
+          <div class="filter-chips">
+            <button class="chip ${reviewFilter === 'all' ? 'active' : ''}" onclick="setReviewFilter('all')">සියල්ල (${total})</button>
+            <button class="chip ${reviewFilter === 'wrong' ? 'active' : ''}" onclick="setReviewFilter('wrong')">වැරදි (${noCount})</button>
+            <button class="chip ${reviewFilter === 'right' ? 'active' : ''}" onclick="setReviewFilter('right')">නිවැරදි (${okCount})</button>
+            <button class="chip ${reviewFilter === 'flagged' ? 'active' : ''}" onclick="setReviewFilter('flagged')">ලකුණු කළ ප්‍රශ්න</button>
+          </div>
+
+          <div class="review-list">
+            ${reviewItemsHtml || '<p style="text-align:center; color:var(--text-muted); padding:20px;">තෝරාගත් කාණ්ඩයේ ප්‍රශ්න නොමැත.</p>'}
+          </div>
+
+          <div style="margin-top: 32px;">
+            <button class="btn primary" style="padding: 14px 32px;" onclick="startQuiz()">නැවත උත්සාහ කරන්න 🔄</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function setReviewFilter(f) {
+      reviewFilter = f;
+      renderResultsScreen();
+    }
+
+    function render() {
+      renderStrip();
+      if (currentIdx === -2) renderWelcomeScreen();
+      else if (currentIdx === -1) renderResultsScreen();
+      else renderQuestion();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Initial Launch
+    render();
+  </script>
+</body>
+
+</html>
