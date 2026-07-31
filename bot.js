@@ -228,10 +228,10 @@ function getSubjectKeyboard() {
   ];
 
   const communityRow = [];
-  if (GROUP_URL) {
+  if (GROUP_URL && GROUP_URL.startsWith('http')) {
     communityRow.push({ text: '💬 Discussion Group', url: GROUP_URL });
   }
-  if (FB_PAGE_URL) {
+  if (FB_PAGE_URL && FB_PAGE_URL.startsWith('http')) {
     communityRow.push({ text: '📘 Facebook Page', url: FB_PAGE_URL });
   }
 
@@ -240,9 +240,12 @@ function getSubjectKeyboard() {
   }
 
   // 1-Click "Add Bot to Your Group" Deep Link
-  keyboard.push([
-    { text: '➕ Add Bot to Your Group (Group එකට එකතු කරන්න)', url: `https://t.me/${botUsername}?startgroup=true` }
-  ]);
+  const groupAddUrl = `https://t.me/${botUsername || 'AL_MCQbot'}?startgroup=true`;
+  if (groupAddUrl.startsWith('http')) {
+    keyboard.push([
+      { text: '➕ Add Bot to Your Group (Group එකට එකතු කරන්න)', url: groupAddUrl }
+    ]);
+  }
 
   return { inline_keyboard: keyboard };
 }
@@ -448,7 +451,9 @@ bot.on('message', (msg) => {
   if (msg.from) {
     registerUser(msg.from);
   }
-  console.log(`📩 Incoming message in [${msg.chat.type}] from ${msg.from?.first_name || 'User'}: "${msg.text || ''}"`);
+  if (msg.text) {
+    console.log(`📩 Incoming message in [${msg.chat.type}] (Chat ID: ${msg.chat.id}) from ${msg.from?.first_name || 'User'}: "${msg.text}"`);
+  }
 });
 
 // Listener: Auto Welcome when Bot is added to a Telegram Group
@@ -480,8 +485,8 @@ bot.on('new_chat_members', async (msg) => {
   }
 });
 
-// Command: /start (Supports both /start and /start@AL_MCQbot)
-bot.onText(/\/start(@\w+)?/, (msg) => {
+// Command: /start (Supports /start, /start@AL_MCQbot, and group start)
+bot.onText(/\/start/i, (msg) => {
   const chatId = msg.chat.id;
   if (msg.from) registerUser(msg.from);
 
@@ -493,8 +498,8 @@ bot.onText(/\/start(@\w+)?/, (msg) => {
     `ඔබට **Native Telegram Polls (Chat එකෙන්ම)**, **Live Competition Leaderboard**, හෝ **Telegram WebApp** මගින් Quiz කිරීමට ඔබගේ විෂය (Subject) පහතින් තෝරන්න:`;
 
   const links = [];
-  if (GROUP_URL) links.push('💬 **Discussion Group**');
-  if (FB_PAGE_URL) links.push('📘 **Facebook Page**');
+  if (GROUP_URL && GROUP_URL.startsWith('http')) links.push('💬 **Discussion Group**');
+  if (FB_PAGE_URL && FB_PAGE_URL.startsWith('http')) links.push('📘 **Facebook Page**');
 
   if (links.length > 0) {
     welcomeMessage += `\n\nඅපගේ ${links.join(' සහ ')} එක සමඟ පහත බොත්තම් මගින් එක්වන්න:`;
@@ -507,7 +512,7 @@ bot.onText(/\/start(@\w+)?/, (msg) => {
 });
 
 // Command: /myid
-bot.onText(/\/myid(@\w+)?/, (msg) => {
+bot.onText(/\/myid/i, (msg) => {
   const chatId = msg.chat.id;
   const fromId = msg.from ? msg.from.id : chatId;
   const name = msg.from ? [msg.from.first_name, msg.from.last_name].filter(Boolean).join(' ') : 'User';
@@ -518,7 +523,7 @@ bot.onText(/\/myid(@\w+)?/, (msg) => {
 });
 
 // Command: /leaderboard or /top
-bot.onText(/\/(leaderboard|top)(@\w+)?/, (msg) => {
+bot.onText(/\/(leaderboard|top)/i, (msg) => {
   const chatId = msg.chat.id;
 
   const keyboard = {
@@ -538,7 +543,7 @@ bot.onText(/\/(leaderboard|top)(@\w+)?/, (msg) => {
 });
 
 // Command: /admin (Admin Control Dashboard)
-bot.onText(/\/admin(@\w+)?/, (msg) => {
+bot.onText(/\/admin/i, (msg) => {
   const chatId = msg.chat.id;
   const fromId = msg.from ? msg.from.id : chatId;
 
@@ -578,7 +583,7 @@ bot.onText(/\/admin(@\w+)?/, (msg) => {
 });
 
 // Command: /broadcast <message>
-bot.onText(/\/broadcast (.+)/, async (msg, match) => {
+bot.onText(/\/broadcast (.+)/i, async (msg, match) => {
   const chatId = msg.chat.id;
   const fromId = msg.from ? msg.from.id : chatId;
   if (!isAdminUser(fromId)) return;
@@ -601,7 +606,7 @@ bot.onText(/\/broadcast (.+)/, async (msg, match) => {
 });
 
 // Command: /schedule <YYYY-MM-DD HH:MM> <message>
-bot.onText(/\/schedule (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (.+)/, (msg, match) => {
+bot.onText(/\/schedule (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (.+)/i, (msg, match) => {
   const chatId = msg.chat.id;
   const fromId = msg.from ? msg.from.id : chatId;
   if (!isAdminUser(fromId)) return;
@@ -623,7 +628,7 @@ bot.onText(/\/schedule (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (.+)/, (msg, match) => {
 });
 
 // Command: /help
-bot.onText(/\/help(@\w+)?/, (msg) => {
+bot.onText(/\/help/i, (msg) => {
   const chatId = msg.chat.id;
   const helpText = 
     `📖 **භාවිතය පිළිබඳ උපදෙස්:**\n\n` +
