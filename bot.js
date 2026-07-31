@@ -1,0 +1,306 @@
+import TelegramBot from 'node-telegram-bot-api';
+import dotenv from 'dotenv';
+import path from 'path';
+import fs from 'fs';
+
+// Load environment variables
+dotenv.config();
+
+const BOT_TOKEN = process.env.BOT_TOKEN || '';
+const BASE_URL = process.env.BASE_URL || 'https://dmadushanka.github.io/A-L';
+
+// Database mapping of subjects, paper categories, and files
+const QUIZ_DATA = {
+  pl: {
+    name: '🏛️ දේශපාලන විද්‍යාව (Political Science)',
+    shortName: 'දේශපාලන විද්‍යාව',
+    papers: {
+      '2016': { title: 'දේශපාලන විද්‍යාව 2016 — MCQ 40', file: 'pl2016.html', img: 'pl2016.png' },
+      '2017': { title: 'දේශපාලන විද්‍යාව 2017 — MCQ 40', file: 'pl2017.html', img: 'pl2017.png' },
+      '2018': { title: 'දේශපාලන විද්‍යාව 2018 — MCQ 40', file: 'pl2018.html', img: 'pl2018.png' },
+      '2019': { title: 'දේශපාලන විද්‍යාව 2019 — MCQ 40', file: 'pl2019.html', img: 'pl2019.png' },
+      '2020': { title: 'දේශපාලන විද්‍යාව 2020 — MCQ 40', file: 'pl2020.html', img: 'pl2020.png' },
+      '2021': { title: 'දේශපාලන විද්‍යාව 2021 — MCQ 40', file: 'pl2021.html', img: 'pl2021.png' },
+      '2023': { title: 'දේශපාලන විද්‍යාව 2023 — MCQ 40', file: 'pl2023.html', img: 'pl2023.png' },
+      '2024': { title: 'දේශපාලන විද්‍යාව 2024 — MCQ 40', file: 'pl2024.html', img: 'pl2024.png' },
+      '2025': { title: 'දේශපාලන විද්‍යාව 2025 — MCQ 40', file: 'pl2025.html', img: 'pl2025.png' }
+    }
+  },
+  hist: {
+    name: '📜 ශ්‍රී ලංකා ඉතිහාසය (Sri Lanka History)',
+    shortName: 'ශ්‍රී ලංකා ඉතිහාසය',
+    papers: {
+      '2015': { title: 'ශ්‍රී ලංකා ඉතිහාසය 2015 — MCQ 40', file: 'history2015.html', img: 'history2015.png' },
+      '2016': { title: 'ශ්‍රී ලංකා ඉතිහාසය 2016 — MCQ 40', file: 'history2016.html', img: 'history2016.png' },
+      '2017': { title: 'ශ්‍රී ලංකා ඉතිහාසය 2017 — MCQ 40', file: 'history2017.html', img: 'history2017.png' },
+      '2018': { title: 'ශ්‍රී ලංකා ඉතිහාසය 2018 — MCQ 40', file: 'history2018.html', img: 'history2018.png' },
+      '2019': { title: 'ශ්‍රී ලංකා ඉතිහාසය 2019 — MCQ 40', file: 'history2019.html', img: 'history2019.png' },
+      '2020': { title: 'ශ්‍රී ලංකා ඉතිහාසය 2020 — MCQ 40', file: 'history2020.html', img: 'history2020.png' },
+      '2022': { title: 'ශ්‍රී ලංකා ඉතිහාසය 2022 — MCQ 40', file: 'history2022.html', img: 'history2022.png' }
+    }
+  },
+  bc: {
+    name: '☸️ බෞද්ධ ශිෂ්ටාචාරය (Buddhist Civ)',
+    shortName: 'බෞද්ධ ශිෂ්ටාචාරය',
+    papers: {
+      '2011': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2011 (BC-1)', file: 'BC1.html', img: 'BC1.png' },
+      '2012': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2012 (BC-2)', file: 'BC2.html', img: 'BC2.png' },
+      '2013': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2013 (BC-3)', file: 'BC3.html', img: 'BC3.png' },
+      '2014': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2014 (BC-4)', file: 'BC4.html', img: 'BC4.png' },
+      '2015': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2015 (BC-5)', file: 'BC5.html', img: 'BC5.png' },
+      '2016': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2016 (BC-6)', file: 'BC6.html', img: 'BC6.png' },
+      '2017': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2017 (BC-7)', file: 'BC7.html', img: 'BC7.png' },
+      '2018': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2018 (BC-8)', file: 'BC8.html', img: 'BC8.png' },
+      '2019': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (BC-9)', file: 'BC9.html', img: 'BC9.png' },
+      '2020': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2020 (BC-10)', file: 'BC10.html', img: 'BC10.png' },
+      '2021': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2021 (BC-11)', file: 'BC11.html', img: 'BC11.png' }
+    }
+  },
+  sin: {
+    name: '✍️ සිංහල (Sinhala Language)',
+    shortName: 'සිංහල',
+    papers: {
+      '2020': { title: 'සිංහල 2020 — I පත්‍රය MCQ', file: 'sinhala2020.html', img: 'sinhala2020.png' },
+      '2021': { title: 'සිංහල 2021 — I පත්‍රය MCQ', file: 'sinhala2021.html', img: 'sinhala2021.png' },
+      '2022': { title: 'සිංහල 2022 — I පත්‍රය MCQ', file: 'sinhala2022.html', img: 'sinhala2022.png' },
+      '2024': { title: 'සිංහල 2024 — I පත්‍රය MCQ', file: 'sinhala2024.html', img: 'sinhala2024.png' },
+      '2025': { title: 'සිංහල 2025 — I පත්‍රය MCQ', file: 'sinhala2025.html', img: 'sinhala2025.png' }
+    }
+  }
+};
+
+// Check if BOT_TOKEN is configured
+if (!BOT_TOKEN || BOT_TOKEN === 'your_telegram_bot_token_here') {
+  console.log('---------------------------------------------------------');
+  console.log('⚠️  WARNING: BOT_TOKEN is not configured in .env file!');
+  console.log('👉 Please edit .env file and set: BOT_TOKEN=123456789:YOUR_BOT_TOKEN');
+  console.log('👉 Get a token from Telegram by chatting with @BotFather');
+  console.log('---------------------------------------------------------');
+  process.exit(0);
+}
+
+// Initialize Telegram Bot
+const bot = new TelegramBot(BOT_TOKEN, { polling: true });
+
+console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
+console.log(`🔗 WebApp Base URL: ${BASE_URL}`);
+
+// Helper: Generate Keyboard for Subject Selection (Step 1)
+function getSubjectKeyboard() {
+  return {
+    inline_keyboard: [
+      [{ text: QUIZ_DATA.pl.name, callback_data: 'sub_pl' }],
+      [{ text: QUIZ_DATA.hist.name, callback_data: 'sub_hist' }],
+      [{ text: QUIZ_DATA.bc.name, callback_data: 'sub_bc' }],
+      [{ text: QUIZ_DATA.sin.name, callback_data: 'sub_sin' }]
+    ]
+  };
+}
+
+// Helper: Generate Category Keyboard (Step 2)
+function getCategoryKeyboard(subId) {
+  return {
+    inline_keyboard: [
+      [{ text: '📑 පසුගිය ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: `cat_${subId}_pp` }],
+      [{ text: '📚 වෙනත් (Model Papers & Revision)', callback_data: `cat_${subId}_other` }],
+      [{ text: '⬅️ ප්‍රධාන මෙගුවට (Back to Subjects)', callback_data: 'nav_subjects' }]
+    ]
+  };
+}
+
+// Helper: Generate Year/Paper Selection Grid (Step 3)
+function getYearKeyboard(subId) {
+  const subData = QUIZ_DATA[subId];
+  const keys = Object.keys(subData.papers);
+  
+  const keyboard = [];
+  let row = [];
+
+  keys.forEach((key, index) => {
+    row.push({ text: `📝 ${key}`, callback_data: `paper_${subId}_${key}` });
+    if (row.length === 3 || index === keys.length - 1) {
+      keyboard.push(row);
+      row = [];
+    }
+  });
+
+  keyboard.push([{ text: '⬅️ ආපසු (Back)', callback_data: `sub_${subId}` }]);
+  return { inline_keyboard: keyboard };
+}
+
+// Command: /start
+bot.onText(/\/start/, (msg) => {
+  const chatId = msg.chat.id;
+  const firstName = msg.from.first_name || 'යහළුවා';
+
+  const welcomeMessage = 
+    `👋 **ආයුබෝවන් ${firstName}!**\n\n` +
+    `අ.පො.ස. (උසස් පෙළ) MCQ Quiz Bot වෙත සාදරයෙන් පිළිගනිමු! 🎓\n\n` +
+    `ඔබට අවශ්‍ය **විෂය (Subject)** පහතින් තෝරන්න:`;
+
+  bot.sendMessage(chatId, welcomeMessage, {
+    parse_mode: 'Markdown',
+    reply_markup: getSubjectKeyboard()
+  });
+});
+
+// Command: /help
+bot.onText(/\/help/, (msg) => {
+  const chatId = msg.chat.id;
+  const helpText = 
+    `📖 **භාවිතය පිළිබඳ උපදෙස්:**\n\n` +
+    `1. **/start** command එක යවා විෂයයන් තෝරන්න.\n` +
+    `2. පසුගිය ප්‍රශ්න පත්‍ර තෝරා වර්ෂය මත Click කරන්න.\n` +
+    `3. **🚀 Open WebApp** බොත්තම මගින් Telegram තුළදීම හෝ **🌐 Open Browser** මගින් Browser එකෙන් පරීක්ෂණයට මුහුණ දෙන්න.\n\n` +
+    `💡 **විශේෂාංග:**\n` +
+    `• MCQ 40 සඳහා නිවැරදි විග්‍රහයන්\n` +
+    `• Real-time Timer සහ Score Gauge\n` +
+    `• Bookmark (ලකුණු කිරීමේ) පහසුකම`;
+
+  bot.sendMessage(chatId, helpText, { parse_mode: 'Markdown' });
+});
+
+// Callback Query Handler
+bot.on('callback_query', async (query) => {
+  const chatId = query.message.chat.id;
+  const messageId = query.message.message_id;
+  const data = query.data;
+
+  try {
+    // 1. Back to Main Subject Selection
+    if (data === 'nav_subjects') {
+      const text = `🎯 **කරුණාකර ඔබගේ විෂය (Subject) තෝරන්න:**`;
+      await bot.editMessageText(text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: getSubjectKeyboard()
+      });
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // 2. Subject Selected -> Show Category Menu (Past Papers vs Other)
+    if (data.startsWith('sub_')) {
+      const subId = data.replace('sub_', '');
+      const subData = QUIZ_DATA[subId];
+
+      if (subData) {
+        const text = 
+          `📘 **තෝරාගත් විෂය:** ${subData.name}\n\n` +
+          `කරුණාකර ඔබ සෙවීමට කැමති කාණ්ඩය තෝරන්න:`;
+
+        await bot.editMessageText(text, {
+          chat_id: chatId,
+          message_id: messageId,
+          parse_mode: 'Markdown',
+          reply_markup: getCategoryKeyboard(subId)
+        });
+      }
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // 3. Category Selected -> Past Papers (Show Year Grid)
+    if (data.startsWith('cat_') && data.endsWith('_pp')) {
+      const subId = data.replace('cat_', '').replace('_pp', '');
+      const subData = QUIZ_DATA[subId];
+
+      if (subData) {
+        const text = 
+          `📑 **${subData.shortName} — පසුගිය ප්‍රශ්න පත්‍ර**\n\n` +
+          `ඔබ පරීක්ෂණය කිරීමට කැමති **වර්ෂය (Year)** තෝරන්න:`;
+
+        await bot.editMessageText(text, {
+          chat_id: chatId,
+          message_id: messageId,
+          parse_mode: 'Markdown',
+          reply_markup: getYearKeyboard(subId)
+        });
+      }
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // 4. Category Selected -> Other (Model Papers & Info)
+    if (data.startsWith('cat_') && data.endsWith('_other')) {
+      const subId = data.replace('cat_', '').replace('_other', '');
+      const subData = QUIZ_DATA[subId];
+
+      if (subData) {
+        const text = 
+          `📚 **${subData.shortName} — වෙනත් ප්‍රශ්න පත්‍ර හා පුනරීක්ෂණ**\n\n` +
+          `ℹ️ ළඟදීම අලුත් ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers) සහ ඒකක අනුව සැකසූ MCQ ප්‍රශ්න එකතු කරනු ලැබේ.\n\n` +
+          `වත්මන් පසුගිය ප්‍රශ්න පත්‍ර සිදු කිරීමට පහත බොත්තම ක්ලික් කරන්න:`;
+
+        const keyboard = {
+          inline_keyboard: [
+            [{ text: '📑 පසුගිය ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: `cat_${subId}_pp` }],
+            [{ text: '⬅️ ආපසු (Back)', callback_data: `sub_${subId}` }]
+          ]
+        };
+
+        await bot.editMessageText(text, {
+          chat_id: chatId,
+          message_id: messageId,
+          parse_mode: 'Markdown',
+          reply_markup: keyboard
+        });
+      }
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // 5. Paper Selected -> Display Rich Quiz Launch Card
+    if (data.startsWith('paper_')) {
+      const parts = data.split('_'); // ['paper', 'pl', '2016']
+      const subId = parts[1];
+      const yearKey = parts[2];
+
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        const quizUrl = `${BASE_URL}/${paperData.file}`;
+        const imgUrl = `${BASE_URL}/${paperData.img}`;
+
+        const cardCaption = 
+          `🎯 **${paperData.title}**\n\n` +
+          `📚 **විෂය:** ${subData.name}\n` +
+          `📜 **ප්‍රශ්න ගණන:** MCQ 40\n` +
+          `💡 **විශේෂාංග:** සියලුම ප්‍රශ්න සඳහා ඓතිහාසික/විෂයානුබද්ධ විග්‍රහයන්, Real-time Timer, සහ Bookmark කිරීමේ පහසුකම.\n\n` +
+          `👇 පහත **Open WebApp** හෝ **Open Browser** බොත්තම ක්ලික් කර Quiz එක ආරම්භ කරන්න:`;
+
+        const launchKeyboard = {
+          inline_keyboard: [
+            [
+              { text: '🚀 Open WebApp (Telegram තුළම)', web_app: { url: quizUrl } }
+            ],
+            [
+              { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
+            ],
+            [
+              { text: '🔄 වෙනත් වර්ෂයක් (Select Year)', callback_data: `cat_${subId}_pp` }
+            ]
+          ]
+        };
+
+        // Send photo card with WebApp launch buttons
+        await bot.sendPhoto(chatId, imgUrl, {
+          caption: cardCaption,
+          parse_mode: 'Markdown',
+          reply_markup: launchKeyboard
+        });
+      }
+
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+  } catch (err) {
+    console.error('Error handling callback query:', err);
+    await bot.answerCallbackQuery(query.id, { text: 'දෝෂයක් සිදු විය. කරුණාකර නැවත උත්සාහ කරන්න.' });
+  }
+});
+
+console.log('✅ Telegram Bot Ready! Listening for messages...');
