@@ -436,6 +436,7 @@ async function sendNextNativePoll(chatId) {
 }
 
 // Background Task: Scheduled Broadcast Engine (Runs every 30 seconds)
+// Triggers Native Telegram Polls directly when schedule time is reached!
 setInterval(async () => {
   try {
     const pendingJobs = getPendingScheduledJobs();
@@ -451,20 +452,18 @@ setInterval(async () => {
       
       const broadcastText = 
         `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
-        `${job.message}`;
+        `${job.message}\n\n` +
+        `👇 පහත **Start Live Quiz** ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:`;
+
+      // Native Poll Quiz Launch Button (Works 100% in both Private Chat and Groups!)
+      const launchKb = job.paperKey ? {
+        inline_keyboard: [
+          [{ text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${job.paperKey}` }]
+        ]
+      } : undefined;
 
       for (const targetChatId of allTargets) {
         const isGroup = targetChatId.toString().startsWith('-');
-        const launchKb = job.paperKey ? {
-          inline_keyboard: [
-            [
-              isGroup
-                ? { text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', url: `${BASE_URL}/index.html` }
-                : { text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${job.paperKey}` }
-            ]
-          ]
-        } : undefined;
-
         try {
           await bot.sendMessage(targetChatId, broadcastText, {
             parse_mode: 'Markdown',
@@ -656,7 +655,7 @@ bot.onText(/\/admin/i, (msg) => {
         { text: '📢 Instant Broadcast Message', callback_data: 'adm_broadcast_prompt' }
       ],
       [
-        { text: '📊 ලියාපදිංචි සිසුන් ගණන (Stats)', callback_data: 'adm_stats' }
+        { text: '📊 ලියාපදිංචි සිසුන් හා Groups (Stats)', callback_data: 'adm_stats' }
       ]
     ]
   };
@@ -879,62 +878,80 @@ bot.on('callback_query', async (query) => {
 
       if (paperData) {
         const targetDate = getTargetScheduleTime(timeType);
+        const isNow = timeType === 'now' || (targetDate.getTime() - Date.now() < 60000);
         const dateFormatted = targetDate.toLocaleString('en-GB', { timeZone: 'Asia/Colombo' });
 
-        // Register Scheduled Job
-        addScheduledJob({
-          time: targetDate.toISOString(),
-          message: `🎯 **${paperData.title}** සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ වී ඇත!`,
-          paperKey: paperKey
-        });
+        // Calculate human readable countdown if in future
+        let timeNotice = `⏰ **ආරම්භ වන වේලාව:** ${dateFormatted}`;
+        if (!isNow) {
+          const diffMins = Math.max(1, Math.round((targetDate.getTime() - Date.now()) / (60 * 1000)));
+          if (diffMins > 60) {
+            const hours = (diffMins / 60).toFixed(1);
+            timeNotice += ` (තව පැය ${hours}කින් ආරම්භ වේ ⏳)`;
+          } else {
+            timeNotice += ` (තව මිනිත්තු ${diffMins}කින් ආරම්භ වේ ⏳)`;
+          }
+        }
+
+        // Register Scheduled Job ONLY if it's scheduled for future
+        if (!isNow) {
+          addScheduledJob({
+            time: targetDate.toISOString(),
+            message: `🎯 **${paperData.title}** සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ වී ඇත!`,
+            paperKey: paperKey
+          });
+        }
 
         const db = readDb();
         const allUsers = Object.keys(db.users);
         const allGroups = Object.keys(db.groups || {});
 
         // 1. Send Confirmation to Admin
-        const confirmText = 
+        const confirmText = isNow ?
+          `✅ **සජීවී ප්‍රශ්න පත්‍ර තරඟය සජීවීව Publish කර ආරම්භ කරන ලදී!**\n\n` +
+          `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
+          `📢 සියලුම ලියාපදිංචි සිසුන් (${allUsers.length}) සහ Groups (${allGroups.length}) වෙත තරඟය ආරම්භ කළ බවට Notification යවන ලදී.` :
           `✅ **සජීවී ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව Schedule කරන ලදී!**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
-          `⏰ **ආරම්භ වන වේලාව:** ${dateFormatted}\n\n` +
-          `📢 සියලුම ලියාපදිංචි සිසුන් (${allUsers.length}) සහ Groups (${allGroups.length}) වෙත තරඟ දැනුම්දීම යවනු ලැබේ.`;
+          `${timeNotice}\n\n` +
+          `📢 සියලුම ලියාපදිංචි සිසුන් (${allUsers.length}) සහ Groups (${allGroups.length}) වෙත තරඟ දැනුම්දීම යවන ලදී.`;
 
         await bot.editMessageText(confirmText, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown' }).catch(e => {});
 
         // 2. Broadcast Announcement Card to All Registered Students & Groups
-        const announceMsg = 
-          `🚀 **විශේෂ දැනුම්දීමයි — සජීවී ප්‍රශ්න පත්‍ර තරඟය (Live Quiz Competition)**\n\n` +
+        const announceMsg = isNow ?
+          `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
+          `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n\n` +
+          `💡 **විශේෂතා:** Native Telegram Polls, Instant Confetti 🎉, Leaderboards & Top 3 Winner Podiums!\n\n` +
+          `👇 පහත **Start Live Quiz** ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:` :
+          `🚀 **විශේෂ දැනුම්දීමයි — ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟය (Upcoming Live Quiz)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
-          `⏰ **ආරම්භ වන වේලාව:** ${dateFormatted}\n\n` +
+          `${timeNotice}\n\n` +
           `💡 **විශේෂතා:**\n` +
           `• 🥇 🥈 🥉 ප්‍රථම ස්ථාන 3 සඳහා Winner Podiums\n` +
           `• 📊 All-Island Top 20 ලකුණු පුවරුව\n` +
           `• Real-time Timer සහ Instant Confetti 🎉\n\n` +
-          `👇 පහත **Join Competition** බොත්තම මගින් සූදානම් වන්න:`;
+          `⏳ නියමිත වේලාව පැමිණි සැනින් මෙම Chat එකටම ඍජුවම Native Quiz Polls පැමිණෙනු ඇත. සූදානම්ව සිටින්න!`;
 
-        const userAnnounceKb = {
+        // If Scheduled for FUTURE: NO BUTTON IS ATTACHED (Prevents early quiz completion)
+        // If Publish NOW: Attach Native Telegram Poll Launch button (`native_${paperKey}`)
+        const announceKb = isNow ? {
           inline_keyboard: [
-            [{ text: '🎯 Join Competition (සූදානම් වන්න)', callback_data: `paper_${subId}_${yearKey}` }]
+            [{ text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${paperKey}` }]
           ]
-        };
-
-        const groupAnnounceKb = {
-          inline_keyboard: [
-            [{ text: '🎯 Join Competition (සූදානම් වන්න)', callback_data: `paper_${subId}_${yearKey}` }]
-          ]
-        };
+        } : undefined;
 
         // Send to Users
         for (const uid of allUsers) {
           try {
-            await bot.sendMessage(uid, announceMsg, { parse_mode: 'Markdown', reply_markup: userAnnounceKb });
+            await bot.sendMessage(uid, announceMsg, { parse_mode: 'Markdown', reply_markup: announceKb });
           } catch (e) { }
         }
 
         // Send to Groups
         for (const gid of allGroups) {
           try {
-            await bot.sendMessage(gid, announceMsg, { parse_mode: 'Markdown', reply_markup: groupAnnounceKb });
+            await bot.sendMessage(gid, announceMsg, { parse_mode: 'Markdown', reply_markup: announceKb });
           } catch (e) {
             if (e.message.includes('kicked') || e.message.includes('not found') || e.message.includes('deactivated')) {
               unregisterGroup(gid);
