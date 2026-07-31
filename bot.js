@@ -106,6 +106,31 @@ function formatDuration(seconds) {
   return `${mins}m ${secs}s`;
 }
 
+// Helper: Calculate Target Date for Preset Schedule Options
+function getTargetScheduleTime(type) {
+  const now = new Date();
+  if (type === 'now') return now;
+  if (type === '15') return new Date(now.getTime() + 15 * 60 * 1000);
+  if (type === '30') return new Date(now.getTime() + 30 * 60 * 1000);
+  if (type === '60') return new Date(now.getTime() + 60 * 60 * 1000);
+  
+  if (type === 'tonight8') {
+    const t = new Date();
+    t.setHours(20, 0, 0, 0);
+    if (t.getTime() <= now.getTime()) {
+      t.setDate(t.getDate() + 1);
+    }
+    return t;
+  }
+  if (type === 'tomorrow8') {
+    const t = new Date();
+    t.setDate(t.getDate() + 1);
+    t.setHours(20, 0, 0, 0);
+    return t;
+  }
+  return now;
+}
+
 // Helper: Dynamically extract QUESTIONS array from HTML file
 function loadQuestionsFromHtml(filename) {
   try {
@@ -340,15 +365,22 @@ setInterval(async () => {
       console.log(`⏰ Executing scheduled broadcast job [${job.id}] to ${allUsers.length} users...`);
       
       const broadcastText = 
-        `⏰ **සජීවී ප්‍රශ්න පත්‍ර මතක් කිරීම! (Scheduled Reminder)**\n\n` +
+        `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
         `${job.message}`;
+
+      const launchKb = job.paperKey ? {
+        inline_keyboard: [
+          [{ text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${job.paperKey}` }]
+        ]
+      } : undefined;
 
       for (const targetChatId of allUsers) {
         try {
-          await bot.sendMessage(targetChatId, broadcastText, { parse_mode: 'Markdown' });
-        } catch (err) {
-          // Ignore individual user block errors
-        }
+          await bot.sendMessage(targetChatId, broadcastText, {
+            parse_mode: 'Markdown',
+            reply_markup: launchKb
+          });
+        } catch (err) { }
       }
 
       markJobSent(job.id);
@@ -415,13 +447,25 @@ bot.onText(/\/admin/, (msg) => {
   const totalUsers = Object.keys(db.users).length;
 
   const adminText = 
-    `🛡️ **Admin Control Panel**\n\n` +
+    `🛡️ **Admin Control Panel — Live Quiz & Broadcast Manager**\n\n` +
     `📊 **මුළු ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n\n` +
-    `💡 **භාවිත කළ හැකි කොමාණ්ඩ:**\n` +
-    `• **/broadcast <පණිවිඩය>** — සියලුම සිසුන්ට වහාම පණිවිඩයක් යැවීමට.\n` +
-    `• **/schedule YYYY-MM-DD HH:MM <පණිවිඩය>** — නියමිත වේලාවට Notification Schedule කිරීමට.`;
+    `කරුණාකර ඔබ කිරීමට කැමති ක්‍රියාව පහතින් තෝරන්න:`;
 
-  bot.sendMessage(chatId, adminText, { parse_mode: 'Markdown' });
+  const adminKeyboard = {
+    inline_keyboard: [
+      [
+        { text: '🚀 Publish Live Quiz & Schedule Time', callback_data: 'adm_sched_step1' }
+      ],
+      [
+        { text: '📢 Instant Broadcast Message', callback_data: 'adm_broadcast_prompt' }
+      ],
+      [
+        { text: '📊 ලියාපදිංචි සිසුන් ගණන (Stats)', callback_data: 'adm_stats' }
+      ]
+    ]
+  };
+
+  bot.sendMessage(chatId, adminText, { parse_mode: 'Markdown', reply_markup: adminKeyboard });
 });
 
 // Command: /broadcast <message>
@@ -516,6 +560,196 @@ bot.on('callback_query', async (query) => {
   if (query.from) registerUser(query.from);
 
   try {
+    // ------------------- ADMIN LIVE QUIZ SCHEDULER WIZARD -------------------
+    
+    // Admin Step 1: Select Subject for Live Quiz
+    if (data === 'adm_sched_step1') {
+      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+
+      const text = `🚀 **Publish Live Quiz — පියවර 1/3: විෂය තෝරන්න**\n\nසජීවීව පැවැත්වීමට අවශ්‍ය විෂය පහතින් තෝරන්න:`;
+      const kb = {
+        inline_keyboard: [
+          [{ text: QUIZ_DATA.pl.name, callback_data: 'adm_sub_pl' }],
+          [{ text: QUIZ_DATA.hist.name, callback_data: 'adm_sub_hist' }],
+          [{ text: QUIZ_DATA.bc.name, callback_data: 'adm_sub_bc' }],
+          [{ text: QUIZ_DATA.sin.name, callback_data: 'adm_sub_sin' }],
+          [{ text: '⬅️ ආපසු (Admin Menu)', callback_data: 'adm_home' }]
+        ]
+      };
+
+      await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb });
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // Admin Step 2: Select Paper Year
+    if (data.startsWith('adm_sub_')) {
+      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      const subId = data.replace('adm_sub_', '');
+      const subData = QUIZ_DATA[subId];
+
+      if (subData) {
+        const text = `🚀 **Publish Live Quiz — පියවර 2/3: ප්‍රශ්න පත්‍රය තෝරන්න**\n\n**විෂය:** ${subData.name}\nසජීවීව පැවැත්වීමට අවශ්‍ය වර්ෂය තෝරන්න:`;
+        const keys = Object.keys(subData.papers);
+
+        const keyboard = [];
+        let row = [];
+        keys.forEach((key, idx) => {
+          row.push({ text: `📝 ${key}`, callback_data: `adm_paper_${subId}_${key}` });
+          if (row.length === 3 || idx === keys.length - 1) {
+            keyboard.push(row);
+            row = [];
+          }
+        });
+        keyboard.push([{ text: '⬅️ ආපසු (Back)', callback_data: 'adm_sched_step1' }]);
+
+        await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: { inline_keyboard: keyboard } });
+      }
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // Admin Step 3: Select Schedule Time
+    if (data.startsWith('adm_paper_')) {
+      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      const parts = data.split('_'); // ['adm', 'paper', 'hist', '2020']
+      const subId = parts[2];
+      const yearKey = parts[3];
+
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        const text = 
+          `🚀 **Publish Live Quiz — පියවර 3/3: ආරම්භක වේලාව තෝරන්න**\n\n` +
+          `🎯 **තෝරාගත් පත්‍රය:** ${paperData.title}\n\n` +
+          `සිසුන්ට මෙම තරඟය ආරම්භ කිරීමට අවශ්‍ය වේලාව පහතින් තෝරන්න:`;
+
+        const kb = {
+          inline_keyboard: [
+            [{ text: '⚡ දැන්ම සජීවීව ආරම්භ කරන්න (Publish & Start Now)', callback_data: `adm_pub_now_${subId}_${yearKey}` }],
+            [{ text: '⏱️ මිනිත්තු 15කින් (In 15 Minutes)', callback_data: `adm_pub_15_${subId}_${yearKey}` }],
+            [{ text: '⏱️ මිනිත්තු 30කින් (In 30 Minutes)', callback_data: `adm_pub_30_${subId}_${yearKey}` }],
+            [{ text: '⏰ පැයකින් (In 1 Hour)', callback_data: `adm_pub_60_${subId}_${yearKey}` }],
+            [{ text: '🌙 අද රාත්‍රී 8.00 ට (Tonight 8:00 PM)', callback_data: `adm_pub_tonight8_${subId}_${yearKey}` }],
+            [{ text: '☀️ හෙට රාත්‍රී 8.00 ට (Tomorrow 8:00 PM)', callback_data: `adm_pub_tomorrow8_${subId}_${yearKey}` }],
+            [{ text: '⬅️ ආපසු (Back)', callback_data: `adm_sub_${subId}` }]
+          ]
+        };
+
+        await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb });
+      }
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // Admin Step 4: Finalize & Schedule Live Quiz
+    if (data.startsWith('adm_pub_')) {
+      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      const parts = data.split('_'); // ['adm', 'pub', '15', 'hist', '2020']
+      const timeType = parts[2];
+      const subId = parts[3];
+      const yearKey = parts[4];
+      const paperKey = `${subId}_${yearKey}`;
+
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        const targetDate = getTargetScheduleTime(timeType);
+        const dateFormatted = targetDate.toLocaleString('en-GB', { timeZone: 'Asia/Colombo' });
+
+        // Register Scheduled Job
+        addScheduledJob({
+          time: targetDate.toISOString(),
+          message: `🎯 **${paperData.title}** සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ වී ඇත!`,
+          paperKey: paperKey
+        });
+
+        // 1. Send Confirmation to Admin
+        const confirmText = 
+          `✅ **සජීවී ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව Schedule කරන ලදී!**\n\n` +
+          `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
+          `⏰ **ආරම්භ වන වේලාව:** ${dateFormatted}\n\n` +
+          `📢 සියලුම ලියාපදිංචි සිසුන් වෙත තරඟ දැනුම්දීම (Announcement Notification) යවනු ලැබේ.`;
+
+        await bot.editMessageText(confirmText, { chatId, messageId, parse_mode: 'Markdown' });
+
+        // 2. Broadcast Announcement Card to All Registered Students
+        const db = readDb();
+        const allUsers = Object.keys(db.users);
+
+        const announceMsg = 
+          `🚀 **විශේෂ දැනුම්දීමයි — සජීවී ප්‍රශ්න පත්‍ර තරඟය (Live Quiz Competition)**\n\n` +
+          `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
+          `⏰ **ආරම්භ වන වේලාව:** ${dateFormatted}\n\n` +
+          `💡 **විශේෂතා:**\n` +
+          `• 🥇 🥈 🥉 ප්‍රථම ස්ථාන 3 සඳහා Winner Podiums\n` +
+          `• 📊 All-Island Top 20 ලකුණු පුවරුව\n` +
+          `• Real-time Timer සහ Instant Confetti 🎉\n\n` +
+          `👇 පහත **Join Competition** බොත්තම මගින් සූදානම් වන්න:`;
+
+        const announceKb = {
+          inline_keyboard: [
+            [{ text: '🎯 Join Competition (සූදානම් වන්න)', callback_data: `paper_${subId}_${yearKey}` }]
+          ]
+        };
+
+        for (const uid of allUsers) {
+          try {
+            await bot.sendMessage(uid, announceMsg, { parse_mode: 'Markdown', reply_markup: announceKb });
+          } catch (e) { }
+        }
+      }
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // Admin Home Menu
+    if (data === 'adm_home') {
+      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      const db = readDb();
+      const totalUsers = Object.keys(db.users).length;
+
+      const adminText = 
+        `🛡️ **Admin Control Panel — Live Quiz & Broadcast Manager**\n\n` +
+        `📊 **මුළු ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n\n` +
+        `කරුණාකර ඔබ කිරීමට කැමති ක්‍රියාව පහතින් තෝරන්න:`;
+
+      const adminKeyboard = {
+        inline_keyboard: [
+          [{ text: '🚀 Publish Live Quiz & Schedule Time', callback_data: 'adm_sched_step1' }],
+          [{ text: '📢 Instant Broadcast Message', callback_data: 'adm_broadcast_prompt' }],
+          [{ text: '📊 ලියාපදිංචි සිසුන් ගණන (Stats)', callback_data: 'adm_stats' }]
+        ]
+      };
+
+      await bot.editMessageText(adminText, { chatId, messageId, parse_mode: 'Markdown', reply_markup: adminKeyboard });
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // Admin Stats Query
+    if (data === 'adm_stats') {
+      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      const db = readDb();
+      const totalUsers = Object.keys(db.users).length;
+      const totalScoresRecorded = Object.values(db.scores).reduce((acc, curr) => acc + curr.length, 0);
+
+      const statsText = 
+        `📊 **Bot Statistics Report**\n\n` +
+        `👥 **ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n` +
+        `📝 **අවසන් කළ ප්‍රශ්න පත්‍ර ගණන:** ${totalScoresRecorded}\n` +
+        `📑 **සක්‍රීය ප්‍රශ්න පත්‍ර ගණන:** 32+`;
+
+      const kb = { inline_keyboard: [[{ text: '⬅️ ආපසු (Admin Menu)', callback_data: 'adm_home' }]] };
+      await bot.editMessageText(statsText, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb });
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // ------------------- USER NAVIGATION & QUIZ HANDLERS -------------------
+
     // 1. Back to Main Subject Selection
     if (data === 'nav_subjects') {
       const text = `🎯 **කරුණාකර ඔබගේ විෂය (Subject) තෝරන්න:**`;
