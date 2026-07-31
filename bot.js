@@ -35,13 +35,64 @@ process.on('uncaughtException', (err) => {
   console.error('⚠️ Uncaught Exception:', err?.message || err);
 });
 
-// Tiny HTTP Health Check Server (Required for Cloud Platforms like Koyeb, Render, Railway, Glitch to stay alive 24/7)
+// Active WhatsApp Group Live Quiz State Matrix (Anti-Cheating Score Engine)
+let currentWaGroupSession = null;
+
+// Handle Green API Webhooks (Real-Time WhatsApp Poll Votes & Anti-Cheating Tracking)
+function handleGreenApiWebhook(update) {
+  if (!update || !currentWaGroupSession) return;
+
+  const type = update.typeWebhook;
+  if (type === 'pollMessageWebhook' || type === 'incomingMessageReceived') {
+    const pollData = update.messageData?.pollVoteMessageData || update.pollVoteData;
+    const sender = update.senderData?.sender;
+    const senderName = update.senderData?.senderName || 'Student';
+
+    if (pollData && sender) {
+      const { userScores, currentQIndex, currentCorrectIdx } = currentWaGroupSession;
+
+      if (!userScores[sender]) {
+        userScores[sender] = { name: senderName, score: 0, correct: 0, wrong: 0, answered: new Set() };
+      }
+
+      const student = userScores[sender];
+      // Anti-Cheating: Single Vote Lock (Only score the first vote per question)
+      if (!student.answered.has(currentQIndex)) {
+        student.answered.add(currentQIndex);
+        if (pollData.optionId === currentCorrectIdx) {
+          student.score++;
+          student.correct++;
+          console.log(`🎯 WA Group Vote [${senderName}]: CORRECT! (+1 Mark)`);
+        } else {
+          student.wrong++;
+          console.log(`❌ WA Group Vote [${senderName}]: WRONG!`);
+        }
+      }
+    }
+  }
+}
+
+// Tiny HTTP Server (Health Check & Green API Webhook Handler)
 const PORT = process.env.PORT || 3000;
 http.createServer((req, res) => {
+  if (req.method === 'POST' && req.url === '/wa-webhook') {
+    let body = '';
+    req.on('data', chunk => { body += chunk; });
+    req.on('end', () => {
+      try {
+        const update = JSON.parse(body);
+        handleGreenApiWebhook(update);
+      } catch (e) {}
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ status: 'ok' }));
+    });
+    return;
+  }
+
   res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
   res.end('🎓 A/L MCQ Quiz Telegram Bot (@AL_MCQbot) is Running Live 24/7!');
 }).listen(PORT, () => {
-  console.log(`🌐 Health check HTTP server is listening on port ${PORT}`);
+  console.log(`🌐 Health check & Webhook HTTP server listening on port ${PORT}`);
 });
 
 // Database mapping of subjects, paper categories, and files
@@ -295,14 +346,25 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
     `පළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
   await autoPostToWhatsAppChannel(waIntro);
 
-  // Track group member scores for this session
-  const groupUserScores = {}; // phone/name -> { name, score, answered }
+  // Track group member scores for this session (Anti-Cheating Engine)
+  const groupUserScores = {};
+  currentWaGroupSession = {
+    paperKey,
+    title: paperData.title,
+    questions,
+    currentQIndex: 0,
+    currentCorrectIdx: 0,
+    userScores: groupUserScores
+  };
 
   // Stream each question sequentially with timed answer reveals
   for (let i = 0; i < questions.length; i++) {
     const q = questions[i];
     const qNum = i + 1;
     const totalQ = questions.length;
+
+    currentWaGroupSession.currentQIndex = i;
+    currentWaGroupSession.currentCorrectIdx = q.c || 0;
 
     let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
     rawQText = cleanText(rawQText, 250);
@@ -351,21 +413,39 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
     }
   }
 
-  // 4. Final WhatsApp Group Leaderboard & Completion Summary
-  let waFinishMsg = `🏆 *${paperData.title}* WhatsApp Group Quiz එක සාර්ථකව අවසන්!\n\n`;
+  // 4. Final WhatsApp Group Leaderboard Mark Sheet Calculation
+  let waFinishMsg = `🏆 *${paperData.title} — 📊 නිල WhatsApp Group ලකුණු සටහන (Final Mark Sheet)*\n\n`;
 
-  const ranks = getLeaderboard(paperKey, 10);
-  if (ranks && ranks.length > 0) {
+  const waStudents = Object.values(groupUserScores).sort((a, b) => b.score - a.score);
+
+  if (waStudents.length > 0) {
     const medals = ['🥇', '🥈', '🥉'];
     waFinishMsg += `🎖️ *ජයග්‍රාහකයින් (Top Champions):*\n`;
-    ranks.slice(0, 3).forEach((r, idx) => {
-      waFinishMsg += `${medals[idx]} *${idx + 1} වන ස්ථානය:* ${r.name} — 🎯 ලකුණු: *${r.score}* / ${questions.length}\n`;
+    waStudents.slice(0, 3).forEach((s, idx) => {
+      const pct = Math.round((s.score / questions.length) * 100);
+      waFinishMsg += `${medals[idx]} *${idx + 1} වන ස්ථානය:* ${s.name} — 🎯 *${s.score} / ${questions.length}* (${pct}%)\n`;
+    });
+    waFinishMsg += `\n📋 *සියලුම සිසුන්ගේ ලකුණු පුවරුව (Group Member Marks):*\n`;
+    waStudents.forEach((s, idx) => {
+      const unanswered = questions.length - (s.correct + s.wrong);
+      waFinishMsg += `${idx + 1}. *${s.name}* — 🎯 *${s.score} Marks* (✅ ${s.correct} | ❌ ${s.wrong} | ⏳ ${unanswered})\n`;
     });
     waFinishMsg += `\n`;
+  } else {
+    const ranks = getLeaderboard(paperKey, 10);
+    if (ranks && ranks.length > 0) {
+      const medals = ['🥇', '🥈', '🥉'];
+      waFinishMsg += `🎖️ *ජයග්‍රාහකයින් (Top Champions):*\n`;
+      ranks.slice(0, 3).forEach((r, idx) => {
+        waFinishMsg += `${medals[idx]} *${idx + 1} වන ස්ථානය:* ${r.name} — 🎯 ලකුණු: *${r.score}* / ${questions.length}\n`;
+      });
+      waFinishMsg += `\n`;
+    }
   }
 
-  waFinishMsg += `📊 ඔබගේ සමස්ත ලංකා ශ්‍රේණිගත කිරීම (All-Island Rank) සහ ප්‍රතිඵල පරීක්ෂා කිරීමට Telegram Bot එක භාවිතා කරන්න:\nhttps://t.me/AL_MCQbot`;
+  waFinishMsg += `📊 ඔබගේ සමස්ත ලංකා ශ්‍රේණිගත කිරීම (All-Island Rank) පරීක්ෂා කිරීමට Telegram Bot එක භාවිතා කරන්න:\nhttps://t.me/AL_MCQbot`;
   await autoPostToWhatsAppChannel(waFinishMsg);
+  currentWaGroupSession = null;
 }
 
 // Helper: Generate Persistent Bottom Reply Keyboard (Floating START bar)
