@@ -20,6 +20,14 @@ const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const BASE_URL = process.env.BASE_URL || 'https://dmadushanka.github.io/A-L';
 const ADMIN_ID = process.env.ADMIN_ID || '';
 
+// Global Error Handlers to keep the bot process alive 24/7
+process.on('unhandledRejection', (reason) => {
+  console.error('⚠️ Unhandled Rejection:', reason?.message || reason);
+});
+process.on('uncaughtException', (err) => {
+  console.error('⚠️ Uncaught Exception:', err?.message || err);
+});
+
 // Database mapping of subjects, paper categories, and files
 const QUIZ_DATA = {
   pl: {
@@ -147,6 +155,15 @@ function loadQuestionsFromHtml(filename) {
     console.error(`Error reading questions from ${filename}:`, e.message);
   }
   return null;
+}
+
+// Helper: Safe answerCallbackQuery wrapper
+async function safeAnswerCallback(queryId, text) {
+  try {
+    await bot.answerCallbackQuery(queryId, text ? { text } : undefined);
+  } catch (err) {
+    // Ignore expired callback query errors gracefully
+  }
 }
 
 // Check if BOT_TOKEN is configured
@@ -310,7 +327,7 @@ async function sendNextNativePoll(chatId) {
     await bot.sendMessage(chatId, resultMessage, {
       parse_mode: 'Markdown',
       reply_markup: finishKeyboard
-    });
+    }).catch(e => console.error('Error sending result:', e.message));
 
     delete userPollSessions[chatId];
     return;
@@ -429,7 +446,7 @@ bot.onText(/\/(leaderboard|top)/, (msg) => {
     ]
   };
 
-  bot.sendMessage(chatId, `🏆 **උසස් පෙළ MCQ Leaderboards & Top 20 Ranks**\n\nඔබට පරීක්ෂා කිරීමට අවශ්‍ය ලකුණු පුවරුව තෝරන්න:`, {
+  bot.sendMessage(chatId, `🏆 **උසස් පෙළ MCQ Leaderboards & Top 20 Ranks**\n\nඔබට පරීක්ෂණය කිරීමට අවශ්‍ය ලකුණු පුවරුව තෝරන්න:`, {
     parse_mode: 'Markdown',
     reply_markup: keyboard
   });
@@ -577,8 +594,8 @@ bot.on('callback_query', async (query) => {
         ]
       };
 
-      await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb });
-      await bot.answerCallbackQuery(query.id);
+      await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -603,16 +620,16 @@ bot.on('callback_query', async (query) => {
         });
         keyboard.push([{ text: '⬅️ ආපසු (Back)', callback_data: 'adm_sched_step1' }]);
 
-        await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: { inline_keyboard: keyboard } });
+        await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: { inline_keyboard: keyboard } }).catch(e => {});
       }
-      await bot.answerCallbackQuery(query.id);
+      await safeAnswerCallback(query.id);
       return;
     }
 
     // Admin Step 3: Select Schedule Time
     if (data.startsWith('adm_paper_')) {
       if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
-      const parts = data.split('_'); // ['adm', 'paper', 'hist', '2020']
+      const parts = data.split('_');
       const subId = parts[2];
       const yearKey = parts[3];
 
@@ -637,16 +654,16 @@ bot.on('callback_query', async (query) => {
           ]
         };
 
-        await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb });
+        await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
       }
-      await bot.answerCallbackQuery(query.id);
+      await safeAnswerCallback(query.id);
       return;
     }
 
     // Admin Step 4: Finalize & Schedule Live Quiz
     if (data.startsWith('adm_pub_')) {
       if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
-      const parts = data.split('_'); // ['adm', 'pub', '15', 'hist', '2020']
+      const parts = data.split('_');
       const timeType = parts[2];
       const subId = parts[3];
       const yearKey = parts[4];
@@ -673,7 +690,7 @@ bot.on('callback_query', async (query) => {
           `⏰ **ආරම්භ වන වේලාව:** ${dateFormatted}\n\n` +
           `📢 සියලුම ලියාපදිංචි සිසුන් වෙත තරඟ දැනුම්දීම (Announcement Notification) යවනු ලැබේ.`;
 
-        await bot.editMessageText(confirmText, { chatId, messageId, parse_mode: 'Markdown' });
+        await bot.editMessageText(confirmText, { chatId, messageId, parse_mode: 'Markdown' }).catch(e => {});
 
         // 2. Broadcast Announcement Card to All Registered Students
         const db = readDb();
@@ -701,7 +718,7 @@ bot.on('callback_query', async (query) => {
           } catch (e) { }
         }
       }
-      await bot.answerCallbackQuery(query.id);
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -724,8 +741,8 @@ bot.on('callback_query', async (query) => {
         ]
       };
 
-      await bot.editMessageText(adminText, { chatId, messageId, parse_mode: 'Markdown', reply_markup: adminKeyboard });
-      await bot.answerCallbackQuery(query.id);
+      await bot.editMessageText(adminText, { chatId, messageId, parse_mode: 'Markdown', reply_markup: adminKeyboard }).catch(e => {});
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -743,8 +760,8 @@ bot.on('callback_query', async (query) => {
         `📑 **සක්‍රීය ප්‍රශ්න පත්‍ර ගණන:** 32+`;
 
       const kb = { inline_keyboard: [[{ text: '⬅️ ආපසු (Admin Menu)', callback_data: 'adm_home' }]] };
-      await bot.editMessageText(statsText, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb });
-      await bot.answerCallbackQuery(query.id);
+      await bot.editMessageText(statsText, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -758,8 +775,8 @@ bot.on('callback_query', async (query) => {
         message_id: messageId,
         parse_mode: 'Markdown',
         reply_markup: getSubjectKeyboard()
-      });
-      await bot.answerCallbackQuery(query.id);
+      }).catch(e => {});
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -786,8 +803,8 @@ bot.on('callback_query', async (query) => {
       }
 
       const backKb = { inline_keyboard: [[{ text: '⬅️ ආපසු (Back)', callback_data: 'nav_subjects' }]] };
-      await bot.sendMessage(chatId, text, { parse_mode: 'Markdown', reply_markup: backKb });
-      await bot.answerCallbackQuery(query.id);
+      await bot.sendMessage(chatId, text, { parse_mode: 'Markdown', reply_markup: backKb }).catch(e => {});
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -806,9 +823,9 @@ bot.on('callback_query', async (query) => {
           message_id: messageId,
           parse_mode: 'Markdown',
           reply_markup: getCategoryKeyboard(subId)
-        });
+        }).catch(e => {});
       }
-      await bot.answerCallbackQuery(query.id);
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -827,9 +844,9 @@ bot.on('callback_query', async (query) => {
           message_id: messageId,
           parse_mode: 'Markdown',
           reply_markup: getYearKeyboard(subId)
-        });
+        }).catch(e => {});
       }
-      await bot.answerCallbackQuery(query.id);
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -856,9 +873,9 @@ bot.on('callback_query', async (query) => {
           message_id: messageId,
           parse_mode: 'Markdown',
           reply_markup: keyboard
-        });
+        }).catch(e => {});
       }
-      await bot.answerCallbackQuery(query.id);
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -914,10 +931,10 @@ bot.on('callback_query', async (query) => {
           caption: cardCaption,
           parse_mode: 'Markdown',
           reply_markup: launchKeyboard
-        });
+        }).catch(e => {});
       }
 
-      await bot.answerCallbackQuery(query.id);
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -935,8 +952,8 @@ bot.on('callback_query', async (query) => {
       const text = generateLeaderboardMessage(paperData ? paperData.title : 'ප්‍රශ්න පත්‍රය', ranks);
 
       const backKb = { inline_keyboard: [[{ text: '⬅️ ආපසු (Back)', callback_data: `paper_${subId}_${yearKey}` }]] };
-      await bot.sendMessage(chatId, text, { parse_mode: 'Markdown', reply_markup: backKb });
-      await bot.answerCallbackQuery(query.id);
+      await bot.sendMessage(chatId, text, { parse_mode: 'Markdown', reply_markup: backKb }).catch(e => {});
+      await safeAnswerCallback(query.id);
       return;
     }
 
@@ -954,8 +971,8 @@ bot.on('callback_query', async (query) => {
         const qList = loadQuestionsFromHtml(paperData.file);
 
         if (!qList || qList.length === 0) {
-          await bot.sendMessage(chatId, '❌ ප්‍රශ්න පත්‍රයේ ප්‍රශ්න පූරණය කිරීමට නොහැකි විය.');
-          await bot.answerCallbackQuery(query.id);
+          await bot.sendMessage(chatId, '❌ ප්‍රශ්න පත්‍රයේ ප්‍රශ්න පූරණය කිරීමට නොහැකි විය.').catch(e => {});
+          await safeAnswerCallback(query.id);
           return;
         }
 
@@ -978,19 +995,19 @@ bot.on('callback_query', async (query) => {
 
         await bot.sendMessage(chatId, `🏁 **${paperData.title}** Native Telegram Quiz ආරම්භ විය!\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`, {
           parse_mode: 'Markdown'
-        });
+        }).catch(e => {});
 
         // Send first poll
         sendNextNativePoll(chatId);
       }
 
-      await bot.answerCallbackQuery(query.id);
+      await safeAnswerCallback(query.id);
       return;
     }
 
   } catch (err) {
     console.error('Error handling callback query:', err);
-    await bot.answerCallbackQuery(query.id, { text: 'දෝෂයක් සිදු විය. කරුණාකර නැවත උත්සාහ කරන්න.' });
+    await safeAnswerCallback(query.id, 'දෝෂයක් සිදු විය. කරුණාකර නැවත උත්සාහ කරන්න.');
   }
 });
 
