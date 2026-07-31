@@ -393,91 +393,60 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
 
       console.log(`🟢 WhatsApp Poll [${qNum}/${totalQ}] sent to group! (StanzaID: ${currentPollStanzaId})`);
 
-      // 2. Wait intervalSec seconds for group members to vote, then fetch stored votes from Cloudflare Worker & Green API
-      await new Promise(res => setTimeout(res, intervalSec * 1000));
-
+      // 2. Active Notification Polling Loop: Query Green API receiveNotification every 1.5s during intervalSec window
       const correctNames = [];
       const wrongNames = [];
+      const endTime = Date.now() + intervalSec * 1000;
 
-      // Source A: Fetch votes from Cloudflare Worker Webhook Relay (/get-wa-votes)
-      try {
-        if (currentPollStanzaId) {
-          const wrx = await fetch(`https://a-l.gayanmadushanka1610.workers.dev/get-wa-votes?stanzaId=${currentPollStanzaId}`);
-          const wVotes = await wrx.json();
+      while (Date.now() < endTime) {
+        try {
+          const rx = await fetch(`https://api.green-api.com/waInstance${instanceId}/receiveNotification/${apiToken}`);
+          const note = await rx.json();
 
-          if (wVotes && typeof wVotes === 'object') {
-            Object.entries(wVotes).forEach(([vId, vData]) => {
-              const studentName = vData.name || vId.split('@')[0];
-              const optIdx = vData.optionIdx;
+          if (note && note.receiptId) {
+            // Delete notification to clear queue
+            await fetch(`https://api.green-api.com/waInstance${instanceId}/deleteNotification/${apiToken}/${note.receiptId}`, { method: 'DELETE' });
 
-              if (!groupUserScores[vId]) {
-                groupUserScores[vId] = { name: studentName, score: 0, correct: 0, wrong: 0, answered: new Set() };
-              }
-              const st = groupUserScores[vId];
-              if (!st.answered.has(i)) {
-                st.answered.add(i);
-                if (optIdx === (q.c || 0)) {
-                  st.score++;
-                  st.correct++;
-                  if (!correctNames.includes(studentName)) correctNames.push(studentName);
-                  console.log(`🎯 Worker Relayed Poll Vote [${studentName}]: CORRECT! (+1 Mark)`);
-                } else {
-                  st.wrong++;
-                  if (!wrongNames.includes(studentName)) wrongNames.push(studentName);
-                  console.log(`❌ Worker Relayed Poll Vote [${studentName}]: WRONG!`);
-                }
-              }
-            });
-          }
-        }
-      } catch (e) {
-        console.error('Notice querying Cloudflare Worker votes:', e.message);
-      }
+            const body = note.body;
+            const type = body?.typeWebhook || body?.typeMessage;
 
-      // Source B: Fetch pollUpdateMessage from Green API lastIncomingMessages as fallback
-      try {
-        const rx = await fetch(`https://api.green-api.com/waInstance${instanceId}/lastIncomingMessages/${apiToken}?minutes=10`);
-        const msgs = await rx.json();
+            if (type === 'pollUpdateMessage' || type === 'pollMessageWebhook' || type === 'incomingMessageReceived') {
+              const pData = body.pollMessageData || body.messageData?.pollVoteMessageData;
+              const senderId = body.senderData?.sender || body.senderId || '';
+              const senderName = body.senderData?.senderName || body.senderName || (senderId ? senderId.split('@')[0] : 'Student');
 
-        if (Array.isArray(msgs)) {
-          const pollUpdates = msgs.filter(m => m.chatId === targetChat && m.typeMessage === 'pollUpdateMessage');
-
-          pollUpdates.forEach(m => {
-            const pData = m.pollMessageData;
-            const senderId = m.senderId || '';
-            let senderName = m.senderName || senderId.split('@')[0] || 'Student';
-
-            if (pData && Array.isArray(pData.votes) && (pData.stanzaId === currentPollStanzaId || pData.name.includes(`[${qNum}/${totalQ}]`))) {
-              pData.votes.forEach((vOpt, optIdx) => {
-                const voters = vOpt.optionVoters || [];
-                if (voters.length > 0) {
-                  voters.forEach(vId => {
-                    const studentName = senderName || vId.split('@')[0];
-                    if (!groupUserScores[vId]) {
-                      groupUserScores[vId] = { name: studentName, score: 0, correct: 0, wrong: 0, answered: new Set() };
-                    }
-                    const st = groupUserScores[vId];
-                    if (!st.answered.has(i)) {
-                      st.answered.add(i);
-                      if (optIdx === (q.c || 0)) {
-                        st.score++;
-                        st.correct++;
-                        if (!correctNames.includes(studentName)) correctNames.push(studentName);
-                        console.log(`🎯 Green API Direct Poll Vote [${studentName}]: CORRECT! (+1 Mark)`);
-                      } else {
-                        st.wrong++;
-                        if (!wrongNames.includes(studentName)) wrongNames.push(studentName);
-                        console.log(`❌ Green API Direct Poll Vote [${studentName}]: WRONG!`);
+              if (pData && Array.isArray(pData.votes)) {
+                if (pData.stanzaId === currentPollStanzaId || pData.name?.includes(`[${qNum}/${totalQ}]`)) {
+                  pData.votes.forEach((vOpt, optIdx) => {
+                    const voters = vOpt.optionVoters || [];
+                    voters.forEach(vId => {
+                      const studentName = (vId === senderId && senderName) ? senderName : vId.split('@')[0];
+                      if (!groupUserScores[vId]) {
+                        groupUserScores[vId] = { name: studentName, score: 0, correct: 0, wrong: 0, answered: new Set() };
                       }
-                    }
+                      const st = groupUserScores[vId];
+                      if (!st.answered.has(i)) {
+                        st.answered.add(i);
+                        if (optIdx === (q.c || 0)) {
+                          st.score++;
+                          st.correct++;
+                          if (!correctNames.includes(studentName)) correctNames.push(studentName);
+                          console.log(`🎯 Direct WA Poll Vote [${studentName}]: CORRECT! (+1 Mark)`);
+                        } else {
+                          st.wrong++;
+                          if (!wrongNames.includes(studentName)) wrongNames.push(studentName);
+                          console.log(`❌ Direct WA Poll Vote [${studentName}]: WRONG!`);
+                        }
+                      }
+                    });
                   });
                 }
-              });
+              }
             }
-          });
-        }
-      } catch (e) {
-        console.error('Notice parsing pollUpdateMessage votes:', e.message);
+          }
+        } catch (e) {}
+
+        await new Promise(res => setTimeout(res, 1500));
       }
 
       // 3. Post Answer Explanation & Tagged Students Card (Reveals Correct Answer, Explanation & Student Names)
