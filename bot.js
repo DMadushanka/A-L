@@ -414,7 +414,7 @@ setInterval(async () => {
   }
 }, 30000);
 
-// Middleware: Auto Register User
+// Middleware: Auto Register User & Log ID
 bot.on('message', (msg) => {
   if (msg.from) {
     registerUser(msg.from);
@@ -436,6 +436,17 @@ bot.onText(/\/start/, (msg) => {
   bot.sendMessage(chatId, welcomeMessage, {
     parse_mode: 'Markdown',
     reply_markup: getSubjectKeyboard()
+  });
+});
+
+// Command: /myid (Shows User's Telegram ID for setup)
+bot.onText(/\/myid/, (msg) => {
+  const chatId = msg.chat.id;
+  const fromId = msg.from ? msg.from.id : chatId;
+  const name = msg.from ? [msg.from.first_name, msg.from.last_name].filter(Boolean).join(' ') : 'User';
+
+  bot.sendMessage(chatId, `👤 **${name}** ඔබගේ Telegram User ID එක:\n\n\`${fromId}\`\n\n💡 මෙම ID එක \`.env\` ගොනුවේ \`ADMIN_ID=${fromId}\` ලෙස ඇතුළත් කිරීමෙන් Admin බලතල ලබාගත හැක.`, {
+    parse_mode: 'Markdown'
   });
 });
 
@@ -465,7 +476,13 @@ bot.onText(/\/admin/, (msg) => {
   const fromId = msg.from ? msg.from.id : chatId;
 
   if (!isAdminUser(fromId)) {
-    return bot.sendMessage(chatId, '⛔ ඔබට මෙම Command එක භාවිතා කිරීමට අවසර නොමැත.');
+    const deniedText = 
+      `⛔ **ඔබට Admin බලතල නොමැත.**\n\n` +
+      `👤 ඔබගේ Telegram User ID එක: \`${fromId}\`\n\n` +
+      `👉 ඔබගේ නව Telegram Account එක Admin කිරීමට \`.env\` ගොනුවේ පහත පරිදි ඇතුළත් කරන්න:\n` +
+      `\`ADMIN_ID=${fromId}\``;
+
+    return bot.sendMessage(chatId, deniedText, { parse_mode: 'Markdown' });
   }
 
   const db = readDb();
@@ -545,7 +562,8 @@ bot.onText(/\/help/, (msg) => {
     `📖 **භාවිතය පිළිබඳ උපදෙස්:**\n\n` +
     `1. **/start** command එක යවා විෂයයන් තෝරන්න.\n` +
     `2. **/leaderboard** යවා Top 3 Winners සහ Top 20 පුවරුව බලන්න.\n` +
-    `3. **🎯 Native Telegram Polls**, **🚀 Open WebApp**, හෝ **🌐 Open Browser** මගින් පරීක්ෂණයට මුහුණ දෙන්න.\n\n` +
+    `3. **/myid** යවා ඔබගේ Telegram User ID එක පරීක්ෂා කරන්න.\n` +
+    `4. **🎯 Native Telegram Polls**, **🚀 Open WebApp**, හෝ **🌐 Open Browser** මගින් පරීක්ෂණයට මුහුණ දෙන්න.\n\n` +
     `💡 **විශේෂාංග:**\n` +
     `• MCQ 40 සඳහා නිවැරදි විග්‍රහයන්\n` +
     `• Instant Confetti 🎉 & Explanation Tooltips\n` +
