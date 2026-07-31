@@ -188,6 +188,15 @@ if (!BOT_TOKEN || BOT_TOKEN === 'your_telegram_bot_token_here') {
 // Initialize Telegram Bot
 const bot = new TelegramBot(BOT_TOKEN, { polling: true });
 
+// Fetch Bot Info dynamically for group link construction
+let botUsername = 'AL_MCQbot';
+bot.getMe().then(me => {
+  if (me && me.username) {
+    botUsername = me.username;
+    console.log(`🤖 Logged in as Bot: @${botUsername}`);
+  }
+}).catch(err => console.log('Notice fetching bot info:', err.message));
+
 // Configure Permanent In-Chat WebApp Menu Button
 const portalUrl = `${BASE_URL}/index.html`;
 
@@ -229,6 +238,11 @@ function getSubjectKeyboard() {
   if (communityRow.length > 0) {
     keyboard.push(communityRow);
   }
+
+  // 1-Click "Add Bot to Your Group" Deep Link
+  keyboard.push([
+    { text: '➕ Add Bot to Your Group (Group එකට එකතු කරන්න)', url: `https://t.me/${botUsername}?startgroup=true` }
+  ]);
 
   return { inline_keyboard: keyboard };
 }
