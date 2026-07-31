@@ -233,47 +233,37 @@ console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
 console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
 console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode)'}`);
 
-// Helper: Zero-Manual-Interaction Automated WhatsApp Channel Publisher (Text + Native WA Polls)
-async function autoPostToWhatsAppChannel(messageText, pollOptions = null) {
-  const waApiUrl = (process.env.WA_API_URL || process.env.WA_WEBHOOK_URL || '').trim();
-  const waApiToken = (process.env.WA_API_TOKEN || '').trim();
-  const waChannelId = (process.env.WA_CHANNEL_ID || '0029VbDIx2lHwXb4rvJNIV0D@newsletter').trim();
+// Helper: Zero-Manual-Interaction Automated WhatsApp Channel Publisher via Green API
+async function autoPostToWhatsAppChannel(messageText) {
+  const instanceId = (process.env.GREEN_API_INSTANCE || '710722698143').trim();
+  const apiToken = (process.env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
+  const targetChat = (process.env.WA_TARGET_CHAT || '94765809011@c.us').trim();
 
-  if (!waApiUrl) return false;
+  if (!instanceId || !apiToken) return false;
+
+  const url = `https://api.green-api.com/waInstance${instanceId}/sendMessage/${apiToken}`;
 
   try {
-    // 1. Send Text / Quiz Card to WhatsApp Channel
-    await fetch(`${waApiUrl}/sendMessage`, {
+    const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        token: waApiToken,
-        to: waChannelId,
-        channelUrl: WA_CHANNEL_URL,
+        chatId: targetChat,
         message: messageText
       })
     });
 
-    // 2. Send Native WhatsApp Poll (if options provided)
-    if (pollOptions && Array.isArray(pollOptions.options)) {
-      await fetch(`${waApiUrl}/sendPoll`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          token: waApiToken,
-          to: waChannelId,
-          title: pollOptions.title || 'MCQ Question',
-          options: pollOptions.options
-        })
-      });
+    const data = await res.json();
+    if (data && data.idMessage) {
+      console.log(`🟢 100% Automated WhatsApp Post sent! Message ID: ${data.idMessage}`);
+      return true;
+    } else {
+      console.log('Green API response:', JSON.stringify(data));
     }
-
-    console.log('🟢 100% Automated WhatsApp Channel Post sent successfully!');
-    return true;
   } catch (err) {
-    console.error('Notice auto-posting to WhatsApp Channel:', err.message);
-    return false;
+    console.error('Notice sending automated WA broadcast:', err.message);
   }
+  return false;
 }
 
 // Helper: Generate Persistent Bottom Reply Keyboard (Floating START bar)
