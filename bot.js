@@ -2,12 +2,23 @@ import TelegramBot from 'node-telegram-bot-api';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import { 
+  registerUser, 
+  recordScore, 
+  getLeaderboard, 
+  getOverallLeaderboard, 
+  addScheduledJob, 
+  getPendingScheduledJobs, 
+  markJobSent,
+  readDb 
+} from './db.js';
 
 // Load environment variables
 dotenv.config();
 
 const BOT_TOKEN = process.env.BOT_TOKEN || '';
 const BASE_URL = process.env.BASE_URL || 'https://dmadushanka.github.io/A-L';
+const ADMIN_ID = process.env.ADMIN_ID || '';
 
 // Database mapping of subjects, paper categories, and files
 const QUIZ_DATA = {
@@ -70,7 +81,7 @@ const QUIZ_DATA = {
 };
 
 // State storage for active Native Telegram Poll sessions
-const userPollSessions = {}; // chatId -> { subId, yearKey, title, questions, qIndex, score }
+const userPollSessions = {}; // chatId -> { subId, yearKey, paperKey, title, questions, qIndex, score, startTime }
 const pollIdMap = {}; // pollId -> { chatId, correctOption }
 
 // Helper: Clean text formatting for Telegram Poll limits
@@ -85,6 +96,14 @@ function cleanText(str, maxLen = 300) {
     clean = clean.substring(0, maxLen - 3) + '...';
   }
   return clean;
+}
+
+// Helper: Format seconds into minutes and seconds string (e.g. 3m 45s)
+function formatDuration(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  if (mins === 0) return `${secs}s`;
+  return `${mins}m ${secs}s`;
 }
 
 // Helper: Dynamically extract QUESTIONS array from HTML file
@@ -142,7 +161,10 @@ function getSubjectKeyboard() {
       [{ text: QUIZ_DATA.pl.name, callback_data: 'sub_pl' }],
       [{ text: QUIZ_DATA.hist.name, callback_data: 'sub_hist' }],
       [{ text: QUIZ_DATA.bc.name, callback_data: 'sub_bc' }],
-      [{ text: QUIZ_DATA.sin.name, callback_data: 'sub_sin' }]
+      [{ text: QUIZ_DATA.sin.name, callback_data: 'sub_sin' }],
+      [
+        { text: '🏆 All-Island Leaderboard (ලකුණු පුවරුව)', callback_data: 'view_top_overall' }
+      ]
     ]
   };
 }
@@ -178,16 +200,67 @@ function getYearKeyboard(subId) {
   return { inline_keyboard: keyboard };
 }
 
+// Helper: Generate Formatted Leaderboard & Podium Text
+function generateLeaderboardMessage(title, ranks) {
+  if (!ranks || ranks.length === 0) {
+    return (
+      `🏆 **${title} — ලකුණු පුවරුව**\n\n` +
+      `ℹ️ තවමත් කිසිදු පරිශීලකයෙකු මෙම ප්‍රශ්න පත්‍රය අවසන් කර නොමැත.\n` +
+      `පළමු ජයග්‍රාහකයා වීමට දැන්ම ප්‍රශ්න පත්‍රය ආරම්භ කරන්න!`
+    );
+  }
+
+  const medals = ['🥇', '🥈', '🥉'];
+  let text = `🏆 **${title} — ජයග්‍රාහකයින් සහ ලකුණු පුවරුව**\n\n`;
+
+  // 1. Top 3 Winners Podium
+  text += `🎖️ **ජයග්‍රාහී ප්‍රථම ස්ථාන 3 (Top 3 Winners):**\n`;
+  const top3 = ranks.slice(0, 3);
+  top3.forEach((r, idx) => {
+    const medal = medals[idx] || '🎖️';
+    const userTag = r.username ? ` (${r.username})` : '';
+    const speed = formatDuration(r.timeSec || 0);
+    text += `${medal} **${idx + 1} වන ස්ථානය:** ${r.name}${userTag}\n   🎯 ලකුණු: **${r.score}** | ⏱️ කාලය: **${speed}**\n\n`;
+  });
+
+  // 2. Top 20 Ranked Table
+  text += `📊 **හොඳම ක්‍රීඩකයින් 20 දෙනාගේ ලැයිස්තුව (Top 20 Table):**\n`;
+  ranks.forEach((r, idx) => {
+    const rankNum = idx + 1;
+    const userTag = r.username ? ` (${r.username})` : '';
+    const speed = formatDuration(r.timeSec || 0);
+    text += `${rankNum}. **${r.name}**${userTag} — 🎯 **${r.score}** | ⏱️ ${speed}\n`;
+  });
+
+  return text;
+}
+
 // Helper: Send Next Native Poll Question
 async function sendNextNativePoll(chatId) {
   const session = userPollSessions[chatId];
   if (!session) return;
 
   if (session.qIndex >= session.questions.length) {
-    // Session Complete - Send Final Results Card
+    // Session Complete - Calculate Time Taken & Record Score in DB
     const total = session.questions.length;
     const score = session.score;
+    const timeSec = Math.max(1, Math.round((Date.now() - session.startTime) / 1000));
     const pct = Math.round((score / total) * 100);
+
+    // Save to Persistent DB
+    recordScore(session.paperKey, {
+      userId: chatId,
+      name: session.userName,
+      username: session.userUsername,
+      score: score,
+      total: total,
+      timeSec: timeSec,
+      timestamp: new Date().toISOString()
+    });
+
+    // Fetch updated Leaderboard & Podium
+    const ranks = getLeaderboard(session.paperKey, 20);
+    const lbText = generateLeaderboardMessage(session.title, ranks);
 
     let verdict = '🎉 විශිෂ්ටයි! ඔබ උසස් පෙළ පරීක්ෂණය සාර්ථකව නිම කළා.';
     if (pct < 50) verdict = '👍 මූලික අවබෝධයක් ඇත — තවදුරටත් පුහුණු වන්න.';
@@ -195,9 +268,12 @@ async function sendNextNativePoll(chatId) {
 
     const resultMessage = 
       `🏆 **පරීක්ෂණය සාර්ථකව අවසන්!**\n\n` +
-      `🎯 **ලබාගත් ලකුණු:** ${score} / ${total} (${pct}%)\n` +
+      `🎯 **ඔබගේ ලකුණු:** ${score} / ${total} (${pct}%)\n` +
+      `⏱️ **ගත වූ කාලය:** ${formatDuration(timeSec)}\n` +
       `📚 **ප්‍රශ්න පත්‍රය:** ${session.title}\n\n` +
-      `${verdict}`;
+      `${verdict}\n\n` +
+      `───────────────────\n` +
+      `${lbText}`;
 
     const finishKeyboard = {
       inline_keyboard: [
@@ -221,11 +297,7 @@ async function sendNextNativePoll(chatId) {
   const totalQ = session.questions.length;
 
   let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
-  
-  // Clean HTML tags and extra formatting
   rawQText = cleanText(rawQText, 250);
-
-  // Strip duplicate leading question numbers like "19. ", "19.", "19)", "19 - "
   rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
 
   const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
@@ -250,26 +322,149 @@ async function sendNextNativePoll(chatId) {
 
   } catch (err) {
     console.error(`Error sending poll Q${qNum} to ${chatId}:`, err.message);
-    // If poll failed (e.g. format error), skip to next question
     session.qIndex++;
     sendNextNativePoll(chatId);
   }
 }
 
+// Background Task: Scheduled Broadcast Engine (Runs every 30 seconds)
+setInterval(async () => {
+  try {
+    const pendingJobs = getPendingScheduledJobs();
+    if (pendingJobs.length === 0) return;
+
+    const db = readDb();
+    const allUsers = Object.keys(db.users);
+
+    for (const job of pendingJobs) {
+      console.log(`⏰ Executing scheduled broadcast job [${job.id}] to ${allUsers.length} users...`);
+      
+      const broadcastText = 
+        `⏰ **සජීවී ප්‍රශ්න පත්‍ර මතක් කිරීම! (Scheduled Reminder)**\n\n` +
+        `${job.message}`;
+
+      for (const targetChatId of allUsers) {
+        try {
+          await bot.sendMessage(targetChatId, broadcastText, { parse_mode: 'Markdown' });
+        } catch (err) {
+          // Ignore individual user block errors
+        }
+      }
+
+      markJobSent(job.id);
+    }
+  } catch (err) {
+    console.error('Error in scheduled broadcast engine:', err.message);
+  }
+}, 30000);
+
+// Middleware: Auto Register User
+bot.on('message', (msg) => {
+  if (msg.from) {
+    registerUser(msg.from);
+  }
+});
+
 // Command: /start
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
+  if (msg.from) registerUser(msg.from);
+
   const firstName = msg.from.first_name || 'යහළුවා';
 
   const welcomeMessage = 
     `✨ **ආයුබෝවන් ${firstName}!**\n\n` +
     `අ.පො.ස. (උසස් පෙළ) MCQ Quiz Bot වෙත සාදරයෙන් පිළිගනිමු! 🎓\n\n` +
-    `ඔබට **Native Telegram Polls (Chat එකෙන්ම)** හෝ **Telegram WebApp** මගින් Quiz කිරීමට ඔබගේ විෂය (Subject) පහතින් තෝරන්න:`;
+    `ඔබට **Native Telegram Polls (Chat එකෙන්ම)**, **Live Competition Leaderboard**, හෝ **Telegram WebApp** මගින් Quiz කිරීමට ඔබගේ විෂය (Subject) පහතින් තෝරන්න:`;
 
   bot.sendMessage(chatId, welcomeMessage, {
     parse_mode: 'Markdown',
     reply_markup: getSubjectKeyboard()
   });
+});
+
+// Command: /leaderboard or /top
+bot.onText(/\/(leaderboard|top)/, (msg) => {
+  const chatId = msg.chat.id;
+
+  const keyboard = {
+    inline_keyboard: [
+      [{ text: '🏆 All-Island Overall Leaderboard', callback_data: 'view_top_overall' }],
+      [{ text: '📜 ශ්‍රී ලංකා ඉතිහාසය Top 20', callback_data: 'view_top_hist' }],
+      [{ text: '🏛️ දේශපාලන විද්‍යාව Top 20', callback_data: 'view_top_pl' }],
+      [{ text: '☸️ බෞද්ධ ශිෂ්ටාචාරය Top 20', callback_data: 'view_top_bc' }],
+      [{ text: '✍️ සිංහල Top 20', callback_data: 'view_top_sin' }]
+    ]
+  };
+
+  bot.sendMessage(chatId, `🏆 **උසස් පෙළ MCQ Leaderboards & Top 20 Ranks**\n\nඔබට පරීක්ෂා කිරීමට අවශ්‍ය ලකුණු පුවරුව තෝරන්න:`, {
+    parse_mode: 'Markdown',
+    reply_markup: keyboard
+  });
+});
+
+// Command: /admin (Admin Control Dashboard)
+bot.onText(/\/admin/, (msg) => {
+  const chatId = msg.chat.id;
+
+  if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) {
+    return bot.sendMessage(chatId, '⛔ ඔබට මෙම Command එක භාවිතා කිරීමට අවසර නොමැත.');
+  }
+
+  const db = readDb();
+  const totalUsers = Object.keys(db.users).length;
+
+  const adminText = 
+    `🛡️ **Admin Control Panel**\n\n` +
+    `📊 **මුළු ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n\n` +
+    `💡 **භාවිත කළ හැකි කොමාණ්ඩ:**\n` +
+    `• **/broadcast <පණිවිඩය>** — සියලුම සිසුන්ට වහාම පණිවිඩයක් යැවීමට.\n` +
+    `• **/schedule YYYY-MM-DD HH:MM <පණිවිඩය>** — නියමිත වේලාවට Notification Schedule කිරීමට.`;
+
+  bot.sendMessage(chatId, adminText, { parse_mode: 'Markdown' });
+});
+
+// Command: /broadcast <message>
+bot.onText(/\/broadcast (.+)/, async (msg, match) => {
+  const chatId = msg.chat.id;
+  if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+
+  const broadcastMsg = match[1];
+  const db = readDb();
+  const allUsers = Object.keys(db.users);
+
+  await bot.sendMessage(chatId, `📢 **Broadcast ආරම්භ විය!** සිසුන් ${allUsers.length} දෙනෙකු වෙත යැවෙමින් පවතී...`);
+
+  let count = 0;
+  for (const uid of allUsers) {
+    try {
+      await bot.sendMessage(uid, `📢 **විශේෂ දැනුම්දීමයි:**\n\n${broadcastMsg}`, { parse_mode: 'Markdown' });
+      count++;
+    } catch (e) { }
+  }
+
+  await bot.sendMessage(chatId, `✅ Broadcast සාර්ථකව අවසන්! සිසුන් **${count}/${allUsers.length}** දෙනෙකුට පණිවිඩය ලැබුණි.`);
+});
+
+// Command: /schedule <YYYY-MM-DD HH:MM> <message>
+bot.onText(/\/schedule (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (.+)/, (msg, match) => {
+  const chatId = msg.chat.id;
+  if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+
+  const timeStr = match[1];
+  const message = match[2];
+
+  const schedDate = new Date(timeStr);
+  if (isNaN(schedDate.getTime())) {
+    return bot.sendMessage(chatId, '❌ දිනය සහ වේලාව වැරදියි. ආකෘතිය: `YYYY-MM-DD HH:MM` (උදා: `2026-07-31 20:00`)', { parse_mode: 'Markdown' });
+  }
+
+  addScheduledJob({
+    time: schedDate.toISOString(),
+    message: message
+  });
+
+  bot.sendMessage(chatId, `✅ පණිවිඩය සාර්ථකව Schedule කරන ලදී!\n⏰ වේලාව: **${timeStr}**\n📝 පණිවිඩය: ${message}`, { parse_mode: 'Markdown' });
 });
 
 // Command: /help
@@ -278,12 +473,12 @@ bot.onText(/\/help/, (msg) => {
   const helpText = 
     `📖 **භාවිතය පිළිබඳ උපදෙස්:**\n\n` +
     `1. **/start** command එක යවා විෂයයන් තෝරන්න.\n` +
-    `2. පසුගිය ප්‍රශ්න පත්‍ර තෝරා වර්ෂය මත Click කරන්න.\n` +
-    `3. **🎯 Native Telegram Polls** (Chat එකෙන්ම), **🚀 Open WebApp**, හෝ **🌐 Open Browser** මගින් පරීක්ෂණයට මුහුණ දෙන්න.\n\n` +
+    `2. **/leaderboard** යවා Top 3 Winners සහ Top 20 පුවරුව බලන්න.\n` +
+    `3. **🎯 Native Telegram Polls**, **🚀 Open WebApp**, හෝ **🌐 Open Browser** මගින් පරීක්ෂණයට මුහුණ දෙන්න.\n\n` +
     `💡 **විශේෂාංග:**\n` +
     `• MCQ 40 සඳහා නිවැරදි විග්‍රහයන්\n` +
-    `• Real-time Timer සහ Score Gauge\n` +
-    `• Instant Confetti 🎉 & Explanation Tooltips`;
+    `• Instant Confetti 🎉 & Explanation Tooltips\n` +
+    `• 🥇 🥈 🥉 Top 3 Winner Podium & Top 20 Rankings`;
 
   bot.sendMessage(chatId, helpText, { parse_mode: 'Markdown' });
 });
@@ -306,7 +501,6 @@ bot.on('poll_answer', async (answer) => {
     }
     session.qIndex++;
 
-    // Small delay before sending next poll for smooth user experience
     setTimeout(() => {
       sendNextNativePoll(chatId);
     }, 1200);
@@ -318,6 +512,8 @@ bot.on('callback_query', async (query) => {
   const chatId = query.message.chat.id;
   const messageId = query.message.message_id;
   const data = query.data;
+
+  if (query.from) registerUser(query.from);
 
   try {
     // 1. Back to Main Subject Selection
@@ -333,7 +529,35 @@ bot.on('callback_query', async (query) => {
       return;
     }
 
-    // 2. Subject Selected -> Show Category Menu (Past Papers vs Other)
+    // 2. View Overall Leaderboard
+    if (data === 'view_top_overall') {
+      const overall = getOverallLeaderboard(20);
+      let text = `🏆 **A/L MCQ All-Island Overall Leaderboard (Top 20)**\n\n`;
+
+      if (overall.length === 0) {
+        text += `ℹ️ තවමත් කිසිදු ලකුණු සටහනක් නොමැත.`;
+      } else {
+        const medals = ['🥇', '🥈', '🥉'];
+        text += `🎖️ **Top 3 Overall Champions:**\n`;
+        overall.slice(0, 3).forEach((r, idx) => {
+          const userTag = r.username ? ` (${r.username})` : '';
+          text += `${medals[idx]} **${r.name}**${userTag} — 🎯 ලකුණු: **${r.totalScore}** (ප්‍රශ්න පත්‍ර ${r.papersDone}යි)\n`;
+        });
+
+        text += `\n📊 **Top 20 Full Ranking Table:**\n`;
+        overall.forEach((r, idx) => {
+          const userTag = r.username ? ` (${r.username})` : '';
+          text += `${idx + 1}. **${r.name}**${userTag} — 🎯 **${r.totalScore}** marks (${formatDuration(r.totalTimeSec)})\n`;
+        });
+      }
+
+      const backKb = { inline_keyboard: [[{ text: '⬅️ ආපසු (Back)', callback_data: 'nav_subjects' }]] };
+      await bot.sendMessage(chatId, text, { parse_mode: 'Markdown', reply_markup: backKb });
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // 3. Subject Selected -> Show Category Menu
     if (data.startsWith('sub_')) {
       const subId = data.replace('sub_', '');
       const subData = QUIZ_DATA[subId];
@@ -354,7 +578,7 @@ bot.on('callback_query', async (query) => {
       return;
     }
 
-    // 3. Category Selected -> Past Papers (Show Year Grid)
+    // 4. Category Selected -> Past Papers (Show Year Grid)
     if (data.startsWith('cat_') && data.endsWith('_pp')) {
       const subId = data.replace('cat_', '').replace('_pp', '');
       const subData = QUIZ_DATA[subId];
@@ -375,7 +599,7 @@ bot.on('callback_query', async (query) => {
       return;
     }
 
-    // 4. Category Selected -> Other (Model Papers & Info)
+    // 5. Category Selected -> Other (Model Papers & Info)
     if (data.startsWith('cat_') && data.endsWith('_other')) {
       const subId = data.replace('cat_', '').replace('_other', '');
       const subData = QUIZ_DATA[subId];
@@ -404,9 +628,9 @@ bot.on('callback_query', async (query) => {
       return;
     }
 
-    // 5. Paper Selected -> Display Rich Launch Card (Native Polls, WebApp, Browser)
+    // 6. Paper Selected -> Display Rich Launch Card
     if (data.startsWith('paper_')) {
-      const parts = data.split('_'); // ['paper', 'pl', '2016']
+      const parts = data.split('_');
       const subId = parts[1];
       const yearKey = parts[2];
 
@@ -417,17 +641,28 @@ bot.on('callback_query', async (query) => {
         const quizUrl = `${BASE_URL}/${paperData.file}`;
         const imgUrl = `${BASE_URL}/${paperData.img}`;
 
+        const paperKey = `${subId}_${yearKey}`;
+        const ranks = getLeaderboard(paperKey, 3);
+        let top3Summary = '';
+        if (ranks.length > 0) {
+          top3Summary = `\n🏆 **Top Leader:** 🥇 ${ranks[0].name} (${ranks[0].score}/40 — ${formatDuration(ranks[0].timeSec)})\n`;
+        }
+
         const cardCaption = 
           `🎯 **${paperData.title}**\n\n` +
           `📚 **විෂය:** ${subData.name}\n` +
           `📜 **ප්‍රශ්න ගණන:** MCQ 40\n` +
-          `💡 **විශේෂාංග:** ඓතිහාසික/විෂයානුබද්ධ විග්‍රහයන්, Instant Confetti 🎉 & Native Telegram Polls.\n\n` +
+          `💡 **විශේෂාංග:** Instant Confetti 🎉, Leaderboards & Top 3 Winner Podiums.\n` +
+          `${top3Summary}\n` +
           `👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
 
         const launchKeyboard = {
           inline_keyboard: [
             [
               { text: '🎯 Native Telegram Polls (Chat එකෙන්ම)', callback_data: `native_${subId}_${yearKey}` }
+            ],
+            [
+              { text: '🏆 ලකුණු පුවරුව (View Leaderboard)', callback_data: `lb_${subId}_${yearKey}` }
             ],
             [
               { text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } }
@@ -452,11 +687,31 @@ bot.on('callback_query', async (query) => {
       return;
     }
 
-    // 6. Native Quiz Mode Selected -> Start Native Telegram Poll Session
+    // 7. View Specific Paper Leaderboard
+    if (data.startsWith('lb_')) {
+      const parts = data.split('_'); // ['lb', 'pl', '2016']
+      const subId = parts[1];
+      const yearKey = parts[2];
+      const paperKey = `${subId}_${yearKey}`;
+
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      const ranks = getLeaderboard(paperKey, 20);
+      const text = generateLeaderboardMessage(paperData ? paperData.title : 'ප්‍රශ්න පත්‍රය', ranks);
+
+      const backKb = { inline_keyboard: [[{ text: '⬅️ ආපසු (Back)', callback_data: `paper_${subId}_${yearKey}` }]] };
+      await bot.sendMessage(chatId, text, { parse_mode: 'Markdown', reply_markup: backKb });
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // 8. Native Quiz Mode Selected -> Start Native Telegram Poll Session
     if (data.startsWith('native_')) {
       const parts = data.split('_'); // ['native', 'pl', '2016']
       const subId = parts[1];
       const yearKey = parts[2];
+      const paperKey = `${subId}_${yearKey}`;
 
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
@@ -470,14 +725,21 @@ bot.on('callback_query', async (query) => {
           return;
         }
 
-        // Initialize User Poll Session
+        const userName = query.from ? [query.from.first_name, query.from.last_name].filter(Boolean).join(' ') : 'ශිෂ්‍යයා';
+        const userUsername = query.from?.username ? `@${query.from.username}` : '';
+
+        // Initialize User Poll Session with Start Time
         userPollSessions[chatId] = {
           subId,
           yearKey,
+          paperKey,
           title: paperData.title,
           questions: qList,
           qIndex: 0,
-          score: 0
+          score: 0,
+          userName,
+          userUsername,
+          startTime: Date.now()
         };
 
         await bot.sendMessage(chatId, `🏁 **${paperData.title}** Native Telegram Quiz ආරම්භ විය!\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`, {
@@ -498,4 +760,4 @@ bot.on('callback_query', async (query) => {
   }
 });
 
-console.log('✅ Telegram Bot Ready! Listening for messages & poll answers...');
+console.log('✅ Telegram Bot Ready! Listening for messages, poll answers & leaderboards...');
