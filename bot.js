@@ -378,7 +378,7 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
 
     try {
       // 1. Send Native WhatsApp Poll
-      await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
+      const pollRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -388,7 +388,10 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
           multipleAnswers: false
         })
       });
-      console.log(`🟢 WhatsApp Poll [${qNum}/${totalQ}] sent to group!`);
+      const pollData = await pollRes.json();
+      const currentPollStanzaId = pollData?.idMessage;
+
+      console.log(`🟢 WhatsApp Poll [${qNum}/${totalQ}] sent to group! (StanzaID: ${currentPollStanzaId})`);
 
       // 2. Wait intervalSec seconds for group members to vote, then fetch pollUpdateMessage votes from Green API
       await new Promise(res => setTimeout(res, intervalSec * 1000));
@@ -408,7 +411,7 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
             const senderId = m.senderId || '';
             let senderName = m.senderName || senderId.split('@')[0] || 'Student';
 
-            if (pData && Array.isArray(pData.votes) && pData.name.includes(`[${qNum}/${totalQ}]`)) {
+            if (pData && Array.isArray(pData.votes) && (pData.stanzaId === currentPollStanzaId || pData.name.includes(`[${qNum}/${totalQ}]`))) {
               pData.votes.forEach((vOpt, optIdx) => {
                 const voters = vOpt.optionVoters || [];
                 if (voters.length > 0) {
@@ -447,12 +450,18 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
       const rawExplain = cleanText(q.e || '', 180);
       const explainPart = rawExplain ? `\n💡 *විග්‍රහය:* ${rawExplain}` : '';
 
-      let studentFeedbackPart = '';
+      let studentFeedbackPart = '\n\n🎯 *නිවැරදි පිළිතුරු දුන් සිසුන් (Correct Answers):*\n';
       if (correctNames.length > 0) {
-        studentFeedbackPart += `\n\n🎯 *නිවැරදි පිළිතුරු දුන් සිසුන් (Correct Answers):*\n` + correctNames.map(n => `• ${n} (+1 Mark)`).join('\n');
+        studentFeedbackPart += correctNames.map(n => `• ${n} (+1 Mark)`).join('\n');
+      } else {
+        studentFeedbackPart += `• (කිසිවෙකු නැත / None)`;
       }
+
+      studentFeedbackPart += '\n\n❌ *වැරදි පිළිතුරු දුන් සිසුන් (Wrong Answers):*\n';
       if (wrongNames.length > 0) {
-        studentFeedbackPart += `\n\n❌ *වැරදි පිළිතුරු දුන් සිසුන් (Wrong Answers):*\n` + wrongNames.map(n => `• ${n}`).join('\n');
+        studentFeedbackPart += wrongNames.map(n => `• ${n}`).join('\n');
+      } else {
+        studentFeedbackPart += `• (කිසිවෙකු නැත / None)`;
       }
 
       const answerRevealMsg = 
