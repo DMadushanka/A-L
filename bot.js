@@ -389,8 +389,52 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
       });
       console.log(`🟢 WhatsApp Poll [${qNum}/${totalQ}] sent to group!`);
 
-      // 2. Wait intervalSec seconds for group members to vote
-      await new Promise(res => setTimeout(res, intervalSec * 1000));
+      // 2. Active Polling Loop: Query Green API receiveNotification every 1.2s during intervalSec window
+      const correctNames = [];
+      const wrongNames = [];
+      const endTime = Date.now() + intervalSec * 1000;
+
+      while (Date.now() < endTime) {
+        try {
+          const rx = await fetch(`https://api.green-api.com/waInstance${instanceId}/receiveNotification/${apiToken}`);
+          const note = await rx.json();
+
+          if (note && note.receiptId) {
+            // Acknowledge notification to clear queue
+            await fetch(`https://api.green-api.com/waInstance${instanceId}/deleteNotification/${apiToken}/${note.receiptId}`, { method: 'DELETE' });
+
+            const body = note.body;
+            const type = body?.typeWebhook;
+            if (type === 'pollMessageWebhook' || type === 'incomingMessageReceived') {
+              const pollData = body.messageData?.pollVoteMessageData || body.pollVoteData;
+              const sender = body.senderData?.sender;
+              const senderName = body.senderData?.senderName || 'Student';
+
+              if (pollData && sender) {
+                if (!groupUserScores[sender]) {
+                  groupUserScores[sender] = { name: senderName, score: 0, correct: 0, wrong: 0, answered: new Set() };
+                }
+                const st = groupUserScores[sender];
+                if (!st.answered.has(i)) {
+                  st.answered.add(i);
+                  if (pollData.optionId === (q.c || 0)) {
+                    st.score++;
+                    st.correct++;
+                    if (!correctNames.includes(senderName)) correctNames.push(senderName);
+                    console.log(`🎯 WA Group Poll Vote: ${senderName} -> CORRECT! (+1 Mark)`);
+                  } else {
+                    st.wrong++;
+                    if (!wrongNames.includes(senderName)) wrongNames.push(senderName);
+                    console.log(`❌ WA Group Poll Vote: ${senderName} -> WRONG!`);
+                  }
+                }
+              }
+            }
+          }
+        } catch (e) {}
+
+        await new Promise(res => setTimeout(res, 1200));
+      }
 
       // 3. Post Answer Explanation & Tagged Students Card (Reveals Correct Answer, Explanation & Student Names)
       const correctIdx = q.c || 0;
@@ -398,22 +442,12 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
       const rawExplain = cleanText(q.e || '', 180);
       const explainPart = rawExplain ? `\n💡 *විග්‍රහය:* ${rawExplain}` : '';
 
-      // Extract voting students for Question i
-      const correctNames = [];
-      const wrongNames = [];
-      Object.values(groupUserScores).forEach(s => {
-        if (s.lastQ === i) {
-          if (s.lastQCorrect) correctNames.push(s.name);
-          else wrongNames.push(s.name);
-        }
-      });
-
       let studentFeedbackPart = '';
       if (correctNames.length > 0) {
-        studentFeedbackPart += `\n\n🎯 *නිවැරදි පිළිතුරු දුන් සිසුන් (Correct):*\n` + correctNames.map(n => `• ${n} (+1 Mark)`).join('\n');
+        studentFeedbackPart += `\n\n🎯 *නිවැරදි පිළිතුරු දුන් සිසුන් (Correct Answers):*\n` + correctNames.map(n => `• ${n} (+1 Mark)`).join('\n');
       }
       if (wrongNames.length > 0) {
-        studentFeedbackPart += `\n\n❌ *වැරදි පිළිතුරු දුන් සිසුන් (Wrong):*\n` + wrongNames.map(n => `• ${n}`).join('\n');
+        studentFeedbackPart += `\n\n❌ *වැරදි පිළිතුරු දුන් සිසුන් (Wrong Answers):*\n` + wrongNames.map(n => `• ${n}`).join('\n');
       }
 
       const answerRevealMsg = 
