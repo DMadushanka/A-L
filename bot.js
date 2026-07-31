@@ -1,5 +1,7 @@
 import TelegramBot from 'node-telegram-bot-api';
 import dotenv from 'dotenv';
+import fs from 'fs';
+import path from 'path';
 
 // Load environment variables
 dotenv.config();
@@ -66,6 +68,42 @@ const QUIZ_DATA = {
     }
   }
 };
+
+// State storage for active Native Telegram Poll sessions
+const userPollSessions = {}; // chatId -> { subId, yearKey, title, questions, qIndex, score }
+const pollIdMap = {}; // pollId -> { chatId, correctOption }
+
+// Helper: Clean text formatting for Telegram Poll limits
+function cleanText(str, maxLen = 300) {
+  if (!str) return '';
+  let clean = str.replace(/<br\s*\/?>/gi, ' ')
+                 .replace(/<[^>]+>/g, '')
+                 .replace(/&nbsp;/gi, ' ')
+                 .replace(/\s+/g, ' ')
+                 .trim();
+  if (clean.length > maxLen) {
+    clean = clean.substring(0, maxLen - 3) + '...';
+  }
+  return clean;
+}
+
+// Helper: Dynamically extract QUESTIONS array from HTML file
+function loadQuestionsFromHtml(filename) {
+  try {
+    const filePath = path.resolve(process.cwd(), filename);
+    if (!fs.existsSync(filePath)) return null;
+
+    const content = fs.readFileSync(filePath, 'utf8');
+    const match = content.match(/const QUESTIONS = (\[[\s\S]*?\]);/);
+    if (match) {
+      const evalFn = new Function('return ' + match[1]);
+      return evalFn();
+    }
+  } catch (e) {
+    console.error(`Error reading questions from ${filename}:`, e.message);
+  }
+  return null;
+}
 
 // Check if BOT_TOKEN is configured
 if (!BOT_TOKEN || BOT_TOKEN === 'your_telegram_bot_token_here') {
@@ -140,6 +178,75 @@ function getYearKeyboard(subId) {
   return { inline_keyboard: keyboard };
 }
 
+// Helper: Send Next Native Poll Question
+async function sendNextNativePoll(chatId) {
+  const session = userPollSessions[chatId];
+  if (!session) return;
+
+  if (session.qIndex >= session.questions.length) {
+    // Session Complete - Send Final Results Card
+    const total = session.questions.length;
+    const score = session.score;
+    const pct = Math.round((score / total) * 100);
+
+    let verdict = '🎉 විශිෂ්ටයි! ඔබ උසස් පෙළ පරීක්ෂණය සාර්ථකව නිම කළා.';
+    if (pct < 50) verdict = '👍 මූලික අවබෝධයක් ඇත — තවදුරටත් පුහුණු වන්න.';
+    else if (pct < 75) verdict = '🌟 හොඳයි! තවදුරටත් පුනරීක්ෂණය කරන්න.';
+
+    const resultMessage = 
+      `🏆 **පරීක්ෂණය සාර්ථකව අවසන්!**\n\n` +
+      `🎯 **ලබාගත් ලකුණු:** ${score} / ${total} (${pct}%)\n` +
+      `📚 **ප්‍රශ්න පත්‍රය:** ${session.title}\n\n` +
+      `${verdict}`;
+
+    const finishKeyboard = {
+      inline_keyboard: [
+        [{ text: '🔄 නැවත උත්සාහ කරන්න (Retry)', callback_data: `native_${session.subId}_${session.yearKey}` }],
+        [{ text: '📑 වෙනත් ප්‍රශ්න පත්‍රයක් (Select Paper)', callback_data: `cat_${session.subId}_pp` }]
+      ]
+    };
+
+    await bot.sendMessage(chatId, resultMessage, {
+      parse_mode: 'Markdown',
+      reply_markup: finishKeyboard
+    });
+
+    delete userPollSessions[chatId];
+    return;
+  }
+
+  // Get current question
+  const q = session.questions[session.qIndex];
+  const qNum = session.qIndex + 1;
+  const totalQ = session.questions.length;
+
+  const rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 300);
+  const cleanOpts = (q.o || []).map(o => cleanText(o, 100));
+  const cleanExplain = cleanText(q.e || '', 200);
+
+  try {
+    const pollMsg = await bot.sendPoll(chatId, cleanQ, cleanOpts, {
+      type: 'quiz',
+      correct_option_id: q.c,
+      explanation: cleanExplain ? `💡 ${cleanExplain}` : undefined,
+      is_anonymous: false
+    });
+
+    // Register Poll ID mapping
+    pollIdMap[pollMsg.poll.id] = {
+      chatId,
+      correctOption: q.c
+    };
+
+  } catch (err) {
+    console.error(`Error sending poll Q${qNum} to ${chatId}:`, err.message);
+    // If poll failed (e.g. format error), skip to next
+    session.qIndex++;
+    sendNextNativePoll(chatId);
+  }
+}
+
 // Command: /start
 bot.onText(/\/start/, (msg) => {
   const chatId = msg.chat.id;
@@ -148,7 +255,7 @@ bot.onText(/\/start/, (msg) => {
   const welcomeMessage = 
     `✨ **ආයුබෝවන් ${firstName}!**\n\n` +
     `අ.පො.ස. (උසස් පෙළ) MCQ Quiz Bot වෙත සාදරයෙන් පිළිගනිමු! 🎓\n\n` +
-    `ඔබට **Telegram තුළම සජීවී Animated Quiz Portal එක** විවෘත කිරීමට පහත **✨ 🚀 Open Animated Quiz Portal** බොත්තම හෝ ඔබගේ විෂය (Subject) පහතින් තෝරන්න:`;
+    `ඔබට **Native Telegram Polls (Chat එකෙන්ම)** හෝ **Telegram WebApp** මගින් Quiz කිරීමට ඔබගේ විෂය (Subject) පහතින් තෝරන්න:`;
 
   bot.sendMessage(chatId, welcomeMessage, {
     parse_mode: 'Markdown',
@@ -163,13 +270,38 @@ bot.onText(/\/help/, (msg) => {
     `📖 **භාවිතය පිළිබඳ උපදෙස්:**\n\n` +
     `1. **/start** command එක යවා විෂයයන් තෝරන්න.\n` +
     `2. පසුගිය ප්‍රශ්න පත්‍ර තෝරා වර්ෂය මත Click කරන්න.\n` +
-    `3. **🚀 Open WebApp** බොත්තම මගින් Telegram තුළදීම හෝ **🌐 Open Browser** මගින් Browser එකෙන් පරීක්ෂණයට මුහුණ දෙන්න.\n\n` +
+    `3. **🎯 Native Telegram Polls** (Chat එකෙන්ම), **🚀 Open WebApp**, හෝ **🌐 Open Browser** මගින් පරීක්ෂණයට මුහුණ දෙන්න.\n\n` +
     `💡 **විශේෂාංග:**\n` +
     `• MCQ 40 සඳහා නිවැරදි විග්‍රහයන්\n` +
     `• Real-time Timer සහ Score Gauge\n` +
-    `• Bookmark (ලකුණු කිරීමේ) පහසුකම`;
+    `• Instant Confetti 🎉 & Explanation Tooltips`;
 
   bot.sendMessage(chatId, helpText, { parse_mode: 'Markdown' });
+});
+
+// Listener for Native Poll Answer Events
+bot.on('poll_answer', async (answer) => {
+  const pollId = answer.poll_id;
+  const selectedOptions = answer.option_ids;
+
+  const mapping = pollIdMap[pollId];
+  if (!mapping) return;
+
+  const { chatId, correctOption } = mapping;
+  delete pollIdMap[pollId];
+
+  const session = userPollSessions[chatId];
+  if (session) {
+    if (selectedOptions && selectedOptions[0] === correctOption) {
+      session.score++;
+    }
+    session.qIndex++;
+
+    // Small delay before sending next poll for smooth user experience
+    setTimeout(() => {
+      sendNextNativePoll(chatId);
+    }, 1200);
+  }
 });
 
 // Callback Query Handler
@@ -263,7 +395,7 @@ bot.on('callback_query', async (query) => {
       return;
     }
 
-    // 5. Paper Selected -> Display Rich Quiz Launch Card
+    // 5. Paper Selected -> Display Rich Launch Card (Native Polls, WebApp, Browser)
     if (data.startsWith('paper_')) {
       const parts = data.split('_'); // ['paper', 'pl', '2016']
       const subId = parts[1];
@@ -280,13 +412,16 @@ bot.on('callback_query', async (query) => {
           `🎯 **${paperData.title}**\n\n` +
           `📚 **විෂය:** ${subData.name}\n` +
           `📜 **ප්‍රශ්න ගණන:** MCQ 40\n` +
-          `💡 **විශේෂාංග:** සියලුම ප්‍රශ්න සඳහා ඓතිහාසික/විෂයානුබද්ධ විග්‍රහයන්, Real-time Timer, සහ Bookmark කිරීමේ පහසුකම.\n\n` +
-          `👇 පහත **Open WebApp** හෝ **Open Browser** බොත්තම ක්ලික් කර Quiz එක ආරම්භ කරන්න:`;
+          `💡 **විශේෂාංග:** ඓතිහාසික/විෂයානුබද්ධ විග්‍රහයන්, Instant Confetti 🎉 & Native Telegram Polls.\n\n` +
+          `👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
 
         const launchKeyboard = {
           inline_keyboard: [
             [
-              { text: '🚀 Open WebApp (Telegram තුළම)', web_app: { url: quizUrl } }
+              { text: '🎯 Native Telegram Polls (Chat එකෙන්ම)', callback_data: `native_${subId}_${yearKey}` }
+            ],
+            [
+              { text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } }
             ],
             [
               { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
@@ -297,12 +432,51 @@ bot.on('callback_query', async (query) => {
           ]
         };
 
-        // Send photo card with WebApp launch buttons
         await bot.sendPhoto(chatId, imgUrl, {
           caption: cardCaption,
           parse_mode: 'Markdown',
           reply_markup: launchKeyboard
         });
+      }
+
+      await bot.answerCallbackQuery(query.id);
+      return;
+    }
+
+    // 6. Native Quiz Mode Selected -> Start Native Telegram Poll Session
+    if (data.startsWith('native_')) {
+      const parts = data.split('_'); // ['native', 'pl', '2016']
+      const subId = parts[1];
+      const yearKey = parts[2];
+
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        const qList = loadQuestionsFromHtml(paperData.file);
+
+        if (!qList || qList.length === 0) {
+          await bot.sendMessage(chatId, '❌ ප්‍රශ්න පත්‍රයේ ප්‍රශ්න පූරණය කිරීමට නොහැකි විය.');
+          await bot.answerCallbackQuery(query.id);
+          return;
+        }
+
+        // Initialize User Poll Session
+        userPollSessions[chatId] = {
+          subId,
+          yearKey,
+          title: paperData.title,
+          questions: qList,
+          qIndex: 0,
+          score: 0
+        };
+
+        await bot.sendMessage(chatId, `🏁 **${paperData.title}** Native Telegram Quiz ආරම්භ විය!\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`, {
+          parse_mode: 'Markdown'
+        });
+
+        // Send first poll
+        sendNextNativePoll(chatId);
       }
 
       await bot.answerCallbackQuery(query.id);
@@ -315,4 +489,4 @@ bot.on('callback_query', async (query) => {
   }
 });
 
-console.log('✅ Telegram Bot Ready! Listening for messages...');
+console.log('✅ Telegram Bot Ready! Listening for messages & poll answers...');
