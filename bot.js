@@ -266,6 +266,52 @@ async function autoPostToWhatsAppChannel(messageText) {
   return false;
 }
 
+// Helper: Run Native WhatsApp Poll Quiz directly inside WhatsApp Group
+async function runNativeWhatsAppGroupQuiz(paperKey) {
+  if (!paperKey) return;
+  const parts = paperKey.split('_');
+  const subId = parts[0];
+  const yearKey = parts[1];
+
+  const subData = QUIZ_DATA[subId];
+  const paperData = subData?.papers[yearKey];
+  if (!paperData) return;
+
+  const questions = loadQuestionsFromHtml(paperData.file);
+  if (!questions || questions.length === 0) return;
+
+  console.log(`🚀 Starting Native WhatsApp Poll Quiz for ${paperData.title} in WhatsApp Group...`);
+
+  const instanceId = (process.env.GREEN_API_INSTANCE || '710722698143').trim();
+  const apiToken = (process.env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
+  const targetChat = (process.env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
+
+  // Send Intro Card to WhatsApp Group
+  const waIntro = `🎓 *${paperData.title}*\n\n🎯 Native WhatsApp Poll Quiz එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
+  await autoPostToWhatsAppChannel(waIntro);
+
+  // Send Question 1 as Native WhatsApp Poll
+  const q1 = questions[0];
+  const q1Title = cleanText(`[1/${questions.length}] ${q1.q}`, 250);
+  const q1Opts = (q1.o || []).map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${o}`, 90) }));
+
+  try {
+    await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chatId: targetChat,
+        message: q1Title,
+        options: q1Opts,
+        multipleAnswers: false
+      })
+    });
+    console.log(`🟢 Native WhatsApp Poll Q1 sent to group!`);
+  } catch (err) {
+    console.error('Error sending Native WA Poll:', err.message);
+  }
+}
+
 // Helper: Generate Persistent Bottom Reply Keyboard (Floating START bar)
 function getPersistentReplyKeyboard() {
   return {
@@ -530,6 +576,11 @@ setInterval(async () => {
       // Zero-Manual-Interaction 100% Automated WhatsApp Channel Auto-Post
       const waMsgText = `🎓 A/L MCQ HUB — සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!\n\n${job.message}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\nhttps://t.me/${botUsername || 'AL_MCQbot'}?start=native_${job.paperKey || ''}`;
       await autoPostToWhatsAppChannel(waMsgText);
+
+      // Launch Native WhatsApp Poll Quiz directly inside WhatsApp Group
+      if (job.paperKey) {
+        await runNativeWhatsAppGroupQuiz(job.paperKey);
+      }
 
       markJobSent(job.id);
     }
@@ -1017,6 +1068,10 @@ bot.on('callback_query', async (query) => {
         // 3. Automated Zero-Manual-Interaction WhatsApp Channel Broadcast Trigger
         const waMsgText = `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟ දැනුම්දීම (Upcoming Live Quiz)'}\n\n📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}\n👇 දැන්ම තරඟයට එකතු වන්න:\nhttps://t.me/${botUsername || 'AL_MCQbot'}?start=native_${paperKey}`;
         await autoPostToWhatsAppChannel(waMsgText);
+
+        if (isNow) {
+          await runNativeWhatsAppGroupQuiz(paperKey);
+        }
 
         // 4. Send 1-Click WhatsApp Channel Post Link to Admin
         const waPostText = encodeURIComponent(
