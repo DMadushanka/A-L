@@ -363,8 +363,10 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
     const qNum = i + 1;
     const totalQ = questions.length;
 
-    currentWaGroupSession.currentQIndex = i;
-    currentWaGroupSession.currentCorrectIdx = q.c || 0;
+    if (currentWaGroupSession) {
+      currentWaGroupSession.currentQIndex = i;
+      currentWaGroupSession.currentCorrectIdx = q.c || 0;
+    }
 
     let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
     rawQText = cleanText(rawQText, 250);
