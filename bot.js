@@ -2,6 +2,7 @@ import TelegramBot from 'node-telegram-bot-api';
 import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
+import http from 'http';
 import { 
   registerUser, 
   registerGroup,
@@ -31,6 +32,15 @@ process.on('unhandledRejection', (reason) => {
 });
 process.on('uncaughtException', (err) => {
   console.error('⚠️ Uncaught Exception:', err?.message || err);
+});
+
+// Tiny HTTP Health Check Server (Required for Cloud Platforms like Koyeb, Render, Railway, Glitch to stay alive 24/7)
+const PORT = process.env.PORT || 3000;
+http.createServer((req, res) => {
+  res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
+  res.end('🎓 A/L MCQ Quiz Telegram Bot (@AL_MCQbot) is Running Live 24/7!');
+}).listen(PORT, () => {
+  console.log(`🌐 Health check HTTP server is listening on port ${PORT}`);
 });
 
 // Database mapping of subjects, paper categories, and files
