@@ -21,6 +21,7 @@ const BASE_URL = (process.env.BASE_URL || 'https://dmadushanka.github.io/A-L').t
 const ADMIN_ID = (process.env.ADMIN_ID || '').trim();
 const CHANNEL_URL = (process.env.CHANNEL_URL || '').trim();
 const GROUP_URL = (process.env.GROUP_URL || '').trim();
+const FB_PAGE_URL = (process.env.FB_PAGE_URL || process.env.Facebook_Page || '').trim();
 
 // Global Error Handlers to keep the bot process alive 24/7
 process.on('unhandledRejection', (reason) => {
@@ -218,11 +219,11 @@ function getSubjectKeyboard() {
   ];
 
   const communityRow = [];
-  if (CHANNEL_URL) {
-    communityRow.push({ text: '📢 Join Our Channel', url: CHANNEL_URL });
-  }
   if (GROUP_URL) {
-    communityRow.push({ text: '💬 Join Discussion Group (අදහස් දැක්වීමට)', url: GROUP_URL });
+    communityRow.push({ text: '💬 Discussion Group', url: GROUP_URL });
+  }
+  if (FB_PAGE_URL) {
+    communityRow.push({ text: '📘 Facebook Page', url: FB_PAGE_URL });
   }
 
   if (communityRow.length > 0) {
@@ -447,8 +448,12 @@ bot.onText(/\/start/, (msg) => {
     `අ.පො.ස. (උසස් පෙළ) MCQ Quiz Bot වෙත සාදරයෙන් පිළිගනිමු! 🎓\n\n` +
     `ඔබට **Native Telegram Polls (Chat එකෙන්ම)**, **Live Competition Leaderboard**, හෝ **Telegram WebApp** මගින් Quiz කිරීමට ඔබගේ විෂය (Subject) පහතින් තෝරන්න:`;
 
-  if (GROUP_URL) {
-    welcomeMessage += `\n\n💬 ප්‍රශ්න සාකච්ඡා කිරීමට සහ අදහස් දැක්වීමට අපගේ **Discussion Group** එකට එක්වන්න:`;
+  const links = [];
+  if (GROUP_URL) links.push('💬 **Discussion Group**');
+  if (FB_PAGE_URL) links.push('📘 **Facebook Page**');
+
+  if (links.length > 0) {
+    welcomeMessage += `\n\nඅපගේ ${links.join(' සහ ')} එක සමඟ පහත බොත්තම් මගින් එක්වන්න:`;
   }
 
   bot.sendMessage(chatId, welcomeMessage, {
