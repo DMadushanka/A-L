@@ -1,0 +1,6 @@
+name = "al-mcq-bot"
+main = "worker.js"
+compatibility_date = "2026-07-31"
+
+[vars]
+BASE_URL = "https://dmadushanka.github.io/A-L"
