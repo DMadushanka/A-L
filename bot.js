@@ -494,6 +494,26 @@ setInterval(async () => {
         }
       }
 
+      // Auto Post to WhatsApp Channel API / Webhook (if WA_API_URL or WA_WEBHOOK_URL is configured)
+      const waWebhookUrl = process.env.WA_API_URL || process.env.WA_WEBHOOK_URL;
+      if (waWebhookUrl) {
+        try {
+          const waMsgText = `🎓 A/L MCQ HUB — සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!\n\n${job.message}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\nhttps://t.me/${botUsername || 'AL_MCQbot'}?start=native_${job.paperKey || ''}`;
+          await fetch(waWebhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              channel_url: WA_CHANNEL_URL,
+              message: waMsgText,
+              paperKey: job.paperKey
+            })
+          });
+          console.log(`🟢 WhatsApp Channel Auto-Post sent for job [${job.id}]`);
+        } catch (waErr) {
+          console.error('Notice auto-posting to WhatsApp Channel:', waErr.message);
+        }
+      }
+
       markJobSent(job.id);
     }
   } catch (err) {
@@ -976,6 +996,27 @@ bot.on('callback_query', async (query) => {
             }
           }
         }
+
+        // 3. Send 1-Click WhatsApp Channel Post Link to Admin
+        const waPostText = encodeURIComponent(
+          `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟය!'}\n\n` +
+          `📚 ප්‍රශ්න පත්‍රය: ${paperData.title}\n` +
+          `${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}` +
+          `💡 විශේෂතා: Real-time Timer, All-Island Leaderboards & Podiums 🎉\n\n` +
+          `👇 පහත ලින්ක් එක ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:\n` +
+          `https://t.me/${botUsername}?start=native_${paperKey}`
+        );
+
+        const waShareUrl = `https://api.whatsapp.com/send?text=${waPostText}`;
+
+        await bot.sendMessage(chatId, `📲 **WhatsApp Channel එකට 1-Click මගින් Post කරන්න:**\nපහත බොත්තම ක්ලික් කර ඔබගේ WhatsApp Channel එකට මෙම Quiz එක සෘජුවම Post කරන්න:`, {
+          parse_mode: 'Markdown',
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '🟢 WhatsApp Channel එකට Share කරන්න (1-Click Post)', url: waShareUrl }]
+            ]
+          }
+        }).catch(e => {});
       }
       await safeAnswerCallback(query.id);
       return;
