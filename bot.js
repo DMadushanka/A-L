@@ -287,8 +287,16 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
   const targetChat = (process.env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
 
   // Send Intro Card to WhatsApp Group
-  const waIntro = `🎓 *${paperData.title}*\n\n🎯 Native WhatsApp Poll Quiz එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n⏱️ සෑම ප්‍රශ්නයකටම තත්පර ${intervalSec}ක් හිමි වේ.\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
+  const waIntro = 
+    `🎓 *${paperData.title}*\n\n` +
+    `🎯 Native WhatsApp Poll Quiz එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
+    `⏱️ සෑම ප්‍රශ්නයකටම තත්පර ${intervalSec}ක් හිමි වේ.\n` +
+    `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර සහ විග්‍රහය ස්වයංක්‍රීයව පෙන්වනු ඇත.\n` +
+    `පළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
   await autoPostToWhatsAppChannel(waIntro);
+
+  // Track group member scores for this session
+  const groupUserScores = {}; // phone/name -> { name, score, answered }
 
   // Stream each question sequentially with timed answer reveals
   for (let i = 0; i < questions.length; i++) {
@@ -326,7 +334,11 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
       const rawExplain = cleanText(q.e || '', 180);
       const explainPart = rawExplain ? `\n💡 *විග්‍රහය:* ${rawExplain}` : '';
 
-      const answerRevealMsg = `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර:*\n👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}`;
+      const answerRevealMsg = 
+        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර:*\n` +
+        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}\n\n` +
+        `ℹ️ කාලය අවසන් වන තෙක් පිළිතුරු නොදුන් සිසුන් "පිළිතුරු නොදුන්" ලෙස සලකනු ලැබේ.`;
+      
       await autoPostToWhatsAppChannel(answerRevealMsg);
 
       // Brief 3-second gap before next question
@@ -339,8 +351,20 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
     }
   }
 
-  // Final Quiz Completion Card
-  const waFinishMsg = `🏆 *${paperData.title}* WhatsApp Group Quiz එක සාර්ථකව අවසන්!\n\n📊 ඔබගේ සමස්ත ලංකා ශ්‍රේණිගත කිරීම (Rank) පරීක්ෂා කිරීමට Telegram Bot එක භාවිතා කරන්න:\nhttps://t.me/AL_MCQbot`;
+  // 4. Final WhatsApp Group Leaderboard & Completion Summary
+  let waFinishMsg = `🏆 *${paperData.title}* WhatsApp Group Quiz එක සාර්ථකව අවසන්!\n\n`;
+
+  const ranks = getLeaderboard(paperKey, 10);
+  if (ranks && ranks.length > 0) {
+    const medals = ['🥇', '🥈', '🥉'];
+    waFinishMsg += `🎖️ *ජයග්‍රාහකයින් (Top Champions):*\n`;
+    ranks.slice(0, 3).forEach((r, idx) => {
+      waFinishMsg += `${medals[idx]} *${idx + 1} වන ස්ථානය:* ${r.name} — 🎯 ලකුණු: *${r.score}* / ${questions.length}\n`;
+    });
+    waFinishMsg += `\n`;
+  }
+
+  waFinishMsg += `📊 ඔබගේ සමස්ත ලංකා ශ්‍රේණිගත කිරීම (All-Island Rank) සහ ප්‍රතිඵල පරීක්ෂා කිරීමට Telegram Bot එක භාවිතා කරන්න:\nhttps://t.me/AL_MCQbot`;
   await autoPostToWhatsAppChannel(waFinishMsg);
 }
 
