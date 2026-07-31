@@ -237,7 +237,7 @@ console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode
 async function autoPostToWhatsAppChannel(messageText) {
   const instanceId = (process.env.GREEN_API_INSTANCE || '710722698143').trim();
   const apiToken = (process.env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
-  const targetChat = (process.env.WA_TARGET_CHAT || '94765809011@c.us').trim();
+  const targetChat = (process.env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
 
   if (!instanceId || !apiToken) return false;
 
@@ -1014,7 +1014,11 @@ bot.on('callback_query', async (query) => {
           }
         }
 
-        // 3. Send 1-Click WhatsApp Channel Post Link to Admin
+        // 3. Automated Zero-Manual-Interaction WhatsApp Channel Broadcast Trigger
+        const waMsgText = `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟ දැනුම්දීම (Upcoming Live Quiz)'}\n\n📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}\n👇 දැන්ම තරඟයට එකතු වන්න:\nhttps://t.me/${botUsername || 'AL_MCQbot'}?start=native_${paperKey}`;
+        await autoPostToWhatsAppChannel(waMsgText);
+
+        // 4. Send 1-Click WhatsApp Channel Post Link to Admin
         const waPostText = encodeURIComponent(
           `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟය!'}\n\n` +
           `📚 ප්‍රශ්න පත්‍රය: ${paperData.title}\n` +
