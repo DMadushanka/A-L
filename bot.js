@@ -339,11 +339,10 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
 
   // Send Intro Card to WhatsApp Group
   const waIntro = 
-    `🎓 *${paperData.title}*\n` +
-    `⚡ *WA Live Poll Engine v3.0 (Auto-Scored)* 🟢\n\n` +
+    `🎓 *${paperData.title}*\n\n` +
     `🎯 Native WhatsApp Poll Quiz එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
     `⏱️ සෑම ප්‍රශ්නයකටම තත්පර ${intervalSec}ක් හිමි වේ.\n` +
-    `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර, විග්‍රහය සහ ඡන්දය දුන් සිසුන්ගේ නම් ස්වයංක්‍රීයව පෙන්වනු ඇත.\n` +
+    `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර සහ විග්‍රහය ස්වයංක්‍රීයව පෙන්වනු ඇත.\n` +
     `පළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
   await autoPostToWhatsAppChannel(waIntro);
 
@@ -373,7 +372,7 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
     rawQText = cleanText(rawQText, 250);
     rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
 
-    const cleanQ = cleanText(`[${qNum}/${totalQ}] (v3.0 Live) ${rawQText}`, 290);
+    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
     const cleanOpts = (q.o || []).map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
 
     try {
@@ -449,30 +448,9 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
         await new Promise(res => setTimeout(res, 1500));
       }
 
-      // 3. Post Answer Explanation & Tagged Students Card (Reveals Correct Answer, Explanation & Student Names)
-      const correctIdx = q.c || 0;
-      const correctAnsText = q.o && q.o[correctIdx] ? cleanText(q.o[correctIdx], 100) : '';
-      const rawExplain = cleanText(q.e || '', 180);
-      const explainPart = rawExplain ? `\n💡 *විග්‍රහය:* ${rawExplain}` : '';
-
-      let studentFeedbackPart = '\n\n🎯 *නිවැරදි පිළිතුරු දුන් සිසුන් (Correct Answers):*\n';
-      if (correctNames.length > 0) {
-        studentFeedbackPart += correctNames.map(n => `• ${n} (+1 Mark)`).join('\n');
-      } else {
-        studentFeedbackPart += `• (කිසිවෙකු නැත / None)`;
-      }
-
-      studentFeedbackPart += '\n\n❌ *වැරදි පිළිතුරු දුන් සිසුන් (Wrong Answers):*\n';
-      if (wrongNames.length > 0) {
-        studentFeedbackPart += wrongNames.map(n => `• ${n}`).join('\n');
-      } else {
-        studentFeedbackPart += `• (කිසිවෙකු නැත / None)`;
-      }
-
       const answerRevealMsg = 
-        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] (v3.0 Live) නිවැරදි පිළිතුර:*\n` +
-        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}${studentFeedbackPart}\n\n` +
-        `ℹ️ කාලය අවසන් වන තෙක් පිළිතුරු නොදුන් සිසුන් "පිළිතුරු නොදුන්" ලෙස සලකනු ලැබේ.`;
+        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර:*\n` +
+        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}`;
       
       await autoPostToWhatsAppChannel(answerRevealMsg);
 
