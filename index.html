@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="si">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>A/L MCQ Quiz Portal — උසස් පෙළ බහුවරණ ප්‍රශ්න පත්‍ර</title>
+  
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="A/L MCQ Quiz Portal">
+  <meta property="og:url" content="https://dmadushanka.github.io/A-L/index.html">
+  <meta property="og:title" content="🎓 අ.පො.ස. (උසස් පෙළ) MCQ Quiz Portal">
+  <meta property="og:description" content="දේශපාලන විද්‍යාව, ඉතිහාසය, බෞද්ධ ශිෂ්ටාචාරය සහ සිංහල පසුගිය MCQ ප්‍රශ්න පත්‍ර සහ නිවැරදි විග්‍රහයන් සහිත අන්තර්ක්‍රියාකාරී Quiz ඇප් එක.">
+  <meta property="og:image" content="https://dmadushanka.github.io/A-L/history2020.png">
+  <meta property="og:image:secure_url" content="https://dmadushanka.github.io/A-L/history2020.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+Sinhala:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-dark: #070913;
+      --bg-card: rgba(15, 21, 45, 0.75);
+      --bg-card-hover: rgba(25, 34, 70, 0.85);
+      --border-card: rgba(0, 242, 254, 0.22);
+      
+      --cyan-glow: #00f2fe;
+      --purple-glow: #7f00ff;
+      --gold-glow: #d4af37;
+      --amber-accent: #f59e0b;
+      
+      --text-main: #f8fafc;
+      --text-sub: #cbd5e1;
+      --text-muted: #94a3b8;
+
+      --radius-lg: 24px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', 'Noto Serif Sinhala', sans-serif;
+      min-height: 100vh;
+      padding: 16px 14px 60px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Ambient Dynamic Floating Blobs */
+    .blob {
+      position: fixed;
+      border-radius: 50%;
+      filter: blur(120px);
+      z-index: -1;
+      opacity: 0.55;
+      animation: floatPulse 14s ease-in-out infinite alternate;
+    }
+
+    .blob-1 {
+      top: -10%;
+      left: -10%;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--cyan-glow), transparent 70%);
+    }
+
+    .blob-2 {
+      bottom: -10%;
+      right: -10%;
+      width: 550px;
+      height: 550px;
+      background: radial-gradient(circle, var(--purple-glow), transparent 70%);
+      animation-delay: -7s;
+    }
+
+    @keyframes floatPulse {
+      0% { transform: translate(0, 0) scale(1); }
+      50% { transform: translate(40px, -50px) scale(1.1); }
+      100% { transform: translate(-30px, 30px) scale(0.95); }
+    }
+
+    .app-container {
+      max-width: 900px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* Modern Hero Header */
+    .hero-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 28px 26px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 220px;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(0, 242, 254, 0.06));
+      pointer-events: none;
+    }
+
+    .hero-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(0, 242, 254, 0.12);
+      border: 1px solid rgba(0, 242, 254, 0.3);
+      color: var(--cyan-glow);
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      animation: pulseGlow 2.5s infinite alternate;
+    }
+
+    @keyframes pulseGlow {
+      from { box-shadow: 0 0 10px rgba(0, 242, 254, 0.2); }
+      to { box-shadow: 0 0 22px rgba(0, 242, 254, 0.5); }
+    }
+
+    .sound-toggle-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s ease;
+    }
+
+    .sound-toggle-btn:hover {
+      background: rgba(0, 242, 254, 0.2);
+      border-color: var(--cyan-glow);
+    }
+
+    .hero-title {
+      font-size: 1.85rem;
+      font-weight: 800;
+      line-height: 1.35;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #ffffff 0%, var(--cyan-glow) 50%, var(--purple-glow) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-family: 'Noto Serif Sinhala', serif;
+    }
+
+    .hero-sub {
+      font-size: 0.96rem;
+      color: var(--text-sub);
+      line-height: 1.6;
+      margin-bottom: 22px;
+    }
+
+    /* Stats Banner Bar */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 12px;
+    }
+
+    .stat-item {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: var(--radius-sm);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .stat-icon {
+      font-size: 1.5rem;
+    }
+
+    .stat-text h4 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #fff;
+    }
+
+    .stat-text p {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Subject Tabs & Search Controls */
+    .controls-card {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .search-box {
+      position: relative;
+      width: 100%;
+    }
+
+    .search-input {
+      width: 100%;
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-md);
+      padding: 14px 18px 14px 46px;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      font-family: inherit;
+      outline: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-input:focus {
+      border-color: var(--cyan-glow);
+      box-shadow: 0 0 20px rgba(0, 242, 254, 0.35);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.1rem;
+      color: var(--text-muted);
+    }
+
+    /* Subject Pills Strip */
+    .subject-pills {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+      scrollbar-width: none;
+    }
+
+    .subject-pills::-webkit-scrollbar {
+      display: none;
+    }
+
+    .pill-btn {
+      background: var(--bg-card);
+      backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-sub);
+      padding: 10px 20px;
+      border-radius: 30px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      font-family: 'Noto Serif Sinhala', serif;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .pill-btn:hover {
+      border-color: var(--cyan-glow);
+      color: #fff;
+      transform: translateY(-2px);
+    }
+
+    .pill-btn.active {
+      background: linear-gradient(135deg, var(--cyan-glow), var(--purple-glow));
+      border-color: transparent;
+      color: #ffffff;
+      box-shadow: 0 6px 22px rgba(0, 242, 254, 0.4);
+    }
+
+    /* Paper Cards Grid */
+    .papers-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: 18px;
+    }
+
+    .paper-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.09);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 16px;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .paper-card:hover {
+      background: var(--bg-card-hover);
+      border-color: var(--cyan-glow);
+      transform: translateY(-6px) scale(1.02);
+      box-shadow: 0 16px 40px rgba(0, 242, 254, 0.25);
+    }
+
+    .paper-thumb {
+      width: 100%;
+      height: 135px;
+      border-radius: var(--radius-md);
+      object-fit: cover;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: #151b35;
+      transition: transform 0.3s ease;
+    }
+
+    .paper-card:hover .paper-thumb {
+      transform: scale(1.04);
+    }
+
+    .paper-info h3 {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--text-main);
+      line-height: 1.45;
+      margin-bottom: 6px;
+      font-family: 'Noto Serif Sinhala', serif;
+    }
+
+    .paper-sub-lbl {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--cyan-glow);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      display: inline-block;
+    }
+
+    .paper-meta-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .meta-tag {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 8px;
+    }
+
+    .meta-tag.highlight {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.35);
+      color: var(--amber-accent);
+    }
+
+    .launch-btn {
+      width: 100%;
+      background: linear-gradient(135deg, var(--cyan-glow), #00a8ff);
+      border: none;
+      color: #070913;
+      padding: 13px 20px;
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      font-weight: 800;
+      font-family: 'Noto Serif Sinhala', serif;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.22s ease;
+      box-shadow: 0 4px 18px rgba(0, 242, 254, 0.35);
+      text-decoration: none;
+    }
+
+    .launch-btn:hover {
+      background: linear-gradient(135deg, #33f5ff, var(--cyan-glow));
+      box-shadow: 0 6px 26px rgba(0, 242, 254, 0.55);
+      transform: translateY(-2px);
+    }
+
+    /* Empty Search State */
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 50px 20px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      margin-bottom: 12px;
+    }
+
+    .empty-title {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .empty-sub {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 12px 10px 40px; }
+      .hero-title { font-size: 1.5rem; }
+      .hero-card { padding: 22px 18px; }
+      .papers-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+
+  <div class="app-container">
+
+    <!-- Hero Header -->
+    <header class="hero-card">
+      <div class="hero-top">
+        <span class="brand-badge">🎓 A/L MCQ QUIZ PORTAL</span>
+        <button class="sound-toggle-btn" id="soundBtn" onclick="toggleSound()">🔊 ශබ්ද</button>
+      </div>
+
+      <h1 class="hero-title">උසස් පෙළ බහුවරණ ප්‍රශ්න පත්‍ර<br>ස්වයං ඇගයීම් පෝර්ටලය</h1>
+      <p class="hero-sub">
+        දේශපාලන විද්‍යාව, ශ්‍රී ලංකා ඉතිහාසය, බෞද්ධ ශිෂ්ටාචාරය සහ සිංහල පසුගිය MCQ ප්‍රශ්න පත්‍ර, 
+        නිවැරදි ඓතිහාසික විග්‍රහයන් සහ කාල ගණක සමඟ පුහුණු වන්න.
+      </p>
+
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-icon">📑</span>
+          <div class="stat-text">
+            <h4 id="statPapersCount">32+</h4>
+            <p>ප්‍රශ්න පත්‍ර</p>
+          </div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">💡</span>
+          <div class="stat-text">
+            <h4>1,280+</h4>
+            <p>MCQ ප්‍රශ්න & විග්‍රහයන්</p>
+          </div>
+        </div>
+        <div class="stat-item">
+          <span class="stat-icon">⏱️</span>
+          <div class="stat-text">
+            <h4>Real-time</h4>
+            <p>ටයිමර් & ලකුණු</p>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- Search & Filter Controls -->
+    <div class="controls-card">
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="searchInput" class="search-input" placeholder="ප්‍රශ්න පත්‍රය, විෂය හෝ වර්ෂය සෙවුම් කරන්න (e.g. 2020, ඉතිහාසය)..." oninput="filterPapers()">
+      </div>
+
+      <div class="subject-pills" id="subjectPills">
+        <button class="pill-btn active" onclick="selectSubjectFilter('all', this)">✨ සියලුම විෂයයන්</button>
+        <button class="pill-btn" onclick="selectSubjectFilter('pl', this)">🏛️ දේශපාලන විද්‍යාව</button>
+        <button class="pill-btn" onclick="selectSubjectFilter('hist', this)">📜 ශ්‍රී ලංකා ඉතිහාසය</button>
+        <button class="pill-btn" onclick="selectSubjectFilter('bc', this)">☸️ බෞද්ධ ශිෂ්ටාචාරය</button>
+        <button class="pill-btn" onclick="selectSubjectFilter('sin', this)">✍️ සිංහල</button>
+      </div>
+    </div>
+
+    <!-- Dynamic Interactive Papers Grid -->
+    <main class="papers-grid" id="papersGrid"></main>
+
+  </div>
+
+  <script>
+    // Initialize Telegram WebApp SDK if available
+    if (window.Telegram && window.Telegram.WebApp) {
+      window.Telegram.WebApp.ready();
+      window.Telegram.WebApp.expand();
+    }
+
+    // Complete Database of All 32 A/L Past Papers
+    const PAPERS_DB = [
+      // Political Science
+      { id: 'pl2016', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2016', title: 'දේශපාලන විද්‍යාව 2016 — I පත්‍රය', mcqs: 40, file: 'pl2016.html', img: 'pl2016.png' },
+      { id: 'pl2017', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2017', title: 'දේශපාලන විද්‍යාව 2017 — I පත්‍රය', mcqs: 40, file: 'pl2017.html', img: 'pl2017.png' },
+      { id: 'pl2018', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2018', title: 'දේශපාලන විද්‍යාව 2018 — I පත්‍රය', mcqs: 40, file: 'pl2018.html', img: 'pl2018.png' },
+      { id: 'pl2019', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2019', title: 'දේශපාලන විද්‍යාව 2019 — I පත්‍රය', mcqs: 40, file: 'pl2019.html', img: 'pl2019.png' },
+      { id: 'pl2020', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2020', title: 'දේශපාලන විද්‍යාව 2020 — I පත්‍රය', mcqs: 40, file: 'pl2020.html', img: 'pl2020.png' },
+      { id: 'pl2021', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2021', title: 'දේශපාලන විද්‍යාව 2021 — I පත්‍රය', mcqs: 40, file: 'pl2021.html', img: 'pl2021.png' },
+      { id: 'pl2023', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2023', title: 'දේශපාලන විද්‍යාව 2023 — I පත්‍රය', mcqs: 40, file: 'pl2023.html', img: 'pl2023.png' },
+      { id: 'pl2024', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2024', title: 'දේශපාලන විද්‍යාව 2024 — I පත්‍රය', mcqs: 40, file: 'pl2024.html', img: 'pl2024.png' },
+      { id: 'pl2025', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2025', title: 'දේශපාලන විද්‍යාව 2025 — I පත්‍රය', mcqs: 40, file: 'pl2025.html', img: 'pl2025.png' },
+
+      // Sri Lanka History
+      { id: 'hist2015', sub: 'hist', subName: 'ශ්‍රී ලංකා ඉතිහාසය', year: '2015', title: 'ශ්‍රී ලංකා ඉතිහාසය 2015 — I පත්‍රය', mcqs: 40, file: 'history2015.html', img: 'history2015.png' },
+      { id: 'hist2016', sub: 'hist', subName: 'ශ්‍රී ලංකා ඉතිහාසය', year: '2016', title: 'ශ්‍රී ලංකා ඉතිහාසය 2016 — I පත්‍රය', mcqs: 40, file: 'history2016.html', img: 'history2016.png' },
+      { id: 'hist2017', sub: 'hist', subName: 'ශ්‍රී ලංකා ඉතිහාසය', year: '2017', title: 'ශ්‍රී ලංකා ඉතිහාසය 2017 — I පත්‍රය', mcqs: 40, file: 'history2017.html', img: 'history2017.png' },
+      { id: 'hist2018', sub: 'hist', subName: 'ශ්‍රී ලංකා ඉතිහාසය', year: '2018', title: 'ශ්‍රී ලංකා ඉතිහාසය 2018 — I පත්‍රය', mcqs: 40, file: 'history2018.html', img: 'history2018.png' },
+      { id: 'hist2019', sub: 'hist', subName: 'ශ්‍රී ලංකා ඉතිහාසය', year: '2019', title: 'ශ්‍රී ලංකා ඉතිහාසය 2019 — I පත්‍රය', mcqs: 40, file: 'history2019.html', img: 'history2019.png' },
+      { id: 'hist2020', sub: 'hist', subName: 'ශ්‍රී ලංකා ඉතිහාසය', year: '2020', title: 'ශ්‍රී ලංකා ඉතිහාසය 2020 — I පත්‍රය', mcqs: 40, file: 'history2020.html', img: 'history2020.png' },
+      { id: 'hist2022', sub: 'hist', subName: 'ශ්‍රී ලංකා ඉතිහාසය', year: '2022', title: 'ශ්‍රී ලංකා ඉතිහාසය 2022 — I පත්‍රය', mcqs: 40, file: 'history2022.html', img: 'history2022.png' },
+
+      // Buddhist Civilization
+      { id: 'bc1', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2011', title: 'බෞද්ධ ශිෂ්ටාචාරය 2011 (BC-1)', mcqs: 40, file: 'BC1.html', img: 'BC1.png' },
+      { id: 'bc2', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2012', title: 'බෞද්ධ ශිෂ්ටාචාරය 2012 (BC-2)', mcqs: 40, file: 'BC2.html', img: 'BC2.png' },
+      { id: 'bc3', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2013', title: 'බෞද්ධ ශිෂ්ටාචාරය 2013 (BC-3)', mcqs: 40, file: 'BC3.html', img: 'BC3.png' },
+      { id: 'bc4', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2014', title: 'බෞද්ධ ශිෂ්ටාචාරය 2014 (BC-4)', mcqs: 40, file: 'BC4.html', img: 'BC4.png' },
+      { id: 'bc5', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2015', title: 'බෞද්ධ ශිෂ්ටාචාරය 2015 (BC-5)', mcqs: 40, file: 'BC5.html', img: 'BC5.png' },
+      { id: 'bc6', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2016', title: 'බෞද්ධ ශිෂ්ටාචාරය 2016 (BC-6)', mcqs: 40, file: 'BC6.html', img: 'BC6.png' },
+      { id: 'bc7', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2017', title: 'බෞද්ධ ශිෂ්ටාචාරය 2017 (BC-7)', mcqs: 40, file: 'BC7.html', img: 'BC7.png' },
+      { id: 'bc8', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2018', title: 'බෞද්ධ ශිෂ්ටාචාරය 2018 (BC-8)', mcqs: 40, file: 'BC8.html', img: 'BC8.png' },
+      { id: 'bc9', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2019', title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (BC-9)', mcqs: 40, file: 'BC9.html', img: 'BC9.png' },
+      { id: 'bc10', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2020', title: 'බෞද්ධ ශිෂ්ටාචාරය 2020 (BC-10)', mcqs: 40, file: 'BC10.html', img: 'BC10.png' },
+      { id: 'bc11', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2021', title: 'බෞද්ධ ශිෂ්ටාචාරය 2021 (BC-11)', mcqs: 40, file: 'BC11.html', img: 'BC11.png' },
+
+      // Sinhala
+      { id: 'sin2020', sub: 'sin', subName: 'සිංහල', year: '2020', title: 'සිංහල 2020 — I පත්‍රය MCQ', mcqs: 40, file: 'sinhala2020.html', img: 'sinhala2020.png' },
+      { id: 'sin2021', sub: 'sin', subName: 'සිංහල', year: '2021', title: 'සිංහල 2021 — I පත්‍රය MCQ', mcqs: 40, file: 'sinhala2021.html', img: 'sinhala2021.png' },
+      { id: 'sin2022', sub: 'sin', subName: 'සිංහල', year: '2022', title: 'සිංහල 2022 — I පත්‍රය MCQ', mcqs: 40, file: 'sinhala2022.html', img: 'sinhala2022.png' },
+      { id: 'sin2024', sub: 'sin', subName: 'සිංහල', year: '2024', title: 'සිංහල 2024 — I පත්‍රය MCQ', mcqs: 40, file: 'sinhala2024.html', img: 'sinhala2024.png' },
+      { id: 'sin2025', sub: 'sin', subName: 'සිංහල', year: '2025', title: 'සිංහල 2025 — I පත්‍රය MCQ', mcqs: 40, file: 'sinhala2025.html', img: 'sinhala2025.png' }
+    ];
+
+    // State
+    let activeSubject = 'all';
+    let searchQuery = '';
+    let soundEnabled = true;
+
+    // Web Audio Synthesizer
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+    function playClickSound() {
+      if (!soundEnabled) return;
+      try {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(520, now);
+        osc.frequency.exponentialRampToValueAtTime(880, now + 0.05);
+        gain.gain.setValueAtTime(0.1, now);
+        gain.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start(now);
+        osc.stop(now + 0.06);
+      } catch (e) { }
+    }
+
+    function toggleSound() {
+      soundEnabled = !soundEnabled;
+      document.getElementById('soundBtn').innerText = soundEnabled ? '🔊 ශබ්ද' : '🔇 ශබ්ද';
+    }
+
+    function selectSubjectFilter(subCode, btnEl) {
+      activeSubject = subCode;
+      playClickSound();
+
+      document.querySelectorAll('.pill-btn').forEach(btn => btn.classList.remove('active'));
+      btnEl.classList.add('active');
+
+      renderGrid();
+    }
+
+    function filterPapers() {
+      searchQuery = document.getElementById('searchInput').value.toLowerCase().trim();
+      renderGrid();
+    }
+
+    function renderGrid() {
+      const grid = document.getElementById('papersGrid');
+
+      const filtered = PAPERS_DB.filter(p => {
+        const matchesSub = activeSubject === 'all' || p.sub === activeSubject;
+        const matchesSearch = !searchQuery || 
+          p.title.toLowerCase().includes(searchQuery) || 
+          p.subName.toLowerCase().includes(searchQuery) || 
+          p.year.includes(searchQuery);
+
+        return matchesSub && matchesSearch;
+      });
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon">🔍</div>
+            <div class="empty-title">ප්‍රශ්න පත්‍ර හමුවූයේ නැත</div>
+            <div class="empty-sub">ඔබගේ සෙවුම් පදය හෝ විෂය තේරීම පරීක්ෂා කර නැවත උත්සාහ කරන්න.</div>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(p => `
+        <article class="paper-card">
+          <div>
+            <img class="paper-thumb" src="${p.img}" alt="${p.title}" loading="lazy">
+            <div style="margin-top: 14px;">
+              <span class="paper-sub-lbl">${p.subName}</span>
+              <div class="paper-info">
+                <h3>${p.title}</h3>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <div class="paper-meta-row" style="margin-bottom: 14px;">
+              <span class="meta-tag">📝 ${p.mcqs} MCQs</span>
+              <span class="meta-tag highlight">💡 විග්‍රහයන් සහිතයි</span>
+              <span class="meta-tag">📅 ${p.year}</span>
+            </div>
+
+            <a href="${p.file}" class="launch-btn" onclick="playClickSound()">
+              <span>🚀 පටන් ගන්න (Start Quiz)</span>
+            </a>
+          </div>
+        </article>
+      `).join('');
+    }
+
+    // Initial Launch
+    document.getElementById('statPapersCount').innerText = `${PAPERS_DB.length}+`;
+    renderGrid();
+  </script>
+</body>
+
+</html>

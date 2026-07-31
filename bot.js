@@ -1,7 +1,5 @@
 import TelegramBot from 'node-telegram-bot-api';
 import dotenv from 'dotenv';
-import path from 'path';
-import fs from 'fs';
 
 // Load environment variables
 dotenv.config();
@@ -82,13 +80,27 @@ if (!BOT_TOKEN || BOT_TOKEN === 'your_telegram_bot_token_here') {
 // Initialize Telegram Bot
 const bot = new TelegramBot(BOT_TOKEN, { polling: true });
 
+// Configure Permanent In-Chat WebApp Menu Button
+const portalUrl = `${BASE_URL}/index.html`;
+
+bot.setChatMenuButton({
+  menu_button: JSON.stringify({
+    type: 'web_app',
+    text: '🎓 Quiz Portal',
+    web_app: { url: portalUrl }
+  })
+}).catch(err => console.log('Menu Button setup notice:', err.message));
+
 console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
-console.log(`🔗 WebApp Base URL: ${BASE_URL}`);
+console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
 
 // Helper: Generate Keyboard for Subject Selection (Step 1)
 function getSubjectKeyboard() {
   return {
     inline_keyboard: [
+      [
+        { text: '✨ 🚀 Open Animated Quiz Portal (සියලුම ප්‍රශ්න)', web_app: { url: portalUrl } }
+      ],
       [{ text: QUIZ_DATA.pl.name, callback_data: 'sub_pl' }],
       [{ text: QUIZ_DATA.hist.name, callback_data: 'sub_hist' }],
       [{ text: QUIZ_DATA.bc.name, callback_data: 'sub_bc' }],
@@ -134,9 +146,9 @@ bot.onText(/\/start/, (msg) => {
   const firstName = msg.from.first_name || 'යහළුවා';
 
   const welcomeMessage = 
-    `👋 **ආයුබෝවන් ${firstName}!**\n\n` +
+    `✨ **ආයුබෝවන් ${firstName}!**\n\n` +
     `අ.පො.ස. (උසස් පෙළ) MCQ Quiz Bot වෙත සාදරයෙන් පිළිගනිමු! 🎓\n\n` +
-    `ඔබට අවශ්‍ය **විෂය (Subject)** පහතින් තෝරන්න:`;
+    `ඔබට **Telegram තුළම සජීවී Animated Quiz Portal එක** විවෘත කිරීමට පහත **✨ 🚀 Open Animated Quiz Portal** බොත්තම හෝ ඔබගේ විෂය (Subject) පහතින් තෝරන්න:`;
 
   bot.sendMessage(chatId, welcomeMessage, {
     parse_mode: 'Markdown',
