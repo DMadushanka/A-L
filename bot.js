@@ -4,6 +4,8 @@ import fs from 'fs';
 import path from 'path';
 import { 
   registerUser, 
+  registerGroup,
+  unregisterGroup,
   recordScore, 
   getLeaderboard, 
   getOverallLeaderboard, 
@@ -441,27 +443,38 @@ setInterval(async () => {
 
     const db = readDb();
     const allUsers = Object.keys(db.users);
+    const allGroups = Object.keys(db.groups || {});
+    const allTargets = [...new Set([...allUsers, ...allGroups])];
 
     for (const job of pendingJobs) {
-      console.log(`⏰ Executing scheduled broadcast job [${job.id}] to ${allUsers.length} users...`);
+      console.log(`⏰ Executing scheduled broadcast job [${job.id}] to ${allUsers.length} users and ${allGroups.length} groups...`);
       
       const broadcastText = 
         `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
         `${job.message}`;
 
-      const launchKb = job.paperKey ? {
-        inline_keyboard: [
-          [{ text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${job.paperKey}` }]
-        ]
-      } : undefined;
+      for (const targetChatId of allTargets) {
+        const isGroup = targetChatId.toString().startsWith('-');
+        const launchKb = job.paperKey ? {
+          inline_keyboard: [
+            [
+              isGroup
+                ? { text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', url: `${BASE_URL}/index.html` }
+                : { text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${job.paperKey}` }
+            ]
+          ]
+        } : undefined;
 
-      for (const targetChatId of allUsers) {
         try {
           await bot.sendMessage(targetChatId, broadcastText, {
             parse_mode: 'Markdown',
             reply_markup: launchKb
           });
-        } catch (err) { }
+        } catch (err) {
+          if (err.message.includes('kicked') || err.message.includes('not found') || err.message.includes('deactivated')) {
+            if (isGroup) unregisterGroup(targetChatId);
+          }
+        }
       }
 
       markJobSent(job.id);
@@ -471,11 +484,16 @@ setInterval(async () => {
   }
 }, 30000);
 
-// Middleware: Auto Register User & Custom Button Text Handler
+// Middleware: Auto Register User / Group & Custom Button Text Handler
 bot.on('message', (msg) => {
-  if (msg.from) {
-    registerUser(msg.from);
+  if (msg.chat) {
+    if (msg.chat.type === 'private' && msg.from) {
+      registerUser(msg.from);
+    } else if (msg.chat.type === 'group' || msg.chat.type === 'supergroup') {
+      registerGroup(msg.chat);
+    }
   }
+
   if (msg.text) {
     console.log(`📩 Incoming message in [${msg.chat.type}] (Chat ID: ${msg.chat.id}) from ${msg.from?.first_name || 'User'}: "${msg.text}"`);
 
@@ -488,9 +506,13 @@ bot.on('message', (msg) => {
   }
 });
 
-// Listener: Auto Welcome when Bot is added to a Telegram Group
+// Listener: Auto Welcome when Bot is added to a Telegram Group & Register Group
 bot.on('new_chat_members', async (msg) => {
   try {
+    if (msg.chat && (msg.chat.type === 'group' || msg.chat.type === 'supergroup')) {
+      registerGroup(msg.chat);
+    }
+
     const newMembers = msg.new_chat_members || [];
     const me = await bot.getMe().catch(() => null);
     if (!me) return;
@@ -515,6 +537,18 @@ bot.on('new_chat_members', async (msg) => {
   } catch (err) {
     console.error('Error handling new_chat_members:', err.message);
   }
+});
+
+// Listener: Auto Unregister Group when Bot is removed/kicked
+bot.on('left_chat_member', async (msg) => {
+  try {
+    const leftMember = msg.left_chat_member;
+    const me = await bot.getMe().catch(() => null);
+    if (leftMember && me && leftMember.id === me.id) {
+      console.log(`ℹ️ Bot removed from Group (ID: ${msg.chat.id})`);
+      unregisterGroup(msg.chat.id);
+    }
+  } catch (err) {}
 });
 
 // Function: Send Main Start Menu with Persistent Reply Keyboard
@@ -605,10 +639,12 @@ bot.onText(/\/admin/i, (msg) => {
 
   const db = readDb();
   const totalUsers = Object.keys(db.users).length;
+  const totalGroups = Object.keys(db.groups || {}).length;
 
   const adminText = 
     `🛡️ **Admin Control Panel — Live Quiz & Broadcast Manager**\n\n` +
-    `📊 **මුළු ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n\n` +
+    `📊 **ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n` +
+    `👥 **ලියාපදිංචි Groups ගණන:** ${totalGroups}\n\n` +
     `කරුණාකර ඔබ කිරීමට කැමති ක්‍රියාව පහතින් තෝරන්න:`;
 
   const adminKeyboard = {
@@ -637,18 +673,24 @@ bot.onText(/\/broadcast (.+)/i, async (msg, match) => {
   const broadcastMsg = match[1];
   const db = readDb();
   const allUsers = Object.keys(db.users);
+  const allGroups = Object.keys(db.groups || {});
+  const totalTargets = allUsers.length + allGroups.length;
 
-  await bot.sendMessage(chatId, `📢 **Broadcast ආරම්භ විය!** සිසුන් ${allUsers.length} දෙනෙකු වෙත යැවෙමින් පවතී...`);
+  await bot.sendMessage(chatId, `📢 **Broadcast ආරම්භ විය!** සිසුන් ${allUsers.length} දෙනෙකු සහ Groups ${allGroups.length} ක් වෙත යැවෙමින් පවතී...`);
 
   let count = 0;
-  for (const uid of allUsers) {
+  for (const targetId of [...allUsers, ...allGroups]) {
     try {
-      await bot.sendMessage(uid, `📢 **විශේෂ දැනුම්දීමයි:**\n\n${broadcastMsg}`, { parse_mode: 'Markdown' });
+      await bot.sendMessage(targetId, `📢 **විශේෂ දැනුම්දීමයි:**\n\n${broadcastMsg}`, { parse_mode: 'Markdown' });
       count++;
-    } catch (e) { }
+    } catch (e) {
+      if (e.message.includes('kicked') || e.message.includes('not found') || e.message.includes('deactivated')) {
+        if (targetId.toString().startsWith('-')) unregisterGroup(targetId);
+      }
+    }
   }
 
-  await bot.sendMessage(chatId, `✅ Broadcast සාර්ථකව අවසන්! සිසුන් **${count}/${allUsers.length}** දෙනෙකුට පණිවිඩය ලැබුණි.`);
+  await bot.sendMessage(chatId, `✅ Broadcast සාර්ථකව අවසන්! සිසුන් සහ Groups **${count}/${totalTargets}** ක් වෙත පණිවිඩය ලැබුණි.`);
 });
 
 // Command: /schedule <YYYY-MM-DD HH:MM> <message>
@@ -846,19 +888,20 @@ bot.on('callback_query', async (query) => {
           paperKey: paperKey
         });
 
+        const db = readDb();
+        const allUsers = Object.keys(db.users);
+        const allGroups = Object.keys(db.groups || {});
+
         // 1. Send Confirmation to Admin
         const confirmText = 
           `✅ **සජීවී ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව Schedule කරන ලදී!**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
           `⏰ **ආරම්භ වන වේලාව:** ${dateFormatted}\n\n` +
-          `📢 සියලුම ලියාපදිංචි සිසුන් වෙත තරඟ දැනුම්දීම (Announcement Notification) යවනු ලැබේ.`;
+          `📢 සියලුම ලියාපදිංචි සිසුන් (${allUsers.length}) සහ Groups (${allGroups.length}) වෙත තරඟ දැනුම්දීම යවනු ලැබේ.`;
 
         await bot.editMessageText(confirmText, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown' }).catch(e => {});
 
-        // 2. Broadcast Announcement Card to All Registered Students
-        const db = readDb();
-        const allUsers = Object.keys(db.users);
-
+        // 2. Broadcast Announcement Card to All Registered Students & Groups
         const announceMsg = 
           `🚀 **විශේෂ දැනුම්දීමයි — සජීවී ප්‍රශ්න පත්‍ර තරඟය (Live Quiz Competition)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
@@ -869,16 +912,34 @@ bot.on('callback_query', async (query) => {
           `• Real-time Timer සහ Instant Confetti 🎉\n\n` +
           `👇 පහත **Join Competition** බොත්තම මගින් සූදානම් වන්න:`;
 
-        const announceKb = {
+        const userAnnounceKb = {
           inline_keyboard: [
             [{ text: '🎯 Join Competition (සූදානම් වන්න)', callback_data: `paper_${subId}_${yearKey}` }]
           ]
         };
 
+        const groupAnnounceKb = {
+          inline_keyboard: [
+            [{ text: '🎯 Join Competition (සූදානම් වන්න)', callback_data: `paper_${subId}_${yearKey}` }]
+          ]
+        };
+
+        // Send to Users
         for (const uid of allUsers) {
           try {
-            await bot.sendMessage(uid, announceMsg, { parse_mode: 'Markdown', reply_markup: announceKb });
+            await bot.sendMessage(uid, announceMsg, { parse_mode: 'Markdown', reply_markup: userAnnounceKb });
           } catch (e) { }
+        }
+
+        // Send to Groups
+        for (const gid of allGroups) {
+          try {
+            await bot.sendMessage(gid, announceMsg, { parse_mode: 'Markdown', reply_markup: groupAnnounceKb });
+          } catch (e) {
+            if (e.message.includes('kicked') || e.message.includes('not found') || e.message.includes('deactivated')) {
+              unregisterGroup(gid);
+            }
+          }
         }
       }
       await safeAnswerCallback(query.id);
@@ -894,7 +955,7 @@ bot.on('callback_query', async (query) => {
 
       const text = 
         `📢 **Instant Broadcast Message**\n\n` +
-        `සියලුම ලියාපදිංචි සිසුන්ට සෘජුවම පණිවිඩයක් යැවීමට පහත පරිදි Command එක Type කර යවන්න:\n\n` +
+        `සියලුම ලියාපදිංචි සිසුන්ට සහ Groups වලට සෘජුවම පණිවිඩයක් යැවීමට පහත පරිදි Command එක Type කර යවන්න:\n\n` +
         `👉 \`/broadcast ඔබගේ පණිවිඩය මෙතැනට\`\n\n` +
         `උදාහරණයක් ලෙස:\n` +
         `\`/broadcast අද රාත්‍රී 8.00 ට 2020 ඉතිහාසය පත්‍රය සජීවීව පැවැත්වේ.\``;
@@ -914,17 +975,19 @@ bot.on('callback_query', async (query) => {
 
       const db = readDb();
       const totalUsers = Object.keys(db.users).length;
+      const totalGroups = Object.keys(db.groups || {}).length;
 
       const adminText = 
         `🛡️ **Admin Control Panel — Live Quiz & Broadcast Manager**\n\n` +
-        `📊 **මුළු ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n\n` +
+        `📊 **ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n` +
+        `👥 **ලියාපදිංචි Groups ගණන:** ${totalGroups}\n\n` +
         `කරුණාකර ඔබ කිරීමට කැමති ක්‍රියාව පහතින් තෝරන්න:`;
 
       const adminKeyboard = {
         inline_keyboard: [
           [{ text: '🚀 Publish Live Quiz & Schedule Time', callback_data: 'adm_sched_step1' }],
           [{ text: '📢 Instant Broadcast Message', callback_data: 'adm_broadcast_prompt' }],
-          [{ text: '📊 ලියාපදිංචි සිසුන් ගණන (Stats)', callback_data: 'adm_stats' }]
+          [{ text: '📊 ලියාපදිංචි සිසුන් හා Groups (Stats)', callback_data: 'adm_stats' }]
         ]
       };
 
@@ -942,11 +1005,13 @@ bot.on('callback_query', async (query) => {
 
       const db = readDb();
       const totalUsers = Object.keys(db.users).length;
+      const totalGroups = Object.keys(db.groups || {}).length;
       const totalScoresRecorded = Object.values(db.scores).reduce((acc, curr) => acc + curr.length, 0);
 
       const statsText = 
         `📊 **Bot Statistics Report**\n\n` +
-        `👥 **ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n` +
+        `👤 **ලියාපදිංචි සිසුන් ගණන:** ${totalUsers}\n` +
+        `👥 **ලියාපදිංචි Groups ගණන:** ${totalGroups}\n` +
         `📝 **අවසන් කළ ප්‍රශ්න පත්‍ර ගණන:** ${totalScoresRecorded}\n` +
         `📑 **සක්‍රීය ප්‍රශ්න පත්‍ර ගණන:** 32+`;
 

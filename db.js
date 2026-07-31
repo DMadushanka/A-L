@@ -6,6 +6,7 @@ const DB_FILE = path.resolve(process.cwd(), 'data_store.json');
 // Initial schema structure
 const initialData = {
   users: {},      // chatId -> { chatId, name, username, joinedAt }
+  groups: {},     // chatId -> { chatId, title, addedAt }
   scores: {},     // paperKey -> Array of { userId, name, username, score, total, timeSec, timestamp }
   schedules: []   // Array of { id, time, message, paperKey, sent }
 };
@@ -22,7 +23,9 @@ export function readDb() {
   initDb();
   try {
     const raw = fs.readFileSync(DB_FILE, 'utf8');
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    if (!parsed.groups) parsed.groups = {};
+    return parsed;
   } catch (err) {
     console.error('Error reading data_store.json:', err.message);
     return initialData;
@@ -42,7 +45,7 @@ export function writeDb(data) {
 export function registerUser(user) {
   const db = readDb();
   const chatId = user.id || user.chatId;
-  if (!chatId) return;
+  if (!chatId || chatId.toString().startsWith('-')) return; // Ignore groups in user registration
 
   const name = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
   const username = user.username ? `@${user.username}` : '';
@@ -55,6 +58,32 @@ export function registerUser(user) {
   };
 
   writeDb(db);
+}
+
+// 1b. Register or Update Group
+export function registerGroup(chat) {
+  const db = readDb();
+  const chatId = chat.id || chat.chatId;
+  if (!chatId || !chatId.toString().startsWith('-')) return;
+
+  const title = chat.title || 'Telegram Group';
+
+  db.groups[chatId] = {
+    chatId,
+    title,
+    addedAt: db.groups[chatId]?.addedAt || new Date().toISOString()
+  };
+
+  writeDb(db);
+}
+
+// 1c. Unregister Group (if bot was kicked or removed)
+export function unregisterGroup(chatId) {
+  const db = readDb();
+  if (db.groups[chatId]) {
+    delete db.groups[chatId];
+    writeDb(db);
+  }
 }
 
 // 2. Record Quiz Score
