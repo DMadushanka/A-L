@@ -220,7 +220,14 @@ async function sendNextNativePoll(chatId) {
   const qNum = session.qIndex + 1;
   const totalQ = session.questions.length;
 
-  const rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+  let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+  
+  // Clean HTML tags and formatting
+  rawQText = cleanText(rawQText, 300);
+
+  // Strip duplicate leading question numbers like "19. ", "19.", "19)", "19 - "
+  rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
+
   const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 300);
   const cleanOpts = (q.o || []).map(o => cleanText(o, 100));
   const cleanExplain = cleanText(q.e || '', 200);
