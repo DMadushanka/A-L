@@ -16,9 +16,9 @@ import {
 // Load environment variables
 dotenv.config();
 
-const BOT_TOKEN = process.env.BOT_TOKEN || '';
-const BASE_URL = process.env.BASE_URL || 'https://dmadushanka.github.io/A-L';
-const ADMIN_ID = process.env.ADMIN_ID || '';
+const BOT_TOKEN = (process.env.BOT_TOKEN || '').trim();
+const BASE_URL = (process.env.BASE_URL || 'https://dmadushanka.github.io/A-L').trim();
+const ADMIN_ID = (process.env.ADMIN_ID || '').trim();
 
 // Global Error Handlers to keep the bot process alive 24/7
 process.on('unhandledRejection', (reason) => {
@@ -91,6 +91,12 @@ const QUIZ_DATA = {
 // State storage for active Native Telegram Poll sessions
 const userPollSessions = {}; // chatId -> { subId, yearKey, paperKey, title, questions, qIndex, score, startTime }
 const pollIdMap = {}; // pollId -> { chatId, correctOption }
+
+// Helper: Check if user has Admin privileges
+function isAdminUser(userId) {
+  if (!ADMIN_ID) return true; // If no ADMIN_ID set, default to allow
+  return userId && userId.toString() === ADMIN_ID;
+}
 
 // Helper: Clean text formatting for Telegram Poll limits
 function cleanText(str, maxLen = 300) {
@@ -192,6 +198,7 @@ bot.setChatMenuButton({
 
 console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
 console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
+console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode)'}`);
 
 // Helper: Generate Keyboard for Subject Selection (Step 1)
 function getSubjectKeyboard() {
@@ -455,8 +462,9 @@ bot.onText(/\/(leaderboard|top)/, (msg) => {
 // Command: /admin (Admin Control Dashboard)
 bot.onText(/\/admin/, (msg) => {
   const chatId = msg.chat.id;
+  const fromId = msg.from ? msg.from.id : chatId;
 
-  if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) {
+  if (!isAdminUser(fromId)) {
     return bot.sendMessage(chatId, '⛔ ඔබට මෙම Command එක භාවිතා කිරීමට අවසර නොමැත.');
   }
 
@@ -488,7 +496,8 @@ bot.onText(/\/admin/, (msg) => {
 // Command: /broadcast <message>
 bot.onText(/\/broadcast (.+)/, async (msg, match) => {
   const chatId = msg.chat.id;
-  if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+  const fromId = msg.from ? msg.from.id : chatId;
+  if (!isAdminUser(fromId)) return;
 
   const broadcastMsg = match[1];
   const db = readDb();
@@ -510,7 +519,8 @@ bot.onText(/\/broadcast (.+)/, async (msg, match) => {
 // Command: /schedule <YYYY-MM-DD HH:MM> <message>
 bot.onText(/\/schedule (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (.+)/, (msg, match) => {
   const chatId = msg.chat.id;
-  if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+  const fromId = msg.from ? msg.from.id : chatId;
+  if (!isAdminUser(fromId)) return;
 
   const timeStr = match[1];
   const message = match[2];
@@ -573,6 +583,7 @@ bot.on('callback_query', async (query) => {
   const chatId = query.message.chat.id;
   const messageId = query.message.message_id;
   const data = query.data;
+  const fromId = query.from ? query.from.id : chatId;
 
   if (query.from) registerUser(query.from);
 
@@ -581,7 +592,10 @@ bot.on('callback_query', async (query) => {
     
     // Admin Step 1: Select Subject for Live Quiz
     if (data === 'adm_sched_step1') {
-      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      if (!isAdminUser(fromId)) {
+        await safeAnswerCallback(query.id, '⛔ ඔබට මෙයට අවසර නොමැත.');
+        return;
+      }
 
       const text = `🚀 **Publish Live Quiz — පියවර 1/3: විෂය තෝරන්න**\n\nසජීවීව පැවැත්වීමට අවශ්‍ය විෂය පහතින් තෝරන්න:`;
       const kb = {
@@ -601,7 +615,11 @@ bot.on('callback_query', async (query) => {
 
     // Admin Step 2: Select Paper Year
     if (data.startsWith('adm_sub_')) {
-      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      if (!isAdminUser(fromId)) {
+        await safeAnswerCallback(query.id, '⛔ ඔබට මෙයට අවසර නොමැත.');
+        return;
+      }
+
       const subId = data.replace('adm_sub_', '');
       const subData = QUIZ_DATA[subId];
 
@@ -628,7 +646,11 @@ bot.on('callback_query', async (query) => {
 
     // Admin Step 3: Select Schedule Time
     if (data.startsWith('adm_paper_')) {
-      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      if (!isAdminUser(fromId)) {
+        await safeAnswerCallback(query.id, '⛔ ඔබට මෙයට අවසර නොමැත.');
+        return;
+      }
+
       const parts = data.split('_');
       const subId = parts[2];
       const yearKey = parts[3];
@@ -662,7 +684,11 @@ bot.on('callback_query', async (query) => {
 
     // Admin Step 4: Finalize & Schedule Live Quiz
     if (data.startsWith('adm_pub_')) {
-      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      if (!isAdminUser(fromId)) {
+        await safeAnswerCallback(query.id, '⛔ ඔබට මෙයට අවසර නොමැත.');
+        return;
+      }
+
       const parts = data.split('_');
       const timeType = parts[2];
       const subId = parts[3];
@@ -722,9 +748,33 @@ bot.on('callback_query', async (query) => {
       return;
     }
 
+    // Admin Broadcast Prompt Option
+    if (data === 'adm_broadcast_prompt') {
+      if (!isAdminUser(fromId)) {
+        await safeAnswerCallback(query.id, '⛔ ඔබට මෙයට අවසර නොමැත.');
+        return;
+      }
+
+      const text = 
+        `📢 **Instant Broadcast Message**\n\n` +
+        `සියලුම ලියාපදිංචි සිසුන්ට සෘජුවම පණිවිඩයක් යැවීමට පහත පරිදි Command එක Type කර යවන්න:\n\n` +
+        `👉 \`/broadcast ඔබගේ පණිවිඩය මෙතැනට\`\n\n` +
+        `උදාහරණයක් ලෙස:\n` +
+        `\`/broadcast අද රාත්‍රී 8.00 ට 2020 ඉතිහාසය පත්‍රය සජීවීව පැවැත්වේ.\``;
+
+      const kb = { inline_keyboard: [[{ text: '⬅️ ආපසු (Admin Menu)', callback_data: 'adm_home' }]] };
+      await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
+      await safeAnswerCallback(query.id);
+      return;
+    }
+
     // Admin Home Menu
     if (data === 'adm_home') {
-      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      if (!isAdminUser(fromId)) {
+        await safeAnswerCallback(query.id, '⛔ ඔබට මෙයට අවසර නොමැත.');
+        return;
+      }
+
       const db = readDb();
       const totalUsers = Object.keys(db.users).length;
 
@@ -748,7 +798,11 @@ bot.on('callback_query', async (query) => {
 
     // Admin Stats Query
     if (data === 'adm_stats') {
-      if (ADMIN_ID && chatId.toString() !== ADMIN_ID.toString()) return;
+      if (!isAdminUser(fromId)) {
+        await safeAnswerCallback(query.id, '⛔ ඔබට මෙයට අවසර නොමැත.');
+        return;
+      }
+
       const db = readDb();
       const totalUsers = Object.keys(db.users).length;
       const totalScoresRecorded = Object.values(db.scores).reduce((acc, curr) => acc + curr.length, 0);
