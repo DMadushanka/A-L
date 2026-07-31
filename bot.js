@@ -25,6 +25,7 @@ const ADMIN_ID = (process.env.ADMIN_ID || '').trim();
 const CHANNEL_URL = (process.env.CHANNEL_URL || '').trim();
 const GROUP_URL = (process.env.GROUP_URL || '').trim();
 const FB_PAGE_URL = (process.env.FB_PAGE_URL || process.env.Facebook_Page || '').trim();
+const WA_CHANNEL_URL = (process.env.WA_CHANNEL_URL || 'https://whatsapp.com/channel/0029VbDIx2lHwXb4rvJNIV0D').trim();
 
 // Global Error Handlers to keep the bot process alive 24/7
 process.on('unhandledRejection', (reason) => {
@@ -265,11 +266,14 @@ function getSubjectKeyboard(isGroup = false) {
   ];
 
   const communityRow = [];
+  if (WA_CHANNEL_URL && WA_CHANNEL_URL.startsWith('http')) {
+    communityRow.push({ text: '🟢 WhatsApp Channel', url: WA_CHANNEL_URL });
+  }
   if (GROUP_URL && GROUP_URL.startsWith('http')) {
-    communityRow.push({ text: '💬 Discussion Group', url: GROUP_URL });
+    communityRow.push({ text: '💬 Group', url: GROUP_URL });
   }
   if (FB_PAGE_URL && FB_PAGE_URL.startsWith('http')) {
-    communityRow.push({ text: '📘 Facebook Page', url: FB_PAGE_URL });
+    communityRow.push({ text: '📘 Facebook', url: FB_PAGE_URL });
   }
 
   if (communityRow.length > 0) {

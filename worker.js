@@ -209,6 +209,7 @@ async function sendNextNativePoll(chatId, env) {
 async function handleUpdate(update, env) {
   const GROUP_URL = env.GROUP_URL || '';
   const FB_PAGE_URL = env.FB_PAGE_URL || '';
+  const WA_CHANNEL_URL = env.WA_CHANNEL_URL || 'https://whatsapp.com/channel/0029VbDIx2lHwXb4rvJNIV0D';
 
   const getSubjectKeyboard = (isGroup = false) => {
     const portalUrl = `${BASE_URL}/index.html`;
@@ -225,8 +226,9 @@ async function handleUpdate(update, env) {
     ];
 
     const communityRow = [];
-    if (GROUP_URL) communityRow.push({ text: '💬 Discussion Group', url: GROUP_URL });
-    if (FB_PAGE_URL) communityRow.push({ text: '📘 Facebook Page', url: FB_PAGE_URL });
+    if (WA_CHANNEL_URL) communityRow.push({ text: '🟢 WhatsApp Channel', url: WA_CHANNEL_URL });
+    if (GROUP_URL) communityRow.push({ text: '💬 Group', url: GROUP_URL });
+    if (FB_PAGE_URL) communityRow.push({ text: '📘 Facebook', url: FB_PAGE_URL });
     if (communityRow.length > 0) keyboard.push(communityRow);
 
     keyboard.push([{ text: '➕ Add Bot to Your Group', url: `https://t.me/AL_MCQbot?startgroup=true` }]);
