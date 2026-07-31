@@ -19,8 +19,8 @@ dotenv.config();
 const BOT_TOKEN = (process.env.BOT_TOKEN || '').trim();
 const BASE_URL = (process.env.BASE_URL || 'https://dmadushanka.github.io/A-L').trim();
 const ADMIN_ID = (process.env.ADMIN_ID || '').trim();
-const CHANNEL_URL = (process.env.CHANNEL_URL || 'https://t.me/AL_MCQ_News').trim();
-const GROUP_URL = (process.env.GROUP_URL || 'https://t.me/AL_MCQ_Discussion').trim();
+const CHANNEL_URL = (process.env.CHANNEL_URL || '').trim();
+const GROUP_URL = (process.env.GROUP_URL || '').trim();
 
 // Global Error Handlers to keep the bot process alive 24/7
 process.on('unhandledRejection', (reason) => {
@@ -204,24 +204,32 @@ console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode
 
 // Helper: Generate Keyboard for Subject Selection & Community Links (Step 1)
 function getSubjectKeyboard() {
-  return {
-    inline_keyboard: [
-      [
-        { text: '✨ 🚀 Open Animated Quiz Portal (සියලුම ප්‍රශ්න)', web_app: { url: portalUrl } }
-      ],
-      [{ text: QUIZ_DATA.pl.name, callback_data: 'sub_pl' }],
-      [{ text: QUIZ_DATA.hist.name, callback_data: 'sub_hist' }],
-      [{ text: QUIZ_DATA.bc.name, callback_data: 'sub_bc' }],
-      [{ text: QUIZ_DATA.sin.name, callback_data: 'sub_sin' }],
-      [
-        { text: '🏆 All-Island Leaderboard (ලකුණු පුවරුව)', callback_data: 'view_top_overall' }
-      ],
-      [
-        { text: '📢 Join Our Channel (නව තොරතුරු සඳහා)', url: CHANNEL_URL },
-        { text: '💬 Join Discussion Group (අදහස් දැක්වීමට)', url: GROUP_URL }
-      ]
+  const keyboard = [
+    [
+      { text: '✨ 🚀 Open Animated Quiz Portal (සියලුම ප්‍රශ්න)', web_app: { url: portalUrl } }
+    ],
+    [{ text: QUIZ_DATA.pl.name, callback_data: 'sub_pl' }],
+    [{ text: QUIZ_DATA.hist.name, callback_data: 'sub_hist' }],
+    [{ text: QUIZ_DATA.bc.name, callback_data: 'sub_bc' }],
+    [{ text: QUIZ_DATA.sin.name, callback_data: 'sub_sin' }],
+    [
+      { text: '🏆 All-Island Leaderboard (ලකුණු පුවරුව)', callback_data: 'view_top_overall' }
     ]
-  };
+  ];
+
+  const communityRow = [];
+  if (CHANNEL_URL) {
+    communityRow.push({ text: '📢 Join Our Channel', url: CHANNEL_URL });
+  }
+  if (GROUP_URL) {
+    communityRow.push({ text: '💬 Join Discussion Group (අදහස් දැක්වීමට)', url: GROUP_URL });
+  }
+
+  if (communityRow.length > 0) {
+    keyboard.push(communityRow);
+  }
+
+  return { inline_keyboard: keyboard };
 }
 
 // Helper: Generate Category Keyboard (Step 2)
@@ -434,11 +442,14 @@ bot.onText(/\/start/, (msg) => {
 
   const firstName = msg.from.first_name || 'යහළුවා';
 
-  const welcomeMessage = 
+  let welcomeMessage = 
     `✨ **ආයුබෝවන් ${firstName}!**\n\n` +
     `අ.පො.ස. (උසස් පෙළ) MCQ Quiz Bot වෙත සාදරයෙන් පිළිගනිමු! 🎓\n\n` +
-    `ඔබට **Native Telegram Polls (Chat එකෙන්ම)**, **Live Competition Leaderboard**, හෝ **Telegram WebApp** මගින් Quiz කිරීමට ඔබගේ විෂය (Subject) පහතින් තෝරන්න:\n\n` +
-    `📢 අලුත්ම විෂයයන් සහ Updates ලබා ගැනීමට අපගේ **Telegram Channel** එකට සහ අදහස් දැක්වීමට **Discussion Group** එකට එක්වන්න:`;
+    `ඔබට **Native Telegram Polls (Chat එකෙන්ම)**, **Live Competition Leaderboard**, හෝ **Telegram WebApp** මගින් Quiz කිරීමට ඔබගේ විෂය (Subject) පහතින් තෝරන්න:`;
+
+  if (GROUP_URL) {
+    welcomeMessage += `\n\n💬 ප්‍රශ්න සාකච්ඡා කිරීමට සහ අදහස් දැක්වීමට අපගේ **Discussion Group** එකට එක්වන්න:`;
+  }
 
   bot.sendMessage(chatId, welcomeMessage, {
     parse_mode: 'Markdown',
