@@ -339,10 +339,11 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
 
   // Send Intro Card to WhatsApp Group
   const waIntro = 
-    `🎓 *${paperData.title}*\n\n` +
+    `🎓 *${paperData.title}*\n` +
+    `⚡ *WA Live Poll Engine v3.0 (Auto-Scored)* 🟢\n\n` +
     `🎯 Native WhatsApp Poll Quiz එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
     `⏱️ සෑම ප්‍රශ්නයකටම තත්පර ${intervalSec}ක් හිමි වේ.\n` +
-    `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර සහ විග්‍රහය ස්වයංක්‍රීයව පෙන්වනු ඇත.\n` +
+    `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර, විග්‍රහය සහ ඡන්දය දුන් සිසුන්ගේ නම් ස්වයංක්‍රීයව පෙන්වනු ඇත.\n` +
     `පළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
   await autoPostToWhatsAppChannel(waIntro);
 
@@ -372,7 +373,7 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
     rawQText = cleanText(rawQText, 250);
     rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
 
-    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
+    const cleanQ = cleanText(`[${qNum}/${totalQ}] (v3.0 Live) ${rawQText}`, 290);
     const cleanOpts = (q.o || []).map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
 
     try {
@@ -455,7 +456,7 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
       }
 
       const answerRevealMsg = 
-        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර:*\n` +
+        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] (v3.0 Live) නිවැරදි පිළිතුර:*\n` +
         `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}${studentFeedbackPart}\n\n` +
         `ℹ️ කාලය අවසන් වන තෙක් පිළිතුරු නොදුන් සිසුන් "පිළිතුරු නොදුන්" ලෙස සලකනු ලැබේ.`;
       
@@ -472,7 +473,7 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
   }
 
   // 4. Final WhatsApp Group Leaderboard Mark Sheet Calculation
-  let waFinishMsg = `🏆 *${paperData.title} — 📊 නිල WhatsApp Group ලකුණු සටහන (Final Mark Sheet)*\n\n`;
+  let waFinishMsg = `🏆 *${paperData.title} — 📊 නිල WhatsApp Group ලකුණු සටහන (Final Mark Sheet v3.0)* ⚡\n\n`;
 
   const waStudents = Object.values(groupUserScores).sort((a, b) => b.score - a.score);
 
