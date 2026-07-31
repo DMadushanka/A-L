@@ -393,12 +393,48 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
 
       console.log(`🟢 WhatsApp Poll [${qNum}/${totalQ}] sent to group! (StanzaID: ${currentPollStanzaId})`);
 
-      // 2. Wait intervalSec seconds for group members to vote, then fetch pollUpdateMessage votes from Green API
+      // 2. Wait intervalSec seconds for group members to vote, then fetch stored votes from Cloudflare Worker & Green API
       await new Promise(res => setTimeout(res, intervalSec * 1000));
 
       const correctNames = [];
       const wrongNames = [];
 
+      // Source A: Fetch votes from Cloudflare Worker Webhook Relay (/get-wa-votes)
+      try {
+        if (currentPollStanzaId) {
+          const wrx = await fetch(`https://a-l.gayanmadushanka1610.workers.dev/get-wa-votes?stanzaId=${currentPollStanzaId}`);
+          const wVotes = await wrx.json();
+
+          if (wVotes && typeof wVotes === 'object') {
+            Object.entries(wVotes).forEach(([vId, vData]) => {
+              const studentName = vData.name || vId.split('@')[0];
+              const optIdx = vData.optionIdx;
+
+              if (!groupUserScores[vId]) {
+                groupUserScores[vId] = { name: studentName, score: 0, correct: 0, wrong: 0, answered: new Set() };
+              }
+              const st = groupUserScores[vId];
+              if (!st.answered.has(i)) {
+                st.answered.add(i);
+                if (optIdx === (q.c || 0)) {
+                  st.score++;
+                  st.correct++;
+                  if (!correctNames.includes(studentName)) correctNames.push(studentName);
+                  console.log(`🎯 Worker Relayed Poll Vote [${studentName}]: CORRECT! (+1 Mark)`);
+                } else {
+                  st.wrong++;
+                  if (!wrongNames.includes(studentName)) wrongNames.push(studentName);
+                  console.log(`❌ Worker Relayed Poll Vote [${studentName}]: WRONG!`);
+                }
+              }
+            });
+          }
+        }
+      } catch (e) {
+        console.error('Notice querying Cloudflare Worker votes:', e.message);
+      }
+
+      // Source B: Fetch pollUpdateMessage from Green API lastIncomingMessages as fallback
       try {
         const rx = await fetch(`https://api.green-api.com/waInstance${instanceId}/lastIncomingMessages/${apiToken}?minutes=10`);
         const msgs = await rx.json();
@@ -427,11 +463,11 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
                         st.score++;
                         st.correct++;
                         if (!correctNames.includes(studentName)) correctNames.push(studentName);
-                        console.log(`🎯 WA Poll Vote [${studentName}]: CORRECT! (+1 Mark)`);
+                        console.log(`🎯 Green API Direct Poll Vote [${studentName}]: CORRECT! (+1 Mark)`);
                       } else {
                         st.wrong++;
                         if (!wrongNames.includes(studentName)) wrongNames.push(studentName);
-                        console.log(`❌ WA Poll Vote [${studentName}]: WRONG!`);
+                        console.log(`❌ Green API Direct Poll Vote [${studentName}]: WRONG!`);
                       }
                     }
                   });

@@ -106,8 +106,51 @@ async function fetchQuestionsFromHtml(file) {
   return null;
 }
 
+// Active WhatsApp Group Poll Vote Cache on Cloudflare Worker
+const WA_GROUP_POLL_VOTES = {}; // stanzaId -> { voterId: { name, optionIdx } }
+
 export default {
   async fetch(request, env, ctx) {
+    const url = new URL(request.url);
+
+    // Endpoint 1: Green API Webhook Listener
+    if (url.pathname === '/wa-webhook' && request.method === 'POST') {
+      try {
+        const update = await request.json();
+        if (update && update.typeMessage === 'pollUpdateMessage') {
+          const pData = update.pollMessageData;
+          const stanzaId = pData?.stanzaId;
+          const senderId = update.senderId || update.senderData?.sender || '';
+          const senderName = update.senderName || update.senderData?.senderName || senderId.split('@')[0] || 'Student';
+
+          if (stanzaId && Array.isArray(pData.votes)) {
+            if (!WA_GROUP_POLL_VOTES[stanzaId]) WA_GROUP_POLL_VOTES[stanzaId] = {};
+            pData.votes.forEach((vOpt, optIdx) => {
+              const voters = vOpt.optionVoters || [];
+              voters.forEach(vId => {
+                const sName = (vId === senderId && senderName) ? senderName : vId.split('@')[0];
+                WA_GROUP_POLL_VOTES[stanzaId][vId] = {
+                  name: sName,
+                  optionIdx: optIdx
+                };
+              });
+            });
+            console.log(`🟢 Stored WhatsApp Poll Vote on Worker for StanzaID: ${stanzaId}`);
+          }
+        }
+      } catch (err) {
+        console.error('Error in WA Webhook on Worker:', err);
+      }
+      return new Response(JSON.stringify({ status: 'ok' }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    // Endpoint 2: Fetch stored poll votes by stanzaId for bot.js
+    if (url.pathname === '/get-wa-votes') {
+      const stanzaId = url.searchParams.get('stanzaId');
+      const votes = stanzaId && WA_GROUP_POLL_VOTES[stanzaId] ? WA_GROUP_POLL_VOTES[stanzaId] : {};
+      return new Response(JSON.stringify(votes), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
     if (request.method === 'POST') {
       try {
         const update = await request.json();
