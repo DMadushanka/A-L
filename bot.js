@@ -197,7 +197,7 @@ bot.getMe().then(me => {
   }
 }).catch(err => console.log('Notice fetching bot info:', err.message));
 
-// Configure Permanent In-Chat WebApp Menu Button
+// Configure Permanent In-Chat WebApp Menu Button (Left of input field)
 const portalUrl = `${BASE_URL}/index.html`;
 
 bot.setChatMenuButton({
@@ -208,9 +208,31 @@ bot.setChatMenuButton({
   })
 }).catch(err => console.log('Menu Button setup notice:', err.message));
 
+// Register Bot Command Autocomplete Registry for Telegram UI
+bot.setMyCommands([
+  { command: 'start', description: '🚀 ප්‍රධාන මෙනුව ආරම්භ කරන්න (Start Quiz Bot)' },
+  { command: 'leaderboard', description: '🏆 උසස් පෙළ ලකුණු පුවරුව (Leaderboards & Ranks)' },
+  { command: 'help', description: '📖 භාවිතය පිළිබඳ උපදෙස් (Help & Instructions)' },
+  { command: 'myid', description: '👤 ඔබගේ Telegram User ID එක (View My ID)' }
+]).catch(err => console.log('Notice setting commands:', err.message));
+
 console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
 console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
 console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode)'}`);
+
+// Helper: Generate Persistent Bottom Reply Keyboard (Floating START bar)
+function getPersistentReplyKeyboard() {
+  return {
+    keyboard: [
+      [
+        { text: '🚀 ආරම්භ කරන්න (Start Quiz)' },
+        { text: '🏆 ලකුණු පුවරුව (Leaderboard)' }
+      ]
+    ],
+    resize_keyboard: true,
+    persistent: true
+  };
+}
 
 // Helper: Generate Keyboard for Subject Selection & Community Links (Step 1)
 function getSubjectKeyboard() {
@@ -446,13 +468,20 @@ setInterval(async () => {
   }
 }, 30000);
 
-// Middleware: Auto Register User & Log Incoming Messages
+// Middleware: Auto Register User & Custom Button Text Handler
 bot.on('message', (msg) => {
   if (msg.from) {
     registerUser(msg.from);
   }
   if (msg.text) {
     console.log(`📩 Incoming message in [${msg.chat.type}] (Chat ID: ${msg.chat.id}) from ${msg.from?.first_name || 'User'}: "${msg.text}"`);
+
+    // Handle Custom Reply Keyboard buttons
+    if (msg.text.includes('🚀 ආරම්භ කරන්න') || msg.text.includes('Start Quiz')) {
+      sendStartMenu(msg.chat.id, msg.from);
+    } else if (msg.text.includes('🏆 ලකුණු පුවරුව') || msg.text.includes('Leaderboard')) {
+      sendLeaderboardMenu(msg.chat.id);
+    }
   }
 });
 
@@ -485,12 +514,9 @@ bot.on('new_chat_members', async (msg) => {
   }
 });
 
-// Command: /start (Supports /start, /start@AL_MCQbot, and group start)
-bot.onText(/\/start/i, (msg) => {
-  const chatId = msg.chat.id;
-  if (msg.from) registerUser(msg.from);
-
-  const firstName = msg.from ? msg.from.first_name : 'යහළුවා';
+// Function: Send Main Start Menu with Persistent Reply Keyboard
+function sendStartMenu(chatId, fromUser) {
+  const firstName = fromUser ? fromUser.first_name : 'යහළුවා';
 
   let welcomeMessage = 
     `✨ **ආයුබෝවන් ${firstName}!**\n\n` +
@@ -505,10 +531,39 @@ bot.onText(/\/start/i, (msg) => {
     welcomeMessage += `\n\nඅපගේ ${links.join(' සහ ')} එක සමඟ පහත බොත්තම් මගින් එක්වන්න:`;
   }
 
+  // 1. Send persistent floating bottom keyboard
+  bot.sendMessage(chatId, '👇 පහත මෙනුවෙන් ඔබගේ විෂය තෝරන්න:', {
+    reply_markup: getPersistentReplyKeyboard()
+  }).catch(e => {});
+
+  // 2. Send Subject Selection Inline Keyboard
   bot.sendMessage(chatId, welcomeMessage, {
     parse_mode: 'Markdown',
     reply_markup: getSubjectKeyboard()
   }).catch(e => console.error('Error sending start message:', e.message));
+}
+
+// Function: Send Leaderboard Menu
+function sendLeaderboardMenu(chatId) {
+  const keyboard = {
+    inline_keyboard: [
+      [{ text: '🏆 All-Island Overall Leaderboard', callback_data: 'view_top_overall' }],
+      [{ text: '📜 ශ්‍රී ලංකා ඉතිහාසය Top 20', callback_data: 'view_top_hist' }],
+      [{ text: '🏛️ දේශපාලන විද්‍යාව Top 20', callback_data: 'view_top_pl' }],
+      [{ text: '☸️ බෞද්ධ ශිෂ්ටාචාරය Top 20', callback_data: 'view_top_bc' }],
+      [{ text: '✍️ සිංහල Top 20', callback_data: 'view_top_sin' }]
+    ]
+  };
+
+  bot.sendMessage(chatId, `🏆 **උසස් පෙළ MCQ Leaderboards & Top 20 Ranks**\n\nඔබට පරීක්ෂණය කිරීමට අවශ්‍ය ලකුණු පුවරුව තෝරන්න:`, {
+    parse_mode: 'Markdown',
+    reply_markup: keyboard
+  });
+}
+
+// Command: /start (Supports /start, /start@AL_MCQbot, and group start)
+bot.onText(/\/start/i, (msg) => {
+  sendStartMenu(msg.chat.id, msg.from);
 });
 
 // Command: /myid
@@ -524,22 +579,7 @@ bot.onText(/\/myid/i, (msg) => {
 
 // Command: /leaderboard or /top
 bot.onText(/\/(leaderboard|top)/i, (msg) => {
-  const chatId = msg.chat.id;
-
-  const keyboard = {
-    inline_keyboard: [
-      [{ text: '🏆 All-Island Overall Leaderboard', callback_data: 'view_top_overall' }],
-      [{ text: '📜 ශ්‍රී ලංකා ඉතිහාසය Top 20', callback_data: 'view_top_hist' }],
-      [{ text: '🏛️ දේශපාලන විද්‍යාව Top 20', callback_data: 'view_top_pl' }],
-      [{ text: '☸️ බෞද්ධ ශිෂ්ටාචාරය Top 20', callback_data: 'view_top_bc' }],
-      [{ text: '✍️ සිංහල Top 20', callback_data: 'view_top_sin' }]
-    ]
-  };
-
-  bot.sendMessage(chatId, `🏆 **උසස් පෙළ MCQ Leaderboards & Top 20 Ranks**\n\nඔබට පරීක්ෂණය කිරීමට අවශ්‍ය ලකුණු පුවරුව තෝරන්න:`, {
-    parse_mode: 'Markdown',
-    reply_markup: keyboard
-  });
+  sendLeaderboardMenu(msg.chat.id);
 });
 
 // Command: /admin (Admin Control Dashboard)
