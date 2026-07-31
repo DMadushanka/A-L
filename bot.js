@@ -389,51 +389,55 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
       });
       console.log(`🟢 WhatsApp Poll [${qNum}/${totalQ}] sent to group!`);
 
-      // 2. Active Polling Loop: Query Green API receiveNotification every 1.2s during intervalSec window
+      // 2. Wait intervalSec seconds for group members to vote, then fetch pollUpdateMessage votes from Green API
+      await new Promise(res => setTimeout(res, intervalSec * 1000));
+
       const correctNames = [];
       const wrongNames = [];
-      const endTime = Date.now() + intervalSec * 1000;
 
-      while (Date.now() < endTime) {
-        try {
-          const rx = await fetch(`https://api.green-api.com/waInstance${instanceId}/receiveNotification/${apiToken}`);
-          const note = await rx.json();
+      try {
+        const rx = await fetch(`https://api.green-api.com/waInstance${instanceId}/lastIncomingMessages/${apiToken}?minutes=10`);
+        const msgs = await rx.json();
 
-          if (note && note.receiptId) {
-            // Acknowledge notification to clear queue
-            await fetch(`https://api.green-api.com/waInstance${instanceId}/deleteNotification/${apiToken}/${note.receiptId}`, { method: 'DELETE' });
+        if (Array.isArray(msgs)) {
+          const pollUpdates = msgs.filter(m => m.chatId === targetChat && m.typeMessage === 'pollUpdateMessage');
 
-            const body = note.body;
-            const type = body?.typeWebhook;
-            if (type === 'pollMessageWebhook' || type === 'incomingMessageReceived') {
-              const pollData = body.messageData?.pollVoteMessageData || body.pollVoteData;
-              const sender = body.senderData?.sender;
-              const senderName = body.senderData?.senderName || 'Student';
+          pollUpdates.forEach(m => {
+            const pData = m.pollMessageData;
+            const senderId = m.senderId || '';
+            let senderName = m.senderName || senderId.split('@')[0] || 'Student';
 
-              if (pollData && sender) {
-                if (!groupUserScores[sender]) {
-                  groupUserScores[sender] = { name: senderName, score: 0, correct: 0, wrong: 0, answered: new Set() };
+            if (pData && Array.isArray(pData.votes) && pData.name.includes(`[${qNum}/${totalQ}]`)) {
+              pData.votes.forEach((vOpt, optIdx) => {
+                const voters = vOpt.optionVoters || [];
+                if (voters.length > 0) {
+                  voters.forEach(vId => {
+                    const studentName = senderName || vId.split('@')[0];
+                    if (!groupUserScores[vId]) {
+                      groupUserScores[vId] = { name: studentName, score: 0, correct: 0, wrong: 0, answered: new Set() };
+                    }
+                    const st = groupUserScores[vId];
+                    if (!st.answered.has(i)) {
+                      st.answered.add(i);
+                      if (optIdx === (q.c || 0)) {
+                        st.score++;
+                        st.correct++;
+                        if (!correctNames.includes(studentName)) correctNames.push(studentName);
+                        console.log(`🎯 WA Poll Vote [${studentName}]: CORRECT! (+1 Mark)`);
+                      } else {
+                        st.wrong++;
+                        if (!wrongNames.includes(studentName)) wrongNames.push(studentName);
+                        console.log(`❌ WA Poll Vote [${studentName}]: WRONG!`);
+                      }
+                    }
+                  });
                 }
-                const st = groupUserScores[sender];
-                if (!st.answered.has(i)) {
-                  st.answered.add(i);
-                  if (pollData.optionId === (q.c || 0)) {
-                    st.score++;
-                    st.correct++;
-                    if (!correctNames.includes(senderName)) correctNames.push(senderName);
-                    console.log(`🎯 WA Group Poll Vote: ${senderName} -> CORRECT! (+1 Mark)`);
-                  } else {
-                    st.wrong++;
-                    if (!wrongNames.includes(senderName)) wrongNames.push(senderName);
-                    console.log(`❌ WA Group Poll Vote: ${senderName} -> WRONG!`);
-                  }
-                }
-              }
+              });
             }
-          }
-        } catch (e) {}
-
-        await new Promise(res => setTimeout(res, 1200));
+          });
+        }
+      } catch (e) {
+        console.error('Notice parsing pollUpdateMessage votes:', e.message);
       }
 
       // 3. Post Answer Explanation & Tagged Students Card (Reveals Correct Answer, Explanation & Student Names)
