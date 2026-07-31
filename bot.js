@@ -222,21 +222,23 @@ async function sendNextNativePoll(chatId) {
 
   let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
   
-  // Clean HTML tags and formatting
-  rawQText = cleanText(rawQText, 300);
+  // Clean HTML tags and extra formatting
+  rawQText = cleanText(rawQText, 250);
 
   // Strip duplicate leading question numbers like "19. ", "19.", "19)", "19 - "
   rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
 
-  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 300);
-  const cleanOpts = (q.o || []).map(o => cleanText(o, 100));
-  const cleanExplain = cleanText(q.e || '', 200);
+  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
+  const cleanOpts = (q.o || []).map(o => cleanText(o, 98));
+  
+  const rawExplain = cleanText(q.e || '', 185);
+  const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
 
   try {
     const pollMsg = await bot.sendPoll(chatId, cleanQ, cleanOpts, {
       type: 'quiz',
       correct_option_id: q.c,
-      explanation: cleanExplain ? `💡 ${cleanExplain}` : undefined,
+      explanation: cleanExplain,
       is_anonymous: false
     });
 
@@ -248,7 +250,7 @@ async function sendNextNativePoll(chatId) {
 
   } catch (err) {
     console.error(`Error sending poll Q${qNum} to ${chatId}:`, err.message);
-    // If poll failed (e.g. format error), skip to next
+    // If poll failed (e.g. format error), skip to next question
     session.qIndex++;
     sendNextNativePoll(chatId);
   }
