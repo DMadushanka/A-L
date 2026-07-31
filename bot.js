@@ -390,15 +390,33 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
       // 2. Wait intervalSec seconds for group members to vote
       await new Promise(res => setTimeout(res, intervalSec * 1000));
 
-      // 3. Post Answer Explanation Card (Reveals Correct Answer & Explanation)
+      // 3. Post Answer Explanation & Tagged Students Card (Reveals Correct Answer, Explanation & Student Names)
       const correctIdx = q.c || 0;
       const correctAnsText = q.o && q.o[correctIdx] ? cleanText(q.o[correctIdx], 100) : '';
       const rawExplain = cleanText(q.e || '', 180);
       const explainPart = rawExplain ? `\n💡 *විග්‍රහය:* ${rawExplain}` : '';
 
+      // Extract voting students for Question i
+      const correctNames = [];
+      const wrongNames = [];
+      Object.values(groupUserScores).forEach(s => {
+        if (s.lastQ === i) {
+          if (s.lastQCorrect) correctNames.push(s.name);
+          else wrongNames.push(s.name);
+        }
+      });
+
+      let studentFeedbackPart = '';
+      if (correctNames.length > 0) {
+        studentFeedbackPart += `\n\n🎯 *නිවැරදි පිළිතුරු දුන් සිසුන් (Correct):*\n` + correctNames.map(n => `• ${n} (+1 Mark)`).join('\n');
+      }
+      if (wrongNames.length > 0) {
+        studentFeedbackPart += `\n\n❌ *වැරදි පිළිතුරු දුන් සිසුන් (Wrong):*\n` + wrongNames.map(n => `• ${n}`).join('\n');
+      }
+
       const answerRevealMsg = 
         `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර:*\n` +
-        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}\n\n` +
+        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}${studentFeedbackPart}\n\n` +
         `ℹ️ කාලය අවසන් වන තෙක් පිළිතුරු නොදුන් සිසුන් "පිළිතුරු නොදුන්" ලෙස සලකනු ලැබේ.`;
       
       await autoPostToWhatsAppChannel(answerRevealMsg);
@@ -432,18 +450,24 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
     });
     waFinishMsg += `\n`;
   } else {
+    // If scores tracked via database/registered users
     const ranks = getLeaderboard(paperKey, 10);
+    const medals = ['🥇', '🥈', '🥉'];
+    waFinishMsg += `🎖️ *ජයග්‍රාහකයින් (Top Champions):*\n`;
     if (ranks && ranks.length > 0) {
-      const medals = ['🥇', '🥈', '🥉'];
-      waFinishMsg += `🎖️ *ජයග්‍රාහකයින් (Top Champions):*\n`;
       ranks.slice(0, 3).forEach((r, idx) => {
         waFinishMsg += `${medals[idx]} *${idx + 1} වන ස්ථානය:* ${r.name} — 🎯 ලකුණු: *${r.score}* / ${questions.length}\n`;
       });
-      waFinishMsg += `\n`;
+      waFinishMsg += `\n📋 *සියලුම ලකුණු පුවරුව (Leaderboard):*\n`;
+      ranks.forEach((r, idx) => {
+        waFinishMsg += `${idx + 1}. *${r.name}* — 🎯 *${r.score} / ${questions.length}*\n`;
+      });
+    } else {
+      waFinishMsg += `ℹ️ සියලුම සිසුන්ගේ සජීවී ලකුණු සහ All-Island Leaderboard එක Telegram Bot එකෙන් බලන්න:\nhttps://t.me/AL_MCQbot\n`;
     }
   }
 
-  waFinishMsg += `📊 ඔබගේ සමස්ත ලංකා ශ්‍රේණිගත කිරීම (All-Island Rank) පරීක්ෂා කිරීමට Telegram Bot එක භාවිතා කරන්න:\nhttps://t.me/AL_MCQbot`;
+  waFinishMsg += `\n📊 ඔබගේ සමස්ත ලංකා ශ්‍රේණිගත කිරීම (All-Island Rank) පරීක්ෂා කිරීමට Telegram Bot එක භාවිතා කරන්න:\nhttps://t.me/AL_MCQbot`;
   await autoPostToWhatsAppChannel(waFinishMsg);
   currentWaGroupSession = null;
 }
