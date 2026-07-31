@@ -235,11 +235,14 @@ function getPersistentReplyKeyboard() {
 }
 
 // Helper: Generate Keyboard for Subject Selection & Community Links (Step 1)
-function getSubjectKeyboard() {
+// Note: WebApp buttons are ONLY allowed in Private Chats, so in Group Chats we use standard URL buttons!
+function getSubjectKeyboard(isGroup = false) {
+  const portalButton = isGroup
+    ? { text: '✨ 🚀 Open Animated Quiz Portal (සියලුම ප්‍රශ්න)', url: portalUrl }
+    : { text: '✨ 🚀 Open Animated Quiz Portal (සියලුම ප්‍රශ්න)', web_app: { url: portalUrl } };
+
   const keyboard = [
-    [
-      { text: '✨ 🚀 Open Animated Quiz Portal (සියලුම ප්‍රශ්න)', web_app: { url: portalUrl } }
-    ],
+    [portalButton],
     [{ text: QUIZ_DATA.pl.name, callback_data: 'sub_pl' }],
     [{ text: QUIZ_DATA.hist.name, callback_data: 'sub_hist' }],
     [{ text: QUIZ_DATA.bc.name, callback_data: 'sub_bc' }],
@@ -478,7 +481,7 @@ bot.on('message', (msg) => {
 
     // Handle Custom Reply Keyboard buttons
     if (msg.text.includes('🚀 ආරම්භ කරන්න') || msg.text.includes('Start Quiz')) {
-      sendStartMenu(msg.chat.id, msg.from);
+      sendStartMenu(msg.chat.id, msg.from, msg.chat.type !== 'private');
     } else if (msg.text.includes('🏆 ලකුණු පුවරුව') || msg.text.includes('Leaderboard')) {
       sendLeaderboardMenu(msg.chat.id);
     }
@@ -506,7 +509,7 @@ bot.on('new_chat_members', async (msg) => {
 
       await bot.sendMessage(chatId, groupWelcome, {
         parse_mode: 'Markdown',
-        reply_markup: getSubjectKeyboard()
+        reply_markup: getSubjectKeyboard(true)
       }).catch(e => console.error('Group welcome send error:', e.message));
     }
   } catch (err) {
@@ -515,7 +518,7 @@ bot.on('new_chat_members', async (msg) => {
 });
 
 // Function: Send Main Start Menu with Persistent Reply Keyboard
-function sendStartMenu(chatId, fromUser) {
+function sendStartMenu(chatId, fromUser, isGroup = false) {
   const firstName = fromUser ? fromUser.first_name : 'යහළුවා';
 
   let welcomeMessage = 
@@ -531,15 +534,17 @@ function sendStartMenu(chatId, fromUser) {
     welcomeMessage += `\n\nඅපගේ ${links.join(' සහ ')} එක සමඟ පහත බොත්තම් මගින් එක්වන්න:`;
   }
 
-  // 1. Send persistent floating bottom keyboard
-  bot.sendMessage(chatId, '👇 පහත මෙනුවෙන් ඔබගේ විෂය තෝරන්න:', {
-    reply_markup: getPersistentReplyKeyboard()
-  }).catch(e => {});
+  // 1. Send persistent floating bottom keyboard (only in private chat for clean UX)
+  if (!isGroup) {
+    bot.sendMessage(chatId, '👇 පහත මෙනුවෙන් ඔබගේ විෂය තෝරන්න:', {
+      reply_markup: getPersistentReplyKeyboard()
+    }).catch(e => {});
+  }
 
   // 2. Send Subject Selection Inline Keyboard
   bot.sendMessage(chatId, welcomeMessage, {
     parse_mode: 'Markdown',
-    reply_markup: getSubjectKeyboard()
+    reply_markup: getSubjectKeyboard(isGroup)
   }).catch(e => console.error('Error sending start message:', e.message));
 }
 
@@ -563,7 +568,8 @@ function sendLeaderboardMenu(chatId) {
 
 // Command: /start (Supports /start, /start@AL_MCQbot, and group start)
 bot.onText(/\/start/i, (msg) => {
-  sendStartMenu(msg.chat.id, msg.from);
+  const isGroup = msg.chat.type !== 'private';
+  sendStartMenu(msg.chat.id, msg.from, isGroup);
 });
 
 // Command: /myid
@@ -714,6 +720,7 @@ bot.on('callback_query', async (query) => {
   const messageId = query.message.message_id;
   const data = query.data;
   const fromId = query.from ? query.from.id : chatId;
+  const isGroup = query.message.chat.type !== 'private';
 
   if (query.from) registerUser(query.from);
 
@@ -958,7 +965,7 @@ bot.on('callback_query', async (query) => {
         chat_id: chatId,
         message_id: messageId,
         parse_mode: 'Markdown',
-        reply_markup: getSubjectKeyboard()
+        reply_markup: getSubjectKeyboard(isGroup)
       }).catch(e => {});
       await safeAnswerCallback(query.id);
       return;
@@ -1091,6 +1098,10 @@ bot.on('callback_query', async (query) => {
           `${top3Summary}\n` +
           `👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
 
+        const webAppOption = isGroup
+          ? { text: '🚀 Open Interactive WebApp (App එක තුළින්)', url: quizUrl }
+          : { text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } };
+
         const launchKeyboard = {
           inline_keyboard: [
             [
@@ -1100,7 +1111,7 @@ bot.on('callback_query', async (query) => {
               { text: '🏆 ලකුණු පුවරුව (View Leaderboard)', callback_data: `lb_${subId}_${yearKey}` }
             ],
             [
-              { text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } }
+              webAppOption
             ],
             [
               { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
