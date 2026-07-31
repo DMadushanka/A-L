@@ -225,10 +225,17 @@ async function handleUpdate(update, env) {
       [{ text: QUIZ_DATA.sin.name, callback_data: 'sub_sin' }]
     ];
 
+    // Dedicated Full-Width WhatsApp Channel Button
+    if (WA_CHANNEL_URL) {
+      keyboard.push([
+        { text: '🟢 Join Official WhatsApp Channel (WhatsApp චැනලය)', url: WA_CHANNEL_URL }
+      ]);
+    }
+
+    // Telegram Group & Facebook Page Row
     const communityRow = [];
-    if (WA_CHANNEL_URL) communityRow.push({ text: '🟢 WhatsApp Channel', url: WA_CHANNEL_URL });
-    if (GROUP_URL) communityRow.push({ text: '💬 Group', url: GROUP_URL });
-    if (FB_PAGE_URL) communityRow.push({ text: '📘 Facebook', url: FB_PAGE_URL });
+    if (GROUP_URL) communityRow.push({ text: '💬 Discussion Group', url: GROUP_URL });
+    if (FB_PAGE_URL) communityRow.push({ text: '📘 Facebook Page', url: FB_PAGE_URL });
     if (communityRow.length > 0) keyboard.push(communityRow);
 
     keyboard.push([{ text: '➕ Add Bot to Your Group', url: `https://t.me/AL_MCQbot?startgroup=true` }]);

@@ -265,17 +265,21 @@ function getSubjectKeyboard(isGroup = false) {
     ]
   ];
 
-  const communityRow = [];
+  // Dedicated Full-Width WhatsApp Channel Button
   if (WA_CHANNEL_URL && WA_CHANNEL_URL.startsWith('http')) {
-    communityRow.push({ text: '🟢 WhatsApp Channel', url: WA_CHANNEL_URL });
-  }
-  if (GROUP_URL && GROUP_URL.startsWith('http')) {
-    communityRow.push({ text: '💬 Group', url: GROUP_URL });
-  }
-  if (FB_PAGE_URL && FB_PAGE_URL.startsWith('http')) {
-    communityRow.push({ text: '📘 Facebook', url: FB_PAGE_URL });
+    keyboard.push([
+      { text: '🟢 Join Official WhatsApp Channel (WhatsApp චැනලය)', url: WA_CHANNEL_URL }
+    ]);
   }
 
+  // Telegram Group & Facebook Page Row
+  const communityRow = [];
+  if (GROUP_URL && GROUP_URL.startsWith('http')) {
+    communityRow.push({ text: '💬 Discussion Group', url: GROUP_URL });
+  }
+  if (FB_PAGE_URL && FB_PAGE_URL.startsWith('http')) {
+    communityRow.push({ text: '📘 Facebook Page', url: FB_PAGE_URL });
+  }
   if (communityRow.length > 0) {
     keyboard.push(communityRow);
   }
