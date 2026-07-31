@@ -767,7 +767,7 @@ setInterval(async () => {
       }
 
       // Zero-Manual-Interaction 100% Automated WhatsApp Channel Auto-Post
-      const waMsgText = `🎓 A/L MCQ HUB — සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!\n\n${job.message}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\nhttps://t.me/${botUsername || 'AL_MCQbot'}?start=native_${job.paperKey || ''}`;
+      const waMsgText = `🎓 A/L MCQ HUB — සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!\n\n${job.message}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\n${groupUrl}`;
       await autoPostToWhatsAppChannel(waMsgText);
 
       // Launch Native WhatsApp Poll Quiz directly inside WhatsApp Group
@@ -1259,7 +1259,7 @@ bot.on('callback_query', async (query) => {
         }
 
         // 3. Automated Zero-Manual-Interaction WhatsApp Channel Broadcast Trigger
-        const waMsgText = `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟ දැනුම්දීම (Upcoming Live Quiz)'}\n\n📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}\n👇 දැන්ම තරඟයට එකතු වන්න:\nhttps://t.me/${botUsername || 'AL_MCQbot'}?start=native_${paperKey}`;
+        const waMsgText = `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟ දැනුම්දීම (Upcoming Live Quiz)'}\n\n📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}\n👇 දැන්ම තරඟයට එකතු වන්න:\n${groupUrl}`;
         await autoPostToWhatsAppChannel(waMsgText);
 
         if (isNow) {
@@ -1273,7 +1273,7 @@ bot.on('callback_query', async (query) => {
           `${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}` +
           `💡 විශේෂතා: Real-time Timer, All-Island Leaderboards & Podiums 🎉\n\n` +
           `👇 පහත ලින්ක් එක ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:\n` +
-          `https://t.me/${botUsername}?start=native_${paperKey}`
+          `${groupUrl}`
         );
 
         const waShareUrl = `https://api.whatsapp.com/send?text=${waPostText}`;
