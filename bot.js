@@ -233,6 +233,49 @@ console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
 console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
 console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode)'}`);
 
+// Helper: Zero-Manual-Interaction Automated WhatsApp Channel Publisher (Text + Native WA Polls)
+async function autoPostToWhatsAppChannel(messageText, pollOptions = null) {
+  const waApiUrl = (process.env.WA_API_URL || process.env.WA_WEBHOOK_URL || '').trim();
+  const waApiToken = (process.env.WA_API_TOKEN || '').trim();
+  const waChannelId = (process.env.WA_CHANNEL_ID || '0029VbDIx2lHwXb4rvJNIV0D@newsletter').trim();
+
+  if (!waApiUrl) return false;
+
+  try {
+    // 1. Send Text / Quiz Card to WhatsApp Channel
+    await fetch(`${waApiUrl}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        token: waApiToken,
+        to: waChannelId,
+        channelUrl: WA_CHANNEL_URL,
+        message: messageText
+      })
+    });
+
+    // 2. Send Native WhatsApp Poll (if options provided)
+    if (pollOptions && Array.isArray(pollOptions.options)) {
+      await fetch(`${waApiUrl}/sendPoll`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          token: waApiToken,
+          to: waChannelId,
+          title: pollOptions.title || 'MCQ Question',
+          options: pollOptions.options
+        })
+      });
+    }
+
+    console.log('🟢 100% Automated WhatsApp Channel Post sent successfully!');
+    return true;
+  } catch (err) {
+    console.error('Notice auto-posting to WhatsApp Channel:', err.message);
+    return false;
+  }
+}
+
 // Helper: Generate Persistent Bottom Reply Keyboard (Floating START bar)
 function getPersistentReplyKeyboard() {
   return {
@@ -494,25 +537,9 @@ setInterval(async () => {
         }
       }
 
-      // Auto Post to WhatsApp Channel API / Webhook (if WA_API_URL or WA_WEBHOOK_URL is configured)
-      const waWebhookUrl = process.env.WA_API_URL || process.env.WA_WEBHOOK_URL;
-      if (waWebhookUrl) {
-        try {
-          const waMsgText = `🎓 A/L MCQ HUB — සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!\n\n${job.message}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\nhttps://t.me/${botUsername || 'AL_MCQbot'}?start=native_${job.paperKey || ''}`;
-          await fetch(waWebhookUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              channel_url: WA_CHANNEL_URL,
-              message: waMsgText,
-              paperKey: job.paperKey
-            })
-          });
-          console.log(`🟢 WhatsApp Channel Auto-Post sent for job [${job.id}]`);
-        } catch (waErr) {
-          console.error('Notice auto-posting to WhatsApp Channel:', waErr.message);
-        }
-      }
+      // Zero-Manual-Interaction 100% Automated WhatsApp Channel Auto-Post
+      const waMsgText = `🎓 A/L MCQ HUB — සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!\n\n${job.message}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\nhttps://t.me/${botUsername || 'AL_MCQbot'}?start=native_${job.paperKey || ''}`;
+      await autoPostToWhatsAppChannel(waMsgText);
 
       markJobSent(job.id);
     }
