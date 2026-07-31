@@ -443,19 +443,49 @@ setInterval(async () => {
   }
 }, 30000);
 
-// Middleware: Auto Register User & Log ID
+// Middleware: Auto Register User & Log Incoming Messages
 bot.on('message', (msg) => {
   if (msg.from) {
     registerUser(msg.from);
   }
+  console.log(`📩 Incoming message in [${msg.chat.type}] from ${msg.from?.first_name || 'User'}: "${msg.text || ''}"`);
 });
 
-// Command: /start
-bot.onText(/\/start/, (msg) => {
+// Listener: Auto Welcome when Bot is added to a Telegram Group
+bot.on('new_chat_members', async (msg) => {
+  try {
+    const newMembers = msg.new_chat_members || [];
+    const me = await bot.getMe().catch(() => null);
+    if (!me) return;
+
+    const addedSelf = newMembers.some(m => m.id === me.id);
+    if (addedSelf) {
+      const chatId = msg.chat.id;
+      const groupTitle = msg.chat.title || 'Group';
+
+      console.log(`🎉 Bot added to new Group: "${groupTitle}" (ID: ${chatId})`);
+
+      const groupWelcome = 
+        `🎉 **ආයුබෝවන් ${groupTitle}!**\n\n` +
+        `අ.පො.ස. (උසස් පෙළ) MCQ Quiz Bot (@${me.username}) මෙම Group එකට සාදරයෙන් එකතු විය! 🎓\n\n` +
+        `සිසුන්ට සෘජුවම Group එක තුළදීම Past Papers & Poll Quizzes කිරීමට පහත බොත්තම් හෝ **/start** command එක භාවිතා කරන්න:`;
+
+      await bot.sendMessage(chatId, groupWelcome, {
+        parse_mode: 'Markdown',
+        reply_markup: getSubjectKeyboard()
+      }).catch(e => console.error('Group welcome send error:', e.message));
+    }
+  } catch (err) {
+    console.error('Error handling new_chat_members:', err.message);
+  }
+});
+
+// Command: /start (Supports both /start and /start@AL_MCQbot)
+bot.onText(/\/start(@\w+)?/, (msg) => {
   const chatId = msg.chat.id;
   if (msg.from) registerUser(msg.from);
 
-  const firstName = msg.from.first_name || 'යහළුවා';
+  const firstName = msg.from ? msg.from.first_name : 'යහළුවා';
 
   let welcomeMessage = 
     `✨ **ආයුබෝවන් ${firstName}!**\n\n` +
@@ -473,11 +503,11 @@ bot.onText(/\/start/, (msg) => {
   bot.sendMessage(chatId, welcomeMessage, {
     parse_mode: 'Markdown',
     reply_markup: getSubjectKeyboard()
-  });
+  }).catch(e => console.error('Error sending start message:', e.message));
 });
 
-// Command: /myid (Shows User's Telegram ID for setup)
-bot.onText(/\/myid/, (msg) => {
+// Command: /myid
+bot.onText(/\/myid(@\w+)?/, (msg) => {
   const chatId = msg.chat.id;
   const fromId = msg.from ? msg.from.id : chatId;
   const name = msg.from ? [msg.from.first_name, msg.from.last_name].filter(Boolean).join(' ') : 'User';
@@ -488,7 +518,7 @@ bot.onText(/\/myid/, (msg) => {
 });
 
 // Command: /leaderboard or /top
-bot.onText(/\/(leaderboard|top)/, (msg) => {
+bot.onText(/\/(leaderboard|top)(@\w+)?/, (msg) => {
   const chatId = msg.chat.id;
 
   const keyboard = {
@@ -508,7 +538,7 @@ bot.onText(/\/(leaderboard|top)/, (msg) => {
 });
 
 // Command: /admin (Admin Control Dashboard)
-bot.onText(/\/admin/, (msg) => {
+bot.onText(/\/admin(@\w+)?/, (msg) => {
   const chatId = msg.chat.id;
   const fromId = msg.from ? msg.from.id : chatId;
 
@@ -593,7 +623,7 @@ bot.onText(/\/schedule (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) (.+)/, (msg, match) => {
 });
 
 // Command: /help
-bot.onText(/\/help/, (msg) => {
+bot.onText(/\/help(@\w+)?/, (msg) => {
   const chatId = msg.chat.id;
   const helpText = 
     `📖 **භාවිතය පිළිබඳ උපදෙස්:**\n\n` +
