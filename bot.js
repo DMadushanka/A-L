@@ -608,7 +608,7 @@ bot.on('callback_query', async (query) => {
         ]
       };
 
-      await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
+      await bot.editMessageText(text, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
       await safeAnswerCallback(query.id);
       return;
     }
@@ -638,7 +638,7 @@ bot.on('callback_query', async (query) => {
         });
         keyboard.push([{ text: '⬅️ ආපසු (Back)', callback_data: 'adm_sched_step1' }]);
 
-        await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: { inline_keyboard: keyboard } }).catch(e => {});
+        await bot.editMessageText(text, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown', reply_markup: { inline_keyboard: keyboard } }).catch(e => {});
       }
       await safeAnswerCallback(query.id);
       return;
@@ -676,7 +676,7 @@ bot.on('callback_query', async (query) => {
           ]
         };
 
-        await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
+        await bot.editMessageText(text, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
       }
       await safeAnswerCallback(query.id);
       return;
@@ -716,7 +716,7 @@ bot.on('callback_query', async (query) => {
           `⏰ **ආරම්භ වන වේලාව:** ${dateFormatted}\n\n` +
           `📢 සියලුම ලියාපදිංචි සිසුන් වෙත තරඟ දැනුම්දීම (Announcement Notification) යවනු ලැබේ.`;
 
-        await bot.editMessageText(confirmText, { chatId, messageId, parse_mode: 'Markdown' }).catch(e => {});
+        await bot.editMessageText(confirmText, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown' }).catch(e => {});
 
         // 2. Broadcast Announcement Card to All Registered Students
         const db = readDb();
@@ -763,7 +763,7 @@ bot.on('callback_query', async (query) => {
         `\`/broadcast අද රාත්‍රී 8.00 ට 2020 ඉතිහාසය පත්‍රය සජීවීව පැවැත්වේ.\``;
 
       const kb = { inline_keyboard: [[{ text: '⬅️ ආපසු (Admin Menu)', callback_data: 'adm_home' }]] };
-      await bot.editMessageText(text, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
+      await bot.editMessageText(text, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
       await safeAnswerCallback(query.id);
       return;
     }
@@ -791,7 +791,7 @@ bot.on('callback_query', async (query) => {
         ]
       };
 
-      await bot.editMessageText(adminText, { chatId, messageId, parse_mode: 'Markdown', reply_markup: adminKeyboard }).catch(e => {});
+      await bot.editMessageText(adminText, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown', reply_markup: adminKeyboard }).catch(e => {});
       await safeAnswerCallback(query.id);
       return;
     }
@@ -814,7 +814,7 @@ bot.on('callback_query', async (query) => {
         `📑 **සක්‍රීය ප්‍රශ්න පත්‍ර ගණන:** 32+`;
 
       const kb = { inline_keyboard: [[{ text: '⬅️ ආපසු (Admin Menu)', callback_data: 'adm_home' }]] };
-      await bot.editMessageText(statsText, { chatId, messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
+      await bot.editMessageText(statsText, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown', reply_markup: kb }).catch(e => {});
       await safeAnswerCallback(query.id);
       return;
     }
