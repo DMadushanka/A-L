@@ -298,45 +298,50 @@ function getPaperImageUrl(paperKey) {
 }
 
 // Helper: Zero-Manual-Interaction Automated WhatsApp Channel Publisher via Green API
-async function autoPostToWhatsAppChannel(messageText, imageUrl = 'https://dmadushanka.github.io/A-L/logo.png') {
+async function autoPostToWhatsAppChannel(messageText, imageUrl = null) {
   const instanceId = (process.env.GREEN_API_INSTANCE || '710722698143').trim();
   const apiToken = (process.env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
   const targetChat = (process.env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
 
   if (!instanceId || !apiToken) return false;
 
-  const targetImageUrl = imageUrl || 'https://dmadushanka.github.io/A-L/logo.png';
-
   try {
-    // If imageUrl is specified or default logo exists, send as file with caption for crisp high-res banner preview
-    const res = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendFileByUrl/${apiToken}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chatId: targetChat,
-        urlFile: targetImageUrl,
-        fileName: 'al_mcq_hub_banner.png',
-        caption: messageText
-      })
-    });
-
-    const data = await res.json();
-    if (data && data.idMessage) {
-      console.log(`🟢 100% Automated WhatsApp Image Banner Post sent! Message ID: ${data.idMessage}`);
-      return true;
-    } else {
-      // Fallback to text sendMessage if sendFileByUrl fails
-      const textRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendMessage/${apiToken}`, {
+    // Send as Image Banner File ONLY when imageUrl is explicitly provided (Start/Announcement Cards)
+    if (imageUrl) {
+      const res = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendFileByUrl/${apiToken}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           chatId: targetChat,
-          message: messageText
+          urlFile: imageUrl,
+          fileName: 'al_mcq_hub_banner.png',
+          caption: messageText
         })
       });
-      const textData = await textRes.json();
-      console.log('Green API text fallback response:', JSON.stringify(textData));
-      return !!textData?.idMessage;
+
+      const data = await res.json();
+      if (data && data.idMessage) {
+        console.log(`🟢 100% Automated WhatsApp Image Banner Post sent! Message ID: ${data.idMessage}`);
+        return true;
+      }
+    }
+
+    // Default to clean text sendMessage (Answer Reveals, Final Mark Sheets, In-Quiz Cards)
+    const textRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendMessage/${apiToken}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chatId: targetChat,
+        message: messageText
+      })
+    });
+    const textData = await textRes.json();
+    if (textData && textData.idMessage) {
+      console.log(`🟢 100% Automated WhatsApp Text Post sent! Message ID: ${textData.idMessage}`);
+      return true;
+    } else {
+      console.log('Green API text response:', JSON.stringify(textData));
+      return false;
     }
   } catch (err) {
     console.error('Error auto-posting to WA Channel:', err.message);
