@@ -1175,15 +1175,16 @@ async function handleUpdate(update, env, ctx) {
         delete POLL_MAP[pollId];
       }
 
-      const sessionKey = (isGroup && userId) ? userId : chatId;
-      const session = SESSIONS[sessionKey] || SESSIONS[chatId];
+      // Check for active session in chatId or userId
+      const targetSessionId = chatId || userId;
+      const session = SESSIONS[targetSessionId] || (userId ? SESSIONS[userId] : null);
 
       if (session) {
         if (selectedOptions && selectedOptions[0] === correctOption) {
           session.score++;
         }
         session.qIndex++;
-        await sendNextNativePoll(session.chatId || sessionKey, env);
+        await sendNextNativePoll(session.chatId || targetSessionId, env);
       }
     }
   }
@@ -1621,6 +1622,7 @@ async function handleUpdate(update, env, ctx) {
 
         // Initialize User Poll Session with Start Time
         SESSIONS[chatId] = {
+          chatId,
           subId,
           yearKey,
           paperKey,
