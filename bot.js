@@ -326,19 +326,25 @@ function formatCountdownText(remSec) {
   if (m >= 60) {
     const h = Math.floor(m / 60);
     const mRem = m % 60;
-    return `\`${String(h).padStart(2, '0')}:${String(mRem).padStart(2, '0')}:${padS}\` (පැය ${h}, මිනිත්තු ${mRem}, තත්පර ${padS})`;
+    const padH = String(h).padStart(2, '0');
+    return `${padH}:${padM}:${padS} (පැය ${h}, මිනිත්තු ${mRem}, තත්පර ${padS})`;
   }
-  return `\`${padM}:${padS}\` (මිනිත්තු ${padM}, තත්පර ${padS} ⌛)`;
+  return `${padM}:${padS} (මිනිත්තු ${padM}, තත්පර ${padS} ⌛)`;
 }
 
-// Live Countdown Engine for Scheduled Telegram Announcements (Edits live clock every 2s)
-function startLiveCountdownEngine(paperKey, title, targetTime, targets) {
+// Live Countdown Engine for Scheduled Telegram Announcements (Edits live clock in-place every 2s)
+function startLiveCountdownEngine(paperKey, title, targetTime, targets, jobId) {
   const timer = setInterval(async () => {
     const now = Date.now();
     const remSec = Math.max(0, Math.floor((targetTime - now) / 1000));
 
     if (remSec <= 0) {
       clearInterval(timer);
+
+      if (jobId) {
+        markJobSent(jobId);
+      }
+
       const startMsg = 
         `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
         `📚 **ප්‍රශ්න පත්‍රය:** ${title}\n\n` +
@@ -356,6 +362,14 @@ function startLiveCountdownEngine(paperKey, title, targetTime, targets) {
           await bot.editMessageText(startMsg, { chat_id: t.chatId, message_id: t.messageId, parse_mode: 'Markdown', reply_markup: launchKb });
         } catch(e) {}
       }
+
+      // Send 1 WhatsApp Channel Post when Live Quiz starts
+      const groupUrl = process.env.GROUP_URL || 'https://t.me/+wZUSJyEncD1mYjFl';
+      const waMsgText = `🎓 A/L MCQ HUB — **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\n📚 **ප්‍රශ්න පත්‍රය:** ${title}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\n${groupUrl}`;
+      await autoPostToWhatsAppChannel(waMsgText);
+
+      // Launch WhatsApp Group Quiz Streamer
+      await runNativeWhatsAppGroupQuiz(paperKey);
       return;
     }
 
@@ -365,7 +379,7 @@ function startLiveCountdownEngine(paperKey, title, targetTime, targets) {
       `📚 **ප්‍රශ්න පත්‍රය:** ${title}\n` +
       `⏰ **ආරම්භ වන වේලාව:** ${new Date(targetTime).toLocaleString('en-US', { timeZone: 'Asia/Colombo' })}\n\n` +
       `⏳ **සජීවී තරඟය ආරම්භ වීමට තව:**\n` +
-      `🔥 ${countdownStr}\n\n` +
+      `🔥 **${countdownStr}**\n\n` +
       `💡 **විශේෂතා:**\n` +
       `• 🥇 🥈 🥉 ප්‍රථම ස්ථාන 3 සඳහා Winner Podiums\n` +
       `• 📊 All-Island Top 20 ලකුණු පුවරුව\n` +
@@ -788,60 +802,17 @@ async function sendNextNativePoll(chatId) {
   }
 }
 
-// Background Task: Scheduled Broadcast Engine (Runs every 30 seconds)
-// Triggers Native Telegram Polls directly when schedule time is reached!
+// Background Task: Scheduled Broadcast Engine Safety Guard (Prevents duplicate background broadcasts)
 setInterval(async () => {
   try {
     const pendingJobs = getPendingScheduledJobs();
     if (pendingJobs.length === 0) return;
 
-    const db = readDb();
-    const allUsers = Object.keys(db.users);
-    const allGroups = Object.keys(db.groups || {});
-    const allTargets = [...new Set([...allUsers, ...allGroups])];
-
     for (const job of pendingJobs) {
-      console.log(`⏰ Executing scheduled broadcast job [${job.id}] to ${allUsers.length} users and ${allGroups.length} groups...`);
-      
-      const broadcastText = 
-        `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
-        `${job.message}\n\n` +
-        `👇 පහත **Start Live Quiz** ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:`;
-
-      // Native Poll Quiz Launch Button (Works 100% in both Private Chat and Groups!)
-      const launchKb = job.paperKey ? {
-        inline_keyboard: [
-          [{ text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${job.paperKey}` }]
-        ]
-      } : undefined;
-
-      for (const targetChatId of allTargets) {
-        const isGroup = targetChatId.toString().startsWith('-');
-        try {
-          await bot.sendMessage(targetChatId, broadcastText, {
-            parse_mode: 'Markdown',
-            reply_markup: launchKb
-          });
-        } catch (err) {
-          if (err.message.includes('kicked') || err.message.includes('not found') || err.message.includes('deactivated')) {
-            if (isGroup) unregisterGroup(targetChatId);
-          }
-        }
-      }
-
-      // Zero-Manual-Interaction 100% Automated WhatsApp Channel Auto-Post
-      const waMsgText = `🎓 A/L MCQ HUB — සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!\n\n${job.message}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\n${groupUrl}`;
-      await autoPostToWhatsAppChannel(waMsgText);
-
-      // Launch Native WhatsApp Poll Quiz directly inside WhatsApp Group
-      if (job.paperKey) {
-        await runNativeWhatsAppGroupQuiz(job.paperKey);
-      }
-
       markJobSent(job.id);
     }
   } catch (err) {
-    console.error('Error in scheduled broadcast engine:', err.message);
+    console.error('Notice in scheduled broadcast safety guard:', err.message);
   }
 }, 30000);
 
@@ -1256,12 +1227,14 @@ bot.on('callback_query', async (query) => {
         }
 
         // Register Scheduled Job ONLY if it's scheduled for future
+        let newJobId = null;
         if (!isNow) {
-          addScheduledJob({
+          const newJob = addScheduledJob({
             time: targetDate.toISOString(),
             message: `🎯 **${paperData.title}** සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ වී ඇත!`,
             paperKey: paperKey
           });
+          if (newJob) newJobId = newJob.id;
         }
 
         const db = readDb();
@@ -1294,7 +1267,7 @@ bot.on('callback_query', async (query) => {
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
           `${timeNotice}\n\n` +
           `⏳ **සජීවී තරඟය ආරම්භ වීමට තව:**\n` +
-          `🔥 ${initialCountdownStr}\n\n` +
+          `🔥 **${initialCountdownStr}**\n\n` +
           `💡 **විශේෂතා:**\n` +
           `• 🥇 🥈 🥉 ප්‍රථම ස්ථාන 3 සඳහා Winner Podiums\n` +
           `• 📊 All-Island Top 20 ලකුණු පුවරුව\n` +
@@ -1335,7 +1308,7 @@ bot.on('callback_query', async (query) => {
 
         // Trigger Live Second-by-Second Countdown Clock Engine for Telegram
         if (!isNow && sentTargets.length > 0) {
-          startLiveCountdownEngine(paperKey, paperData.title, scheduledTimestamp, sentTargets);
+          startLiveCountdownEngine(paperKey, paperData.title, scheduledTimestamp, sentTargets, newJobId);
         }
 
         // 3. Automated Zero-Manual-Interaction WhatsApp Channel Broadcast Trigger
