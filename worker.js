@@ -105,6 +105,65 @@ function parseJsArray(str) {
   }
 }
 
+function getPaperImageUrl(paperKey) {
+  if (!paperKey) return `${BASE_URL}/logo.png`;
+  const parts = paperKey.split('_');
+  const subId = parts[0];
+  const yearKey = parts[1];
+  const subData = QUIZ_DATA[subId];
+  const paperData = subData?.papers[yearKey];
+  if (paperData && paperData.img) {
+    return `${BASE_URL}/${paperData.img}`;
+  }
+  return `${BASE_URL}/logo.png`;
+}
+
+// Helper: Zero-Manual-Interaction Automated WhatsApp Channel Publisher via Green API for Cloudflare Worker
+async function autoPostToWhatsAppChannel(messageText, imageUrl = null, env = {}) {
+  const instanceId = (env.GREEN_API_INSTANCE || '710722698143').trim();
+  const apiToken = (env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
+  const targetChat = (env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
+
+  if (!instanceId || !apiToken) return false;
+
+  try {
+    if (imageUrl) {
+      const res = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendFileByUrl/${apiToken}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chatId: targetChat,
+          urlFile: imageUrl,
+          fileName: 'al_mcq_hub_banner.png',
+          caption: messageText
+        })
+      });
+      const data = await res.json();
+      if (data && data.idMessage) {
+        console.log(`🟢 WhatsApp Image Banner Post sent from Worker! Message ID: ${data.idMessage}`);
+        return true;
+      }
+    }
+
+    const textRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendMessage/${apiToken}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chatId: targetChat,
+        message: messageText
+      })
+    });
+    const textData = await textRes.json();
+    if (textData && textData.idMessage) {
+      console.log(`🟢 WhatsApp Text Post sent from Worker! Message ID: ${textData.idMessage}`);
+      return true;
+    }
+  } catch (err) {
+    console.error('Error auto-posting to WA from Worker:', err.message);
+  }
+  return false;
+}
+
 // Fetch questions dynamically from GitHub Pages HTML
 async function fetchQuestionsFromHtml(file) {
   try {
@@ -524,7 +583,20 @@ async function handleUpdate(update, env) {
           reply_markup: announceKb
         }, env);
 
-        await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published!' }, env);
+        // Automated WhatsApp Group Broadcast Trigger from Worker
+        const targetGroupUrl = (env && env.GROUP_URL) ? env.GROUP_URL : 'https://t.me/+wZUSJyEncD1mYjFl';
+        const waMsgText = 
+          `═════════════════════════\n` +
+          `🎓 *A/L MCQ HUB* — සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!\n` +
+          `═════════════════════════\n\n` +
+          `📚 *ප්‍රශ්න පත්‍රය:* ${paperData.title}\n\n` +
+          `👇 *දැන්ම තරඟයට එකතු වන්න:*\n` +
+          `${targetGroupUrl}`;
+
+        const paperImgUrl = getPaperImageUrl(paperKey);
+        await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
+
+        await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp Broadcast Sent!' }, env);
       }
     } else if (data.startsWith('sub_')) {
       const subId = data.replace('sub_', '');
