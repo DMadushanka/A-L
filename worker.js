@@ -1002,7 +1002,6 @@ async function handleUpdate(update, env, ctx) {
           `👇 *දැන්ම තරඟයට එකතු වන්න:*\n` +
           `${targetGroupUrl}`;
 
-        const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
         // Start Automated WhatsApp Group Poll Quiz Streamer directly on Worker
