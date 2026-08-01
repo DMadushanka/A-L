@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: al-mcq-quiz-bot
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node bot.js
+    envVars:
+      - key: BOT_TOKEN
+        value: 8463293577:AAF2N2_PIP1WIoZE32Q_RMTQ8l1vr_6uXfc
+      - key: ADMIN_ID
+        value: 2035260032
+      - key: GROUP_URL
+        value: https://t.me/+wZUSJyEncD1mYjFl
+      - key: GREEN_API_INSTANCE
+        value: 710722698143
+      - key: GREEN_API_TOKEN
+        value: b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f
+      - key: WA_TARGET_CHAT
+        value: 120363409065043686@g.us
