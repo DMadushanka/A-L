@@ -747,6 +747,120 @@ async function handleUpdate(update, env, ctx) {
 
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp Group Polls Started!' }, env);
       }
+    } else if (data.startsWith('adm_sch_p_')) {
+      const parts = data.split('_'); // ['adm', 'sch', 'p', 'pl', '2016']
+      const subId = parts[3];
+      const yearKey = parts[4];
+      const paperKey = `${subId}_${yearKey}`;
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        const text = 
+          `⏰ **Schedule Quiz — ${paperData.title}**\n\n` +
+          `කරුණාකර ප්‍රශ්න පත්‍ර තරඟය ආරම්භ කිරීමට අවශ්‍ය වේලාව තෝරන්න:`;
+        const kb = {
+          inline_keyboard: [
+            [{ text: '🕒 ඊළඟ පැයේදී (In 1 Hour)', callback_data: `adm_set_1h_${paperKey}` }],
+            [{ text: '🕗 අද රාත්‍රී 8:00 ට (Today 8:00 PM)', callback_data: `adm_set_2000_${paperKey}` }],
+            [{ text: '🕘 අද රාත්‍රී 9:00 ට (Today 9:00 PM)', callback_data: `adm_set_2100_${paperKey}` }],
+            [{ text: '📅 හෙට පෙ.ව. 9:00 ට (Tomorrow 9:00 AM)', callback_data: `adm_set_tom9_${paperKey}` }],
+            [{ text: '⬅️ ආපසු (Back)', callback_data: `adm_sch_sub_${subId}` }]
+          ]
+        };
+
+        await sendApi('editMessageText', {
+          chat_id: chatId,
+          message_id: messageId,
+          text: text,
+          parse_mode: 'Markdown',
+          reply_markup: kb
+        }, env);
+      }
+    } else if (data.startsWith('adm_set_')) {
+      const parts = data.split('_'); // ['adm', 'set', '1h', 'pl', '2016']
+      const timeTag = parts[2];
+      const subId = parts[3];
+      const yearKey = parts[4];
+      const paperKey = `${subId}_${yearKey}`;
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        let delayMs = 0;
+        let timeLabel = '';
+
+        if (timeTag === '1h') {
+          delayMs = 60 * 60 * 1000;
+          timeLabel = 'පැයකින් (In 1 Hour)';
+        } else if (timeTag === '2000') {
+          const t8 = new Date();
+          t8.setHours(20, 0, 0, 0);
+          if (t8.getTime() <= Date.now()) t8.setDate(t8.getDate() + 1);
+          delayMs = t8.getTime() - Date.now();
+          timeLabel = 'අද/හෙට රාත්‍රී 8:00 ට (8:00 PM)';
+        } else if (timeTag === '2100') {
+          const t9 = new Date();
+          t9.setHours(21, 0, 0, 0);
+          if (t9.getTime() <= Date.now()) t9.setDate(t9.getDate() + 1);
+          delayMs = t9.getTime() - Date.now();
+          timeLabel = 'අද/හෙට රාත්‍රී 9:00 ට (9:00 PM)';
+        } else if (timeTag === 'tom9') {
+          const tm9 = new Date();
+          tm9.setDate(tm9.getDate() + 1);
+          tm9.setHours(9, 0, 0, 0);
+          delayMs = tm9.getTime() - Date.now();
+          timeLabel = 'හෙට පෙ.ව. 9:00 ට (Tomorrow 9:00 AM)';
+        }
+
+        // 1. Instant WhatsApp Announcement Broadcast
+        const targetGroupUrl = (env && env.GROUP_URL) ? env.GROUP_URL : 'https://t.me/+wZUSJyEncD1mYjFl';
+        const waMsgText = 
+          `═════════════════════════\n` +
+          `🎓 *A/L MCQ HUB* — සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී!\n` +
+          `═════════════════════════\n\n` +
+          `📚 *ප්‍රශ්න පත්‍රය:* ${paperData.title}\n` +
+          `⏰ *ආරම්භ වන වේලාව:* ${timeLabel}\n\n` +
+          `👇 *දැන්ම තරඟයට එකතු වන්න:*\n` +
+          `${targetGroupUrl}`;
+
+        const paperImgUrl = getPaperImageUrl(paperKey);
+        await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
+
+        // 2. Instant Telegram Announcement Message
+        const tgAnnounce = 
+          `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
+          `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
+          `⏰ **ආරම්භ වන වේලාව:** ${timeLabel}\n\n` +
+          `👇 නියමිත වේලාවට **Start Live Quiz** ක්ලික් කර තරඟයට එකතු වන්න:`;
+
+        const tgKb = {
+          inline_keyboard: [
+            [{ text: '🎯 සජීවී තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${paperKey}` }]
+          ]
+        };
+
+        await sendApi('sendMessage', {
+          chat_id: chatId,
+          text: tgAnnounce,
+          parse_mode: 'Markdown',
+          reply_markup: tgKb
+        }, env);
+
+        // 3. Register delayed execution on Worker (Runs 24/7 in background)
+        if (ctx && typeof ctx.waitUntil === 'function') {
+          ctx.waitUntil((async () => {
+            if (delayMs > 0) {
+              await new Promise(r => setTimeout(r, Math.min(delayMs, 86400000)));
+            }
+            await processSingleWhatsAppPollStep(paperKey, 0, 20, env);
+          })());
+        } else {
+          processSingleWhatsAppPollStep(paperKey, 0, 20, env);
+        }
+
+        await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: `✅ Quiz Scheduled for ${timeLabel}!` }, env);
+      }
     } else if (data.startsWith('sub_')) {
       const subId = data.replace('sub_', '');
       const subData = QUIZ_DATA[subId];
