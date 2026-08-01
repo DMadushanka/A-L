@@ -195,70 +195,79 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
   const apiToken = (env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
   const targetChat = (env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
 
-  // If start of quiz (qIndex === 0), send Intro Card
-  if (qIndex === 0) {
-    const waIntro = 
-      `═════════════════════════\n` +
-      `🎓 *${paperData.title}*\n` +
-      `═════════════════════════\n\n` +
-      `🎯 *Native WhatsApp Poll Quiz* එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
-      `⏱️ සෑම ප්‍රශ්නයකටම තත්පර *${intervalSec}*ක් හිමි වේ.\n` +
-      `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර සහ විග්‍රහය ස්වයංක්‍රීයව පෙන්වනු ඇත.\n\n` +
-      `👇 *පළමු ප්‍රශ්නය පහත දැක්වේ:*`;
-    const introImgUrl = getPaperImageUrl(paperKey);
-    await autoPostToWhatsAppChannel(waIntro, introImgUrl, env);
+  // Send Start Intro Banner Card
+  const waIntro = 
+    `═════════════════════════\n` +
+    `🎓 *${paperData.title}*\n` +
+    `═════════════════════════\n\n` +
+    `🎯 *Native WhatsApp Poll Quiz* එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
+    `📝 මුළු ප්‍රශ්න ගණන: MCQ ${totalQ}\n` +
+    `⚡ සියලුම ප්‍රශ්න පෝලිමට පහතින් නිකුත් වන අතර, අවසානයේ සම්පූර්ණ පිළිතුරු පත්‍රය ලැබෙනු ඇත.\n\n` +
+    `👇 *පළමු ප්‍රශ්නය පහත දැක්වේ:*`;
+  const introImgUrl = getPaperImageUrl(paperKey);
+  await autoPostToWhatsAppChannel(waIntro, introImgUrl, env);
+
+  // Fast 10ms WhatsApp poll stream for all questions (Questions ONLY)
+  for (let i = 0; i < totalQ; i++) {
+    const q = questions[i];
+    const qNum = i + 1;
+
+    const opts = q.options || q.o || [];
+    let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+    rawQText = cleanText(rawQText, 250);
+    rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
+
+    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
+    const cleanOpts = opts.map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
+
+    try {
+      // Send Native WhatsApp Poll
+      await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chatId: targetChat,
+          message: cleanQ,
+          options: cleanOpts,
+          multipleAnswers: false
+        })
+      });
+
+      // Fast 10ms Cloudflare Worker delay
+      if (i < totalQ - 1) {
+        await new Promise(res => setTimeout(res, 10));
+      }
+    } catch (err) {
+      console.error(`Error in Worker WA Fast Streamer Q${qNum}:`, err.message);
+    }
   }
 
-  // Process single question qIndex with timed 15s answer reveal
-  const i = qIndex;
-  const q = questions[i];
-  const qNum = i + 1;
+  // Brief 1-second pause before posting Final Answer Key Booklet
+  await new Promise(res => setTimeout(res, 1000));
 
-  const opts = q.options || q.o || [];
-  const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
-
-  let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
-  rawQText = cleanText(rawQText, 250);
-  rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
-
-  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
-  const cleanOpts = opts.map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
-
-  try {
-    // 1. Send Native WhatsApp Poll
-    const pollRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chatId: targetChat,
-        message: cleanQ,
-        options: cleanOpts,
-        multipleAnswers: false
-      })
-    });
-    const pollData = await pollRes.json();
-    console.log(`🟢 Worker sent WhatsApp Poll [${qNum}/${totalQ}]! Message ID: ${pollData?.idMessage}`);
-
-    // 2. Wait for full 15 seconds interval!
-    await new Promise(res => setTimeout(res, intervalSec * 1000));
-
-    // 3. Send Answer Reveal Card (Clean text without image)
+  // Build Comprehensive Answer Key Booklet Card
+  let bookletLines = [];
+  for (let k = 0; k < totalQ; k++) {
+    const qObj = questions[k];
+    const opts = qObj.options || qObj.o || [];
+    const correctIdx = (qObj.correct !== undefined) ? qObj.correct : ((qObj.c !== undefined) ? qObj.c : 0);
     const rawAnsText = (opts && opts[correctIdx]) ? opts[correctIdx] : '';
-    const correctAnsText = cleanText(rawAnsText, 95);
-    const rawExplain = cleanText(q.e || q.explanation || '', 180);
-    const explainPart = rawExplain ? `\n\n💡 *විග්‍රහය:* ${rawExplain}` : '';
-
-    const answerRevealMsg = 
-      `═════════════════════════\n` +
-      `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර*\n` +
-      `═════════════════════════\n\n` +
-      `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}\n\n` +
-      `─────────────────────────`;
-    
-    await autoPostToWhatsAppChannel(answerRevealMsg, null, env);
-  } catch (err) {
-    console.error(`Error in Worker WA Streamer Q${qNum}:`, err.message);
+    const ansText = cleanText(rawAnsText, 60);
+    const numStr = (k + 1).toString().padStart(2, '0');
+    bookletLines.push(`${numStr}. (${correctIdx + 1}) ${ansText}`);
   }
+
+  const bookletMsg = 
+    `═════════════════════════\n` +
+    `🏆 *${paperData.title}*\n` +
+    `📋 *සම්පූර්ණ නිවැරදි පිළිතුරු පත්‍රය (Answer Key Booklet)* ⚡\n` +
+    `═════════════════════════\n\n` +
+    `📌 *නිවැරදි පිළිතුරු සටහන (MCQ 01 - ${totalQ}):*\n\n` +
+    bookletLines.join('\n') + `\n\n` +
+    `─────────────────────────\n` +
+    `🎉 සහභාගී වූ සියලුම සිසුන්ට සුභ පැතුම්!`;
+
+  await autoPostToWhatsAppChannel(bookletMsg, null, env);
 }
 
 // Fetch questions dynamically from GitHub Pages HTML
