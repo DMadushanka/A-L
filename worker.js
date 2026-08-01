@@ -499,7 +499,116 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
   await autoPostToWhatsAppChannel(bookletMsg, null, env);
 }
 
-// Helper: Pure Native Telegram Group Poll Quiz Launcher (Interactive poll-by-poll response flow)
+async function savePollMapping(pollId, data) {
+  try {
+    const cache = caches.default;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/poll-map/${pollId}`;
+    await cache.put(cacheUrl, new Response(JSON.stringify(data), {
+      headers: { 'Cache-Control': 'public, max-age=86400' }
+    }));
+  } catch (e) {
+    console.error('Error saving poll mapping:', e);
+  }
+}
+
+async function getPollMapping(pollId) {
+  try {
+    const cache = caches.default;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/poll-map/${pollId}`;
+    const match = await cache.match(cacheUrl);
+    if (match) {
+      return await match.json();
+    }
+  } catch (e) {}
+  return null;
+}
+
+async function sendNextNativePollStep(chatId, paperKey, qIndex = 0, score = 0, startTime = Date.now(), env = {}) {
+  if (!paperKey) return;
+  const parts = paperKey.split('_');
+  const subId = parts[0];
+  const yearKey = parts[1];
+
+  const subData = QUIZ_DATA[subId];
+  const paperData = subData?.papers[yearKey];
+  if (!paperData) return;
+
+  const questions = await fetchQuestionsFromHtml(paperData.file);
+  if (!questions || questions.length === 0) return;
+
+  const totalQ = questions.length;
+
+  if (qIndex >= totalQ) {
+    const timeSec = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+    const pct = Math.round((score / totalQ) * 100);
+
+    let verdict = '🎉 විශිෂ්ටයි! උසස් පෙළ ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව නිම කළා.';
+    if (pct < 50) verdict = '👍 මූලික අවබෝධයක් ඇත — තවදුරටත් පුහුණු වන්න.';
+    else if (pct < 75) verdict = '🌟 හොඳයි! තවදුරටත් පුනරීක්ෂණය කරන්න.';
+
+    const resultMessage = 
+      `🏆 **ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව අවසන්!**\n\n` +
+      `🎯 **ලබාගත් ලකුණු:** ${score} / ${totalQ} (${pct}%)\n` +
+      `⏱️ **ගත වූ කාලය:** ${formatDuration(timeSec)}\n` +
+      `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n\n` +
+      `${verdict}`;
+
+    const finishKeyboard = {
+      inline_keyboard: [
+        [{ text: '🔄 නැවත උත්සාහ කරන්න (Retry)', callback_data: `native_${subId}_${yearKey}` }],
+        [{ text: '📑 වෙනත් ප්‍රශ්න පත්‍රයක් (Select Paper)', callback_data: `cat_${subId}_pp` }]
+      ]
+    };
+
+    await sendApi('sendMessage', {
+      chat_id: chatId,
+      text: resultMessage,
+      parse_mode: 'Markdown',
+      reply_markup: finishKeyboard
+    }, env);
+    return;
+  }
+
+  const q = questions[qIndex];
+  const qNum = qIndex + 1;
+
+  let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+  rawQText = cleanText(rawQText, 250);
+  rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
+
+  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
+  const cleanOpts = (q.o || q.options || []).map(o => cleanText(o, 98));
+  const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
+
+  const rawExplain = cleanText(q.e || '', 185);
+  const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
+
+  const pollRes = await sendApi('sendPoll', {
+    chat_id: chatId,
+    question: cleanQ,
+    options: cleanOpts,
+    type: 'quiz',
+    correct_option_id: correctIdx,
+    explanation: cleanExplain,
+    is_anonymous: false
+  }, env);
+
+  if (pollRes.ok && pollRes.result) {
+    const pollId = pollRes.result.poll.id;
+    await savePollMapping(pollId, {
+      chatId,
+      paperKey,
+      qIndex,
+      score,
+      correctOption: correctIdx,
+      startTime
+    });
+  } else {
+    await sendNextNativePollStep(chatId, paperKey, qIndex + 1, score, startTime, env);
+  }
+}
+
+// Helper: Pure Native Telegram Group Poll Quiz Launcher
 async function processSingleTelegramPollStep(paperKey, env = {}) {
   if (!paperKey) return;
   const parts = paperKey.split('_');
@@ -510,25 +619,8 @@ async function processSingleTelegramPollStep(paperKey, env = {}) {
   const paperData = subData?.papers[yearKey];
   if (!paperData) return;
 
-  const qList = await fetchQuestionsFromHtml(paperData.file);
-  if (!qList || qList.length === 0) return;
-
   const tgTarget = getTelegramTargetChat(env, '-1004322002704');
 
-  // Initialize Native Telegram Quiz Session for the Telegram Group
-  SESSIONS[tgTarget] = {
-    chatId: tgTarget,
-    subId,
-    yearKey,
-    paperKey,
-    title: paperData.title,
-    questions: qList,
-    qIndex: 0,
-    score: 0,
-    startTime: Date.now()
-  };
-
-  // Send Intro Announcement Banner to Telegram Group
   const startText = `🚀 **${paperData.title} Native Telegram Quiz තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
   const paperImgUrl = getPaperImageUrl(paperKey);
   const photoRes = await sendApi('sendPhoto', {
@@ -546,8 +638,7 @@ async function processSingleTelegramPollStep(paperKey, env = {}) {
     }, env);
   }
 
-  // Send Question 1 Native Telegram Poll to Group
-  await sendNextNativePoll(tgTarget, env);
+  await sendNextNativePollStep(tgTarget, paperKey, 0, 0, Date.now(), env);
 }
 
 // Fetch questions dynamically from GitHub Pages HTML
@@ -1123,31 +1214,22 @@ async function handleUpdate(update, env, ctx) {
     }
   }
 
-  // Handle Native Telegram Poll Answers
+  // Handle Native Telegram Poll Answers (Persistent Cross-Isolate Flow)
   if (update.poll_answer) {
     const answer = update.poll_answer;
     const pollId = answer.poll_id;
-    const userId = answer.user ? String(answer.user.id) : null;
     const selectedOptions = answer.option_ids;
 
-    const mapping = POLL_MAP[pollId];
+    const mapping = await getPollMapping(pollId);
     if (mapping) {
-      const { chatId, correctOption, isGroup } = mapping;
-      if (!isGroup) {
-        delete POLL_MAP[pollId];
+      const { chatId, paperKey, qIndex, score, correctOption, startTime } = mapping;
+      let newScore = score || 0;
+
+      if (selectedOptions && selectedOptions[0] === correctOption) {
+        newScore++;
       }
 
-      // Check for active session in chatId or userId
-      const targetSessionId = chatId || userId;
-      const session = SESSIONS[targetSessionId] || (userId ? SESSIONS[userId] : null);
-
-      if (session) {
-        if (selectedOptions && selectedOptions[0] === correctOption) {
-          session.score++;
-        }
-        session.qIndex++;
-        await sendNextNativePoll(session.chatId || targetSessionId, env);
-      }
+      await sendNextNativePollStep(chatId, paperKey, qIndex + 1, newScore, startTime, env);
     }
   }
 
@@ -1603,8 +1685,8 @@ async function handleUpdate(update, env, ctx) {
           parse_mode: 'Markdown'
         }, env);
 
-        // Send first native poll
-        await sendNextNativePoll(chatId, env);
+        // Send first native poll via persistent step streamer
+        await sendNextNativePollStep(chatId, paperKey, 0, 0, Date.now(), env);
       }
     }
 
