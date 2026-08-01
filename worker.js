@@ -171,6 +171,30 @@ export default {
       }
     }
 
+    // Endpoint 4: Register 24/7 Green API WhatsApp Webhook on Cloudflare Worker
+    if (url.pathname === '/setup-wa-webhook') {
+      const instanceId = env.GREEN_API_INSTANCE || '710722698143';
+      const apiToken = env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f';
+      const waWebhookUrl = `${url.origin}/wa-webhook`;
+      try {
+        const res = await fetch(`https://api.green-api.com/waInstance${instanceId}/setSettings/${apiToken}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            webhookUrl: waWebhookUrl,
+            outgoingWebhook: 'yes',
+            stateWebhook: 'yes',
+            incomingWebhook: 'yes',
+            pollMessageWebhook: 'yes'
+          })
+        });
+        const result = await res.json();
+        return new Response(JSON.stringify({ ok: true, status: 'wa_webhook_set_24_7', url: waWebhookUrl, result }, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      } catch (err) {
+        return new Response(JSON.stringify({ ok: false, error: err.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      }
+    }
+
     if (request.method === 'POST') {
       try {
         const update = await request.json();
