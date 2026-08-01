@@ -224,7 +224,7 @@ function parseCustomTimeInput(inputStr) {
   return null;
 }
 
-let SAVED_TG_GROUP_ID = null;
+let SAVED_TG_GROUP_ID = '-1004322002704';
 
 function getTelegramTargetChat(env, fallbackChatId) {
   if (env && env.TG_TARGET_CHAT && env.TG_TARGET_CHAT.trim() !== '') {
@@ -233,10 +233,10 @@ function getTelegramTargetChat(env, fallbackChatId) {
   if (SAVED_TG_GROUP_ID) {
     return SAVED_TG_GROUP_ID;
   }
-  if (fallbackChatId && String(fallbackChatId).trim() !== '') {
+  if (fallbackChatId && String(fallbackChatId).startsWith('-')) {
     return String(fallbackChatId).trim();
   }
-  return '2035260032';
+  return '-1004322002704';
 }
 
 function cleanText(str, maxLen = 300) {
@@ -339,7 +339,7 @@ async function autoPostToWhatsAppChannel(messageText, imageUrl = null, env = {})
 async function autoPostToTelegramViaGreenApi(messageText, imageUrl = null, env = {}) {
   const instanceId = (env.GREEN_API_TG_INSTANCE || '410022698261').trim();
   const apiToken = (env.GREEN_API_TG_TOKEN || '17e510a2ebf3421f911f9cb223cde00dedda659906f2477d9a').trim();
-  const targetChat = (env.TG_TARGET_CHAT || '').trim();
+  const targetChat = getTelegramTargetChat(env, '-1004322002704');
 
   if (!instanceId || !apiToken) return false;
 
