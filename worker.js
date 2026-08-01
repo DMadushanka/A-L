@@ -160,7 +160,7 @@ export default {
         const info = await infoRes.json();
 
         if (info?.result?.url === workerUrl) {
-          return new Response(JSON.stringify({ ok: true, status: 'already_active', url: workerUrl, info: info.result }, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
+          return new Response(JSON.stringify({ ok: true, status: 'already_active_24_7', url: workerUrl, info: info.result }, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
         }
 
         const setRes = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${encodeURIComponent(workerUrl)}`);
