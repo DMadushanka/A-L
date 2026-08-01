@@ -239,8 +239,8 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
       const pollData = await pollRes.json();
       console.log(`🟢 Worker sent WhatsApp Poll [${qNum}/${totalQ}]! Message ID: ${pollData?.idMessage}`);
 
-      // 2. Wait for question interval
-      await new Promise(res => setTimeout(res, intervalSec * 1000));
+      // 2. Fast 10ms Cloudflare Worker delay (Green API handles 20s queue delay)
+      await new Promise(res => setTimeout(res, 10));
 
       // 3. Send Answer Reveal Card (Clean text without image)
       const rawAnsText = (opts && opts[correctIdx]) ? opts[correctIdx] : '';
@@ -257,9 +257,9 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
       
       await autoPostToWhatsAppChannel(answerRevealMsg, null, env);
 
-      // Brief 2-second gap before next question
+      // Fast 10ms Cloudflare Worker delay before queuing next question
       if (i < totalQ - 1) {
-        await new Promise(res => setTimeout(res, 2000));
+        await new Promise(res => setTimeout(res, 10));
       }
     } catch (err) {
       console.error(`Error in Worker WA Streamer Q${qNum}:`, err.message);
@@ -372,7 +372,8 @@ export default {
             outgoingWebhook: 'yes',
             stateWebhook: 'yes',
             incomingWebhook: 'yes',
-            pollMessageWebhook: 'yes'
+            pollMessageWebhook: 'yes',
+            delaySendMessagesMilliseconds: 20000
           })
         });
         const result = await res.json();
