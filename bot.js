@@ -525,6 +525,12 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
         await new Promise(res => setTimeout(res, 1500));
       }
 
+      const correctIdx = q.c || 0;
+      const rawAnsText = (q.o && q.o[correctIdx]) ? q.o[correctIdx] : '';
+      const correctAnsText = cleanText(rawAnsText, 95);
+      const rawExplain = cleanText(q.e || '', 180);
+      const explainPart = rawExplain ? `\n\n💡 *විග්‍රහය:* ${rawExplain}` : '';
+
       const answerRevealMsg = 
         `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර:*\n` +
         `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}`;
