@@ -209,7 +209,7 @@ export default {
 };
 
 async function sendApi(method, payload, env) {
-  const BOT_TOKEN = env.BOT_TOKEN;
+  const BOT_TOKEN = (env && env.BOT_TOKEN) ? env.BOT_TOKEN : '8463293577:AAF2N2_PIP1WIoZE32Q_RMTQ8l1vr_6uXfc';
   const url = `https://api.telegram.org/bot${BOT_TOKEN}/${method}`;
   const res = await fetch(url, {
     method: 'POST',
@@ -294,9 +294,9 @@ async function sendNextNativePoll(chatId, env) {
 }
 
 async function handleUpdate(update, env) {
-  const GROUP_URL = env.GROUP_URL || '';
-  const FB_PAGE_URL = env.FB_PAGE_URL || '';
-  const WA_CHANNEL_URL = env.WA_CHANNEL_URL || 'https://whatsapp.com/channel/0029VbDIx2lHwXb4rvJNIV0D';
+  const GROUP_URL = (env && env.GROUP_URL) ? env.GROUP_URL : 'https://t.me/+wZUSJyEncD1mYjFl';
+  const FB_PAGE_URL = (env && env.FB_PAGE_URL) ? env.FB_PAGE_URL : 'https://facebook.com/ALMSQHUB';
+  const WA_CHANNEL_URL = (env && env.WA_CHANNEL_URL) ? env.WA_CHANNEL_URL : 'https://chat.whatsapp.com/GVqkNJtrwqLLSsiFOjF2b4';
 
   const getSubjectKeyboard = (isGroup = false) => {
     const portalUrl = `${BASE_URL}/index.html`;
