@@ -552,16 +552,23 @@ async function processSingleTelegramPollStep(paperKey, qIndex = 0, intervalSec =
   const rawExplain = cleanText(q.e || '', 185);
   const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
 
-  await sendApi('sendPoll', {
+  const pollRes = await sendApi('sendPoll', {
     chat_id: tgTarget,
     question: cleanQ,
     options: cleanOpts,
     type: 'quiz',
     correct_option_id: correctIdx,
     explanation: cleanExplain,
-    open_period: Math.min(intervalSec, 60),
     is_anonymous: false
   }, env);
+
+  if (pollRes.ok && pollRes.result) {
+    POLL_MAP[pollRes.result.poll.id] = {
+      chatId: tgTarget,
+      correctOption: correctIdx,
+      isGroup: true
+    };
+  }
 
   const nextUrl = `${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=${qIndex + 1}&intervalSec=${intervalSec}`;
 
@@ -1158,20 +1165,25 @@ async function handleUpdate(update, env, ctx) {
   if (update.poll_answer) {
     const answer = update.poll_answer;
     const pollId = answer.poll_id;
+    const userId = answer.user ? String(answer.user.id) : null;
     const selectedOptions = answer.option_ids;
 
     const mapping = POLL_MAP[pollId];
     if (mapping) {
-      const { chatId, correctOption } = mapping;
-      delete POLL_MAP[pollId];
+      const { chatId, correctOption, isGroup } = mapping;
+      if (!isGroup) {
+        delete POLL_MAP[pollId];
+      }
 
-      const session = SESSIONS[chatId];
+      const sessionKey = (isGroup && userId) ? userId : chatId;
+      const session = SESSIONS[sessionKey] || SESSIONS[chatId];
+
       if (session) {
         if (selectedOptions && selectedOptions[0] === correctOption) {
           session.score++;
         }
         session.qIndex++;
-        await sendNextNativePoll(chatId, env);
+        await sendNextNativePoll(session.chatId || sessionKey, env);
       }
     }
   }
