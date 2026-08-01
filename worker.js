@@ -1357,13 +1357,7 @@ async function handleUpdate(update, env, ctx) {
           `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n\n` +
           `💡 **විශේෂතා:** Native Telegram Polls, Instant Confetti 🎉, Leaderboards & Top 3 Winner Podiums!\n\n` +
-          `👇 පහත **Start Live Quiz** ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:`;
-
-        const announceKb = {
-          inline_keyboard: [
-            [{ text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${paperKey}` }]
-          ]
-        };
+          `👇 **පළමු ප්‍රශ්නය පහත දැක්වේ:**`;
 
         const paperImgUrl = getPaperImageUrl(paperKey);
         const tgTarget = getTelegramTargetChat(env, chatId);
@@ -1372,16 +1366,14 @@ async function handleUpdate(update, env, ctx) {
           chat_id: tgTarget,
           photo: paperImgUrl,
           caption: announceMsg,
-          parse_mode: 'Markdown',
-          reply_markup: announceKb
+          parse_mode: 'Markdown'
         }, env);
 
         if (!photoRes.ok) {
           await sendApi('sendMessage', {
             chat_id: tgTarget,
             text: announceMsg,
-            parse_mode: 'Markdown',
-            reply_markup: announceKb
+            parse_mode: 'Markdown'
           }, env);
         }
 
