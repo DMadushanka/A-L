@@ -255,13 +255,6 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
   } catch (err) {
     console.error(`Error in Worker WA Streamer Q${qNum}:`, err.message);
   }
-
-  // Self-chain to next question on a brand new, fresh Cloudflare Worker request!
-  const nextUrl = `${origin}/stream-wa-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=${qIndex + 1}&intervalSec=${intervalSec}`;
-  const triggerPromise = fetch(nextUrl).catch(e => console.error('Error triggering next step:', e));
-  if (ctx && typeof ctx.waitUntil === 'function') {
-    ctx.waitUntil(triggerPromise);
-  }
 }
 
 // Fetch questions dynamically from GitHub Pages HTML
@@ -376,11 +369,19 @@ export default {
       const qIndex = parseInt(url.searchParams.get('qIndex') || '0', 10);
       const intervalSec = parseInt(url.searchParams.get('intervalSec') || '20', 10);
       const origin = url.origin;
+      const nextUrl = `${origin}/stream-wa-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=${qIndex + 1}&intervalSec=${intervalSec}`;
 
       if (ctx && typeof ctx.waitUntil === 'function') {
-        ctx.waitUntil(processSingleWhatsAppPollStep(paperKey, qIndex, intervalSec, env, ctx, origin));
+        ctx.waitUntil((async () => {
+          await processSingleWhatsAppPollStep(paperKey, qIndex, intervalSec, env);
+          try {
+            await fetch(nextUrl);
+          } catch (err) {
+            console.error('Error fetching next step:', err);
+          }
+        })());
       } else {
-        processSingleWhatsAppPollStep(paperKey, qIndex, intervalSec, env, ctx, origin);
+        processSingleWhatsAppPollStep(paperKey, qIndex, intervalSec, env);
       }
 
       return new Response(JSON.stringify({ ok: true, paperKey, qIndex }), { status: 200, headers: { 'Content-Type': 'application/json' } });
@@ -713,10 +714,11 @@ async function handleUpdate(update, env, ctx) {
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
         // Start 100% Automated Perpetual Self-Chaining WhatsApp Group Poll Quiz Streamer on Worker
+        const streamUrl = `https://a-l.gayanmadushanka1610.workers.dev/stream-wa-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=0&intervalSec=20`;
         if (ctx && typeof ctx.waitUntil === 'function') {
-          ctx.waitUntil(processSingleWhatsAppPollStep(paperKey, 0, 20, env, ctx, 'https://a-l.gayanmadushanka1610.workers.dev'));
+          ctx.waitUntil(fetch(streamUrl).catch(e => console.error('Stream start error:', e)));
         } else {
-          processSingleWhatsAppPollStep(paperKey, 0, 20, env, ctx, 'https://a-l.gayanmadushanka1610.workers.dev');
+          fetch(streamUrl).catch(e => console.error('Stream start error:', e));
         }
 
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp Group Polls Started!' }, env);
