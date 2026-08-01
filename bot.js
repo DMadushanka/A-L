@@ -447,13 +447,15 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
   const apiToken = (process.env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
   const targetChat = (process.env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
 
-  // Send Intro Card to WhatsApp Group with high-res subject cover banner
+  // Send Intro Card to WhatsApp Group with high-res subject cover banner & card framing
   const waIntro = 
-    `🎓 *${paperData.title}*\n\n` +
-    `🎯 Native WhatsApp Poll Quiz එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
-    `⏱️ සෑම ප්‍රශ්නයකටම තත්පර ${intervalSec}ක් හිමි වේ.\n` +
-    `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර සහ විග්‍රහය ස්වයංක්‍රීයව පෙන්වනු ඇත.\n` +
-    `පළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
+    `═════════════════════════\n` +
+    `🎓 *${paperData.title}*\n` +
+    `═════════════════════════\n\n` +
+    `🎯 *Native WhatsApp Poll Quiz* එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
+    `⏱️ සෑම ප්‍රශ්නයකටම තත්පර *${intervalSec}*ක් හිමි වේ.\n` +
+    `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර සහ විග්‍රහය ස්වයංක්‍රීයව පෙන්වනු ඇත.\n\n` +
+    `👇 *පළමු ප්‍රශ්නය පහත දැක්වේ:*`;
   const introImgUrl = getPaperImageUrl(paperKey);
   await autoPostToWhatsAppChannel(waIntro, introImgUrl);
 
@@ -566,8 +568,11 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
       const explainPart = rawExplain ? `\n\n💡 *විග්‍රහය:* ${rawExplain}` : '';
 
       const answerRevealMsg = 
-        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර:*\n` +
-        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}`;
+        `═════════════════════════\n` +
+        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර*\n` +
+        `═════════════════════════\n\n` +
+        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}\n\n` +
+        `─────────────────────────`;
       
       await autoPostToWhatsAppChannel(answerRevealMsg);
 
@@ -582,7 +587,11 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
   }
 
   // 4. Final WhatsApp Group Leaderboard Mark Sheet Calculation
-  let waFinishMsg = `🏆 *${paperData.title} — 📊 නිල WhatsApp Group ලකුණු සටහන (Final Mark Sheet v3.0)* ⚡\n\n`;
+  let waFinishMsg = 
+    `═════════════════════════\n` +
+    `🏆 *${paperData.title}*\n` +
+    `📊 *නිල WhatsApp Group ලකුණු සටහන* ⚡\n` +
+    `═════════════════════════\n\n`;
 
   const waStudents = Object.values(groupUserScores).sort((a, b) => b.score - a.score);
 
