@@ -713,12 +713,11 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // Start 100% Automated Perpetual Self-Chaining WhatsApp Group Poll Quiz Streamer on Worker
-        const streamUrl = `https://a-l.gayanmadushanka1610.workers.dev/stream-wa-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=0&intervalSec=20`;
+        // Start Automated WhatsApp Group Poll Quiz Streamer directly on Worker
         if (ctx && typeof ctx.waitUntil === 'function') {
-          ctx.waitUntil(fetch(streamUrl).catch(e => console.error('Stream start error:', e)));
+          ctx.waitUntil(processSingleWhatsAppPollStep(paperKey, 0, 15, env));
         } else {
-          fetch(streamUrl).catch(e => console.error('Stream start error:', e));
+          processSingleWhatsAppPollStep(paperKey, 0, 15, env);
         }
 
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp Group Polls Started!' }, env);
