@@ -151,6 +151,15 @@ export default {
       return new Response(JSON.stringify(votes), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
+    // Endpoint 3: Register 24/7 Telegram Webhook on Cloudflare Worker
+    if (url.pathname === '/setup-telegram-webhook') {
+      const token = env.BOT_TOKEN || '8463293577:AAF2N2_PIP1WIoZE32Q_RMTQ8l1vr_6uXfc';
+      const workerUrl = `${url.origin}`;
+      const res = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${encodeURIComponent(workerUrl)}`);
+      const result = await res.json();
+      return new Response(JSON.stringify(result, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
     if (request.method === 'POST') {
       try {
         const update = await request.json();
