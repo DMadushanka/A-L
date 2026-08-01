@@ -209,52 +209,71 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
     await autoPostToWhatsAppChannel(waIntro, introImgUrl, env);
   }
 
-  const q = questions[qIndex];
-  const qNum = qIndex + 1;
+  // Stream questions sequentially with timed answer reveals
+  for (let i = qIndex; i < totalQ; i++) {
+    const q = questions[i];
+    const qNum = i + 1;
 
-  let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
-  rawQText = cleanText(rawQText, 250);
-  rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
+    const opts = q.options || q.o || [];
+    const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
 
-  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
-  const cleanOpts = (q.o || []).map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
+    let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+    rawQText = cleanText(rawQText, 250);
+    rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
 
-  try {
-    // 1. Send Native WhatsApp Poll
-    const pollRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chatId: targetChat,
-        message: cleanQ,
-        options: cleanOpts,
-        multipleAnswers: false
-      })
-    });
-    const pollData = await pollRes.json();
-    console.log(`🟢 Worker sent WhatsApp Poll [${qNum}/${totalQ}]! Message ID: ${pollData?.idMessage}`);
+    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
+    const cleanOpts = opts.map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
 
-    // 2. Wait for question interval
-    await new Promise(res => setTimeout(res, intervalSec * 1000));
+    try {
+      // 1. Send Native WhatsApp Poll
+      const pollRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chatId: targetChat,
+          message: cleanQ,
+          options: cleanOpts,
+          multipleAnswers: false
+        })
+      });
+      const pollData = await pollRes.json();
+      console.log(`🟢 Worker sent WhatsApp Poll [${qNum}/${totalQ}]! Message ID: ${pollData?.idMessage}`);
 
-    // 3. Send Answer Reveal Card
-    const correctIdx = q.c || 0;
-    const rawAnsText = (q.o && q.o[correctIdx]) ? q.o[correctIdx] : '';
-    const correctAnsText = cleanText(rawAnsText, 95);
-    const rawExplain = cleanText(q.e || '', 180);
-    const explainPart = rawExplain ? `\n\n💡 *විග්‍රහය:* ${rawExplain}` : '';
+      // 2. Wait for question interval
+      await new Promise(res => setTimeout(res, intervalSec * 1000));
 
-    const answerRevealMsg = 
-      `═════════════════════════\n` +
-      `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර*\n` +
-      `═════════════════════════\n\n` +
-      `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}\n\n` +
-      `─────────────────────────`;
-    
-    await autoPostToWhatsAppChannel(answerRevealMsg, null, env);
-  } catch (err) {
-    console.error(`Error in Worker WA Streamer Q${qNum}:`, err.message);
+      // 3. Send Answer Reveal Card (Clean text without image)
+      const rawAnsText = (opts && opts[correctIdx]) ? opts[correctIdx] : '';
+      const correctAnsText = cleanText(rawAnsText, 95);
+      const rawExplain = cleanText(q.e || q.explanation || '', 180);
+      const explainPart = rawExplain ? `\n\n💡 *විග්‍රහය:* ${rawExplain}` : '';
+
+      const answerRevealMsg = 
+        `═════════════════════════\n` +
+        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර*\n` +
+        `═════════════════════════\n\n` +
+        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}\n\n` +
+        `─────────────────────────`;
+      
+      await autoPostToWhatsAppChannel(answerRevealMsg, null, env);
+
+      // Brief 2-second gap before next question
+      if (i < totalQ - 1) {
+        await new Promise(res => setTimeout(res, 2000));
+      }
+    } catch (err) {
+      console.error(`Error in Worker WA Streamer Q${qNum}:`, err.message);
+    }
   }
+
+  // Send Final Completion Card
+  const finishMsg = 
+    `═════════════════════════\n` +
+    `🏆 *${paperData.title}*\n` +
+    `🎯 *ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව අවසන්!* ⚡\n` +
+    `═════════════════════════\n\n` +
+    `🎉 සහභාගී වූ සියලුම සිසුන්ට ස්තූතියි!`;
+  await autoPostToWhatsAppChannel(finishMsg, null, env);
 }
 
 // Fetch questions dynamically from GitHub Pages HTML
