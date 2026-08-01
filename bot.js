@@ -284,32 +284,59 @@ console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
 console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
 console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode)'}`);
 
+function getPaperImageUrl(paperKey) {
+  if (!paperKey) return 'https://dmadushanka.github.io/A-L/logo.png';
+  const parts = paperKey.split('_');
+  const subId = parts[0];
+  const yearKey = parts[1];
+  const subData = QUIZ_DATA[subId];
+  const paperData = subData?.papers[yearKey];
+  if (paperData && paperData.img) {
+    return `https://dmadushanka.github.io/A-L/${paperData.img}`;
+  }
+  return 'https://dmadushanka.github.io/A-L/logo.png';
+}
+
 // Helper: Zero-Manual-Interaction Automated WhatsApp Channel Publisher via Green API
-async function autoPostToWhatsAppChannel(messageText) {
+async function autoPostToWhatsAppChannel(messageText, imageUrl = 'https://dmadushanka.github.io/A-L/logo.png') {
   const instanceId = (process.env.GREEN_API_INSTANCE || '710722698143').trim();
   const apiToken = (process.env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
   const targetChat = (process.env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
 
   if (!instanceId || !apiToken) return false;
 
-  const url = `https://api.green-api.com/waInstance${instanceId}/sendMessage/${apiToken}`;
+  const targetImageUrl = imageUrl || 'https://dmadushanka.github.io/A-L/logo.png';
 
   try {
-    const res = await fetch(url, {
+    // If imageUrl is specified or default logo exists, send as file with caption for crisp high-res banner preview
+    const res = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendFileByUrl/${apiToken}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         chatId: targetChat,
-        message: messageText
+        urlFile: targetImageUrl,
+        fileName: 'al_mcq_hub_banner.png',
+        caption: messageText
       })
     });
 
     const data = await res.json();
     if (data && data.idMessage) {
-      console.log(`🟢 100% Automated WhatsApp Post sent! Message ID: ${data.idMessage}`);
+      console.log(`🟢 100% Automated WhatsApp Image Banner Post sent! Message ID: ${data.idMessage}`);
       return true;
     } else {
-      console.log('Green API response:', JSON.stringify(data));
+      // Fallback to text sendMessage if sendFileByUrl fails
+      const textRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendMessage/${apiToken}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chatId: targetChat,
+          message: messageText
+        })
+      });
+      const textData = await textRes.json();
+      console.log('Green API text fallback response:', JSON.stringify(textData));
+      return !!textData?.idMessage;
     }
   } catch (err) {
     console.error('Error auto-posting to WA Channel:', err.message);
@@ -363,10 +390,11 @@ function startLiveCountdownEngine(paperKey, title, targetTime, targets, jobId) {
         } catch(e) {}
       }
 
-      // Send 1 WhatsApp Channel Post when Live Quiz starts
+      // Send 1 WhatsApp Channel Post when Live Quiz starts with high-res subject image banner
       const groupUrl = process.env.GROUP_URL || 'https://t.me/+wZUSJyEncD1mYjFl';
       const waMsgText = `🎓 A/L MCQ HUB — **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\n📚 **ප්‍රශ්න පත්‍රය:** ${title}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\n${groupUrl}`;
-      await autoPostToWhatsAppChannel(waMsgText);
+      const paperImgUrl = getPaperImageUrl(paperKey);
+      await autoPostToWhatsAppChannel(waMsgText, paperImgUrl);
 
       // Launch WhatsApp Group Quiz Streamer
       await runNativeWhatsAppGroupQuiz(paperKey);
@@ -414,14 +442,15 @@ async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
   const apiToken = (process.env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
   const targetChat = (process.env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
 
-  // Send Intro Card to WhatsApp Group
+  // Send Intro Card to WhatsApp Group with high-res subject cover banner
   const waIntro = 
     `🎓 *${paperData.title}*\n\n` +
     `🎯 Native WhatsApp Poll Quiz එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
     `⏱️ සෑම ප්‍රශ්නයකටම තත්පර ${intervalSec}ක් හිමි වේ.\n` +
     `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර සහ විග්‍රහය ස්වයංක්‍රීයව පෙන්වනු ඇත.\n` +
     `පළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
-  await autoPostToWhatsAppChannel(waIntro);
+  const introImgUrl = getPaperImageUrl(paperKey);
+  await autoPostToWhatsAppChannel(waIntro, introImgUrl);
 
   // Track group member scores for this session (Anti-Cheating Engine)
   const groupUserScores = {};
@@ -1321,7 +1350,8 @@ bot.on('callback_query', async (query) => {
 
         // 3. Automated Zero-Manual-Interaction WhatsApp Channel Broadcast Trigger
         const waMsgText = `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟ දැනුම්දීම (Upcoming Live Quiz)'}\n\n📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}\n👇 දැන්ම තරඟයට එකතු වන්න:\n${targetGroupUrl}`;
-        await autoPostToWhatsAppChannel(waMsgText);
+        const broadcastPaperImgUrl = getPaperImageUrl(paperKey);
+        await autoPostToWhatsAppChannel(waMsgText, broadcastPaperImgUrl);
 
         if (isNow) {
           await runNativeWhatsAppGroupQuiz(paperKey);
