@@ -69,7 +69,7 @@ const SESSIONS = {}; // chatId -> { subId, yearKey, paperKey, title, questions, 
 const CUSTOM_TIME_STATE = {}; // chatId -> { paperKey, time }
 const SCHEDULED_QUIZZES = []; // array of { paperKey, targetTime, chatId, timeLabel, executed }
 const AUTHORIZED_ADMIN_IDS = ['2035260032', '5813878261'];
-const QUIZ_STOP_FLAGS = {}; // paperKey or 'all' -> boolean
+let GLOBAL_QUIZ_STOPPED_IN_MEMORY = false;
 
 function isAdminUser(fromId, env) {
   if (!fromId) return false;
@@ -79,14 +79,45 @@ function isAdminUser(fromId, env) {
   return false;
 }
 
-function requestStopQuiz(paperKey = 'all') {
-  QUIZ_STOP_FLAGS[paperKey] = true;
-  QUIZ_STOP_FLAGS['all'] = true;
-  console.log(`🛑 Stop requested for quiz: ${paperKey}`);
+async function requestStopQuiz(paperKey = 'all') {
+  GLOBAL_QUIZ_STOPPED_IN_MEMORY = true;
+  try {
+    const cache = caches.default;
+    const cacheUrl = 'https://a-l.gayanmadushanka1610.workers.dev/quiz-stopped-flag';
+    await cache.put(cacheUrl, new Response('true', {
+      headers: { 'Cache-Control': 'public, max-age=3600' }
+    }));
+    console.log(`🛑 Global Stop Signal written to Cloudflare Cache API!`);
+  } catch (e) {
+    console.error('Error writing stop signal to cache:', e);
+  }
 }
 
-function isQuizStopped(paperKey) {
-  return QUIZ_STOP_FLAGS[paperKey] || QUIZ_STOP_FLAGS['all'] || false;
+async function isQuizStopped(paperKey) {
+  if (GLOBAL_QUIZ_STOPPED_IN_MEMORY) return true;
+  try {
+    const cache = caches.default;
+    const cacheUrl = 'https://a-l.gayanmadushanka1610.workers.dev/quiz-stopped-flag';
+    const match = await cache.match(cacheUrl);
+    if (match) {
+      const txt = await match.text();
+      if (txt === 'true') {
+        GLOBAL_QUIZ_STOPPED_IN_MEMORY = true;
+        return true;
+      }
+    }
+  } catch (e) {}
+  return false;
+}
+
+async function clearQuizStopFlags() {
+  GLOBAL_QUIZ_STOPPED_IN_MEMORY = false;
+  try {
+    const cache = caches.default;
+    const cacheUrl = 'https://a-l.gayanmadushanka1610.workers.dev/quiz-stopped-flag';
+    await cache.delete(cacheUrl);
+    console.log(`🟢 Global Stop Signal cleared from Cloudflare Cache API!`);
+  } catch (e) {}
 }
 
 function scheduleQuiz(paperKey, delayMs, timeLabel, chatId) {
@@ -369,8 +400,8 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
 
   // Fast 10ms WhatsApp poll stream for all questions (Questions ONLY)
   for (let i = 0; i < totalQ; i++) {
-    if (isQuizStopped(paperKey)) {
-      console.log(`🛑 Quiz execution aborted by Admin for ${paperKey}!`);
+    if (await isQuizStopped(paperKey)) {
+      console.log(`🛑 Active WhatsApp poll stream immediately aborted by Admin for ${paperKey}!`);
       return;
     }
     const q = questions[i];
@@ -1128,6 +1159,7 @@ async function handleUpdate(update, env, ctx) {
         }, env);
       }
     } else if (data.startsWith('adm_pub_now_')) {
+      await clearQuizStopFlags();
       const parts = data.split('_'); // ['adm', 'pub', 'now', 'pl', '2016']
       const subId = parts[3];
       const yearKey = parts[4];
