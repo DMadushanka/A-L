@@ -227,10 +227,16 @@ function parseCustomTimeInput(inputStr) {
 let SAVED_TG_GROUP_ID = null;
 
 function getTelegramTargetChat(env, fallbackChatId) {
-  if (env && env.TG_TARGET_CHAT) return env.TG_TARGET_CHAT;
-  if (SAVED_TG_GROUP_ID) return SAVED_TG_GROUP_ID;
-  if (fallbackChatId && String(fallbackChatId).startsWith('-')) return fallbackChatId;
-  return null;
+  if (env && env.TG_TARGET_CHAT && env.TG_TARGET_CHAT.trim() !== '') {
+    return env.TG_TARGET_CHAT.trim();
+  }
+  if (SAVED_TG_GROUP_ID) {
+    return SAVED_TG_GROUP_ID;
+  }
+  if (fallbackChatId && String(fallbackChatId).trim() !== '') {
+    return String(fallbackChatId).trim();
+  }
+  return '2035260032';
 }
 
 function cleanText(str, maxLen = 300) {
