@@ -499,7 +499,7 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
   await autoPostToWhatsAppChannel(bookletMsg, null, env);
 }
 
-// Helper: Fast Telegram Group Native Poll Streamer (All questions streamed reliably to group)
+// Helper: Pure Native Telegram Group Poll Quiz Launcher (Interactive poll-by-poll response flow)
 async function processSingleTelegramPollStep(paperKey, env = {}) {
   if (!paperKey) return;
   const parts = paperKey.split('_');
@@ -510,100 +510,44 @@ async function processSingleTelegramPollStep(paperKey, env = {}) {
   const paperData = subData?.papers[yearKey];
   if (!paperData) return;
 
-  const questions = await fetchQuestionsFromHtml(paperData.file);
-  if (!questions || questions.length === 0) return;
+  const qList = await fetchQuestionsFromHtml(paperData.file);
+  if (!qList || qList.length === 0) return;
 
-  const totalQ = questions.length;
   const tgTarget = getTelegramTargetChat(env, '-1004322002704');
 
-  // Stream Intro Banner to Telegram Group
-  const introText = 
-    `═════════════════════════\n` +
-    `🎓 *${paperData.title}*\n` +
-    `═════════════════════════\n\n` +
-    `🎯 *Native Telegram Poll Quiz* එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
-    `📝 මුළු ප්‍රශ්න ගණන: MCQ ${totalQ}\n` +
-    `⚡ සියලුම ප්‍රශ්න පහතින් නිකුත් වන අතර, සෑම ප්‍රශ්නයකටම ඔබගේ පිළිතුර තෝරන්න!\n\n` +
-    `👇 *පළමු ප්‍රශ්නය පහත දැක්වේ:*`;
-  
-  const introImgUrl = getPaperImageUrl(paperKey);
+  // Initialize Native Telegram Quiz Session for the Telegram Group
+  SESSIONS[tgTarget] = {
+    chatId: tgTarget,
+    subId,
+    yearKey,
+    paperKey,
+    title: paperData.title,
+    questions: qList,
+    qIndex: 0,
+    score: 0,
+    startTime: Date.now()
+  };
+
+  // Send Intro Announcement Banner to Telegram Group
+  const startText = `🚀 **${paperData.title} Native Telegram Quiz තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
+  const paperImgUrl = getPaperImageUrl(paperKey);
   const photoRes = await sendApi('sendPhoto', {
     chat_id: tgTarget,
-    photo: introImgUrl,
-    caption: introText,
+    photo: paperImgUrl,
+    caption: startText,
     parse_mode: 'Markdown'
   }, env);
 
   if (!photoRes.ok) {
     await sendApi('sendMessage', {
       chat_id: tgTarget,
-      text: introText,
+      text: startText,
       parse_mode: 'Markdown'
     }, env);
   }
 
-  // Fast Telegram Poll Stream for all questions (Questions ONLY)
-  for (let i = 0; i < totalQ; i++) {
-    if (await isQuizStopped(paperKey)) {
-      console.log(`🛑 Active Telegram Group poll stream immediately aborted by Admin for ${paperKey}!`);
-      return;
-    }
-
-    const q = questions[i];
-    const qNum = i + 1;
-
-    const opts = q.options || q.o || [];
-    let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
-    rawQText = cleanText(rawQText, 250);
-    rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
-
-    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
-    const cleanOpts = opts.map(o => cleanText(o, 98));
-    const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
-
-    const rawExplain = cleanText(q.e || '', 185);
-    const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
-
-    try {
-      const pollRes = await sendApi('sendPoll', {
-        chat_id: tgTarget,
-        question: cleanQ,
-        options: cleanOpts,
-        type: 'quiz',
-        correct_option_id: correctIdx,
-        explanation: cleanExplain,
-        is_anonymous: false
-      }, env);
-
-      if (pollRes.ok && pollRes.result) {
-        POLL_MAP[pollRes.result.poll.id] = {
-          chatId: tgTarget,
-          correctOption: correctIdx,
-          isGroup: true
-        };
-      }
-
-      if (i < totalQ - 1) {
-        await new Promise(res => setTimeout(res, 100));
-      }
-    } catch (err) {
-      console.error(`Error in TG Fast Poll Stream Q${qNum}:`, err.message);
-    }
-  }
-
-  // Final Telegram Group Finish Message
-  const podiumText = 
-    `═════════════════════════\n` +
-    `🏆 *${paperData.title}*\n` +
-    `🎯 *Telegram සජීවී ප්‍රශ්න පත්‍රයේ සියලුම MCQ ${totalQ} ප්‍රශ්න නිකුත් කර අවසන්!* ⚡\n` +
-    `═════════════════════════\n\n` +
-    `🎉 සහභාගී වූ සහ පිළිතුරු සැපයූ සියලුම සිසුන්ට ස්තූතියි!`;
-  
-  await sendApi('sendMessage', {
-    chat_id: tgTarget,
-    text: podiumText,
-    parse_mode: 'Markdown'
-  }, env);
+  // Send Question 1 Native Telegram Poll to Group
+  await sendNextNativePoll(tgTarget, env);
 }
 
 // Fetch questions dynamically from GitHub Pages HTML
