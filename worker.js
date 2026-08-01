@@ -79,15 +79,38 @@ function isAdminUser(fromId, env) {
   return false;
 }
 
-async function requestStopQuiz(paperKey = 'all') {
+async function clearGreenApiQueue(env = {}) {
+  const waInstance = (env.GREEN_API_INSTANCE || '710722698143').trim();
+  const waToken = (env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
+
+  const tgInstance = (env.GREEN_API_TG_INSTANCE || '410022698261').trim();
+  const tgToken = (env.GREEN_API_TG_TOKEN || '17e510a2ebf3421f911f9cb223cde00dedda659906f2477d9a').trim();
+
+  try {
+    await fetch(`https://api.green-api.com/waInstance${waInstance}/clearSendingQueue/${waToken}`);
+    console.log('🟢 Green API WhatsApp Queue cleared!');
+  } catch (e) {
+    console.error('Error clearing WA queue:', e);
+  }
+
+  try {
+    await fetch(`https://api.green-api.com/tgInstance${tgInstance}/clearSendingQueue/${tgToken}`);
+    console.log('🟢 Green API Telegram Queue cleared!');
+  } catch (e) {
+    console.error('Error clearing TG queue:', e);
+  }
+}
+
+async function requestStopQuiz(paperKey = 'all', env = {}) {
   GLOBAL_QUIZ_STOPPED_IN_MEMORY = true;
+  await clearGreenApiQueue(env);
   try {
     const cache = caches.default;
     const cacheUrl = 'https://a-l.gayanmadushanka1610.workers.dev/quiz-stopped-flag';
     await cache.put(cacheUrl, new Response('true', {
       headers: { 'Cache-Control': 'public, max-age=3600' }
     }));
-    console.log(`🛑 Global Stop Signal written to Cloudflare Cache API!`);
+    console.log(`🛑 Global Stop Signal written to Cloudflare Cache API & Green API Queues Cleared!`);
   } catch (e) {
     console.error('Error writing stop signal to cache:', e);
   }
@@ -962,7 +985,7 @@ async function handleUpdate(update, env, ctx) {
         return;
       }
 
-      requestStopQuiz('all');
+      await requestStopQuiz('all', env);
 
       // 1. WhatsApp Cancellation Card
       const waStopMsg = 
@@ -1078,7 +1101,7 @@ async function handleUpdate(update, env, ctx) {
         reply_markup: getSubjectKeyboard(isGroup)
       }, env);
     } else if (data === 'adm_stop_quiz') {
-      requestStopQuiz('all');
+      await requestStopQuiz('all', env);
 
       const waStopMsg = 
         `═════════════════════════\n` +
