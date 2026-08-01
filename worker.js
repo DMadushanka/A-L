@@ -253,6 +253,54 @@ async function autoPostToWhatsAppChannel(messageText, imageUrl = null, env = {})
   return false;
 }
 
+// Helper: Zero-Manual-Interaction Automated Telegram Broadcast Publisher via Green API Telegram Instance for Cloudflare Worker
+async function autoPostToTelegramViaGreenApi(messageText, imageUrl = null, env = {}) {
+  const instanceId = (env.GREEN_API_TG_INSTANCE || '410022698261').trim();
+  const apiToken = (env.GREEN_API_TG_TOKEN || '17e510a2ebf3421f911f9cb223cde00dedda659906f2477d9a').trim();
+  const targetChat = (env.TG_TARGET_CHAT || '').trim();
+
+  if (!instanceId || !apiToken) return false;
+
+  try {
+    if (imageUrl && targetChat) {
+      const res = await fetch(`https://api.green-api.com/tgInstance${instanceId}/sendFileByUrl/${apiToken}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chatId: targetChat,
+          urlFile: imageUrl,
+          fileName: 'al_mcq_hub_banner.png',
+          caption: messageText
+        })
+      });
+      const data = await res.json();
+      if (data && (data.idMessage || data.id || data.status)) {
+        console.log(`🟢 Green API Telegram Image Post sent! ID: ${data.idMessage || data.id}`);
+        return true;
+      }
+    }
+
+    if (targetChat) {
+      const textRes = await fetch(`https://api.green-api.com/tgInstance${instanceId}/sendMessage/${apiToken}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chatId: targetChat,
+          message: messageText
+        })
+      });
+      const textData = await textRes.json();
+      if (textData && (textData.idMessage || textData.id || textData.status)) {
+        console.log(`🟢 Green API Telegram Text Post sent! ID: ${textData.idMessage || textData.id}`);
+        return true;
+      }
+    }
+  } catch (err) {
+    console.error('Error auto-posting to TG via Green API from Worker:', err.message);
+  }
+  return false;
+}
+
 // Helper: Perpetual Self-Chaining Automated WhatsApp Group Poll Quiz Streamer on Worker
 async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec = 20, env = {}, ctx = null, origin = 'https://a-l.gayanmadushanka1610.workers.dev') {
   if (!paperKey) return;
@@ -762,7 +810,7 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // 2. Instant Telegram Announcement Message with Image Banner to Telegram Group
+        // 2. Instant Telegram Announcement Message with Image Banner to Telegram Group (Via Bot API & Green API Telegram Instance)
         const tgAnnounce = 
           `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
@@ -770,6 +818,8 @@ async function handleUpdate(update, env, ctx) {
           `🔔 නියමිත වේලාව පැමිණි සැනින් මෙම Group එක වෙත ප්‍රශ්න පත්‍රය ස්වයංක්‍රීයව ලැබෙනු ඇත!`;
 
         const tgTarget = getTelegramTargetChat(env, chatId);
+        await autoPostToTelegramViaGreenApi(tgAnnounce, paperImgUrl, env);
+
         const tgPhotoRes = await sendApi('sendPhoto', {
           chat_id: tgTarget,
           photo: paperImgUrl,
@@ -1122,7 +1172,7 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // 2. Instant Telegram Announcement Message with Image Banner to Telegram Group
+        // 2. Instant Telegram Announcement Message with Image Banner to Telegram Group (Via Bot API & Green API Telegram Instance)
         const tgAnnounce = 
           `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
@@ -1130,6 +1180,8 @@ async function handleUpdate(update, env, ctx) {
           `🔔 නියමිත වේලාව පැමිණි සැනින් මෙම Group එක වෙත ප්‍රශ්න පත්‍රය ස්වයංක්‍රීයව ලැබෙනු ඇත!`;
 
         const tgTarget = getTelegramTargetChat(env, chatId);
+        await autoPostToTelegramViaGreenApi(tgAnnounce, paperImgUrl, env);
+
         const tgPhotoRes = await sendApi('sendPhoto', {
           chat_id: tgTarget,
           photo: paperImgUrl,
