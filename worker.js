@@ -155,9 +155,20 @@ export default {
     if (url.pathname === '/setup-telegram-webhook') {
       const token = env.BOT_TOKEN || '8463293577:AAF2N2_PIP1WIoZE32Q_RMTQ8l1vr_6uXfc';
       const workerUrl = `${url.origin}`;
-      const res = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${encodeURIComponent(workerUrl)}`);
-      const result = await res.json();
-      return new Response(JSON.stringify(result, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      try {
+        const infoRes = await fetch(`https://api.telegram.org/bot${token}/getWebhookInfo`);
+        const info = await infoRes.json();
+
+        if (info?.result?.url === workerUrl) {
+          return new Response(JSON.stringify({ ok: true, status: 'already_active', url: workerUrl, info: info.result }, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        }
+
+        const setRes = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${encodeURIComponent(workerUrl)}`);
+        const result = await setRes.json();
+        return new Response(JSON.stringify(result, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      } catch (err) {
+        return new Response(JSON.stringify({ ok: false, error: err.message }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+      }
     }
 
     if (request.method === 'POST') {
