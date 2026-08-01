@@ -1254,8 +1254,10 @@ bot.on('callback_query', async (query) => {
         await bot.editMessageText(confirmText, { chat_id: chatId, message_id: messageId, parse_mode: 'Markdown' }).catch(e => {});
 
         // 2. Broadcast Announcement Card to All Registered Students & Groups
+        const targetGroupUrl = process.env.GROUP_URL || 'https://t.me/+wZUSJyEncD1mYjFl';
+        const targetTimeMs = targetDate.getTime();
         const sentTargets = [];
-        const initialRemSec = !isNow ? Math.max(0, Math.floor((scheduledTimestamp - Date.now()) / 1000)) : 0;
+        const initialRemSec = !isNow ? Math.max(0, Math.floor((targetTimeMs - Date.now()) / 1000)) : 0;
         const initialCountdownStr = !isNow ? formatCountdownText(initialRemSec) : '';
 
         const announceMsg = isNow ?
@@ -1308,11 +1310,11 @@ bot.on('callback_query', async (query) => {
 
         // Trigger Live Second-by-Second Countdown Clock Engine for Telegram
         if (!isNow && sentTargets.length > 0) {
-          startLiveCountdownEngine(paperKey, paperData.title, scheduledTimestamp, sentTargets, newJobId);
+          startLiveCountdownEngine(paperKey, paperData.title, targetTimeMs, sentTargets, newJobId);
         }
 
         // 3. Automated Zero-Manual-Interaction WhatsApp Channel Broadcast Trigger
-        const waMsgText = `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟ දැනුම්දීම (Upcoming Live Quiz)'}\n\n📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}\n👇 දැන්ම තරඟයට එකතු වන්න:\n${groupUrl}`;
+        const waMsgText = `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟ දැනුම්දීම (Upcoming Live Quiz)'}\n\n📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}\n👇 දැන්ම තරඟයට එකතු වන්න:\n${targetGroupUrl}`;
         await autoPostToWhatsAppChannel(waMsgText);
 
         if (isNow) {
@@ -1326,7 +1328,7 @@ bot.on('callback_query', async (query) => {
           `${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}` +
           `💡 විශේෂතා: Real-time Timer, All-Island Leaderboards & Podiums 🎉\n\n` +
           `👇 පහත ලින්ක් එක ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:\n` +
-          `${groupUrl}`
+          `${targetGroupUrl}`
         );
 
         const waShareUrl = `https://api.whatsapp.com/send?text=${waPostText}`;
