@@ -83,21 +83,20 @@ async function clearGreenApiQueue(env = {}) {
   const waInstance = (env.GREEN_API_INSTANCE || '710722698143').trim();
   const waToken = (env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
 
-  const tgInstance = (env.GREEN_API_TG_INSTANCE || '410022698261').trim();
-  const tgToken = (env.GREEN_API_TG_TOKEN || '17e510a2ebf3421f911f9cb223cde00dedda659906f2477d9a').trim();
-
   try {
-    await fetch(`https://api.green-api.com/waInstance${waInstance}/clearSendingQueue/${waToken}`);
-    console.log('🟢 Green API WhatsApp Queue cleared!');
+    const res1 = await fetch(`https://api.green-api.com/waInstance${waInstance}/clearMessagesQueue/${waToken}`);
+    const data1 = await res1.json();
+    console.log('🟢 Green API WhatsApp Queue cleared (api.green-api.com):', data1);
   } catch (e) {
-    console.error('Error clearing WA queue:', e);
+    console.error('Error clearing WA queue (api):', e.message);
   }
 
   try {
-    await fetch(`https://api.green-api.com/tgInstance${tgInstance}/clearSendingQueue/${tgToken}`);
-    console.log('🟢 Green API Telegram Queue cleared!');
+    const res2 = await fetch(`https://7107.api.greenapi.com/waInstance${waInstance}/clearMessagesQueue/${waToken}`);
+    const data2 = await res2.json();
+    console.log('🟢 Green API WhatsApp Queue cleared (7107.api.greenapi.com):', data2);
   } catch (e) {
-    console.error('Error clearing TG queue:', e);
+    console.error('Error clearing WA queue (7107):', e.message);
   }
 }
 
