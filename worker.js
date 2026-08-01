@@ -152,9 +152,13 @@ function parseCustomTimeInput(inputStr) {
   return null;
 }
 
+let SAVED_TG_GROUP_ID = null;
+
 function getTelegramTargetChat(env, fallbackChatId) {
   if (env && env.TG_TARGET_CHAT) return env.TG_TARGET_CHAT;
-  return fallbackChatId;
+  if (SAVED_TG_GROUP_ID) return SAVED_TG_GROUP_ID;
+  if (fallbackChatId && String(fallbackChatId).startsWith('-')) return fallbackChatId;
+  return null;
 }
 
 function cleanText(str, maxLen = 300) {
@@ -771,6 +775,22 @@ async function handleUpdate(update, env, ctx) {
     const chatId = msg.chat.id;
     const isGroup = msg.chat.type !== 'private';
     const text = msg.text || '';
+
+    // Auto-capture Telegram Group Chat ID whenever an update arrives from a group
+    if (isGroup && String(chatId).startsWith('-')) {
+      SAVED_TG_GROUP_ID = String(chatId);
+      console.log(`📌 Captured Telegram Group Chat ID: ${SAVED_TG_GROUP_ID}`);
+    }
+
+    if (text.startsWith('/setgroup')) {
+      SAVED_TG_GROUP_ID = String(chatId);
+      await sendApi('sendMessage', {
+        chat_id: chatId,
+        text: `✅ **මෙම Telegram Group එක (ID: \`${chatId}\`) Broadcasts සඳහා සාර්ථකව Register කරන ලදී!** ⚡\n\nමින්පසු Admin විසින් Schedule හෝ Publish කරන සියලුම Quiz Broadcasts මෙම Group එක වෙත ස්වයංක්‍රීයව ලැබෙනු ඇත.`,
+        parse_mode: 'Markdown'
+      }, env);
+      return;
+    }
 
     // Check if Admin is inputting custom manual scheduled time
     if (CUSTOM_TIME_STATE[chatId] && !text.startsWith('/')) {
