@@ -214,11 +214,15 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
 
     const opts = q.options || q.o || [];
     let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
-    rawQText = cleanText(rawQText, 250);
+    rawQText = cleanText(rawQText, 1000);
     rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
 
-    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
-    const cleanOpts = opts.map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
+    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 1024);
+    const cleanOpts = opts.map((o, idx) => {
+      let optText = cleanText(o, 90);
+      optText = optText.replace(/^[\(\[\{]?\d+[\)\]\}]?\s*/, '');
+      return { optionName: cleanText(`${idx + 1}. ${optText}`, 95) };
+    });
 
     try {
       // Send Native WhatsApp Poll
@@ -252,7 +256,9 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
     const opts = qObj.options || qObj.o || [];
     const correctIdx = (qObj.correct !== undefined) ? qObj.correct : ((qObj.c !== undefined) ? qObj.c : 0);
     const rawAnsText = (opts && opts[correctIdx]) ? opts[correctIdx] : '';
-    const ansText = cleanText(rawAnsText, 60);
+    let ansText = cleanText(rawAnsText, 80);
+    ansText = ansText.replace(/^[\(\[\{]?\d+[\)\]\}]?\s*/, '');
+    
     const numStr = (k + 1).toString().padStart(2, '0');
     bookletLines.push(`${numStr}. (${correctIdx + 1}) ${ansText}`);
   }
