@@ -64,9 +64,48 @@ const QUIZ_DATA = {
   }
 };
 
-// Global State Storage for Active Sessions & Poll Maps
+// Global State Storage for Active Sessions, Poll Maps & Custom Scheduling
 const SESSIONS = {}; // chatId -> { subId, yearKey, paperKey, title, questions, qIndex, score, startTime }
 const POLL_MAP = {}; // pollId -> { chatId, correctOption }
+const CUSTOM_TIME_STATE = {}; // chatId -> { paperKey, time }
+
+function parseCustomTimeInput(inputStr) {
+  if (!inputStr) return null;
+  const str = inputStr.trim().toLowerCase();
+  
+  // 1. Relative mins/hours: '30m', '45m', '15 mins', '2h', '15'
+  const relMatch = str.match(/^(\d+)\s*(m|min|mins|minutes|h|hr|hours)?$/);
+  if (relMatch) {
+    const val = parseInt(relMatch[1], 10);
+    const unit = relMatch[2] || 'm';
+    if (unit.startsWith('h')) {
+      return { delayMs: val * 3600 * 1000, label: `තවත් පැය ${val} කින් (In ${val} Hours)` };
+    } else {
+      return { delayMs: val * 60 * 1000, label: `තවත් මිනිත්තු ${val} කින් (In ${val} Mins)` };
+    }
+  }
+
+  // 2. Exact clock time: '20:30', '8:30', '19:45', '09:15'
+  const timeMatch = str.match(/^(\d{1,2}):(\d{2})$/);
+  if (timeMatch) {
+    const hours = parseInt(timeMatch[1], 10);
+    const mins = parseInt(timeMatch[2], 10);
+    if (hours >= 0 && hours < 24 && mins >= 0 && mins < 60) {
+      const target = new Date();
+      target.setHours(hours, mins, 0, 0);
+      if (target.getTime() <= Date.now()) {
+        target.setDate(target.getDate() + 1);
+      }
+      const delayMs = target.getTime() - Date.now();
+      const hStr = hours.toString().padStart(2, '0');
+      const mStr = mins.toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'රාත්‍රී/සවස' : 'උදෑසන';
+      return { delayMs, label: `පැය ${hStr}:${mStr} ට (${ampm})` };
+    }
+  }
+
+  return null;
+}
 
 function cleanText(str, maxLen = 300) {
   if (!str) return '';
@@ -553,6 +592,85 @@ async function handleUpdate(update, env, ctx) {
     const isGroup = msg.chat.type !== 'private';
     const text = msg.text || '';
 
+    // Check if Admin is inputting custom manual scheduled time
+    if (CUSTOM_TIME_STATE[chatId] && !text.startsWith('/')) {
+      const state = CUSTOM_TIME_STATE[chatId];
+      const parsedTime = parseCustomTimeInput(text);
+
+      if (!parsedTime) {
+        await sendApi('sendMessage', {
+          chat_id: chatId,
+          text: `❌ **වේලාව නිරවුල් නැත!**\n\nකරුණාකර පහත මාදිලියකින් එකක් ටයිප් කර යවන්න (Type valid time):\n• \`20:30\` (රාත්‍රී 8:30 ට)\n• \`19:45\` (සවස 7:45 ට)\n• \`30m\` (තවත් මිනිත්තු 30කින්)\n• \`2h\` (තවත් පැය 2කින්)`,
+          parse_mode: 'Markdown'
+        }, env);
+        return;
+      }
+
+      delete CUSTOM_TIME_STATE[chatId];
+      const { delayMs, label } = parsedTime;
+      const paperKey = state.paperKey;
+      const parts = paperKey.split('_');
+      const subId = parts[0];
+      const yearKey = parts[1];
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        // 1. Instant WhatsApp Announcement Broadcast
+        const targetGroupUrl = (env && env.GROUP_URL) ? env.GROUP_URL : 'https://t.me/+wZUSJyEncD1mYjFl';
+        const waMsgText = 
+          `═════════════════════════\n` +
+          `🎓 *A/L MCQ HUB* — සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී!\n` +
+          `═════════════════════════\n\n` +
+          `📚 *ප්‍රශ්න පත්‍රය:* ${paperData.title}\n` +
+          `⏰ *ආරම්භ වන වේලාව:* ${label}\n\n` +
+          `👇 *දැන්ම තරඟයට එකතු වන්න:*\n` +
+          `${targetGroupUrl}`;
+
+        const paperImgUrl = getPaperImageUrl(paperKey);
+        await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
+
+        // 2. Instant Telegram Announcement Message
+        const tgAnnounce = 
+          `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
+          `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
+          `⏰ **ආරම්භ වන වේලාව:** ${label}\n\n` +
+          `👇 නියමිත වේලාවට **Start Live Quiz** ක්ලික් කර තරඟයට එකතු වන්න:`;
+
+        const tgKb = {
+          inline_keyboard: [
+            [{ text: '🎯 සජීවී තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${paperKey}` }]
+          ]
+        };
+
+        await sendApi('sendMessage', {
+          chat_id: chatId,
+          text: tgAnnounce,
+          parse_mode: 'Markdown',
+          reply_markup: tgKb
+        }, env);
+
+        // 3. Register delayed execution on Worker
+        if (ctx && typeof ctx.waitUntil === 'function') {
+          ctx.waitUntil((async () => {
+            if (delayMs > 0) {
+              await new Promise(r => setTimeout(r, Math.min(delayMs, 86400000)));
+            }
+            await processSingleWhatsAppPollStep(paperKey, 0, 20, env);
+          })());
+        } else {
+          processSingleWhatsAppPollStep(paperKey, 0, 20, env);
+        }
+
+        await sendApi('sendMessage', {
+          chat_id: chatId,
+          text: `✅ **${paperData.title}** සාර්ථකව **${label}** සඳහා Schedule කරන ලදී! ⚡`,
+          parse_mode: 'Markdown'
+        }, env);
+      }
+      return;
+    }
+
     if (text.startsWith('/start') || text.includes('ආරම්භ') || text.includes('Start')) {
       const firstName = msg.from ? msg.from.first_name : 'යහළුවා';
       const welcomeMessage = 
@@ -761,6 +879,7 @@ async function handleUpdate(update, env, ctx) {
           `කරුණාකර ප්‍රශ්න පත්‍ර තරඟය ආරම්භ කිරීමට අවශ්‍ය වේලාව තෝරන්න:`;
         const kb = {
           inline_keyboard: [
+            [{ text: '✏️ Custom Time (මැනුවලි වේලාව ලියන්න)', callback_data: `adm_custom_${paperKey}` }],
             [{ text: '🕒 ඊළඟ පැයේදී (In 1 Hour)', callback_data: `adm_set_1h_${paperKey}` }],
             [{ text: '🕗 අද රාත්‍රී 8:00 ට (Today 8:00 PM)', callback_data: `adm_set_2000_${paperKey}` }],
             [{ text: '🕘 අද රාත්‍රී 9:00 ට (Today 9:00 PM)', callback_data: `adm_set_2100_${paperKey}` }],
@@ -775,6 +894,34 @@ async function handleUpdate(update, env, ctx) {
           text: text,
           parse_mode: 'Markdown',
           reply_markup: kb
+        }, env);
+      }
+    } else if (data.startsWith('adm_custom_')) {
+      const paperKey = data.replace('adm_custom_', '');
+      const parts = paperKey.split('_');
+      const subId = parts[0];
+      const yearKey = parts[1];
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        CUSTOM_TIME_STATE[chatId] = { paperKey, time: Date.now() };
+
+        const text = 
+          `✏️ **Manual Time Entry — ${paperData.title}**\n\n` +
+          `කරුණාකර ප්‍රශ්න පත්‍රය Schedule කිරීමට අවශ්‍ය වේලාව පහතින් ටයිප් කර යවන්න (Type valid time below):\n\n` +
+          `💡 **උදාහරණ (Examples):**\n` +
+          `• \`20:30\` (අද/හෙට රාත්‍රී 8:30 ට)\n` +
+          `• \`19:45\` (අද/හෙට සවස 7:45 ට)\n` +
+          `• \`09:15\` (උදෑසන 9:15 ට)\n` +
+          `• \`30m\` (තවත් මිනිත්තු 30 කින්)\n` +
+          `• \`2h\` (තවත් පැය 2 කින්)`;
+
+        await sendApi('editMessageText', {
+          chat_id: chatId,
+          message_id: messageId,
+          text: text,
+          parse_mode: 'Markdown'
         }, env);
       }
     } else if (data.startsWith('adm_set_')) {
