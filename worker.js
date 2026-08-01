@@ -66,9 +66,28 @@ const QUIZ_DATA = {
 
 // Global State Storage for Active Sessions, Poll Maps & Custom Scheduling
 const SESSIONS = {}; // chatId -> { subId, yearKey, paperKey, title, questions, qIndex, score, startTime }
-const POLL_MAP = {}; // pollId -> { chatId, correctOption }
 const CUSTOM_TIME_STATE = {}; // chatId -> { paperKey, time }
 const SCHEDULED_QUIZZES = []; // array of { paperKey, targetTime, chatId, timeLabel, executed }
+const AUTHORIZED_ADMIN_IDS = ['2035260032', '5813878261'];
+const QUIZ_STOP_FLAGS = {}; // paperKey or 'all' -> boolean
+
+function isAdminUser(fromId, env) {
+  if (!fromId) return false;
+  const idStr = String(fromId).trim();
+  if (AUTHORIZED_ADMIN_IDS.includes(idStr)) return true;
+  if (env && env.ADMIN_ID && String(env.ADMIN_ID).trim() === idStr) return true;
+  return false;
+}
+
+function requestStopQuiz(paperKey = 'all') {
+  QUIZ_STOP_FLAGS[paperKey] = true;
+  QUIZ_STOP_FLAGS['all'] = true;
+  console.log(`🛑 Stop requested for quiz: ${paperKey}`);
+}
+
+function isQuizStopped(paperKey) {
+  return QUIZ_STOP_FLAGS[paperKey] || QUIZ_STOP_FLAGS['all'] || false;
+}
 
 function scheduleQuiz(paperKey, delayMs, timeLabel, chatId) {
   const targetTime = Date.now() + delayMs;
@@ -350,6 +369,10 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
 
   // Fast 10ms WhatsApp poll stream for all questions (Questions ONLY)
   for (let i = 0; i < totalQ; i++) {
+    if (isQuizStopped(paperKey)) {
+      console.log(`🛑 Quiz execution aborted by Admin for ${paperKey}!`);
+      return;
+    }
     const q = questions[i];
     const qNum = i + 1;
 
@@ -896,14 +919,54 @@ async function handleUpdate(update, env, ctx) {
         text: `📖 **උපදෙස්:**\n\n/start යවා විෂයයන් තෝරා පරීක්ෂණ ආරම්භ කරන්න.`,
         parse_mode: 'Markdown'
       }, env);
-    } else if (text.startsWith('/admin')) {
+    } else if (text.startsWith('/stopquiz') || text.startsWith('/stop')) {
       const fromId = msg.from ? String(msg.from.id) : '';
-      const ADMIN_ID = (env && env.ADMIN_ID) ? String(env.ADMIN_ID) : '2035260032';
 
-      if (fromId !== ADMIN_ID && fromId !== '2035260032' && fromId !== '5813878261') {
+      if (!isAdminUser(fromId, env)) {
         await sendApi('sendMessage', {
           chat_id: chatId,
-          text: '⛔ **ඔබට Admin මෙනුව භාවිත කිරීමට අවසර නොමැත.**',
+          text: '⛔ **ඔබට මෙම මෙනුව භාවිත කිරීමට අවසර නොමැත! (Unauthorized)**',
+          parse_mode: 'Markdown'
+        }, env);
+        return;
+      }
+
+      requestStopQuiz('all');
+
+      // 1. WhatsApp Cancellation Card
+      const waStopMsg = 
+        `═════════════════════════\n` +
+        `🛑 *A/L MCQ HUB* — සජීවී ප්‍රශ්න පත්‍ර තරඟය අත්හිටුවන ලදී!\n` +
+        `═════════════════════════\n\n` +
+        `⚠️ Admin විසින් සක්‍රීය ප්‍රශ්න පත්‍ර තරඟය තාවකාලිකව නවත්වන ලදී.`;
+      await autoPostToWhatsAppChannel(waStopMsg, null, env);
+
+      // 2. Telegram Group Cancellation Card
+      const tgTarget = getTelegramTargetChat(env, chatId);
+      if (tgTarget) {
+        const tgStopMsg = 
+          `🛑 **සජීවී ප්‍රශ්න පත්‍ර තරඟය අත්හිටුවන ලදී! (Quiz Stopped by Admin)**\n\n` +
+          `⚠️ Admin විසින් සක්‍රීය ප්‍රශ්න පත්‍ර තරඟය තාවකාලිකව නවත්වන ලදී.`;
+        await autoPostToTelegramViaGreenApi(tgStopMsg, null, env);
+        await sendApi('sendMessage', {
+          chat_id: tgTarget,
+          text: tgStopMsg,
+          parse_mode: 'Markdown'
+        }, env);
+      }
+
+      await sendApi('sendMessage', {
+        chat_id: chatId,
+        text: `✅ **සක්‍රීය Quiz තරඟය සාර්ථකව නවත්වන ලදී! (Quiz Stopped Successfully)** 🛑`,
+        parse_mode: 'Markdown'
+      }, env);
+    } else if (text.startsWith('/admin')) {
+      const fromId = msg.from ? String(msg.from.id) : '';
+
+      if (!isAdminUser(fromId, env)) {
+        await sendApi('sendMessage', {
+          chat_id: chatId,
+          text: '⛔ **ඔබට Admin මෙනුව භාවිත කිරීමට අවසර නොමැත! (Unauthorized)**',
           parse_mode: 'Markdown'
         }, env);
         return;
@@ -917,6 +980,7 @@ async function handleUpdate(update, env, ctx) {
         inline_keyboard: [
           [{ text: '🚀 සජීවී Quiz එකක් දැන්ම Publish කරන්න', callback_data: 'adm_quiz_select' }],
           [{ text: '⏰ ඉදිරි වේලාවකට Quiz එකක් Schedule කරන්න', callback_data: 'adm_quiz_select_sch' }],
+          [{ text: '🛑 සක්‍රීය Quiz එක වහාම නවත්වන්න (Stop Active Quiz)', callback_data: 'adm_stop_quiz' }],
           [{ text: '📊 Registered Users & Groups Stats', callback_data: 'adm_stats' }],
           [{ text: '⬅️ ප්‍රධාන මෙනුවට (Back)', callback_data: 'nav_subjects' }]
         ]
@@ -960,6 +1024,19 @@ async function handleUpdate(update, env, ctx) {
     const messageId = query.message.message_id;
     const data = query.data;
     const isGroup = query.message.chat.type !== 'private';
+    const fromId = query.from ? String(query.from.id) : '';
+
+    // Enforce strict admin security on all Admin menu buttons
+    if (data.startsWith('adm_')) {
+      if (!isAdminUser(fromId, env)) {
+        await sendApi('answerCallbackQuery', {
+          callback_query_id: query.id,
+          text: '⛔ ඔබට Admin මෙනුව භාවිත කිරීමට අවසර නොමැත! (Unauthorized Access)',
+          show_alert: true
+        }, env);
+        return;
+      }
+    }
 
     if (data === 'nav_subjects') {
       await sendApi('editMessageText', {
@@ -968,6 +1045,35 @@ async function handleUpdate(update, env, ctx) {
         text: '🎯 **කරුණාකර ඔබගේ විෂය (Subject) තෝරන්න:**',
         parse_mode: 'Markdown',
         reply_markup: getSubjectKeyboard(isGroup)
+      }, env);
+    } else if (data === 'adm_stop_quiz') {
+      requestStopQuiz('all');
+
+      const waStopMsg = 
+        `═════════════════════════\n` +
+        `🛑 *A/L MCQ HUB* — සජීවී ප්‍රශ්න පත්‍ර තරඟය අත්හිටුවන ලදී!\n` +
+        `═════════════════════════\n\n` +
+        `⚠️ Admin විසින් සක්‍රීය ප්‍රශ්න පත්‍ර තරඟය තාවකාලිකව නවත්වන ලදී.`;
+      await autoPostToWhatsAppChannel(waStopMsg, null, env);
+
+      const tgTarget = getTelegramTargetChat(env, chatId);
+      if (tgTarget) {
+        const tgStopMsg = 
+          `🛑 **සජීවී ප්‍රශ්න පත්‍ර තරඟය අත්හිටුවන ලදී! (Quiz Stopped by Admin)**\n\n` +
+          `⚠️ Admin විසින් සක්‍රීය ප්‍රශ්න පත්‍ර තරඟය තාවකාලිකව නවත්වන ලදී.`;
+        await autoPostToTelegramViaGreenApi(tgStopMsg, null, env);
+        await sendApi('sendMessage', {
+          chat_id: tgTarget,
+          text: tgStopMsg,
+          parse_mode: 'Markdown'
+        }, env);
+      }
+
+      await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '🛑 Quiz stopped successfully!' }, env);
+      await sendApi('sendMessage', {
+        chat_id: chatId,
+        text: `✅ **සක්‍රීය Quiz තරඟය සාර්ථකව නවත්වන ලදී! (Quiz Stopped Successfully)** 🛑`,
+        parse_mode: 'Markdown'
       }, env);
     } else if (data === 'adm_stats') {
       await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '📊 Stats loaded!' }, env);
