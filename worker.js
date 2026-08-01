@@ -630,24 +630,17 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // 2. Instant Telegram Announcement Message
+        // 2. Instant Telegram Announcement Message (No button, automated execution)
         const tgAnnounce = 
           `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
           `⏰ **ආරම්භ වන වේලාව:** ${label}\n\n` +
-          `👇 නියමිත වේලාවට **Start Live Quiz** ක්ලික් කර තරඟයට එකතු වන්න:`;
-
-        const tgKb = {
-          inline_keyboard: [
-            [{ text: '🎯 සජීවී තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${paperKey}` }]
-          ]
-        };
+          `🔔 නියමිත වේලාව පැමිණි සැනින් මෙම Group එක වෙත ප්‍රශ්න පත්‍රය ස්වයංක්‍රීයව ලැබෙනු ඇත!`;
 
         await sendApi('sendMessage', {
           chat_id: chatId,
           text: tgAnnounce,
-          parse_mode: 'Markdown',
-          reply_markup: tgKb
+          parse_mode: 'Markdown'
         }, env);
 
         // 3. Register delayed execution on Worker
@@ -974,24 +967,17 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // 2. Instant Telegram Announcement Message
+        // 2. Instant Telegram Announcement Message (No button, automated execution)
         const tgAnnounce = 
           `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
           `⏰ **ආරම්භ වන වේලාව:** ${timeLabel}\n\n` +
-          `👇 නියමිත වේලාවට **Start Live Quiz** ක්ලික් කර තරඟයට එකතු වන්න:`;
-
-        const tgKb = {
-          inline_keyboard: [
-            [{ text: '🎯 සජීවී තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${paperKey}` }]
-          ]
-        };
+          `🔔 නියමිත වේලාව පැමිණි සැනින් මෙම Group එක වෙත ප්‍රශ්න පත්‍රය ස්වයංක්‍රීයව ලැබෙනු ඇත!`;
 
         await sendApi('sendMessage', {
           chat_id: chatId,
           text: tgAnnounce,
-          parse_mode: 'Markdown',
-          reply_markup: tgKb
+          parse_mode: 'Markdown'
         }, env);
 
         // 3. Register delayed execution on Worker (Runs 24/7 in background)
