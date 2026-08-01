@@ -68,6 +68,51 @@ const QUIZ_DATA = {
 const SESSIONS = {}; // chatId -> { subId, yearKey, paperKey, title, questions, qIndex, score, startTime }
 const POLL_MAP = {}; // pollId -> { chatId, correctOption }
 const CUSTOM_TIME_STATE = {}; // chatId -> { paperKey, time }
+const SCHEDULED_QUIZZES = []; // array of { paperKey, targetTime, chatId, timeLabel, executed }
+
+function scheduleQuiz(paperKey, delayMs, timeLabel, chatId) {
+  const targetTime = Date.now() + delayMs;
+  SCHEDULED_QUIZZES.push({
+    paperKey,
+    targetTime,
+    timeLabel,
+    chatId,
+    executed: false
+  });
+  console.log(`⏰ Quiz ${paperKey} scheduled for ${new Date(targetTime).toISOString()} (${timeLabel})`);
+}
+
+async function checkAndRunScheduledQuizzes(env, ctx) {
+  const now = Date.now();
+  for (let i = 0; i < SCHEDULED_QUIZZES.length; i++) {
+    const item = SCHEDULED_QUIZZES[i];
+    if (!item.executed && now >= item.targetTime) {
+      item.executed = true;
+      console.log(`🚀 Scheduled time reached for ${item.paperKey}! Starting automated quiz...`);
+
+      const subId = item.paperKey.split('_')[0];
+      const yearKey = item.paperKey.split('_')[1];
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        // 1. Send Automated Telegram Start Announcement
+        await sendApi('sendMessage', {
+          chat_id: item.chatId,
+          text: `🚀 **${paperData.title} සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`,
+          parse_mode: 'Markdown'
+        }, env);
+
+        // 2. Trigger WhatsApp Poll Stream + Answer Booklet
+        if (ctx && typeof ctx.waitUntil === 'function') {
+          ctx.waitUntil(processSingleWhatsAppPollStep(item.paperKey, 0, 20, env));
+        } else {
+          processSingleWhatsAppPollStep(item.paperKey, 0, 20, env);
+        }
+      }
+    }
+  }
+}
 
 function parseCustomTimeInput(inputStr) {
   if (!inputStr) return null;
@@ -337,6 +382,9 @@ const WA_GROUP_POLL_VOTES = {}; // stanzaId -> { voterId: { name, optionIdx } }
 
 export default {
   async fetch(request, env, ctx) {
+    if (ctx && typeof ctx.waitUntil === 'function') {
+      ctx.waitUntil(checkAndRunScheduledQuizzes(env, ctx));
+    }
     const url = new URL(request.url);
 
     // Endpoint 1: Green API Webhook Listener
@@ -461,6 +509,13 @@ export default {
       return new Response('OK', { status: 200 });
     }
     return new Response('🎓 A/L MCQ Quiz Telegram Bot (@AL_MCQbot) Cloudflare Worker is Live 24/7!', { status: 200 });
+  },
+  async scheduled(event, env, ctx) {
+    if (ctx && typeof ctx.waitUntil === 'function') {
+      ctx.waitUntil(checkAndRunScheduledQuizzes(env, ctx));
+    } else {
+      await checkAndRunScheduledQuizzes(env, ctx);
+    }
   }
 };
 
@@ -643,17 +698,8 @@ async function handleUpdate(update, env, ctx) {
           parse_mode: 'Markdown'
         }, env);
 
-        // 3. Register delayed execution on Worker
-        if (ctx && typeof ctx.waitUntil === 'function') {
-          ctx.waitUntil((async () => {
-            if (delayMs > 0) {
-              await new Promise(r => setTimeout(r, Math.min(delayMs, 86400000)));
-            }
-            await processSingleWhatsAppPollStep(paperKey, 0, 20, env);
-          })());
-        } else {
-          processSingleWhatsAppPollStep(paperKey, 0, 20, env);
-        }
+        // 3. Register persistent schedule on Worker
+        scheduleQuiz(paperKey, delayMs, label, chatId);
 
         await sendApi('sendMessage', {
           chat_id: chatId,
@@ -980,17 +1026,8 @@ async function handleUpdate(update, env, ctx) {
           parse_mode: 'Markdown'
         }, env);
 
-        // 3. Register delayed execution on Worker (Runs 24/7 in background)
-        if (ctx && typeof ctx.waitUntil === 'function') {
-          ctx.waitUntil((async () => {
-            if (delayMs > 0) {
-              await new Promise(r => setTimeout(r, Math.min(delayMs, 86400000)));
-            }
-            await processSingleWhatsAppPollStep(paperKey, 0, 20, env);
-          })());
-        } else {
-          processSingleWhatsAppPollStep(paperKey, 0, 20, env);
-        }
+        // 3. Register persistent schedule on Worker
+        scheduleQuiz(paperKey, delayMs, timeLabel, chatId);
 
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: `✅ Quiz Scheduled for ${timeLabel}!` }, env);
       }
