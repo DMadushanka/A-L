@@ -152,6 +152,11 @@ function parseCustomTimeInput(inputStr) {
   return null;
 }
 
+function getTelegramTargetChat(env, fallbackChatId) {
+  if (env && env.TG_TARGET_CHAT) return env.TG_TARGET_CHAT;
+  return fallbackChatId;
+}
+
 function cleanText(str, maxLen = 300) {
   if (!str) return '';
   let clean = str.replace(/<br\s*\/?>/gi, ' ')
@@ -757,15 +762,16 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // 2. Instant Telegram Announcement Message with Image Banner
+        // 2. Instant Telegram Announcement Message with Image Banner to Telegram Group
         const tgAnnounce = 
           `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
           `⏰ **ආරම්භ වන වේලාව:** ${label}\n\n` +
           `🔔 නියමිත වේලාව පැමිණි සැනින් මෙම Group එක වෙත ප්‍රශ්න පත්‍රය ස්වයංක්‍රීයව ලැබෙනු ඇත!`;
 
+        const tgTarget = getTelegramTargetChat(env, chatId);
         const tgPhotoRes = await sendApi('sendPhoto', {
-          chat_id: chatId,
+          chat_id: tgTarget,
           photo: paperImgUrl,
           caption: tgAnnounce,
           parse_mode: 'Markdown'
@@ -773,7 +779,7 @@ async function handleUpdate(update, env, ctx) {
 
         if (!tgPhotoRes.ok) {
           await sendApi('sendMessage', {
-            chat_id: chatId,
+            chat_id: tgTarget,
             text: tgAnnounce,
             parse_mode: 'Markdown'
           }, env);
@@ -966,12 +972,25 @@ async function handleUpdate(update, env, ctx) {
           ]
         };
 
-        await sendApi('sendMessage', {
-          chat_id: chatId,
-          text: announceMsg,
+        const paperImgUrl = getPaperImageUrl(paperKey);
+        const tgTarget = getTelegramTargetChat(env, chatId);
+
+        const photoRes = await sendApi('sendPhoto', {
+          chat_id: tgTarget,
+          photo: paperImgUrl,
+          caption: announceMsg,
           parse_mode: 'Markdown',
           reply_markup: announceKb
         }, env);
+
+        if (!photoRes.ok) {
+          await sendApi('sendMessage', {
+            chat_id: tgTarget,
+            text: announceMsg,
+            parse_mode: 'Markdown',
+            reply_markup: announceKb
+          }, env);
+        }
 
         // Automated WhatsApp Group Broadcast Trigger from Worker
         const targetGroupUrl = (env && env.GROUP_URL) ? env.GROUP_URL : 'https://t.me/+wZUSJyEncD1mYjFl';
@@ -1104,15 +1123,16 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // 2. Instant Telegram Announcement Message with Image Banner
+        // 2. Instant Telegram Announcement Message with Image Banner to Telegram Group
         const tgAnnounce = 
           `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
           `⏰ **ආරම්භ වන වේලාව:** ${timeLabel}\n\n` +
           `🔔 නියමිත වේලාව පැමිණි සැනින් මෙම Group එක වෙත ප්‍රශ්න පත්‍රය ස්වයංක්‍රීයව ලැබෙනු ඇත!`;
 
+        const tgTarget = getTelegramTargetChat(env, chatId);
         const tgPhotoRes = await sendApi('sendPhoto', {
-          chat_id: chatId,
+          chat_id: tgTarget,
           photo: paperImgUrl,
           caption: tgAnnounce,
           parse_mode: 'Markdown'
@@ -1120,7 +1140,7 @@ async function handleUpdate(update, env, ctx) {
 
         if (!tgPhotoRes.ok) {
           await sendApi('sendMessage', {
-            chat_id: chatId,
+            chat_id: tgTarget,
             text: tgAnnounce,
             parse_mode: 'Markdown'
           }, env);
