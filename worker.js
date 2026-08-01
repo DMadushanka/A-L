@@ -499,6 +499,88 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
   await autoPostToWhatsAppChannel(bookletMsg, null, env);
 }
 
+// Helper: Perpetual Self-Chaining Automated Telegram Group Poll Quiz Streamer on Worker
+async function processSingleTelegramPollStep(paperKey, qIndex = 0, intervalSec = 25, env = {}, ctx = null, origin = 'https://a-l.gayanmadushanka1610.workers.dev') {
+  if (!paperKey) return;
+  const parts = paperKey.split('_');
+  const subId = parts[0];
+  const yearKey = parts[1];
+
+  const subData = QUIZ_DATA[subId];
+  const paperData = subData?.papers[yearKey];
+  if (!paperData) return;
+
+  const questions = await fetchQuestionsFromHtml(paperData.file);
+  if (!questions || questions.length === 0) return;
+
+  const totalQ = questions.length;
+  const tgTarget = getTelegramTargetChat(env, '-1004322002704');
+
+  if (qIndex >= totalQ) {
+    const podiumText = 
+      `═════════════════════════\n` +
+      `🏆 *${paperData.title}*\n` +
+      `🎯 *Telegram සජීවී ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව අවසන්!* ⚡\n` +
+      `═════════════════════════\n\n` +
+      `🎉 සහභාගී වූ සහ පිළිතුරු සැපයූ සියලුම සිසුන්ට ස්තූතියි!`;
+    
+    await sendApi('sendMessage', {
+      chat_id: tgTarget,
+      text: podiumText,
+      parse_mode: 'Markdown'
+    }, env);
+    return;
+  }
+
+  if (await isQuizStopped(paperKey)) {
+    console.log(`🛑 Active Telegram Group poll stream immediately aborted by Admin for ${paperKey}!`);
+    return;
+  }
+
+  const q = questions[qIndex];
+  const qNum = qIndex + 1;
+
+  const opts = q.options || q.o || [];
+  let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+  rawQText = cleanText(rawQText, 250);
+  rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
+
+  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
+  const cleanOpts = opts.map(o => cleanText(o, 98));
+  const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
+
+  const rawExplain = cleanText(q.e || '', 185);
+  const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
+
+  await sendApi('sendPoll', {
+    chat_id: tgTarget,
+    question: cleanQ,
+    options: cleanOpts,
+    type: 'quiz',
+    correct_option_id: correctIdx,
+    explanation: cleanExplain,
+    open_period: Math.min(intervalSec, 60),
+    is_anonymous: false
+  }, env);
+
+  const nextUrl = `${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=${qIndex + 1}&intervalSec=${intervalSec}`;
+
+  if (ctx && typeof ctx.waitUntil === 'function') {
+    ctx.waitUntil((async () => {
+      try {
+        await new Promise(r => setTimeout(r, intervalSec * 1000));
+        await fetch(nextUrl, {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+          }
+        });
+      } catch (err) {
+        console.error('Error fetching next TG step:', err);
+      }
+    })());
+  }
+}
+
 // Fetch questions dynamically from GitHub Pages HTML
 async function fetchQuestionsFromHtml(file) {
   try {
@@ -677,8 +759,9 @@ export default {
               }
             }
 
-            // 2. Start WhatsApp Fast Poll Stream + Answer Booklet
+            // 2. Start Both WhatsApp Fast Poll Stream + Telegram Automated Poll Stream
             await processSingleWhatsAppPollStep(paperKey, 0, 20, env);
+            await processSingleTelegramPollStep(paperKey, 0, 25, env, ctx, url.origin);
           }
         })());
       } else {
@@ -705,9 +788,26 @@ export default {
           }
         }
         processSingleWhatsAppPollStep(paperKey, 0, 20, env);
+        processSingleTelegramPollStep(paperKey, 0, 25, env, ctx, url.origin);
       }
 
       return new Response(JSON.stringify({ ok: true, scheduled: paperKey, delaySec }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
+    // Endpoint 7: Automated Native Telegram Group Poll Quiz Step Streamer Endpoint
+    if (url.pathname === '/stream-tg-step') {
+      const paperKey = url.searchParams.get('paperKey');
+      const qIndex = parseInt(url.searchParams.get('qIndex') || '0', 10);
+      const intervalSec = parseInt(url.searchParams.get('intervalSec') || '25', 10);
+      const origin = url.origin;
+
+      if (ctx && typeof ctx.waitUntil === 'function') {
+        ctx.waitUntil(processSingleTelegramPollStep(paperKey, qIndex, intervalSec, env, ctx, origin));
+      } else {
+        processSingleTelegramPollStep(paperKey, qIndex, intervalSec, env, ctx, origin);
+      }
+
+      return new Response(JSON.stringify({ ok: true, paperKey, qIndex }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
     if (request.method === 'POST') {
@@ -1240,14 +1340,16 @@ async function handleUpdate(update, env, ctx) {
 
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // Start Automated WhatsApp Group Poll Quiz Streamer directly on Worker
+        // Start Automated WhatsApp & Telegram Poll Quiz Streamers directly on Worker
         if (ctx && typeof ctx.waitUntil === 'function') {
           ctx.waitUntil(processSingleWhatsAppPollStep(paperKey, 0, 20, env));
+          ctx.waitUntil(processSingleTelegramPollStep(paperKey, 0, 25, env, ctx, 'https://a-l.gayanmadushanka1610.workers.dev'));
         } else {
           processSingleWhatsAppPollStep(paperKey, 0, 20, env);
+          processSingleTelegramPollStep(paperKey, 0, 25, env, ctx, 'https://a-l.gayanmadushanka1610.workers.dev');
         }
 
-        await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp Group Polls Started!' }, env);
+        await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp/Telegram Group Polls Started!' }, env);
       }
     } else if (data.startsWith('adm_sch_p_')) {
       const parts = data.split('_'); // ['adm', 'sch', 'p', 'pl', '2016']
