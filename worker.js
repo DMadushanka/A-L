@@ -88,6 +88,23 @@ function formatDuration(seconds) {
   return `${mins}m ${secs}s`;
 }
 
+function parseJsArray(str) {
+  try {
+    return JSON.parse(str);
+  } catch (e) {}
+
+  try {
+    // 1. Convert unquoted JS keys (q:, o:, c:, e:) to double quoted JSON keys ("q":, "o":, "c":, "e":)
+    let jsonStr = str.replace(/([{,]\s*)([a-zA-Z0-9_]+)\s*:/g, '$1"$2":');
+    // 2. Remove any trailing commas inside objects or arrays
+    jsonStr = jsonStr.replace(/,\s*([\]}])/g, '$1');
+
+    return JSON.parse(jsonStr);
+  } catch (err) {
+    return null;
+  }
+}
+
 // Fetch questions dynamically from GitHub Pages HTML
 async function fetchQuestionsFromHtml(file) {
   try {
@@ -97,8 +114,7 @@ async function fetchQuestionsFromHtml(file) {
     const html = await res.text();
     const match = html.match(/const QUESTIONS = (\[[\s\S]*?\]);/);
     if (match) {
-      const evalFn = new Function('return ' + match[1]);
-      return evalFn();
+      return parseJsArray(match[1]);
     }
   } catch (e) {
     console.error('Error fetching questions:', e);
@@ -355,6 +371,38 @@ async function handleUpdate(update, env) {
         text: `📖 **උපදෙස්:**\n\n/start යවා විෂයයන් තෝරා පරීක්ෂණ ආරම්භ කරන්න.`,
         parse_mode: 'Markdown'
       }, env);
+    } else if (text.startsWith('/admin')) {
+      const fromId = msg.from ? String(msg.from.id) : '';
+      const ADMIN_ID = (env && env.ADMIN_ID) ? String(env.ADMIN_ID) : '2035260032';
+
+      if (fromId !== ADMIN_ID && fromId !== '2035260032' && fromId !== '5813878261') {
+        await sendApi('sendMessage', {
+          chat_id: chatId,
+          text: '⛔ **ඔබට Admin මෙනුව භාවිත කිරීමට අවසර නොමැත.**',
+          parse_mode: 'Markdown'
+        }, env);
+        return;
+      }
+
+      const adminMsg = 
+        `🛡️ **A/L MCQ HUB — Admin Control Panel** ⚡\n\n` +
+        `ගරු Admin තුමනි, ඔබ සාදරයෙන් පිළිගනිමු! පහත පහසුකම් භාවිත කිරීමට බොත්තමක් තෝරන්න:`;
+
+      const adminKb = {
+        inline_keyboard: [
+          [{ text: '🚀 සජීවී Quiz එකක් දැන්ම Publish කරන්න', callback_data: 'adm_quiz_select' }],
+          [{ text: '⏰ ඉදිරි වේලාවකට Quiz එකක් Schedule කරන්න', callback_data: 'adm_quiz_select_sch' }],
+          [{ text: '📊 Registered Users & Groups Stats', callback_data: 'adm_stats' }],
+          [{ text: '⬅️ ප්‍රධාන මෙනුවට (Back)', callback_data: 'nav_subjects' }]
+        ]
+      };
+
+      await sendApi('sendMessage', {
+        chat_id: chatId,
+        text: adminMsg,
+        parse_mode: 'Markdown',
+        reply_markup: adminKb
+      }, env);
     }
   }
 
@@ -396,6 +444,88 @@ async function handleUpdate(update, env) {
         parse_mode: 'Markdown',
         reply_markup: getSubjectKeyboard(isGroup)
       }, env);
+    } else if (data === 'adm_stats') {
+      await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '📊 Stats loaded!' }, env);
+      await sendApi('sendMessage', {
+        chat_id: chatId,
+        text: '📊 **A/L MCQ HUB — Statistics** ⚡\n\n✅ Telegram Bot is Live 24/7 on Cloudflare Worker!',
+        parse_mode: 'Markdown'
+      }, env);
+    } else if (data === 'adm_quiz_select' || data === 'adm_quiz_select_sch') {
+      const isSch = data.includes('_sch');
+      const prefix = isSch ? 'adm_sch_sub_' : 'adm_sel_sub_';
+      const text = `🎯 **Admin Panel — ${isSch ? 'Schedule Quiz' : 'Publish Quiz Now'}**\n\nකරුණාකර ප්‍රශ්න පත්‍රය තෝරා ගැනීම සඳහා විෂය (Subject) තෝරන්න:`;
+      const kb = {
+        inline_keyboard: [
+          [{ text: QUIZ_DATA.pl.name, callback_data: `${prefix}pl` }],
+          [{ text: QUIZ_DATA.hist.name, callback_data: `${prefix}hist` }],
+          [{ text: QUIZ_DATA.bc.name, callback_data: `${prefix}bc` }],
+          [{ text: QUIZ_DATA.sin.name, callback_data: `${prefix}sin` }]
+        ]
+      };
+      await sendApi('editMessageText', {
+        chat_id: chatId,
+        message_id: messageId,
+        text: text,
+        parse_mode: 'Markdown',
+        reply_markup: kb
+      }, env);
+    } else if (data.startsWith('adm_sel_sub_') || data.startsWith('adm_sch_sub_')) {
+      const isSch = data.startsWith('adm_sch_sub_');
+      const subId = data.replace('adm_sel_sub_', '').replace('adm_sch_sub_', '');
+      const subData = QUIZ_DATA[subId];
+      if (subData) {
+        const keys = Object.keys(subData.papers);
+        const keyboard = [];
+        let row = [];
+        keys.forEach((key, idx) => {
+          const cb = isSch ? `adm_sch_p_${subId}_${key}` : `adm_pub_now_${subId}_${key}`;
+          row.push({ text: `📝 ${key}`, callback_data: cb });
+          if (row.length === 3 || idx === keys.length - 1) {
+            keyboard.push(row);
+            row = [];
+          }
+        });
+        keyboard.push([{ text: '⬅️ ආපසු (Back)', callback_data: isSch ? 'adm_quiz_select_sch' : 'adm_quiz_select' }]);
+
+        await sendApi('editMessageText', {
+          chat_id: chatId,
+          message_id: messageId,
+          text: `📑 **${subData.shortName} — ${isSch ? 'Schedule Quiz' : 'Publish Quiz Now'}**\n\nප්‍රශ්න පත්‍රය (Year) තෝරන්න:`,
+          parse_mode: 'Markdown',
+          reply_markup: { inline_keyboard: keyboard }
+        }, env);
+      }
+    } else if (data.startsWith('adm_pub_now_')) {
+      const parts = data.split('_'); // ['adm', 'pub', 'now', 'pl', '2016']
+      const subId = parts[3];
+      const yearKey = parts[4];
+      const paperKey = `${subId}_${yearKey}`;
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        const announceMsg = 
+          `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
+          `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n\n` +
+          `💡 **විශේෂතා:** Native Telegram Polls, Instant Confetti 🎉, Leaderboards & Top 3 Winner Podiums!\n\n` +
+          `👇 පහත **Start Live Quiz** ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:`;
+
+        const announceKb = {
+          inline_keyboard: [
+            [{ text: '🎯 දැන්ම තරඟයට එකතු වන්න (Start Live Quiz)', callback_data: `native_${paperKey}` }]
+          ]
+        };
+
+        await sendApi('sendMessage', {
+          chat_id: chatId,
+          text: announceMsg,
+          parse_mode: 'Markdown',
+          reply_markup: announceKb
+        }, env);
+
+        await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published!' }, env);
+      }
     } else if (data.startsWith('sub_')) {
       const subId = data.replace('sub_', '');
       const subData = QUIZ_DATA[subId];
