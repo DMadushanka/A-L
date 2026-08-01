@@ -517,13 +517,25 @@ export default {
           const paperData = subData?.papers[yearKey];
 
           if (paperData) {
-            // 1. Send Automated Telegram Quiz Start Announcement
+            const paperImgUrl = getPaperImageUrl(paperKey);
+            const startText = `🚀 **${paperData.title} සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
+
+            // 1. Send Automated Telegram Quiz Start Announcement with Photo Banner
             if (chatId) {
-              await sendApi('sendMessage', {
+              const photoRes = await sendApi('sendPhoto', {
                 chat_id: chatId,
-                text: `🚀 **${paperData.title} සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`,
+                photo: paperImgUrl,
+                caption: startText,
                 parse_mode: 'Markdown'
               }, env);
+
+              if (!photoRes.ok) {
+                await sendApi('sendMessage', {
+                  chat_id: chatId,
+                  text: startText,
+                  parse_mode: 'Markdown'
+                }, env);
+              }
             }
 
             // 2. Start WhatsApp Fast Poll Stream + Answer Booklet
@@ -536,11 +548,22 @@ export default {
         const subData = QUIZ_DATA[subId];
         const paperData = subData?.papers[yearKey];
         if (paperData && chatId) {
-          await sendApi('sendMessage', {
+          const paperImgUrl = getPaperImageUrl(paperKey);
+          const startText = `🚀 **${paperData.title} සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
+          const photoRes = await sendApi('sendPhoto', {
             chat_id: chatId,
-            text: `🚀 **${paperData.title} සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`,
+            photo: paperImgUrl,
+            caption: startText,
             parse_mode: 'Markdown'
           }, env);
+
+          if (!photoRes.ok) {
+            await sendApi('sendMessage', {
+              chat_id: chatId,
+              text: startText,
+              parse_mode: 'Markdown'
+            }, env);
+          }
         }
         processSingleWhatsAppPollStep(paperKey, 0, 20, env);
       }
@@ -734,18 +757,27 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // 2. Instant Telegram Announcement Message (No button, automated execution)
+        // 2. Instant Telegram Announcement Message with Image Banner
         const tgAnnounce = 
           `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
           `⏰ **ආරම්භ වන වේලාව:** ${label}\n\n` +
           `🔔 නියමිත වේලාව පැමිණි සැනින් මෙම Group එක වෙත ප්‍රශ්න පත්‍රය ස්වයංක්‍රීයව ලැබෙනු ඇත!`;
 
-        await sendApi('sendMessage', {
+        const tgPhotoRes = await sendApi('sendPhoto', {
           chat_id: chatId,
-          text: tgAnnounce,
+          photo: paperImgUrl,
+          caption: tgAnnounce,
           parse_mode: 'Markdown'
         }, env);
+
+        if (!tgPhotoRes.ok) {
+          await sendApi('sendMessage', {
+            chat_id: chatId,
+            text: tgAnnounce,
+            parse_mode: 'Markdown'
+          }, env);
+        }
 
         // 3. Register persistent schedule trigger on Worker via dedicated endpoint
         const triggerUrl = `${url.origin}/trigger-scheduled?paperKey=${encodeURIComponent(paperKey)}&delaySec=${Math.round(delayMs / 1000)}&chatId=${encodeURIComponent(chatId)}`;
@@ -1072,18 +1104,27 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // 2. Instant Telegram Announcement Message (No button, automated execution)
+        // 2. Instant Telegram Announcement Message with Image Banner
         const tgAnnounce = 
           `⏰ **සජීවී ප්‍රශ්න පත්‍ර තරඟය Schedule කරන ලදී! (Quiz Scheduled)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n` +
           `⏰ **ආරම්භ වන වේලාව:** ${timeLabel}\n\n` +
           `🔔 නියමිත වේලාව පැමිණි සැනින් මෙම Group එක වෙත ප්‍රශ්න පත්‍රය ස්වයංක්‍රීයව ලැබෙනු ඇත!`;
 
-        await sendApi('sendMessage', {
+        const tgPhotoRes = await sendApi('sendPhoto', {
           chat_id: chatId,
-          text: tgAnnounce,
+          photo: paperImgUrl,
+          caption: tgAnnounce,
           parse_mode: 'Markdown'
         }, env);
+
+        if (!tgPhotoRes.ok) {
+          await sendApi('sendMessage', {
+            chat_id: chatId,
+            text: tgAnnounce,
+            parse_mode: 'Markdown'
+          }, env);
+        }
 
         // 3. Register persistent schedule trigger on Worker via dedicated endpoint
         const triggerUrl = `${url.origin}/trigger-scheduled?paperKey=${encodeURIComponent(paperKey)}&delaySec=${Math.round(delayMs / 1000)}&chatId=${encodeURIComponent(chatId)}`;
