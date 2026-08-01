@@ -209,71 +209,56 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
     await autoPostToWhatsAppChannel(waIntro, introImgUrl, env);
   }
 
-  // Stream questions sequentially with timed answer reveals
-  for (let i = qIndex; i < totalQ; i++) {
-    const q = questions[i];
-    const qNum = i + 1;
+  // Process single question qIndex with timed 25s answer reveal
+  const i = qIndex;
+  const q = questions[i];
+  const qNum = i + 1;
 
-    const opts = q.options || q.o || [];
-    const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
+  const opts = q.options || q.o || [];
+  const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
 
-    let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
-    rawQText = cleanText(rawQText, 250);
-    rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
+  let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+  rawQText = cleanText(rawQText, 250);
+  rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
 
-    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
-    const cleanOpts = opts.map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
+  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
+  const cleanOpts = opts.map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
 
-    try {
-      // 1. Send Native WhatsApp Poll
-      const pollRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chatId: targetChat,
-          message: cleanQ,
-          options: cleanOpts,
-          multipleAnswers: false
-        })
-      });
-      const pollData = await pollRes.json();
-      console.log(`🟢 Worker sent WhatsApp Poll [${qNum}/${totalQ}]! Message ID: ${pollData?.idMessage}`);
+  try {
+    // 1. Send Native WhatsApp Poll
+    const pollRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chatId: targetChat,
+        message: cleanQ,
+        options: cleanOpts,
+        multipleAnswers: false
+      })
+    });
+    const pollData = await pollRes.json();
+    console.log(`🟢 Worker sent WhatsApp Poll [${qNum}/${totalQ}]! Message ID: ${pollData?.idMessage}`);
 
-      // 2. Wait for question interval
-      await new Promise(res => setTimeout(res, intervalSec * 1000));
+    // 2. Wait for full 25 seconds interval!
+    await new Promise(res => setTimeout(res, intervalSec * 1000));
 
-      // 3. Send Answer Reveal Card (Clean text without image)
-      const rawAnsText = (opts && opts[correctIdx]) ? opts[correctIdx] : '';
-      const correctAnsText = cleanText(rawAnsText, 95);
-      const rawExplain = cleanText(q.e || q.explanation || '', 180);
-      const explainPart = rawExplain ? `\n\n💡 *විග්‍රහය:* ${rawExplain}` : '';
+    // 3. Send Answer Reveal Card (Clean text without image)
+    const rawAnsText = (opts && opts[correctIdx]) ? opts[correctIdx] : '';
+    const correctAnsText = cleanText(rawAnsText, 95);
+    const rawExplain = cleanText(q.e || q.explanation || '', 180);
+    const explainPart = rawExplain ? `\n\n💡 *විග්‍රහය:* ${rawExplain}` : '';
 
-      const answerRevealMsg = 
-        `═════════════════════════\n` +
-        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර*\n` +
-        `═════════════════════════\n\n` +
-        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}\n\n` +
-        `─────────────────────────`;
-      
-      await autoPostToWhatsAppChannel(answerRevealMsg, null, env);
-
-      // Brief 2-second gap before next question
-      if (i < totalQ - 1) {
-        await new Promise(res => setTimeout(res, 2000));
-      }
-    } catch (err) {
-      console.error(`Error in Worker WA Streamer Q${qNum}:`, err.message);
-    }
+    const answerRevealMsg = 
+      `═════════════════════════\n` +
+      `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර*\n` +
+      `═════════════════════════\n\n` +
+      `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}\n\n` +
+      `─────────────────────────`;
+    
+    await autoPostToWhatsAppChannel(answerRevealMsg, null, env);
+  } catch (err) {
+    console.error(`Error in Worker WA Streamer Q${qNum}:`, err.message);
   }
-
-  // Send Final Completion Card
-  const finishMsg = 
-    `═════════════════════════\n` +
-    `🏆 *${paperData.title}*\n` +
-    `🎯 *ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව අවසන්!* ⚡\n` +
-    `═════════════════════════\n\n` +
-    `🎉 සහභාගී වූ සියලුම සිසුන්ට ස්තූතියි!`;
-  await autoPostToWhatsAppChannel(finishMsg, null, env);
 }
 
 // Fetch questions dynamically from GitHub Pages HTML
@@ -386,7 +371,7 @@ export default {
     if (url.pathname === '/stream-wa-step') {
       const paperKey = url.searchParams.get('paperKey');
       const qIndex = parseInt(url.searchParams.get('qIndex') || '0', 10);
-      const intervalSec = parseInt(url.searchParams.get('intervalSec') || '20', 10);
+      const intervalSec = parseInt(url.searchParams.get('intervalSec') || '25', 10);
       const origin = url.origin;
       const nextUrl = `${origin}/stream-wa-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=${qIndex + 1}&intervalSec=${intervalSec}`;
 
@@ -394,7 +379,12 @@ export default {
         ctx.waitUntil((async () => {
           await processSingleWhatsAppPollStep(paperKey, qIndex, intervalSec, env);
           try {
-            await fetch(nextUrl);
+            await new Promise(r => setTimeout(r, 2000));
+            await fetch(nextUrl, {
+              headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+              }
+            });
           } catch (err) {
             console.error('Error fetching next step:', err);
           }
@@ -732,11 +722,17 @@ async function handleUpdate(update, env, ctx) {
         const paperImgUrl = getPaperImageUrl(paperKey);
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
-        // Start Automated WhatsApp Group Poll Quiz Streamer directly on Worker
+        // Start Automated Perpetual WhatsApp Group Poll Quiz Streamer with 25s interval on Worker
+        const streamUrl = `https://a-l.gayanmadushanka1610.workers.dev/stream-wa-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=0&intervalSec=25`;
+        const fetchOpts = {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+          }
+        };
         if (ctx && typeof ctx.waitUntil === 'function') {
-          ctx.waitUntil(processSingleWhatsAppPollStep(paperKey, 0, 15, env));
+          ctx.waitUntil(fetch(streamUrl, fetchOpts).catch(e => console.error('Stream start error:', e)));
         } else {
-          processSingleWhatsAppPollStep(paperKey, 0, 15, env);
+          fetch(streamUrl, fetchOpts).catch(e => console.error('Stream start error:', e));
         }
 
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp Group Polls Started!' }, env);
