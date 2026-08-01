@@ -499,6 +499,55 @@ export default {
       return new Response(JSON.stringify({ ok: true, paperKey, qIndex }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
+    // Endpoint 6: Automated Scheduled Quiz Execution Trigger Endpoint
+    if (url.pathname === '/trigger-scheduled') {
+      const paperKey = url.searchParams.get('paperKey');
+      const delaySec = parseInt(url.searchParams.get('delaySec') || '0', 10);
+      const chatId = url.searchParams.get('chatId');
+
+      if (ctx && typeof ctx.waitUntil === 'function') {
+        ctx.waitUntil((async () => {
+          if (delaySec > 0) {
+            await new Promise(r => setTimeout(r, Math.min(delaySec, 86400) * 1000));
+          }
+          
+          const subId = paperKey.split('_')[0];
+          const yearKey = paperKey.split('_')[1];
+          const subData = QUIZ_DATA[subId];
+          const paperData = subData?.papers[yearKey];
+
+          if (paperData) {
+            // 1. Send Automated Telegram Quiz Start Announcement
+            if (chatId) {
+              await sendApi('sendMessage', {
+                chat_id: chatId,
+                text: `🚀 **${paperData.title} සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`,
+                parse_mode: 'Markdown'
+              }, env);
+            }
+
+            // 2. Start WhatsApp Fast Poll Stream + Answer Booklet
+            await processSingleWhatsAppPollStep(paperKey, 0, 20, env);
+          }
+        })());
+      } else {
+        const subId = paperKey.split('_')[0];
+        const yearKey = paperKey.split('_')[1];
+        const subData = QUIZ_DATA[subId];
+        const paperData = subData?.papers[yearKey];
+        if (paperData && chatId) {
+          await sendApi('sendMessage', {
+            chat_id: chatId,
+            text: `🚀 **${paperData.title} සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`,
+            parse_mode: 'Markdown'
+          }, env);
+        }
+        processSingleWhatsAppPollStep(paperKey, 0, 20, env);
+      }
+
+      return new Response(JSON.stringify({ ok: true, scheduled: paperKey, delaySec }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+    }
+
     if (request.method === 'POST') {
       try {
         const update = await request.json();
@@ -698,8 +747,18 @@ async function handleUpdate(update, env, ctx) {
           parse_mode: 'Markdown'
         }, env);
 
-        // 3. Register persistent schedule on Worker
-        scheduleQuiz(paperKey, delayMs, label, chatId);
+        // 3. Register persistent schedule trigger on Worker via dedicated endpoint
+        const triggerUrl = `${url.origin}/trigger-scheduled?paperKey=${encodeURIComponent(paperKey)}&delaySec=${Math.round(delayMs / 1000)}&chatId=${encodeURIComponent(chatId)}`;
+        const fetchOpts = {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+          }
+        };
+        if (ctx && typeof ctx.waitUntil === 'function') {
+          ctx.waitUntil(fetch(triggerUrl, fetchOpts).catch(e => console.error('Trigger error:', e)));
+        } else {
+          fetch(triggerUrl, fetchOpts).catch(e => console.error('Trigger error:', e));
+        }
 
         await sendApi('sendMessage', {
           chat_id: chatId,
@@ -1026,8 +1085,18 @@ async function handleUpdate(update, env, ctx) {
           parse_mode: 'Markdown'
         }, env);
 
-        // 3. Register persistent schedule on Worker
-        scheduleQuiz(paperKey, delayMs, timeLabel, chatId);
+        // 3. Register persistent schedule trigger on Worker via dedicated endpoint
+        const triggerUrl = `${url.origin}/trigger-scheduled?paperKey=${encodeURIComponent(paperKey)}&delaySec=${Math.round(delayMs / 1000)}&chatId=${encodeURIComponent(chatId)}`;
+        const fetchOpts = {
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+          }
+        };
+        if (ctx && typeof ctx.waitUntil === 'function') {
+          ctx.waitUntil(fetch(triggerUrl, fetchOpts).catch(e => console.error('Trigger error:', e)));
+        } else {
+          fetch(triggerUrl, fetchOpts).catch(e => console.error('Trigger error:', e));
+        }
 
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: `✅ Quiz Scheduled for ${timeLabel}!` }, env);
       }
