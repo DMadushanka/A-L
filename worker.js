@@ -499,8 +499,8 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
   await autoPostToWhatsAppChannel(bookletMsg, null, env);
 }
 
-// Helper: Perpetual Self-Chaining Automated Telegram Group Poll Quiz Streamer on Worker
-async function processSingleTelegramPollStep(paperKey, qIndex = 0, intervalSec = 25, env = {}, ctx = null, origin = 'https://a-l.gayanmadushanka1610.workers.dev') {
+// Helper: Fast Telegram Group Native Poll Streamer (All questions streamed reliably to group)
+async function processSingleTelegramPollStep(paperKey, env = {}) {
   if (!paperKey) return;
   const parts = paperKey.split('_');
   const subId = parts[0];
@@ -516,76 +516,94 @@ async function processSingleTelegramPollStep(paperKey, qIndex = 0, intervalSec =
   const totalQ = questions.length;
   const tgTarget = getTelegramTargetChat(env, '-1004322002704');
 
-  if (qIndex >= totalQ) {
-    const podiumText = 
-      `═════════════════════════\n` +
-      `🏆 *${paperData.title}*\n` +
-      `🎯 *Telegram සජීවී ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව අවසන්!* ⚡\n` +
-      `═════════════════════════\n\n` +
-      `🎉 සහභාගී වූ සහ පිළිතුරු සැපයූ සියලුම සිසුන්ට ස්තූතියි!`;
-    
-    await sendApi('sendMessage', {
-      chat_id: tgTarget,
-      text: podiumText,
-      parse_mode: 'Markdown'
-    }, env);
-    return;
-  }
-
-  if (await isQuizStopped(paperKey)) {
-    console.log(`🛑 Active Telegram Group poll stream immediately aborted by Admin for ${paperKey}!`);
-    return;
-  }
-
-  const q = questions[qIndex];
-  const qNum = qIndex + 1;
-
-  const opts = q.options || q.o || [];
-  let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
-  rawQText = cleanText(rawQText, 250);
-  rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
-
-  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
-  const cleanOpts = opts.map(o => cleanText(o, 98));
-  const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
-
-  const rawExplain = cleanText(q.e || '', 185);
-  const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
-
-  const pollRes = await sendApi('sendPoll', {
+  // Stream Intro Banner to Telegram Group
+  const introText = 
+    `═════════════════════════\n` +
+    `🎓 *${paperData.title}*\n` +
+    `═════════════════════════\n\n` +
+    `🎯 *Native Telegram Poll Quiz* එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
+    `📝 මුළු ප්‍රශ්න ගණන: MCQ ${totalQ}\n` +
+    `⚡ සියලුම ප්‍රශ්න පහතින් නිකුත් වන අතර, සෑම ප්‍රශ්නයකටම ඔබගේ පිළිතුර තෝරන්න!\n\n` +
+    `👇 *පළමු ප්‍රශ්නය පහත දැක්වේ:*`;
+  
+  const introImgUrl = getPaperImageUrl(paperKey);
+  const photoRes = await sendApi('sendPhoto', {
     chat_id: tgTarget,
-    question: cleanQ,
-    options: cleanOpts,
-    type: 'quiz',
-    correct_option_id: correctIdx,
-    explanation: cleanExplain,
-    is_anonymous: false
+    photo: introImgUrl,
+    caption: introText,
+    parse_mode: 'Markdown'
   }, env);
 
-  if (pollRes.ok && pollRes.result) {
-    POLL_MAP[pollRes.result.poll.id] = {
-      chatId: tgTarget,
-      correctOption: correctIdx,
-      isGroup: true
-    };
+  if (!photoRes.ok) {
+    await sendApi('sendMessage', {
+      chat_id: tgTarget,
+      text: introText,
+      parse_mode: 'Markdown'
+    }, env);
   }
 
-  const nextUrl = `${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=${qIndex + 1}&intervalSec=${intervalSec}`;
+  // Fast Telegram Poll Stream for all questions (Questions ONLY)
+  for (let i = 0; i < totalQ; i++) {
+    if (await isQuizStopped(paperKey)) {
+      console.log(`🛑 Active Telegram Group poll stream immediately aborted by Admin for ${paperKey}!`);
+      return;
+    }
 
-  if (ctx && typeof ctx.waitUntil === 'function') {
-    ctx.waitUntil((async () => {
-      try {
-        await new Promise(r => setTimeout(r, intervalSec * 1000));
-        await fetch(nextUrl, {
-          headers: {
-            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-          }
-        });
-      } catch (err) {
-        console.error('Error fetching next TG step:', err);
+    const q = questions[i];
+    const qNum = i + 1;
+
+    const opts = q.options || q.o || [];
+    let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+    rawQText = cleanText(rawQText, 250);
+    rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
+
+    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
+    const cleanOpts = opts.map(o => cleanText(o, 98));
+    const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
+
+    const rawExplain = cleanText(q.e || '', 185);
+    const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
+
+    try {
+      const pollRes = await sendApi('sendPoll', {
+        chat_id: tgTarget,
+        question: cleanQ,
+        options: cleanOpts,
+        type: 'quiz',
+        correct_option_id: correctIdx,
+        explanation: cleanExplain,
+        is_anonymous: false
+      }, env);
+
+      if (pollRes.ok && pollRes.result) {
+        POLL_MAP[pollRes.result.poll.id] = {
+          chatId: tgTarget,
+          correctOption: correctIdx,
+          isGroup: true
+        };
       }
-    })());
+
+      if (i < totalQ - 1) {
+        await new Promise(res => setTimeout(res, 100));
+      }
+    } catch (err) {
+      console.error(`Error in TG Fast Poll Stream Q${qNum}:`, err.message);
+    }
   }
+
+  // Final Telegram Group Finish Message
+  const podiumText = 
+    `═════════════════════════\n` +
+    `🏆 *${paperData.title}*\n` +
+    `🎯 *Telegram සජීවී ප්‍රශ්න පත්‍රයේ සියලුම MCQ ${totalQ} ප්‍රශ්න නිකුත් කර අවසන්!* ⚡\n` +
+    `═════════════════════════\n\n` +
+    `🎉 සහභාගී වූ සහ පිළිතුරු සැපයූ සියලුම සිසුන්ට ස්තූතියි!`;
+  
+  await sendApi('sendMessage', {
+    chat_id: tgTarget,
+    text: podiumText,
+    parse_mode: 'Markdown'
+  }, env);
 }
 
 // Fetch questions dynamically from GitHub Pages HTML
@@ -766,9 +784,9 @@ export default {
               }
             }
 
-            // 2. Start Both WhatsApp Fast Poll Stream + Telegram Automated Poll Stream
+            // 2. Start Both WhatsApp & Telegram Group Poll Streams
             await processSingleWhatsAppPollStep(paperKey, 0, 20, env);
-            await processSingleTelegramPollStep(paperKey, 0, 25, env, ctx, url.origin);
+            await processSingleTelegramPollStep(paperKey, env);
           }
         })());
       } else {
@@ -795,7 +813,7 @@ export default {
           }
         }
         processSingleWhatsAppPollStep(paperKey, 0, 20, env);
-        processSingleTelegramPollStep(paperKey, 0, 25, env, ctx, url.origin);
+        processSingleTelegramPollStep(paperKey, env);
       }
 
       return new Response(JSON.stringify({ ok: true, scheduled: paperKey, delaySec }), { status: 200, headers: { 'Content-Type': 'application/json' } });
@@ -1356,10 +1374,10 @@ async function handleUpdate(update, env, ctx) {
         // Start Automated WhatsApp & Telegram Poll Quiz Streamers directly on Worker
         if (ctx && typeof ctx.waitUntil === 'function') {
           ctx.waitUntil(processSingleWhatsAppPollStep(paperKey, 0, 20, env));
-          ctx.waitUntil(processSingleTelegramPollStep(paperKey, 0, 25, env, ctx, 'https://a-l.gayanmadushanka1610.workers.dev'));
+          ctx.waitUntil(processSingleTelegramPollStep(paperKey, env));
         } else {
           processSingleWhatsAppPollStep(paperKey, 0, 20, env);
-          processSingleTelegramPollStep(paperKey, 0, 25, env, ctx, 'https://a-l.gayanmadushanka1610.workers.dev');
+          processSingleTelegramPollStep(paperKey, env);
         }
 
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp/Telegram Group Polls Started!' }, env);
