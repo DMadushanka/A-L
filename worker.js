@@ -53,7 +53,8 @@ const QUIZ_DATA = {
       '2026_central': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (මධ්‍යම පළාත්) — MCQ 50', file: 'bc2026_central.html', img: '2026model_CentralP.png', btnLabel: '2026 (මධ්‍යම Model)', isModel: true },
       '2024_uva': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2024 (ඌව පළාත්) — MCQ 50', file: 'bc2024_uva.html', img: 'bc2024_uva.png', btnLabel: '2024 (ඌව පළාත්)', isModel: true },
       '2019_prototype': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (ආදර්ශ / Prototype) — MCQ 50', file: 'bc2019_prototype.html', img: 'BCmo2019.png', btnLabel: '2019 (Prototype)', isModel: true },
-      '2026_moe': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (අධ්‍යාපන අමාත්‍යාංශය) — MCQ 50', file: 'bc2026_moe.html', img: 'bc2026_moe.png', btnLabel: '2026 (MOE Model)', isModel: true }
+      '2026_moe': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (අධ්‍යාපන අමාත්‍යාංශය) — MCQ 50', file: 'bc2026_moe.html', img: 'bc2026_moe.png', btnLabel: '2026 (MOE Model)', isModel: true },
+      '2026_model_p2': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (ආදර්ශ II පත්‍රය — Structured & Essay)', file: 'bc2026_model_part2.html', img: 'bc2026_part2.png', btnLabel: '2026 Model Part 2', isModel: true, isPart2: true }
     }
   },
   sin: {
@@ -1640,25 +1641,49 @@ async function handleUpdate(update, env, ctx) {
           ? { text: '🚀 Open Interactive WebApp (App එක තුළින්)', url: quizUrl }
           : { text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } };
 
-        const launchKeyboard = {
-          inline_keyboard: [
-            [
-              { text: '🎯 Native Telegram Polls (Chat එකෙන්ම)', callback_data: `native_${subId}_${yearKey}` }
-            ],
-            [
-              webAppOption
-            ],
-            [
-              { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
-            ],
-            [
-              { text: '🔄 වෙනත් පත්‍රයක් (Select Paper)', callback_data: `sub_${subId}` }
-            ]
-          ]
-        };
+        let launchKeyboard;
+        let captionText;
 
-        const mcqCount = paperData.title.includes('MCQ 50') ? 'MCQ 50' : 'MCQ 40';
-        const captionText = `🎯 **${paperData.title}**\n\n📚 **විෂය:** ${subData.name}\n📜 **ප්‍රශ්න ගණන:** ${mcqCount}\n\n👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
+        if (paperData.isPart2) {
+          launchKeyboard = {
+            inline_keyboard: [
+              [
+                webAppOption
+              ],
+              [
+                { text: '📖 Read Questions & Marking Scheme in Chat', callback_data: `part2_read_${subId}_${yearKey}` }
+              ],
+              [
+                { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
+              ],
+              [
+                { text: '🔄 වෙනත් පත්‍රයක් (Select Paper)', callback_data: `sub_${subId}` }
+              ]
+            ]
+          };
+
+          captionText = `🎯 **${paperData.title}**\n\n📚 **විෂය:** ${subData.name}\n📜 **ප්‍රශ්න පත්‍රය:** II පත්‍රය (ව්‍යුහගත හා රචනා ප්‍රශ්න 8ක්)\n💡 **විශේෂතා:** සම්පූර්ණ ප්‍රශ්න පත්‍රය සහ නිල පිළිතුරු විග්‍රහය (Marking Scheme) ඇතුළත් වේ.\n\n👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
+        } else {
+          launchKeyboard = {
+            inline_keyboard: [
+              [
+                { text: '🎯 Native Telegram Polls (Chat එකෙන්ම)', callback_data: `native_${subId}_${yearKey}` }
+              ],
+              [
+                webAppOption
+              ],
+              [
+                { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
+              ],
+              [
+                { text: '🔄 වෙනත් පත්‍රයක් (Select Paper)', callback_data: `sub_${subId}` }
+              ]
+            ]
+          };
+
+          const mcqCount = paperData.title.includes('MCQ 50') ? 'MCQ 50' : 'MCQ 40';
+          captionText = `🎯 **${paperData.title}**\n\n📚 **විෂය:** ${subData.name}\n📜 **ප්‍රශ්න ගණන:** ${mcqCount}\n\n👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
+        }
 
         const photoRes = await sendApi('sendPhoto', {
           chat_id: chatId,
@@ -1676,6 +1701,43 @@ async function handleUpdate(update, env, ctx) {
             reply_markup: launchKeyboard
           }, env);
         }
+      }
+    } else if (data.startsWith('part2_read_')) {
+      await sendApi('answerCallbackQuery', { callback_query_id: query.id }, env);
+      const parts = data.split('_');
+      const subId = parts[2];
+      const yearKey = parts.slice(3).join('_');
+      const subData = QUIZ_DATA[subId];
+      const paperData = subData?.papers[yearKey];
+
+      if (paperData) {
+        const quizUrl = `${BASE_URL}/${paperData.file}`;
+        const guideText = 
+          `📜 **${paperData.title}**\n\n` +
+          `**I කොටස - ව්‍යුහගත රචනා (Structured Essay):**\n` +
+          `• ප්‍රශ්නය 01: වෛදික යාග, ස්වධර්ම, අජිත කේසකම්බලී, ඊශ්වර නිර්මාණවාදය & ස්ත්‍රී නිදහස\n` +
+          `• ප්‍රශ්නය 02: ව්‍යග්ඝපජ්ජ සම්පදා, අපාය මුඛ, කල්‍යාණ මිත්‍රයන්, ධන විභාජනය & මිච්ඡා වණිජ්ජා\n` +
+          `• ප්‍රශ්නය 03: ථූපාරාමය, මිහිඳු හිමි දේශනා, පූර්ව මහින්ද ඇදහිලි & අභයගිරි නිකාය භේදය\n\n` +
+          `**II කොටස - රචනා ප්‍රශ්න (Essay Questions):**\n` +
+          `• ප්‍රශ්නය 04: අග්ගඤ්ඤ සූත්‍රය (මානව පරිණාමය) & දස සක්විති වත්\n` +
+          `• ප්‍රශ්නය 05: 'සත්ථා දේවමනුස්සානං' බුදුගුණය & බුද්ධ චරිතයේ නායකත්ව ලක්ෂණ\n` +
+          `• ප්‍රශ්නය 06: I හා III ධර්ම සංගායනා & වික්‍රමශීලා විශ්වවිද්‍යාලය\n` +
+          `• ප්‍රශ්නය 07: සාංචි ස්තූපය vs ලාංකේය ස්තූප & ගන්ධාර vs මථුරා ප්‍රතිමා\n` +
+          `• ප්‍රශ්නය 08: තායිලන්ත බුදුසමය & ජපානයේ සෙන් බුදුදහම\n\n` +
+          `💡 **සම්පූර්ණ ප්‍රශ්න පත්‍රය සහ නිල ලකුණු දීමේ පටිපාටිය (Marking Scheme) සඳහා WebApp එක භාවිතා කරන්න!**`;
+
+        await sendApi('sendMessage', {
+          chat_id: chatId,
+          text: guideText,
+          parse_mode: 'Markdown',
+          reply_markup: {
+            inline_keyboard: [
+              [{ text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } }],
+              [{ text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }],
+              [{ text: '⬅️ ආපසු (Back)', callback_data: `paper_${subId}_${yearKey}` }]
+            ]
+          }
+        }, env);
       }
     } else if (data.startsWith('native_')) {
       const parts = data.split('_');
