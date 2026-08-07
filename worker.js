@@ -1623,6 +1623,26 @@ async function handleUpdate(update, env, ctx) {
     }
   }
 
+  // Handle Native Telegram Poll Auto-Close Updates (when 25s open_period timer expires)
+  if (update.poll && update.poll.is_closed) {
+    const pollId = update.poll.id;
+    const mapping = await getPollMapping(pollId);
+    if (mapping) {
+      const { chatId, paperKey, qIndex, score, startTime } = mapping;
+      const isGroup = String(chatId).startsWith('-');
+
+      if (isGroup) {
+        const currentGroupQIndex = await getGroupActiveQIndex(chatId, paperKey);
+        if (qIndex + 1 > currentGroupQIndex) {
+          await setGroupActiveQIndex(chatId, paperKey, qIndex + 1);
+          await sendNextNativePollStep(chatId, paperKey, qIndex + 1, score, startTime, env);
+        }
+      } else {
+        await sendNextNativePollStep(chatId, paperKey, qIndex + 1, score, startTime, env);
+      }
+    }
+  }
+
   // Handle Callback Queries (Buttons)
   if (update.callback_query) {
     const query = update.callback_query;
