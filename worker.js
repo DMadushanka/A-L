@@ -768,6 +768,75 @@ async function setGroupActiveQIndex(chatId, paperKey, activeQIndex) {
   } catch (e) {}
 }
 
+async function recordUserPollAnswer(chatId, paperKey, user, qIndex, selectedOption, correctOption) {
+  if (!user || !user.id) return;
+  const userId = String(user.id);
+  const cacheKey = `user-stats/${chatId}/${paperKey}`;
+  const cache = caches.default;
+  const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/${cacheKey}`;
+
+  let statsMap = {};
+  try {
+    const match = await cache.match(cacheUrl);
+    if (match) {
+      statsMap = await match.json();
+    }
+  } catch (e) {}
+
+  if (!statsMap[userId]) {
+    const name = user.first_name ? `${user.first_name} ${user.last_name || ''}`.trim() : (user.username || 'Student');
+    statsMap[userId] = {
+      name: name,
+      score: 0,
+      totalAnswered: 0,
+      wrongList: []
+    };
+  }
+
+  const userRecord = statsMap[userId];
+  const qNum = qIndex + 1;
+  const isCorrect = (selectedOption === correctOption);
+
+  userRecord.totalAnswered++;
+  if (isCorrect) {
+    userRecord.score++;
+  } else {
+    userRecord.wrongList.push({
+      qNum: qNum,
+      userAns: selectedOption + 1,
+      correctAns: correctOption + 1
+    });
+  }
+
+  try {
+    await cache.put(cacheUrl, new Response(JSON.stringify(statsMap), {
+      headers: { 'Cache-Control': 'public, max-age=86400' }
+    }));
+  } catch (e) {}
+}
+
+async function getUserQuizStats(chatId, paperKey) {
+  try {
+    const cacheKey = `user-stats/${chatId}/${paperKey}`;
+    const cache = caches.default;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/${cacheKey}`;
+    const match = await cache.match(cacheUrl);
+    if (match) {
+      return await match.json();
+    }
+  } catch (e) {}
+  return {};
+}
+
+async function resetUserQuizStats(chatId, paperKey) {
+  try {
+    const cacheKey = `user-stats/${chatId}/${paperKey}`;
+    const cache = caches.default;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/${cacheKey}`;
+    await cache.delete(cacheUrl);
+  } catch (e) {}
+}
+
 async function sendNextNativePollStep(chatId, paperKey, qIndex = 0, score = 0, startTime = Date.now(), env = {}) {
   if (!paperKey) return;
   if (qIndex === 0 && String(chatId).startsWith('-')) {
@@ -788,22 +857,48 @@ async function sendNextNativePollStep(chatId, paperKey, qIndex = 0, score = 0, s
 
   if (qIndex >= totalQ) {
     const timeSec = Math.max(1, Math.round((Date.now() - startTime) / 1000));
-    const pct = Math.round((score / totalQ) * 100);
 
-    let verdict = '🎉 විශිෂ්ටයි! උසස් පෙළ ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව නිම කළා.';
-    if (pct < 50) verdict = '👍 මූලික අවබෝධයක් ඇත — තවදුරටත් පුහුණු වන්න.';
-    else if (pct < 75) verdict = '🌟 හොඳයි! තවදුරටත් පුනරීක්ෂණය කරන්න.';
+    // Build Live Competition Leaderboard Podium
+    const allStatsMap = await getUserQuizStats(chatId, paperKey);
+    const userList = Object.keys(allStatsMap).map(uid => ({
+      userId: uid,
+      name: allStatsMap[uid].name,
+      score: allStatsMap[uid].score,
+      totalAnswered: allStatsMap[uid].totalAnswered,
+      wrongCount: (allStatsMap[uid].wrongList || []).length
+    }));
+
+    userList.sort((a, b) => b.score - a.score || a.wrongCount - b.wrongCount);
+
+    let leaderboardText = '';
+    if (userList.length > 0) {
+      const topWinners = userList.slice(0, 5);
+      const podiums = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+      const winnerLines = topWinners.map((u, idx) => {
+        const icon = podiums[idx] || `${idx + 1}.`;
+        const uPct = Math.round((u.score / totalQ) * 100);
+        return `${icon} **${u.name}** — ${u.score}/${totalQ} (${uPct}%)`;
+      });
+
+      leaderboardText = 
+        `\n\n🏆 **සජීවී ප්‍රශ්න පත්‍ර තරඟාවලියේ ජයග්‍රාහකයින් (Live Competition Leaderboard)** 🥇🥈🥉\n` +
+        `─────────────────────────\n` +
+        winnerLines.join('\n') + `\n` +
+        `─────────────────────────\n` +
+        `🎉 **ජයග්‍රාහකයින් සියලු දෙනාටම අපගේ උණුසුම් සුභ පැතුම්! (Congratulations!)** 👏⚡`;
+    }
 
     const resultMessage = 
-      `🏆 **ප්‍රශ්න පත්‍ර තරඟය සාර්ථකව අවසන්!**\n\n` +
-      `🎯 **ලබාගත් ලකුණු:** ${score} / ${totalQ} (${pct}%)\n` +
+      `🏆 **${paperData.title} — තරඟය සාර්ථකව අවසන්!**\n\n` +
       `⏱️ **ගත වූ කාලය:** ${formatDuration(timeSec)}\n` +
-      `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n\n` +
-      `${verdict}`;
+      `👥 **සහභාගී වූ සිසුන් ගණන:** ${userList.length || 1}` +
+      leaderboardText + `\n\n` +
+      `💡 **ඔබේ පුද්ගලික ලකුණු සහ වැරදුණු ප්‍රශ්න බලන්න පහත බොත්තම ඔබන්න:**`;
 
     const finishKeyboard = {
       inline_keyboard: [
-        [{ text: '🔄 නැවත උත්සාහ කරන්න (Retry)', callback_data: `native_${subId}_${yearKey}` }],
+        [{ text: '📊 මගේ ලකුණු සහ වැරදුණු ප්‍රශ්න (My Individual Summary)', callback_data: `my_report_${subId}_${yearKey}` }],
+        [{ text: '🔄 නැවත තරඟය පවත්වන්න (Retry)', callback_data: `native_${subId}_${yearKey}` }],
         [{ text: '📑 වෙනත් ප්‍රශ්න පත්‍රයක් (Select Paper)', callback_data: `cat_${subId}_pp` }]
       ]
     };
@@ -2038,6 +2133,48 @@ async function handleUpdate(update, env, ctx) {
       const qIndex = parseInt(qIndexStr, 10) || 1;
       const yearKey = parts.slice(3, parts.length - 1).join('_');
       await renderPart2Question(chatId, messageId, subId, yearKey, qIndex, env, query.id, isGroup);
+    } else if (data.startsWith('my_report_')) {
+      const parts = data.split('_');
+      const subId = parts[2];
+      const yearKey = parts.slice(3).join('_');
+      const paperKey = `${subId}_${yearKey}`;
+
+      const allStatsMap = await getUserQuizStats(chatId, paperKey);
+      const userRecord = allStatsMap[fromId];
+
+      if (!userRecord || userRecord.totalAnswered === 0) {
+        await sendApi('answerCallbackQuery', {
+          callback_query_id: query.id,
+          text: '⚠️ ඔබ මෙම ප්‍රශ්න පත්‍ර තරඟයට සහභාගී වී පිළිතුරු සපයා නොමැත!',
+          show_alert: true
+        }, env);
+        return;
+      }
+
+      const totalAns = userRecord.totalAnswered;
+      const userScore = userRecord.score;
+      const wrongList = userRecord.wrongList || [];
+
+      let wrongText = '';
+      if (wrongList.length === 0) {
+        wrongText = '🎉 ඔබ සියලුම ප්‍රශ්නවලට 100% නිවැරදි පිළිතුරු සපයා ඇත! (No Errors!)';
+      } else {
+        const wrongLines = wrongList.slice(0, 10).map(w => `• Q${w.qNum < 10 ? '0' + w.qNum : w.qNum}: ඔබ දුන් පිළිතුර (${w.userAns}) ❌ | නිවැරදි පිළිතුර (${w.correctAns}) ✅`);
+        wrongText = `❌ ඔබට වැරදුණු ප්‍රශ්න (${wrongList.length}):\n` + wrongLines.join('\n');
+      }
+
+      const personalReport = 
+        `📊 ඔබගේ පුද්ගලික ලකුණු සටහන (My Quiz Summary)\n` +
+        `👤 නම: ${userRecord.name}\n` +
+        `🎯 ලබාගත් ලකුණු: ${userScore} / ${totalAns} (${Math.round((userScore / totalAns) * 100)}%)\n\n` +
+        wrongText;
+
+      await sendApi('answerCallbackQuery', {
+        callback_query_id: query.id,
+        text: personalReport,
+        show_alert: true
+      }, env);
+      return;
     } else if (data.startsWith('native_')) {
       const parts = data.split('_');
       const subId = parts[1];
