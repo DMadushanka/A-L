@@ -1372,14 +1372,71 @@ async function handleUpdate(update, env, ctx) {
       const paperData = subData?.papers[yearKey];
 
       if (paperData) {
+        const paperImgUrl = getPaperImageUrl(paperKey);
+        const tgTarget = getTelegramTargetChat(env, chatId);
+        const quizUrl = `${BASE_URL}/${paperData.file}`;
+        const targetGroupUrl = (env && env.GROUP_URL) ? env.GROUP_URL : 'https://t.me/+wZUSJyEncD1mYjFl';
+
+        if (paperData.isPart2) {
+          // Native Part II Presentation Card (Not MCQ Quiz)
+          const part2Announce = 
+            `📜 **${paperData.title}**\n\n` +
+            `🎓 **අ.පො.ස. (උසස් පෙළ) II පත්‍රය — පළකරන ලදී! (Part II Paper Published)**\n\n` +
+            `✍️ **ප්‍රශ්න පත්‍ර ව්‍යුහය:** ව්‍යුහගත හා රචනා ප්‍රශ්න 08ක් (Structured & Essay Questions)\n` +
+            `💡 **විශේෂතා:** සම්පූර්ණ ප්‍රශ්න පත්‍රය සහ නිල පිළිතුරු විග්‍රහය (Marking Scheme) ඇතුළත් වේ.\n\n` +
+            `👇 **ප්‍රශ්න පත්‍රය හා පිළිතුරු කියවීමට පහත බොත්තමක් තෝරන්න:**`;
+
+          const part2Keyboard = {
+            inline_keyboard: [
+              [
+                { text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } }
+              ],
+              [
+                { text: '📖 Read Questions & Marking Scheme in Chat', callback_data: `part2_read_${subId}_${yearKey}` }
+              ],
+              [
+                { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
+              ]
+            ]
+          };
+
+          const photoRes = await sendApi('sendPhoto', {
+            chat_id: tgTarget,
+            photo: paperImgUrl,
+            caption: part2Announce,
+            parse_mode: 'Markdown',
+            reply_markup: part2Keyboard
+          }, env);
+
+          if (!photoRes.ok) {
+            await sendApi('sendMessage', {
+              chat_id: tgTarget,
+              text: part2Announce,
+              parse_mode: 'Markdown',
+              reply_markup: part2Keyboard
+            }, env);
+          }
+
+          // WhatsApp Channel Broadcast for Part II Paper
+          const waPart2Text = 
+            `═════════════════════════\n` +
+            `🎓 *A/L MCQ HUB* — නව II පත්‍රය (Structured & Essay) පළකරන ලදී!\n` +
+            `═════════════════════════\n\n` +
+            `📜 *ප්‍රශ්න පත්‍රය:* ${paperData.title}\n` +
+            `✍️ *විශේෂතා:* ව්‍යුහගත හා රචනා ප්‍රශ්න 8ක් සහ නිල ලකුණු දීමේ පටිපාටිය (Marking Scheme)\n\n` +
+            `👇 *දැන්ම පත්‍රය කියවන්න:*\n` +
+            `${targetGroupUrl}`;
+
+          await autoPostToWhatsAppChannel(waPart2Text, paperImgUrl, env);
+          await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Part II Model Paper & Marking Scheme Published!' }, env);
+          return;
+        }
+
         const announceMsg = 
           `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
           `📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n\n` +
           `💡 **විශේෂතා:** Native Telegram Polls, Instant Confetti 🎉, Leaderboards & Top 3 Winner Podiums!\n\n` +
           `👇 **පළමු ප්‍රශ්නය පහත දැක්වේ:**`;
-
-        const paperImgUrl = getPaperImageUrl(paperKey);
-        const tgTarget = getTelegramTargetChat(env, chatId);
 
         const photoRes = await sendApi('sendPhoto', {
           chat_id: tgTarget,
@@ -1397,7 +1454,6 @@ async function handleUpdate(update, env, ctx) {
         }
 
         // Automated WhatsApp Group Broadcast Trigger from Worker
-        const targetGroupUrl = (env && env.GROUP_URL) ? env.GROUP_URL : 'https://t.me/+wZUSJyEncD1mYjFl';
         const waMsgText = 
           `═════════════════════════\n` +
           `🎓 *A/L MCQ HUB* — සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!\n` +
