@@ -1713,7 +1713,7 @@ async function handleUpdate(update, env, ctx) {
                 { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
               ],
               [
-                { text: '🔄 වෙනත් පත්‍රයක් (Select Paper)', callback_data: `sub_${subId}` }
+                { text: '⬅️ ආපසු (Back)', callback_data: `cat_${subId}_mp` }
               ]
             ]
           };
@@ -1737,7 +1737,7 @@ async function handleUpdate(update, env, ctx) {
                 { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
               ],
               [
-                { text: '🔄 වෙනත් පත්‍රයක් (Select Paper)', callback_data: `sub_${subId}` }
+                { text: '⬅️ ආපසු (Back)', callback_data: `cat_${subId}_pp` }
               ]
             ]
           };
@@ -1750,34 +1750,24 @@ async function handleUpdate(update, env, ctx) {
             `👇 **ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:**`;
         }
 
-        // Try 1: Send Photo with Photo Banner
-        const photoRes = await sendApi('sendPhoto', {
+        // Primary: Edit current menu message in-place for instant responsive UX
+        const editRes = await sendApi('editMessageText', {
           chat_id: chatId,
-          photo: imgUrl,
-          caption: cardText,
+          message_id: messageId,
+          text: cardText,
           parse_mode: 'Markdown',
           reply_markup: launchKeyboard
         }, env);
 
-        if (!photoRes.ok) {
-          // Try 2: Edit current menu message with Markdown
-          const editRes = await sendApi('editMessageText', {
+        if (!editRes.ok) {
+          // Fallback: Send a photo message if edit fails
+          await sendApi('sendPhoto', {
             chat_id: chatId,
-            message_id: messageId,
-            text: cardText,
+            photo: imgUrl,
+            caption: cardText,
             parse_mode: 'Markdown',
             reply_markup: launchKeyboard
           }, env);
-
-          if (!editRes.ok) {
-            // Try 3: Edit current menu message without parse_mode (guaranteed never to crash)
-            await sendApi('editMessageText', {
-              chat_id: chatId,
-              message_id: messageId,
-              text: cardText.replace(/\*\*/g, ''),
-              reply_markup: launchKeyboard
-            }, env);
-          }
         }
       }
     } else if (data.startsWith('part2_read_')) {
