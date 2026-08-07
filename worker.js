@@ -2442,16 +2442,8 @@ async function handleUpdate(update, env, ctx) {
           parse_mode: 'Markdown'
         }, env);
 
-        if (isGroup) {
-          const origin = url.origin;
-          if (ctx && typeof ctx.waitUntil === 'function') {
-            ctx.waitUntil(fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=0&intervalSec=15&sendHeader=true`));
-          } else {
-            fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=0&intervalSec=15&sendHeader=true`);
-          }
-        } else {
-          await sendNextNativePollStep(chatId, paperKey, 0, 0, Date.now(), env);
-        }
+        // Send Question 1 Native Poll directly to the active chat (Group or DM)
+        await sendNextNativePollStep(chatId, paperKey, 0, 0, Date.now(), env);
       }
     }
 
