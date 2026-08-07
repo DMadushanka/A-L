@@ -1400,8 +1400,11 @@ async function handleUpdate(update, env, ctx) {
             ]
           };
 
+          const tgTargetGroup = getTelegramTargetChat(env, '-1004322002704');
+
+          // 1. Post to Telegram Group via Bot API with Photo Banner & Interactive Buttons
           const photoRes = await sendApi('sendPhoto', {
-            chat_id: tgTarget,
+            chat_id: tgTargetGroup,
             photo: paperImgUrl,
             caption: part2Announce,
             parse_mode: 'Markdown',
@@ -1410,14 +1413,17 @@ async function handleUpdate(update, env, ctx) {
 
           if (!photoRes.ok) {
             await sendApi('sendMessage', {
-              chat_id: tgTarget,
+              chat_id: tgTargetGroup,
               text: part2Announce,
               parse_mode: 'Markdown',
               reply_markup: part2Keyboard
             }, env);
           }
 
-          // WhatsApp Channel Broadcast for Part II Paper
+          // 2. Post to Telegram Group via Green API Telegram Instance Broadcast
+          await autoPostToTelegramViaGreenApi(part2Announce, paperImgUrl, env);
+
+          // 3. WhatsApp Channel Broadcast for Part II Paper
           const waPart2Text = 
             `═════════════════════════\n` +
             `🎓 *A/L MCQ HUB* — නව II පත්‍රය (Structured & Essay) පළකරන ලදී!\n` +
@@ -1428,7 +1434,7 @@ async function handleUpdate(update, env, ctx) {
             `${targetGroupUrl}`;
 
           await autoPostToWhatsAppChannel(waPart2Text, paperImgUrl, env);
-          await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Part II Model Paper & Marking Scheme Published!' }, env);
+          await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Part II Paper Published to Telegram & WhatsApp Groups!' }, env);
           return;
         }
 
