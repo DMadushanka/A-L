@@ -545,7 +545,7 @@ function getPaperImageUrl(paperKey) {
   if (!paperKey) return 'https://dmadushanka.github.io/A-L/logo.png';
   const parts = paperKey.split('_');
   const subId = parts[0];
-  const yearKey = parts[1];
+  const yearKey = parts.slice(1).join('_');
   const subData = QUIZ_DATA[subId];
   const paperData = subData?.papers[yearKey];
   if (paperData && paperData.img) {
@@ -631,6 +631,7 @@ async function publishLiveQuizAnnouncement(paperKey, paperData, targetDate, isNo
   const initialRemSec = !isNow ? Math.max(0, Math.floor((targetTimeMs - Date.now()) / 1000)) : 0;
   const initialCountdownStr = !isNow ? formatCountdownText(initialRemSec) : '';
 
+  const imageUrl = getPaperImageUrl(paperKey);
   const timeNotice = `⏰ **ආරම්භ වන වේලාව:** ${targetDate.toLocaleString('en-GB', { timeZone: 'Asia/Colombo' })}`;
   const announceMsg = isNow ?
     `🚀 **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)**\n\n` +
@@ -656,7 +657,12 @@ async function publishLiveQuizAnnouncement(paperKey, paperData, targetDate, isNo
 
   for (const uid of allUsers) {
     try {
-      const m = await bot.sendMessage(uid, announceMsg, { parse_mode: 'Markdown', reply_markup: announceKb });
+      let m = null;
+      try {
+        m = await bot.sendPhoto(uid, imageUrl, { caption: announceMsg, parse_mode: 'Markdown', reply_markup: announceKb });
+      } catch (e) {
+        m = await bot.sendMessage(uid, announceMsg, { parse_mode: 'Markdown', reply_markup: announceKb });
+      }
       if (m && m.message_id && !isNow) {
         sentTargets.push({ chatId: uid, messageId: m.message_id });
       }
@@ -665,7 +671,12 @@ async function publishLiveQuizAnnouncement(paperKey, paperData, targetDate, isNo
 
   for (const gid of allGroups) {
     try {
-      const m = await bot.sendMessage(gid, announceMsg, { parse_mode: 'Markdown', reply_markup: announceKb });
+      let m = null;
+      try {
+        m = await bot.sendPhoto(gid, imageUrl, { caption: announceMsg, parse_mode: 'Markdown', reply_markup: announceKb });
+      } catch (e) {
+        m = await bot.sendMessage(gid, announceMsg, { parse_mode: 'Markdown', reply_markup: announceKb });
+      }
       if (m && m.message_id && !isNow) {
         sentTargets.push({ chatId: gid, messageId: m.message_id });
       }
@@ -675,6 +686,19 @@ async function publishLiveQuizAnnouncement(paperKey, paperData, targetDate, isNo
       }
     }
   }
+
+  // Also auto post preview banner image to WhatsApp Channel
+  const waAnnounceText = 
+    `═════════════════════════\n` +
+    `🎓 *A/L MCQ HUB* — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟය!'}\n` +
+    `═════════════════════════\n\n` +
+    `📚 *ප්‍රශ්න පත්‍රය:* ${paperData.title}\n` +
+    `${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}` +
+    `💡 *විශේෂතා:* Real-time Timer, All-Island Leaderboards & Podiums 🎉\n\n` +
+    `👇 පහත ලින්ක් එක ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:\n` +
+    `${targetGroupUrl}`;
+
+  await autoPostToWhatsAppChannel(waAnnounceText, imageUrl);
 
   if (!isNow && sentTargets.length > 0) {
     startLiveCountdownEngine(paperKey, paperData.title, targetTimeMs, sentTargets, jobId);
