@@ -54,7 +54,8 @@ const QUIZ_DATA = {
       '2024_uva': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2024 (ඌව පළාත්) — MCQ 50', file: 'bc2024_uva.html', img: 'bc2024_uva.png', btnLabel: '2024 (ඌව පළාත්)', isModel: true },
       '2019_prototype': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (ආදර්ශ / Prototype) — MCQ 50', file: 'bc2019_prototype.html', img: 'BCmo2019.png', btnLabel: '2019 (Prototype)', isModel: true },
       '2026_moe': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (අධ්‍යාපන අමාත්‍යාංශය) — MCQ 50', file: 'bc2026_moe.html', img: 'bc2026_moe.png', btnLabel: '2026 (MOE Model)', isModel: true },
-      '2026_model_p2': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (ආදර්ශ II පත්‍රය — Structured & Essay)', file: 'bc2026_model_part2.html', img: 'bc2026_part2.png', btnLabel: '2026 Model Part 2', isModel: true, isPart2: true }
+      '2026_model_p2': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (ආදර්ශ II පත්‍රය — Structured & Essay)', file: 'bc2026_model_part2.html', img: 'bc2026_part2.png', btnLabel: '2026 Model Part 2', isModel: true, isPart2: true },
+      '2026_master': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (මාස්ටර් ප්‍රශ්න බැංකුව — MCQ 229)', file: 'bc2026_master.html', img: 'bc2026_master.png', btnLabel: '2026 (Master Bank)', isModel: true }
     }
   },
   sin: {
@@ -1956,11 +1957,12 @@ async function handleUpdate(update, env, ctx) {
             ]
           };
 
-          const mcqCount = paperData.title.includes('MCQ 50') ? 'MCQ 50' : 'MCQ 40';
+          const mcqCount = paperData.title.includes('MCQ 229') ? 'MCQ 229 (Master Shuffled Bank)' : (paperData.title.includes('MCQ 50') ? 'MCQ 50' : 'MCQ 40');
           cardText = 
             `🎯 **${paperData.title}**\n\n` +
             `📚 **විෂය:** ${subData.name}\n` +
-            `📜 **ප්‍රශ්න ගණන:** ${mcqCount}\n\n` +
+            `📜 **ප්‍රශ්න ගණන:** ${mcqCount}\n` +
+            `💡 **විශේෂතා:** සමස්ත විෂය නිර්දේශයම ආවරණය වන පරිදි අහඹු ලෙස මාරු කරන ලද (Shuffled) ප්‍රශ්න 229ක් සහ නිල පිළිතුරු විග්‍රහයන් ඇතුළත් වේ.\n\n` +
             `👇 **ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:**`;
         }
 
