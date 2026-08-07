@@ -1698,7 +1698,7 @@ async function handleUpdate(update, env, ctx) {
           : { text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } };
 
         let launchKeyboard;
-        let captionText;
+        let cardText;
 
         if (paperData.isPart2) {
           launchKeyboard = {
@@ -1718,7 +1718,12 @@ async function handleUpdate(update, env, ctx) {
             ]
           };
 
-          captionText = `🎯 **${paperData.title}**\n\n📚 **විෂය:** ${subData.name}\n📜 **ප්‍රශ්න පත්‍රය:** II පත්‍රය (ව්‍යුහගත හා රචනා ප්‍රශ්න 8ක්)\n💡 **විශේෂතා:** සම්පූර්ණ ප්‍රශ්න පත්‍රය සහ නිල පිළිතුරු විග්‍රහය (Marking Scheme) ඇතුළත් වේ.\n\n👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
+          cardText = 
+            `📜 **${paperData.title}**\n\n` +
+            `📚 **විෂය:** ${subData.name}\n` +
+            `✍️ **ප්‍රශ්න පත්‍රය:** II පත්‍රය (ව්‍යුහගත හා රචනා ප්‍රශ්න 8ක්)\n` +
+            `💡 **විශේෂතා:** සම්පූර්ණ ප්‍රශ්න පත්‍රය සහ නිල පිළිතුරු විග්‍රහය (Marking Scheme) ඇතුළත් වේ.\n\n` +
+            `👇 **ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:**`;
         } else {
           launchKeyboard = {
             inline_keyboard: [
@@ -1738,24 +1743,41 @@ async function handleUpdate(update, env, ctx) {
           };
 
           const mcqCount = paperData.title.includes('MCQ 50') ? 'MCQ 50' : 'MCQ 40';
-          captionText = `🎯 **${paperData.title}**\n\n📚 **විෂය:** ${subData.name}\n📜 **ප්‍රශ්න ගණන:** ${mcqCount}\n\n👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
+          cardText = 
+            `🎯 **${paperData.title}**\n\n` +
+            `📚 **විෂය:** ${subData.name}\n` +
+            `📜 **ප්‍රශ්න ගණන:** ${mcqCount}\n\n` +
+            `👇 **ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:**`;
         }
 
+        // Try 1: Send Photo with Photo Banner
         const photoRes = await sendApi('sendPhoto', {
           chat_id: chatId,
           photo: imgUrl,
-          caption: captionText,
+          caption: cardText,
           parse_mode: 'Markdown',
           reply_markup: launchKeyboard
         }, env);
 
         if (!photoRes.ok) {
-          await sendApi('sendMessage', {
+          // Try 2: Edit current menu message with Markdown
+          const editRes = await sendApi('editMessageText', {
             chat_id: chatId,
-            text: captionText,
+            message_id: messageId,
+            text: cardText,
             parse_mode: 'Markdown',
             reply_markup: launchKeyboard
           }, env);
+
+          if (!editRes.ok) {
+            // Try 3: Edit current menu message without parse_mode (guaranteed never to crash)
+            await sendApi('editMessageText', {
+              chat_id: chatId,
+              message_id: messageId,
+              text: cardText.replace(/\*\*/g, ''),
+              reply_markup: launchKeyboard
+            }, env);
+          }
         }
       }
     } else if (data.startsWith('part2_read_')) {
@@ -1770,11 +1792,11 @@ async function handleUpdate(update, env, ctx) {
         const quizUrl = `${BASE_URL}/${paperData.file}`;
         const guideText = 
           `📜 **${paperData.title}**\n\n` +
-          `**I කොටස - ව්‍යුහගත රචනා (Structured Essay):**\n` +
+          `📌 **I කොටස - ව්‍යුහගත රචනා (Structured Essay):**\n` +
           `• ප්‍රශ්නය 01: වෛදික යාග, ස්වධර්ම, අජිත කේසකම්බලී, ඊශ්වර නිර්මාණවාදය & ස්ත්‍රී නිදහස\n` +
           `• ප්‍රශ්නය 02: ව්‍යග්ඝපජ්ජ සම්පදා, අපාය මුඛ, කල්‍යාණ මිත්‍රයන්, ධන විභාජනය & මිච්ඡා වණිජ්ජා\n` +
           `• ප්‍රශ්නය 03: ථූපාරාමය, මිහිඳු හිමි දේශනා, පූර්ව මහින්ද ඇදහිලි & අභයගිරි නිකාය භේදය\n\n` +
-          `**II කොටස - රචනා ප්‍රශ්න (Essay Questions):**\n` +
+          `✍️ **II කොටස - රචනා ප්‍රශ්න (Essay Questions):**\n` +
           `• ප්‍රශ්නය 04: අග්ගඤ්ඤ සූත්‍රය (මානව පරිණාමය) & දස සක්විති වත්\n` +
           `• ප්‍රශ්නය 05: 'සත්ථා දේවමනුස්සානං' බුදුගුණය & බුද්ධ චරිතයේ නායකත්ව ලක්ෂණ\n` +
           `• ප්‍රශ්නය 06: I හා III ධර්ම සංගායනා & වික්‍රමශීලා විශ්වවිද්‍යාලය\n` +
@@ -1782,8 +1804,9 @@ async function handleUpdate(update, env, ctx) {
           `• ප්‍රශ්නය 08: තායිලන්ත බුදුසමය & ජපානයේ සෙන් බුදුදහම\n\n` +
           `💡 **සම්පූර්ණ ප්‍රශ්න පත්‍රය සහ නිල ලකුණු දීමේ පටිපාටිය (Marking Scheme) සඳහා WebApp එක භාවිතා කරන්න!**`;
 
-        await sendApi('sendMessage', {
+        const res = await sendApi('editMessageText', {
           chat_id: chatId,
+          message_id: messageId,
           text: guideText,
           parse_mode: 'Markdown',
           reply_markup: {
@@ -1794,6 +1817,21 @@ async function handleUpdate(update, env, ctx) {
             ]
           }
         }, env);
+
+        if (!res.ok) {
+          await sendApi('sendMessage', {
+            chat_id: chatId,
+            text: guideText,
+            parse_mode: 'Markdown',
+            reply_markup: {
+              inline_keyboard: [
+                [{ text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } }],
+                [{ text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }],
+                [{ text: '⬅️ ආපසු (Back)', callback_data: `paper_${subId}_${yearKey}` }]
+              ]
+            }
+          }, env);
+        }
       }
     } else if (data.startsWith('native_')) {
       const parts = data.split('_');
