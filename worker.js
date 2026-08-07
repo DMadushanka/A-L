@@ -988,8 +988,8 @@ async function sendNextNativePollStep(chatId, paperKey, qIndex = 0, score = 0, s
   }
 }
 
-// Helper: Pure Native Telegram Group Perpetual Step Streamer (15-Second Auto Timer per Question)
-async function processSingleTelegramPollStep(paperKey, qIndex = 0, intervalSec = 15, env = {}, sendHeader = true) {
+// Helper: Pure Native Telegram Group Perpetual Step Streamer (20-Second Auto Timer per Question)
+async function processSingleTelegramPollStep(paperKey, qIndex = 0, intervalSec = 20, env = {}, sendHeader = true, targetChatId = null) {
   if (!paperKey) return true;
   const parts = paperKey.split('_');
   const subId = parts[0];
@@ -999,7 +999,7 @@ async function processSingleTelegramPollStep(paperKey, qIndex = 0, intervalSec =
   const paperData = subData?.papers[yearKey];
   if (!paperData) return true;
 
-  const tgTarget = getTelegramTargetChat(env, '-1004322002704');
+  const tgTarget = targetChatId || getTelegramTargetChat(env, '-1004322002704');
   const questions = await fetchQuestionsFromHtml(paperData.file);
   if (!questions || questions.length === 0) return true;
 
@@ -1354,15 +1354,16 @@ export default {
     if (url.pathname === '/stream-tg-step') {
       const paperKey = url.searchParams.get('paperKey');
       const qIndex = parseInt(url.searchParams.get('qIndex') || '0', 10);
-      const intervalSec = parseInt(url.searchParams.get('intervalSec') || '15', 10);
+      const intervalSec = parseInt(url.searchParams.get('intervalSec') || '20', 10);
+      const targetChatId = url.searchParams.get('chatId') || env.TG_TARGET_CHAT || '-1004322002704';
       const sendHeader = url.searchParams.get('sendHeader') !== 'false';
       const origin = url.origin;
 
       if (ctx && typeof ctx.waitUntil === 'function') {
         ctx.waitUntil((async () => {
-          const isFinished = await processSingleTelegramPollStep(paperKey, qIndex, intervalSec, env, sendHeader);
+          const isFinished = await processSingleTelegramPollStep(paperKey, qIndex, intervalSec, env, sendHeader, targetChatId);
           if (!isFinished) {
-            const nextUrl = `${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=${qIndex + 1}&intervalSec=${intervalSec}&sendHeader=false`;
+            const nextUrl = `${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&chatId=${encodeURIComponent(targetChatId)}&qIndex=${qIndex + 1}&intervalSec=${intervalSec}&sendHeader=false`;
             try {
               await new Promise(r => setTimeout(r, intervalSec * 1000));
               await fetch(nextUrl, {
@@ -1376,10 +1377,10 @@ export default {
           }
         })());
       } else {
-        await processSingleTelegramPollStep(paperKey, qIndex, intervalSec, env, sendHeader);
+        await processSingleTelegramPollStep(paperKey, qIndex, intervalSec, env, sendHeader, targetChatId);
       }
 
-      return new Response(JSON.stringify({ ok: true, status: 'tg_step_processed', paperKey, qIndex, intervalSec }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+      return new Response(JSON.stringify({ ok: true, status: 'tg_step_processed', paperKey, qIndex, intervalSec, chatId: targetChatId }), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
     if (request.method === 'POST') {
@@ -1765,15 +1766,7 @@ async function handleUpdate(update, env, ctx) {
 
       const isGroup = String(chatId).startsWith('-');
 
-      if (isGroup) {
-        const currentGroupQIndex = await getGroupActiveQIndex(chatId, paperKey);
-        if (qIndex + 1 > currentGroupQIndex) {
-          await setGroupActiveQIndex(chatId, paperKey, qIndex + 1);
-          await sendNextNativePollStep(chatId, paperKey, qIndex + 1, newScore, startTime, env);
-        } else {
-          console.log(`ℹ️ Group poll answer for Q${qIndex + 1} ignored for group progression as Q${currentGroupQIndex + 1} is already active.`);
-        }
-      } else {
+      if (!isGroup) {
         await sendNextNativePollStep(chatId, paperKey, qIndex + 1, newScore, startTime, env);
       }
     }
@@ -2442,8 +2435,16 @@ async function handleUpdate(update, env, ctx) {
           parse_mode: 'Markdown'
         }, env);
 
-        // Send Question 1 Native Poll directly to the active chat (Group or DM)
-        await sendNextNativePollStep(chatId, paperKey, 0, 0, Date.now(), env);
+        if (isGroup) {
+          const origin = url.origin;
+          if (ctx && typeof ctx.waitUntil === 'function') {
+            ctx.waitUntil(fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&chatId=${encodeURIComponent(chatId)}&qIndex=0&intervalSec=20&sendHeader=false`));
+          } else {
+            fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&chatId=${encodeURIComponent(chatId)}&qIndex=0&intervalSec=20&sendHeader=false`);
+          }
+        } else {
+          await sendNextNativePollStep(chatId, paperKey, 0, 0, Date.now(), env);
+        }
       }
     }
 
