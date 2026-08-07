@@ -529,6 +529,7 @@
         <button class="pill-btn" onclick="selectSubjectFilter('hist', this)">📜 ශ්‍රී ලංකා ඉතිහාසය</button>
         <button class="pill-btn" onclick="selectSubjectFilter('bc', this)">☸️ බෞද්ධ ශිෂ්ටාචාරය</button>
         <button class="pill-btn" onclick="selectSubjectFilter('sin', this)">✍️ සිංහල</button>
+        <button class="pill-btn" onclick="selectSubjectFilter('bs', this)">💼 ව්‍යාපාර අධ්‍යයනය</button>
       </div>
     </div>
 
@@ -544,8 +545,11 @@
       window.Telegram.WebApp.expand();
     }
 
-    // Complete Database of All 32 A/L Past Papers
+    // Complete Database of All Past Papers
     const PAPERS_DB = [
+      // Business Studies
+      { id: 'bs2015', sub: 'bs', subName: 'ව්‍යාපාර අධ්‍යයනය', year: '2015', title: 'ව්‍යාපාර අධ්‍යයනය 2015 — I පත්‍රය (MCQ 30)', mcqs: 30, file: 'bs2015.html', img: 'bs5.png' },
+
       // Political Science
       { id: 'pl2016', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2016', title: 'දේශපාලන විද්‍යාව 2016 — I පත්‍රය', mcqs: 40, file: 'pl2016.html', img: 'pl2016.png' },
       { id: 'pl2017', sub: 'pl', subName: 'දේශපාලන විද්‍යාව', year: '2017', title: 'දේශපාලන විද්‍යාව 2017 — I පත්‍රය', mcqs: 40, file: 'pl2017.html', img: 'pl2017.png' },
@@ -578,6 +582,11 @@
       { id: 'bc9', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2019', title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (BC-9)', mcqs: 40, file: 'BC9.html', img: 'BC9.png' },
       { id: 'bc10', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2020', title: 'බෞද්ධ ශිෂ්ටාචාරය 2020 (BC-10)', mcqs: 40, file: 'BC10.html', img: 'BC10.png' },
       { id: 'bc11', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2021', title: 'බෞද්ධ ශිෂ්ටාචාරය 2021 (BC-11)', mcqs: 40, file: 'BC11.html', img: 'BC11.png' },
+      { id: 'bc2024_wp', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2024', title: 'බෞද්ධ ශිෂ්ටාචාරය 2024 (බස්නාහිර පළාත්) — MCQ 50', mcqs: 50, file: 'bc2024_wp.html', img: 'bc2024_wp.png' },
+      { id: 'bc2026_central', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2026', title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (මධ්‍යම පළාත්) — MCQ 50', mcqs: 50, file: 'bc2026_central.html', img: '2026model_CentralP.png' },
+      { id: 'bc2024_uva', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2024', title: 'බෞද්ධ ශිෂ්ටාචාරය 2024 (ඌව පළාත්) — MCQ 50', mcqs: 50, file: 'bc2024_uva.html', img: 'bc2024_uva.png' },
+      { id: 'bc2019_prototype', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2019', title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (ආදර්ශ / Prototype) — MCQ 50', mcqs: 50, file: 'bc2019_prototype.html', img: 'BCmo2019.png' },
+      { id: 'bc2026_moe', sub: 'bc', subName: 'බෞද්ධ ශිෂ්ටාචාරය', year: '2026', title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (අධ්‍යාපන අමාත්‍යාංශය) — MCQ 50', mcqs: 50, file: 'bc2026_moe.html', img: 'bc2026_moe.png' },
 
       // Sinhala
       { id: 'sin2020', sub: 'sin', subName: 'සිංහල', year: '2020', title: 'සිංහල 2020 — I පත්‍රය MCQ', mcqs: 40, file: 'sinhala2020.html', img: 'sinhala2020.png' },

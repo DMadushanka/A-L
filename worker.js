@@ -48,7 +48,12 @@ const QUIZ_DATA = {
       '2018': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2018 (BC-8)', file: 'BC8.html', img: 'BC8.png' },
       '2019': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (BC-9)', file: 'BC9.html', img: 'BC9.png' },
       '2020': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2020 (BC-10)', file: 'BC10.html', img: 'BC10.png' },
-      '2021': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2021 (BC-11)', file: 'BC11.html', img: 'BC11.png' }
+      '2021': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2021 (BC-11)', file: 'BC11.html', img: 'BC11.png' },
+      '2024_wp': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2024 (බස්නාහිර පළාත්) — MCQ 50', file: 'bc2024_wp.html', img: 'bc2024_wp.png', btnLabel: '2024 (බස්නාහිර)', isModel: true },
+      '2026_central': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (මධ්‍යම පළාත්) — MCQ 50', file: 'bc2026_central.html', img: '2026model_CentralP.png', btnLabel: '2026 (මධ්‍යම Model)', isModel: true },
+      '2024_uva': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2024 (ඌව පළාත්) — MCQ 50', file: 'bc2024_uva.html', img: 'bc2024_uva.png', btnLabel: '2024 (ඌව පළාත්)', isModel: true },
+      '2019_prototype': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (ආදර්ශ / Prototype) — MCQ 50', file: 'bc2019_prototype.html', img: 'BCmo2019.png', btnLabel: '2019 (Prototype)', isModel: true },
+      '2026_moe': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (අධ්‍යාපන අමාත්‍යාංශය) — MCQ 50', file: 'bc2026_moe.html', img: 'bc2026_moe.png', btnLabel: '2026 (MOE Model)', isModel: true }
     }
   },
   sin: {
@@ -60,6 +65,13 @@ const QUIZ_DATA = {
       '2022': { title: 'සිංහල 2022 — I පත්‍රය MCQ', file: 'sinhala2022.html', img: 'sinhala2022.png' },
       '2024': { title: 'සිංහල 2024 — I පත්‍රය MCQ', file: 'sinhala2024.html', img: 'sinhala2024.png' },
       '2025': { title: 'සිංහල 2025 — I පත්‍රය MCQ', file: 'sinhala2025.html', img: 'sinhala2025.png' }
+    }
+  },
+  bs: {
+    name: '💼 ව්‍යාපාර අධ්‍යයනය (Business Studies)',
+    shortName: 'ව්‍යාපාර අධ්‍යයනය',
+    papers: {
+      '2015': { title: 'ව්‍යාපාර අධ්‍යයනය 2015 — MCQ 30', file: 'bs2015.html', img: 'bs5.png' }
     }
   }
 };
@@ -163,7 +175,7 @@ async function checkAndRunScheduledQuizzes(env, ctx) {
       console.log(`🚀 Scheduled time reached for ${item.paperKey}! Starting automated quiz...`);
 
       const subId = item.paperKey.split('_')[0];
-      const yearKey = item.paperKey.split('_')[1];
+      const yearKey = item.paperKey.split('_').slice(1).join('_');
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
 
@@ -280,7 +292,7 @@ function getPaperImageUrl(paperKey) {
   if (!paperKey) return `${BASE_URL}/logo.png`;
   const parts = paperKey.split('_');
   const subId = parts[0];
-  const yearKey = parts[1];
+  const yearKey = parts.slice(1).join('_');
   const subData = QUIZ_DATA[subId];
   const paperData = subData?.papers[yearKey];
   if (paperData && paperData.img) {
@@ -388,7 +400,7 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
   if (!paperKey) return;
   const parts = paperKey.split('_');
   const subId = parts[0];
-  const yearKey = parts[1];
+  const yearKey = parts.slice(1).join('_');
 
   const subData = QUIZ_DATA[subId];
   const paperData = subData?.papers[yearKey];
@@ -527,7 +539,7 @@ async function sendNextNativePollStep(chatId, paperKey, qIndex = 0, score = 0, s
   if (!paperKey) return;
   const parts = paperKey.split('_');
   const subId = parts[0];
-  const yearKey = parts[1];
+  const yearKey = parts.slice(1).join('_');
 
   const subData = QUIZ_DATA[subId];
   const paperData = subData?.papers[yearKey];
@@ -613,7 +625,7 @@ async function processSingleTelegramPollStep(paperKey, env = {}) {
   if (!paperKey) return;
   const parts = paperKey.split('_');
   const subId = parts[0];
-  const yearKey = parts[1];
+  const yearKey = parts.slice(1).join('_');
 
   const subData = QUIZ_DATA[subId];
   const paperData = subData?.papers[yearKey];
@@ -793,7 +805,7 @@ export default {
           }
           
           const subId = paperKey.split('_')[0];
-          const yearKey = paperKey.split('_')[1];
+          const yearKey = paperKey.split('_').slice(1).join('_');
           const subData = QUIZ_DATA[subId];
           const paperData = subData?.papers[yearKey];
 
@@ -826,7 +838,7 @@ export default {
         })());
       } else {
         const subId = paperKey.split('_')[0];
-        const yearKey = paperKey.split('_')[1];
+        const yearKey = paperKey.split('_').slice(1).join('_');
         const subData = QUIZ_DATA[subId];
         const paperData = subData?.papers[yearKey];
         if (paperData && chatId) {
@@ -991,7 +1003,8 @@ async function handleUpdate(update, env, ctx) {
       [{ text: QUIZ_DATA.pl.name, callback_data: 'sub_pl' }],
       [{ text: QUIZ_DATA.hist.name, callback_data: 'sub_hist' }],
       [{ text: QUIZ_DATA.bc.name, callback_data: 'sub_bc' }],
-      [{ text: QUIZ_DATA.sin.name, callback_data: 'sub_sin' }]
+      [{ text: QUIZ_DATA.sin.name, callback_data: 'sub_sin' }],
+      [{ text: QUIZ_DATA.bs.name, callback_data: 'sub_bs' }]
     ];
 
     // Dedicated Full-Width WhatsApp Channel Button
@@ -1053,7 +1066,7 @@ async function handleUpdate(update, env, ctx) {
       const paperKey = state.paperKey;
       const parts = paperKey.split('_');
       const subId = parts[0];
-      const yearKey = parts[1];
+      const yearKey = parts.slice(1).join('_');
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
 
@@ -1307,7 +1320,8 @@ async function handleUpdate(update, env, ctx) {
           [{ text: QUIZ_DATA.pl.name, callback_data: `${prefix}pl` }],
           [{ text: QUIZ_DATA.hist.name, callback_data: `${prefix}hist` }],
           [{ text: QUIZ_DATA.bc.name, callback_data: `${prefix}bc` }],
-          [{ text: QUIZ_DATA.sin.name, callback_data: `${prefix}sin` }]
+          [{ text: QUIZ_DATA.sin.name, callback_data: `${prefix}sin` }],
+          [{ text: QUIZ_DATA.bs.name, callback_data: `${prefix}bs` }]
         ]
       };
       await sendApi('editMessageText', {
@@ -1326,9 +1340,11 @@ async function handleUpdate(update, env, ctx) {
         const keyboard = [];
         let row = [];
         keys.forEach((key, idx) => {
+          const paperObj = subData.papers[key];
+          const label = paperObj.btnLabel || key;
           const cb = isSch ? `adm_sch_p_${subId}_${key}` : `adm_pub_now_${subId}_${key}`;
-          row.push({ text: `📝 ${key}`, callback_data: cb });
-          if (row.length === 3 || idx === keys.length - 1) {
+          row.push({ text: `📝 ${label}`, callback_data: cb });
+          if (row.length === 2 || idx === keys.length - 1) {
             keyboard.push(row);
             row = [];
           }
@@ -1345,9 +1361,9 @@ async function handleUpdate(update, env, ctx) {
       }
     } else if (data.startsWith('adm_pub_now_')) {
       await clearQuizStopFlags();
-      const parts = data.split('_'); // ['adm', 'pub', 'now', 'pl', '2016']
+      const parts = data.split('_');
       const subId = parts[3];
-      const yearKey = parts[4];
+      const yearKey = parts.slice(4).join('_');
       const paperKey = `${subId}_${yearKey}`;
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
@@ -1401,9 +1417,9 @@ async function handleUpdate(update, env, ctx) {
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp/Telegram Group Polls Started!' }, env);
       }
     } else if (data.startsWith('adm_sch_p_')) {
-      const parts = data.split('_'); // ['adm', 'sch', 'p', 'pl', '2016']
+      const parts = data.split('_');
       const subId = parts[3];
-      const yearKey = parts[4];
+      const yearKey = parts.slice(4).join('_');
       const paperKey = `${subId}_${yearKey}`;
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
@@ -1435,7 +1451,7 @@ async function handleUpdate(update, env, ctx) {
       const paperKey = data.replace('adm_custom_', '');
       const parts = paperKey.split('_');
       const subId = parts[0];
-      const yearKey = parts[1];
+      const yearKey = parts.slice(1).join('_');
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
 
@@ -1460,10 +1476,10 @@ async function handleUpdate(update, env, ctx) {
         }, env);
       }
     } else if (data.startsWith('adm_set_')) {
-      const parts = data.split('_'); // ['adm', 'set', '1h', 'pl', '2016']
+      const parts = data.split('_');
       const timeTag = parts[2];
       const subId = parts[3];
-      const yearKey = parts[4];
+      const yearKey = parts.slice(4).join('_');
       const paperKey = `${subId}_${yearKey}`;
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
@@ -1553,41 +1569,55 @@ async function handleUpdate(update, env, ctx) {
       const subId = data.replace('sub_', '');
       const subData = QUIZ_DATA[subId];
       if (subData) {
+        const hasModel = Object.values(subData.papers).some(p => p.isModel);
+        const inlineKb = [
+          [{ text: '📑 පසුගිය ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: `cat_${subId}_pp` }]
+        ];
+        if (hasModel) {
+          inlineKb.push([{ text: '🎯 ආදර්ශ / පළාත් ප්‍රශ්න පත්‍ර (Model Papers)', callback_data: `cat_${subId}_mp` }]);
+        }
+        inlineKb.push([{ text: '⬅️ ප්‍රධාන මෙනුවට (Back)', callback_data: 'nav_subjects' }]);
+
         const text = `📘 **තෝරාගත් විෂය:** ${subData.name}\n\nකරුණාකර ඔබ සෙවීමට කැමති කාණ්ඩය තෝරන්න:`;
-        const kb = {
-          inline_keyboard: [
-            [{ text: '📑 පසුගිය ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: `cat_${subId}_pp` }],
-            [{ text: '⬅️ ප්‍රධාන මෙනුවට (Back)', callback_data: 'nav_subjects' }]
-          ]
-        };
         await sendApi('editMessageText', {
           chat_id: chatId,
           message_id: messageId,
           text: text,
           parse_mode: 'Markdown',
-          reply_markup: kb
+          reply_markup: { inline_keyboard: inlineKb }
         }, env);
       }
-    } else if (data.startsWith('cat_') && data.endsWith('_pp')) {
-      const subId = data.replace('cat_', '').replace('_pp', '');
+    } else if (data.startsWith('cat_') && (data.endsWith('_pp') || data.endsWith('_mp'))) {
+      const isModelOnly = data.endsWith('_mp');
+      const subId = data.replace('cat_', '').replace('_pp', '').replace('_mp', '');
       const subData = QUIZ_DATA[subId];
       if (subData) {
-        const keys = Object.keys(subData.papers);
+        let keys = Object.keys(subData.papers);
+        if (isModelOnly) {
+          keys = keys.filter(k => subData.papers[k].isModel);
+        } else {
+          const pastKeys = keys.filter(k => !subData.papers[k].isModel);
+          if (pastKeys.length > 0) keys = pastKeys;
+        }
+
         const keyboard = [];
         let row = [];
         keys.forEach((key, idx) => {
-          row.push({ text: `📝 ${key}`, callback_data: `paper_${subId}_${key}` });
-          if (row.length === 3 || idx === keys.length - 1) {
+          const paperObj = subData.papers[key];
+          const label = paperObj.btnLabel || key;
+          row.push({ text: `📝 ${label}`, callback_data: `paper_${subId}_${key}` });
+          if (row.length === 2 || idx === keys.length - 1) {
             keyboard.push(row);
             row = [];
           }
         });
         keyboard.push([{ text: '⬅️ ආපසු (Back)', callback_data: `sub_${subId}` }]);
 
+        const catTitle = isModelOnly ? 'ආදර්ශ / පළාත් ප්‍රශ්න පත්‍ර (Model Papers)' : 'පසුගිය ප්‍රශ්න පත්‍ර (Past Papers)';
         await sendApi('editMessageText', {
           chat_id: chatId,
           message_id: messageId,
-          text: `📑 **${subData.shortName} — පසුගිය ප්‍රශ්න පත්‍ර**\n\nවර්ෂය (Year) තෝරන්න:`,
+          text: `📑 **${subData.shortName} — ${catTitle}**\n\nප්‍රශ්න පත්‍රය තෝරන්න:`,
           parse_mode: 'Markdown',
           reply_markup: { inline_keyboard: keyboard }
         }, env);
@@ -1595,7 +1625,7 @@ async function handleUpdate(update, env, ctx) {
     } else if (data.startsWith('paper_')) {
       const parts = data.split('_');
       const subId = parts[1];
-      const yearKey = parts[2];
+      const yearKey = parts.slice(2).join('_');
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
 
@@ -1633,9 +1663,9 @@ async function handleUpdate(update, env, ctx) {
         }, env);
       }
     } else if (data.startsWith('native_')) {
-      const parts = data.split('_'); // ['native', 'pl', '2016']
+      const parts = data.split('_');
       const subId = parts[1];
-      const yearKey = parts[2];
+      const yearKey = parts.slice(2).join('_');
       const paperKey = `${subId}_${yearKey}`;
 
       const subData = QUIZ_DATA[subId];
