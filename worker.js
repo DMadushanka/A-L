@@ -216,7 +216,7 @@ const PART2_QUESTIONS_DATA = {
 };
 
 // Helper: Render Question by Question with Full Marking Scheme in Telegram Chat
-async function renderPart2Question(chatId, messageId, subId, yearKey, qIndex = 1, env = {}, queryId = null) {
+async function renderPart2Question(chatId, messageId, subId, yearKey, qIndex = 1, env = {}, queryId = null, isGroup = false) {
   if (queryId) {
     await sendApi('answerCallbackQuery', { callback_query_id: queryId }, env);
   }
@@ -248,9 +248,13 @@ async function renderPart2Question(chatId, messageId, subId, yearKey, qIndex = 1
     { text: `Q0${nextQ} ▶️`, callback_data: `part2_q_${subId}_${yearKey}_${nextQ}` }
   ];
 
+  const webAppBtn = isGroup
+    ? { text: '🚀 Interactive WebApp', url: quizUrl }
+    : { text: '🚀 Interactive WebApp', web_app: { url: quizUrl } };
+
   // Action Row
   const actionRow = [
-    { text: '🚀 Interactive WebApp', web_app: { url: quizUrl } },
+    webAppBtn,
     { text: '⬅️ ආපසු (Back)', callback_data: `paper_${subId}_${yearKey}` }
   ];
 
@@ -1984,14 +1988,14 @@ async function handleUpdate(update, env, ctx) {
       const parts = data.split('_');
       const subId = parts[2];
       const yearKey = parts.slice(3).join('_');
-      await renderPart2Question(chatId, messageId, subId, yearKey, 1, env, query.id);
+      await renderPart2Question(chatId, messageId, subId, yearKey, 1, env, query.id, isGroup);
     } else if (data.startsWith('part2_q_')) {
       const parts = data.split('_');
       const subId = parts[2];
       const qIndexStr = parts[parts.length - 1];
       const qIndex = parseInt(qIndexStr, 10) || 1;
       const yearKey = parts.slice(3, parts.length - 1).join('_');
-      await renderPart2Question(chatId, messageId, subId, yearKey, qIndex, env, query.id);
+      await renderPart2Question(chatId, messageId, subId, yearKey, qIndex, env, query.id, isGroup);
     } else if (data.startsWith('native_')) {
       const parts = data.split('_');
       const subId = parts[1];
