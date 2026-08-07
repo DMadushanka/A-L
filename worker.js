@@ -1623,6 +1623,7 @@ async function handleUpdate(update, env, ctx) {
         }, env);
       }
     } else if (data.startsWith('paper_')) {
+      await sendApi('answerCallbackQuery', { callback_query_id: query.id }, env);
       const parts = data.split('_');
       const subId = parts[1];
       const yearKey = parts.slice(2).join('_');
@@ -1649,18 +1650,30 @@ async function handleUpdate(update, env, ctx) {
               { text: '🌐 Open Browser (Browser එකෙන්)', url: quizUrl }
             ],
             [
-              { text: '🔄 වෙනත් වර්ෂයක් (Select Year)', callback_data: `cat_${subId}_pp` }
+              { text: '🔄 වෙනත් පත්‍රයක් (Select Paper)', callback_data: `sub_${subId}` }
             ]
           ]
         };
 
-        await sendApi('sendPhoto', {
+        const mcqCount = paperData.title.includes('MCQ 50') ? 'MCQ 50' : 'MCQ 40';
+        const captionText = `🎯 **${paperData.title}**\n\n📚 **විෂය:** ${subData.name}\n📜 **ප්‍රශ්න ගණන:** ${mcqCount}\n\n👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
+
+        const photoRes = await sendApi('sendPhoto', {
           chat_id: chatId,
           photo: imgUrl,
-          caption: `🎯 **${paperData.title}**\n\n📚 **විෂය:** ${subData.name}\n📜 **ප්‍රශ්න ගණන:** MCQ 40\n\n👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`,
+          caption: captionText,
           parse_mode: 'Markdown',
           reply_markup: launchKeyboard
         }, env);
+
+        if (!photoRes.ok) {
+          await sendApi('sendMessage', {
+            chat_id: chatId,
+            text: captionText,
+            parse_mode: 'Markdown',
+            reply_markup: launchKeyboard
+          }, env);
+        }
       }
     } else if (data.startsWith('native_')) {
       const parts = data.split('_');
