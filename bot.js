@@ -140,7 +140,14 @@ const QUIZ_DATA = {
       '2018': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2018 (BC-8)', file: 'BC8.html', img: 'BC8.png' },
       '2019': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (BC-9)', file: 'BC9.html', img: 'BC9.png' },
       '2020': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2020 (BC-10)', file: 'BC10.html', img: 'BC10.png' },
-      '2021': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2021 (BC-11)', file: 'BC11.html', img: 'BC11.png' }
+      '2021': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2021 (BC-11)', file: 'BC11.html', img: 'BC11.png' },
+      '2024_wp': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2024 (බස්නාහිර පළාත්) — MCQ 50', file: 'bc2024_wp.html', img: 'bc2024_wp.png', btnLabel: '2024 (බස්නාහිර)', isModel: true },
+      '2026_central': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (මධ්‍යම පළාත්) — MCQ 50', file: 'bc2026_central.html', img: '2026model_CentralP.png', btnLabel: '2026 (මධ්‍යම Model)', isModel: true },
+      '2024_uva': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2024 (ඌව පළාත්) — MCQ 50', file: 'bc2024_uva.html', img: 'bc2024_uva.png', btnLabel: '2024 (ඌව පළාත්)', isModel: true },
+      '2019_prototype': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2019 (ආදර්ශ / Prototype) — MCQ 50', file: 'bc2019_prototype.html', img: 'BCmo2019.png', btnLabel: '2019 (Prototype)', isModel: true },
+      '2026_moe': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (අධ්‍යාපන අමාත්‍යාංශය) — MCQ 50', file: 'bc2026_moe.html', img: 'bc2026_moe.png', btnLabel: '2026 (MOE Model)', isModel: true },
+      '2026_model_p2': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (ආදර්ශ II පත්‍රය — Structured & Essay)', file: 'bc2026_model_part2.html', img: 'bc2026_part2.png', btnLabel: '2026 Model Part 2', isModel: true, isPart2: true },
+      '2026_master': { title: 'බෞද්ධ ශිෂ්ටාචාරය 2026 (මාස්ටර් ප්‍රශ්න බැංකුව — MCQ 229)', file: 'bc2026_master.html', img: 'bc2026_master.png', btnLabel: '2026 (Master Bank)', isModel: true }
     }
   },
   sin: {
@@ -831,97 +838,172 @@ function generateLeaderboardMessage(title, ranks) {
   return text;
 }
 
-// Helper: Send Next Native Poll Question
-async function sendNextNativePoll(chatId) {
+// Helper: Send Next Native Poll Question (Continuous 20-Second Group Timer Engine)
+async function sendNextGroupNativePollStep(chatId) {
   const session = userPollSessions[chatId];
   if (!session) return;
 
-  if (session.qIndex >= session.questions.length) {
-    // Session Complete - Calculate Time Taken & Record Score in DB
-    const total = session.questions.length;
-    const score = session.score;
+  if (session.timerId) {
+    clearTimeout(session.timerId);
+    session.timerId = null;
+  }
+
+  const total = session.questions.length;
+
+  if (session.qIndex >= total) {
     const timeSec = Math.max(1, Math.round((Date.now() - session.startTime) / 1000));
-    const pct = Math.round((score / total) * 100);
 
-    // Save to Persistent DB
-    recordScore(session.paperKey, {
-      userId: chatId,
-      name: session.userName,
-      username: session.userUsername,
-      score: score,
-      total: total,
-      timeSec: timeSec,
-      timestamp: new Date().toISOString()
-    });
+    // Calculate Group Leaderboard & Winner Podium
+    const userList = Object.keys(session.userScores || {}).map(uid => ({
+      userId: uid,
+      name: session.userScores[uid].name,
+      username: session.userScores[uid].username,
+      score: session.userScores[uid].score,
+      totalAnswered: session.userScores[uid].totalAnswered,
+      wrongList: session.userScores[uid].wrongList || []
+    }));
 
-    // Fetch updated Leaderboard & Podium
-    const ranks = getLeaderboard(session.paperKey, 20);
-    const lbText = generateLeaderboardMessage(session.title, ranks);
+    userList.sort((a, b) => b.score - a.score || a.wrongList.length - b.wrongList.length);
 
-    let verdict = '🎉 විශිෂ්ටයි! ඔබ උසස් පෙළ පරීක්ෂණය සාර්ථකව නිම කළා.';
-    if (pct < 50) verdict = '👍 මූලික අවබෝධයක් ඇත — තවදුරටත් පුහුණු වන්න.';
-    else if (pct < 75) verdict = '🌟 හොඳයි! තවදුරටත් පුනරීක්ෂණය කරන්න.';
+    let leaderboardText = '';
+    if (userList.length > 0) {
+      const topWinners = userList.slice(0, 5);
+      const podiums = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+      const winnerLines = topWinners.map((u, idx) => {
+        const icon = podiums[idx] || `${idx + 1}.`;
+        const uPct = Math.round((u.score / total) * 100);
+        const tag = u.username ? ` (${u.username})` : '';
+        return `${icon} **${u.name}**${tag} — ${u.score}/${total} (${uPct}%)`;
+      });
 
-    const resultMessage = 
-      `🏆 **පරීක්ෂණය සාර්ථකව අවසන්!**\n\n` +
-      `🎯 **ඔබගේ ලකුණු:** ${score} / ${total} (${pct}%)\n` +
+      leaderboardText = 
+        `\n\n🏆 **සජීවී ප්‍රශ්න පත්‍ර තරඟාවලියේ ජයග්‍රාහකයින් (Live Competition Leaderboard)** 🥇🥈🥉\n` +
+        `─────────────────────────\n` +
+        winnerLines.join('\n') + `\n` +
+        `─────────────────────────\n` +
+        `🎉 **ජයග්‍රාහකයින් සියලු දෙනාටම අපගේ උණුසුම් සුභ පැතුම්! (Congratulations!)** 👏⚡`;
+    }
+
+    const finishMessage = 
+      `🏆 **${session.title} — තරඟය සාර්ථකව අවසන්!**\n\n` +
       `⏱️ **ගත වූ කාලය:** ${formatDuration(timeSec)}\n` +
-      `📚 **ප්‍රශ්න පත්‍රය:** ${session.title}\n\n` +
-      `${verdict}\n\n` +
-      `───────────────────\n` +
-      `${lbText}`;
+      `👥 **සහභාගී වූ සිසුන් ගණන:** ${userList.length || 1}` +
+      leaderboardText + `\n\n` +
+      `💡 **ඔබේ පුද්ගලික ලකුණු සහ වැරදුණු ප්‍රශ්න බලන්න පහත බොත්තම ඔබන්න:**`;
 
     const finishKeyboard = {
       inline_keyboard: [
-        [{ text: '🔄 නැවත උත්සාහ කරන්න (Retry)', callback_data: `native_${session.subId}_${session.yearKey}` }],
+        [{ text: '📊 මගේ ලකුණු සහ වැරදුණු ප්‍රශ්න (My Individual Summary)', callback_data: `my_report_${session.subId}_${session.yearKey}` }],
+        [{ text: '🔄 නැවත තරඟය පවත්වන්න (Retry)', callback_data: `native_${session.subId}_${session.yearKey}` }],
         [{ text: '📑 වෙනත් ප්‍රශ්න පත්‍රයක් (Select Paper)', callback_data: `cat_${session.subId}_pp` }]
       ]
     };
 
-    await bot.sendMessage(chatId, resultMessage, {
+    await bot.sendMessage(chatId, finishMessage, {
       parse_mode: 'Markdown',
       reply_markup: finishKeyboard
     }).catch(e => console.error('Error sending result:', e.message));
+
+    // Save individual scores to DB
+    for (const u of userList) {
+      recordScore(session.paperKey, {
+        userId: u.userId,
+        name: u.name,
+        username: u.username,
+        score: u.score,
+        total: total,
+        timeSec: timeSec,
+        timestamp: new Date().toISOString()
+      });
+    }
 
     delete userPollSessions[chatId];
     return;
   }
 
-  // Get current question
   const q = session.questions[session.qIndex];
   const qNum = session.qIndex + 1;
-  const totalQ = session.questions.length;
 
   let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
   rawQText = cleanText(rawQText, 250);
   rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
 
-  const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
-  const cleanOpts = (q.o || []).map(o => cleanText(o, 98));
-  
+  const cleanQ = cleanText(`[${qNum}/${total}] ⏳ 20s | ${rawQText}`, 290);
+  const cleanOpts = (q.o || q.options || []).map(o => cleanText(o, 98));
+  const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
+
   const rawExplain = cleanText(q.e || '', 185);
   const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
 
   try {
     const pollMsg = await bot.sendPoll(chatId, cleanQ, cleanOpts, {
       type: 'quiz',
-      correct_option_id: q.c,
+      correct_option_id: correctIdx,
       explanation: cleanExplain,
-      is_anonymous: false
+      is_anonymous: false,
+      open_period: 20
     });
 
-    // Register Poll ID mapping
-    pollIdMap[pollMsg.poll.id] = {
-      chatId,
-      correctOption: q.c
-    };
-
+    if (pollMsg && pollMsg.poll) {
+      pollIdMap[pollMsg.poll.id] = {
+        chatId,
+        qIndex: session.qIndex,
+        correctOption: correctIdx
+      };
+    }
   } catch (err) {
     console.error(`Error sending poll Q${qNum} to ${chatId}:`, err.message);
-    session.qIndex++;
-    sendNextNativePoll(chatId);
   }
+
+  session.qIndex++;
+  session.timerId = setTimeout(() => {
+    sendNextGroupNativePollStep(chatId);
+  }, 20000);
 }
+
+// Register Poll Answer Listener for Real-Time Group Leaderboards
+bot.on('poll_answer', (answer) => {
+  try {
+    const pollId = answer.poll_id;
+    const mapping = pollIdMap[pollId];
+    if (!mapping) return;
+
+    const { chatId, qIndex, correctOption } = mapping;
+    const session = userPollSessions[chatId];
+    if (!session) return;
+
+    const user = answer.user;
+    if (!user) return;
+
+    if (!session.userScores[user.id]) {
+      const name = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
+      const username = user.username ? `@${user.username}` : '';
+      session.userScores[user.id] = {
+        name,
+        username,
+        score: 0,
+        totalAnswered: 0,
+        wrongList: []
+      };
+    }
+
+    const student = session.userScores[user.id];
+    const selectedOpt = (answer.option_ids && answer.option_ids.length > 0) ? answer.option_ids[0] : -1;
+
+    student.totalAnswered++;
+    if (selectedOpt === correctOption) {
+      student.score++;
+    } else {
+      student.wrongList.push({
+        qNum: qIndex + 1,
+        userAns: selectedOpt + 1,
+        correctAns: correctOption + 1
+      });
+    }
+  } catch (err) {
+    console.error('Error handling poll answer:', err.message);
+  }
+});
 
 // Background Task: Scheduled Broadcast Engine Safety Guard (Prevents duplicate background broadcasts)
 setInterval(async () => {
@@ -1759,7 +1841,7 @@ bot.on('callback_query', async (query) => {
         const userName = query.from ? [query.from.first_name, query.from.last_name].filter(Boolean).join(' ') : 'ශිෂ්‍යයා';
         const userUsername = query.from?.username ? `@${query.from.username}` : '';
 
-        // Initialize User Poll Session with Start Time
+        // Initialize User Poll Session with Start Time & Live Timer
         userPollSessions[chatId] = {
           subId,
           yearKey,
@@ -1768,6 +1850,8 @@ bot.on('callback_query', async (query) => {
           questions: qList,
           qIndex: 0,
           score: 0,
+          timerId: null,
+          userScores: {},
           userName,
           userUsername,
           startTime: Date.now()
@@ -1777,11 +1861,54 @@ bot.on('callback_query', async (query) => {
           parse_mode: 'Markdown'
         }).catch(e => {});
 
-        // Send first poll
-        sendNextNativePoll(chatId);
+        // Send first poll & start continuous 20s step streamer
+        sendNextGroupNativePollStep(chatId);
       }
 
       await safeAnswerCallback(query.id);
+      return;
+    }
+
+    // 9. Individual Summary Report Query Handler
+    if (data.startsWith('my_report_')) {
+      const fromUser = query.from;
+      let userRecord = null;
+
+      for (const sessionKey in userPollSessions) {
+        const session = userPollSessions[sessionKey];
+        if (session && session.userScores && session.userScores[fromUser.id]) {
+          userRecord = session.userScores[fromUser.id];
+          break;
+        }
+      }
+
+      if (!userRecord) {
+        await safeAnswerCallback(query.id, 'ℹ️ මෙම තරඟය සඳහා ඔබගේ ලකුණු සටහනක් හමු නොවුණි.');
+        return;
+      }
+
+      const totalAns = userRecord.totalAnswered || 1;
+      const userScore = userRecord.score || 0;
+      const wrongList = userRecord.wrongList || [];
+
+      let wrongText = '';
+      if (wrongList.length === 0) {
+        wrongText = '🎉 ඔබ සියලුම ප්‍රශ්නවලට 100% නිවැරදි පිළිතුරු සපයා ඇත! (No Errors!)';
+      } else {
+        const wrongLines = wrongList.slice(0, 10).map(w => `• Q${w.qNum < 10 ? '0' + w.qNum : w.qNum}: ඔබ දුන් පිළිතුර (${w.userAns}) ❌ | නිවැරදි පිළිතුර (${w.correctAns}) ✅`);
+        wrongText = `❌ ඔබට වැරදුණු ප්‍රශ්න (${wrongList.length}):\n` + wrongLines.join('\n');
+      }
+
+      const personalReport = 
+        `📊 ඔබගේ පුද්ගලික ලකුණු සටහන (My Quiz Summary)\n` +
+        `👤 නම: ${userRecord.name}\n` +
+        `🎯 ලබාගත් ලකුණු: ${userScore} / ${totalAns} (${Math.round((userScore / totalAns) * 100)}%)\n\n` +
+        wrongText;
+
+      await bot.answerCallbackQuery(query.id, {
+        text: personalReport,
+        show_alert: true
+      }).catch(e => {});
       return;
     }
 
