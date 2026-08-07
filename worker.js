@@ -1101,19 +1101,19 @@ export default {
       return new Response(JSON.stringify(votes), { status: 200, headers: { 'Content-Type': 'application/json' } });
     }
 
-    // Endpoint 3: Register 24/7 Telegram Webhook on Cloudflare Worker
-    if (url.pathname === '/setup-telegram-webhook') {
+    // Endpoint 3: Register 24/7 Telegram Webhook on Cloudflare Worker (with explicit allowed_updates for poll & poll_answer)
+    if (url.pathname === '/setup-telegram-webhook' || url.pathname === '/set-webhook') {
       const token = env.BOT_TOKEN || '8463293577:AAF2N2_PIP1WIoZE32Q_RMTQ8l1vr_6uXfc';
       const workerUrl = `${url.origin}`;
       try {
-        const infoRes = await fetch(`https://api.telegram.org/bot${token}/getWebhookInfo`);
-        const info = await infoRes.json();
-
-        if (info?.result?.url === workerUrl) {
-          return new Response(JSON.stringify({ ok: true, status: 'already_active_24_7', url: workerUrl, info: info.result }, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
-        }
-
-        const setRes = await fetch(`https://api.telegram.org/bot${token}/setWebhook?url=${encodeURIComponent(workerUrl)}`);
+        const setRes = await fetch(`https://api.telegram.org/bot${token}/setWebhook`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            url: workerUrl,
+            allowed_updates: ["message", "edited_message", "callback_query", "poll", "poll_answer", "chat_member", "my_chat_member"]
+          })
+        });
         const result = await setRes.json();
         return new Response(JSON.stringify(result, null, 2), { status: 200, headers: { 'Content-Type': 'application/json' } });
       } catch (err) {
