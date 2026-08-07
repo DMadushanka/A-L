@@ -1811,6 +1811,8 @@ bot.on('callback_query', async (query) => {
 
         await publishLiveQuizAnnouncement(paperKey, paperData, targetDate, isNow, newJobId);
 
+        const targetGroupUrl = process.env.GROUP_URL || (typeof GROUP_URL !== 'undefined' ? GROUP_URL : 'https://t.me/+wZUSJyEncD1mYjFl');
+
         // 4. Send 1-Click WhatsApp Channel Post Link to Admin
         const waPostText = encodeURIComponent(
           `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟය!'}\n\n` +
