@@ -1741,7 +1741,7 @@ bot.on('callback_query', async (query) => {
     if (data.startsWith('paper_')) {
       const parts = data.split('_');
       const subId = parts[1];
-      const yearKey = parts[2];
+      const yearKey = parts.slice(2).join('_');
 
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
@@ -1760,7 +1760,6 @@ bot.on('callback_query', async (query) => {
         const cardCaption = 
           `🎯 **${paperData.title}**\n\n` +
           `📚 **විෂය:** ${subData.name}\n` +
-          `📜 **ප්‍රශ්න ගණන:** MCQ 40\n` +
           `💡 **විශේෂාංග:** Instant Confetti 🎉, Leaderboards & Top 3 Winner Podiums.\n` +
           `${top3Summary}\n` +
           `👇 ඔබ පරීක්ෂණය කිරීමට කැමති ක්‍රමය තෝරන්න:`;
@@ -1789,11 +1788,21 @@ bot.on('callback_query', async (query) => {
           ]
         };
 
-        await bot.sendPhoto(chatId, imgUrl, {
-          caption: cardCaption,
-          parse_mode: 'Markdown',
-          reply_markup: launchKeyboard
-        }).catch(e => {});
+        try {
+          await bot.sendPhoto(chatId, imgUrl, {
+            caption: cardCaption,
+            parse_mode: 'Markdown',
+            reply_markup: launchKeyboard
+          });
+        } catch (photoErr) {
+          console.error('Error sending photo, falling back to sendMessage:', photoErr.message);
+          await bot.sendMessage(chatId, cardCaption, {
+            parse_mode: 'Markdown',
+            reply_markup: launchKeyboard
+          }).catch(e => console.error('Error sending fallback message:', e.message));
+        }
+      } else {
+        console.error(`Paper data not found for subId: ${subId}, yearKey: ${yearKey}`);
       }
 
       await safeAnswerCallback(query.id);
@@ -1802,9 +1811,9 @@ bot.on('callback_query', async (query) => {
 
     // 7. View Specific Paper Leaderboard
     if (data.startsWith('lb_')) {
-      const parts = data.split('_'); // ['lb', 'pl', '2016']
+      const parts = data.split('_');
       const subId = parts[1];
-      const yearKey = parts[2];
+      const yearKey = parts.slice(2).join('_');
       const paperKey = `${subId}_${yearKey}`;
 
       const subData = QUIZ_DATA[subId];
@@ -1821,9 +1830,9 @@ bot.on('callback_query', async (query) => {
 
     // 8. Native Quiz Mode Selected -> Start Native Telegram Poll Session
     if (data.startsWith('native_')) {
-      const parts = data.split('_'); // ['native', 'pl', '2016']
+      const parts = data.split('_');
       const subId = parts[1];
-      const yearKey = parts[2];
+      const yearKey = parts.slice(2).join('_');
       const paperKey = `${subId}_${yearKey}`;
 
       const subData = QUIZ_DATA[subId];
