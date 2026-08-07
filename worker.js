@@ -621,7 +621,7 @@ async function sendNextNativePollStep(chatId, paperKey, qIndex = 0, score = 0, s
 }
 
 // Helper: Pure Native Telegram Group Poll Quiz Launcher
-async function processSingleTelegramPollStep(paperKey, env = {}) {
+async function processSingleTelegramPollStep(paperKey, env = {}, sendHeader = true) {
   if (!paperKey) return;
   const parts = paperKey.split('_');
   const subId = parts[0];
@@ -633,21 +633,23 @@ async function processSingleTelegramPollStep(paperKey, env = {}) {
 
   const tgTarget = getTelegramTargetChat(env, '-1004322002704');
 
-  const startText = `🚀 **${paperData.title} Native Telegram Quiz තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
-  const paperImgUrl = getPaperImageUrl(paperKey);
-  const photoRes = await sendApi('sendPhoto', {
-    chat_id: tgTarget,
-    photo: paperImgUrl,
-    caption: startText,
-    parse_mode: 'Markdown'
-  }, env);
-
-  if (!photoRes.ok) {
-    await sendApi('sendMessage', {
+  if (sendHeader) {
+    const startText = `🚀 **${paperData.title} Native Telegram Quiz තරඟය දැන් ආරම්භ විය!**\n\nපළමු ප්‍රශ්නය පහත දැක්වේ 👇`;
+    const paperImgUrl = getPaperImageUrl(paperKey);
+    const photoRes = await sendApi('sendPhoto', {
       chat_id: tgTarget,
-      text: startText,
+      photo: paperImgUrl,
+      caption: startText,
       parse_mode: 'Markdown'
     }, env);
+
+    if (!photoRes.ok) {
+      await sendApi('sendMessage', {
+        chat_id: tgTarget,
+        text: startText,
+        parse_mode: 'Markdown'
+      }, env);
+    }
   }
 
   await sendNextNativePollStep(tgTarget, paperKey, 0, 0, Date.now(), env);
@@ -1408,10 +1410,10 @@ async function handleUpdate(update, env, ctx) {
         // Start Automated WhatsApp & Telegram Poll Quiz Streamers directly on Worker
         if (ctx && typeof ctx.waitUntil === 'function') {
           ctx.waitUntil(processSingleWhatsAppPollStep(paperKey, 0, 20, env));
-          ctx.waitUntil(processSingleTelegramPollStep(paperKey, env));
+          ctx.waitUntil(processSingleTelegramPollStep(paperKey, env, false));
         } else {
           processSingleWhatsAppPollStep(paperKey, 0, 20, env);
-          processSingleTelegramPollStep(paperKey, env);
+          processSingleTelegramPollStep(paperKey, env, false);
         }
 
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp/Telegram Group Polls Started!' }, env);
