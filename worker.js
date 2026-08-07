@@ -721,10 +721,40 @@ async function processSingleWhatsAppPollStep(paperKey, qIndex = 0, intervalSec =
   await autoPostToWhatsAppChannel(bookletMsg, null, env);
 }
 
-async function savePollMapping(pollId, data) {
+const GLOBAL_POLL_MAP = new Map();
+
+async function saveActiveGroupQuiz(chatId, paperKey, activeQIndex = 0) {
+  const data = { chatId, paperKey, activeQIndex, updatedAt: Date.now() };
   try {
     const cache = caches.default;
-    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/poll-map/${pollId}`;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/active-group-quiz/${chatId}`;
+    await cache.put(cacheUrl, new Response(JSON.stringify(data), {
+      headers: { 'Cache-Control': 'public, max-age=86400' }
+    }));
+  } catch (e) {}
+}
+
+async function getActiveGroupQuiz(chatId) {
+  try {
+    const cache = caches.default;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/active-group-quiz/${chatId}`;
+    const match = await cache.match(cacheUrl);
+    if (match) {
+      return await match.json();
+    }
+  } catch (e) {}
+  return null;
+}
+
+async function savePollMapping(pollId, data) {
+  const strId = String(pollId);
+  GLOBAL_POLL_MAP.set(strId, data);
+  if (data.chatId && data.paperKey) {
+    await saveActiveGroupQuiz(data.chatId, data.paperKey, data.qIndex || 0);
+  }
+  try {
+    const cache = caches.default;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/poll-map/${strId}`;
     await cache.put(cacheUrl, new Response(JSON.stringify(data), {
       headers: { 'Cache-Control': 'public, max-age=86400' }
     }));
@@ -734,12 +764,18 @@ async function savePollMapping(pollId, data) {
 }
 
 async function getPollMapping(pollId) {
+  const strId = String(pollId);
+  if (GLOBAL_POLL_MAP.has(strId)) {
+    return GLOBAL_POLL_MAP.get(strId);
+  }
   try {
     const cache = caches.default;
-    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/poll-map/${pollId}`;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/poll-map/${strId}`;
     const match = await cache.match(cacheUrl);
     if (match) {
-      return await match.json();
+      const data = await match.json();
+      GLOBAL_POLL_MAP.set(strId, data);
+      return data;
     }
   } catch (e) {}
   return null;
@@ -1595,22 +1631,41 @@ async function handleUpdate(update, env, ctx) {
     const answer = update.poll_answer;
     const pollId = answer.poll_id;
     const selectedOptions = answer.option_ids;
+    const user = answer.user;
 
-    const mapping = await getPollMapping(pollId);
+    let mapping = await getPollMapping(pollId);
+    if (!mapping) {
+      const targetGroup = getTelegramTargetChat(env, '-1004322002704');
+      const activeGroup = await getActiveGroupQuiz(targetGroup);
+      if (activeGroup && activeGroup.paperKey) {
+        mapping = {
+          chatId: targetGroup,
+          paperKey: activeGroup.paperKey,
+          qIndex: activeGroup.activeQIndex || 0,
+          score: 0,
+          correctOption: 0,
+          startTime: activeGroup.updatedAt || Date.now()
+        };
+      }
+    }
+
     if (mapping) {
       const { chatId, paperKey, qIndex, score, correctOption, startTime } = mapping;
       let newScore = score || 0;
 
-      if (selectedOptions && selectedOptions[0] === correctOption) {
+      const userSelOpt = (selectedOptions && selectedOptions.length > 0) ? selectedOptions[0] : 0;
+      if (userSelOpt === correctOption) {
         newScore++;
+      }
+
+      if (user) {
+        await recordUserPollAnswer(chatId, paperKey, user, qIndex, userSelOpt, correctOption);
       }
 
       const isGroup = String(chatId).startsWith('-');
 
       if (isGroup) {
-        // Prevent duplicate question posts in Telegram Groups when multiple users answer the same poll
         const currentGroupQIndex = await getGroupActiveQIndex(chatId, paperKey);
-        
         if (qIndex + 1 > currentGroupQIndex) {
           await setGroupActiveQIndex(chatId, paperKey, qIndex + 1);
           await sendNextNativePollStep(chatId, paperKey, qIndex + 1, newScore, startTime, env);
@@ -1626,7 +1681,22 @@ async function handleUpdate(update, env, ctx) {
   // Handle Native Telegram Poll Auto-Close Updates (when 25s open_period timer expires)
   if (update.poll && update.poll.is_closed) {
     const pollId = update.poll.id;
-    const mapping = await getPollMapping(pollId);
+    let mapping = await getPollMapping(pollId);
+
+    if (!mapping) {
+      const targetGroup = getTelegramTargetChat(env, '-1004322002704');
+      const activeGroup = await getActiveGroupQuiz(targetGroup);
+      if (activeGroup && activeGroup.paperKey) {
+        mapping = {
+          chatId: targetGroup,
+          paperKey: activeGroup.paperKey,
+          qIndex: activeGroup.activeQIndex || 0,
+          score: 0,
+          startTime: activeGroup.updatedAt || Date.now()
+        };
+      }
+    }
+
     if (mapping) {
       const { chatId, paperKey, qIndex, score, startTime } = mapping;
       const isGroup = String(chatId).startsWith('-');
