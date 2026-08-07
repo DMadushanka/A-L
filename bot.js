@@ -1183,10 +1183,21 @@ async function sendNextGroupNativePollStep(chatId) {
       ]
     };
 
-    await bot.sendMessage(chatId, finishMessage, {
-      parse_mode: 'Markdown',
-      reply_markup: finishKeyboard
-    }).catch(e => console.error('Error sending result:', e.message));
+    let sentFinish = false;
+    let finishAttempts = 0;
+    while (!sentFinish && finishAttempts < 3) {
+      try {
+        await bot.sendMessage(chatId, finishMessage, {
+          parse_mode: 'Markdown',
+          reply_markup: finishKeyboard
+        });
+        sentFinish = true;
+      } catch (e) {
+        finishAttempts++;
+        console.error(`Attempt ${finishAttempts} error sending finish results to ${chatId}:`, e.message);
+        if (finishAttempts < 3) await new Promise(r => setTimeout(r, 2000));
+      }
+    }
 
     // Save individual scores to DB
     for (const u of userList) {
@@ -1219,30 +1230,37 @@ async function sendNextGroupNativePollStep(chatId) {
   const rawExplain = cleanText(q.e || '', 185);
   const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
 
-  try {
-    const pollMsg = await bot.sendPoll(chatId, cleanQ, cleanOpts, {
-      type: 'quiz',
-      correct_option_id: correctIdx,
-      explanation: cleanExplain,
-      is_anonymous: false,
-      open_period: 20
-    });
-
-    if (pollMsg && pollMsg.poll) {
-      pollIdMap[pollMsg.poll.id] = {
-        chatId,
-        qIndex: session.qIndex,
-        correctOption: correctIdx
-      };
+  let pollMsg = null;
+  let attempts = 0;
+  while (!pollMsg && attempts < 3) {
+    try {
+      pollMsg = await bot.sendPoll(chatId, cleanQ, cleanOpts, {
+        type: 'quiz',
+        correct_option_id: correctIdx,
+        explanation: cleanExplain,
+        is_anonymous: false,
+        open_period: 20
+      });
+    } catch (err) {
+      attempts++;
+      console.error(`Attempt ${attempts} error sending poll Q${qNum} to ${chatId}:`, err.message);
+      if (attempts < 3) await new Promise(r => setTimeout(r, 2000));
     }
-  } catch (err) {
-    console.error(`Error sending poll Q${qNum} to ${chatId}:`, err.message);
+  }
+
+  if (pollMsg && pollMsg.poll) {
+    pollIdMap[pollMsg.poll.id] = {
+      chatId,
+      qIndex: session.qIndex,
+      correctOption: correctIdx
+    };
   }
 
   session.qIndex++;
+  // Wait 22 seconds (20s open_period + 2s buffer for poll answer events) before next question or finish
   session.timerId = setTimeout(() => {
     sendNextGroupNativePollStep(chatId);
-  }, 20000);
+  }, 22000);
 }
 
 // Register Poll Answer Listener for Real-Time Group Leaderboards
@@ -1299,7 +1317,7 @@ setInterval(async () => {
       if (job.paperKey) {
         const parts = job.paperKey.split('_');
         const subId = parts[0];
-        const yearKey = parts[1];
+        const yearKey = parts.slice(1).join('_');
         const subData = QUIZ_DATA[subId];
         const paperData = subData?.papers[yearKey];
         if (paperData) {
