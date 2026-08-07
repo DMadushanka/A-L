@@ -1778,37 +1778,56 @@ async function handleUpdate(update, env, ctx) {
     }
   }
 
+function parseQNumFromTitle(questionText) {
+  if (!questionText) return null;
+  const match = questionText.match(/\[(\d+)\/(\d+)\]/);
+  if (match) {
+    return {
+      qNum: parseInt(match[1], 10),
+      totalQ: parseInt(match[2], 10)
+    };
+  }
+  return null;
+}
+
   // Handle Native Telegram Poll Auto-Close Updates (when 25s open_period timer expires)
   if (update.poll && update.poll.is_closed) {
-    const pollId = update.poll.id;
+    const pollObj = update.poll;
+    const pollId = pollObj.id;
     let mapping = await getPollMapping(pollId);
 
-    if (!mapping) {
-      const targetGroup = getTelegramTargetChat(env, '-1004322002704');
-      const activeGroup = await getActiveGroupQuiz(targetGroup);
-      if (activeGroup && activeGroup.paperKey) {
-        mapping = {
-          chatId: targetGroup,
-          paperKey: activeGroup.paperKey,
-          qIndex: activeGroup.activeQIndex || 0,
-          score: 0,
-          startTime: activeGroup.updatedAt || Date.now()
-        };
-      }
-    }
+    const parsedTitle = parseQNumFromTitle(pollObj.question);
+    
+    let targetChat = null;
+    let paperKey = null;
+    let finishedQIndex = 0;
+    let startTime = Date.now();
 
     if (mapping) {
-      const { chatId, paperKey, qIndex, score, startTime } = mapping;
-      const isGroup = String(chatId).startsWith('-');
+      targetChat = mapping.chatId;
+      paperKey = mapping.paperKey;
+      finishedQIndex = mapping.qIndex;
+      startTime = mapping.startTime || Date.now();
+    } else {
+      targetChat = getTelegramTargetChat(env, '-1004322002704');
+      const activeGroup = await getActiveGroupQuiz(targetChat);
+      paperKey = activeGroup?.paperKey || 'bc_2024_uva';
+      finishedQIndex = parsedTitle ? (parsedTitle.qNum - 1) : (activeGroup?.activeQIndex || 0);
+      startTime = activeGroup?.updatedAt || Date.now();
+    }
+
+    if (targetChat && paperKey) {
+      const nextQIndex = finishedQIndex + 1;
+      const isGroup = String(targetChat).startsWith('-');
 
       if (isGroup) {
-        const currentGroupQIndex = await getGroupActiveQIndex(chatId, paperKey);
-        if (qIndex + 1 > currentGroupQIndex) {
-          await setGroupActiveQIndex(chatId, paperKey, qIndex + 1);
-          await sendNextNativePollStep(chatId, paperKey, qIndex + 1, score, startTime, env);
+        const currentGroupQIndex = await getGroupActiveQIndex(targetChat, paperKey);
+        if (nextQIndex > currentGroupQIndex) {
+          await setGroupActiveQIndex(targetChat, paperKey, nextQIndex);
+          await sendNextNativePollStep(targetChat, paperKey, nextQIndex, 0, startTime, env);
         }
       } else {
-        await sendNextNativePollStep(chatId, paperKey, qIndex + 1, score, startTime, env);
+        await sendNextNativePollStep(targetChat, paperKey, nextQIndex, 0, startTime, env);
       }
     }
   }
