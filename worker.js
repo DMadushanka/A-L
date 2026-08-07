@@ -745,8 +745,34 @@ async function getPollMapping(pollId) {
   return null;
 }
 
+async function getGroupActiveQIndex(chatId, paperKey) {
+  try {
+    const cache = caches.default;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/group-qindex/${chatId}/${paperKey}`;
+    const match = await cache.match(cacheUrl);
+    if (match) {
+      const data = await match.json();
+      return data.activeQIndex !== undefined ? data.activeQIndex : 0;
+    }
+  } catch (e) {}
+  return 0;
+}
+
+async function setGroupActiveQIndex(chatId, paperKey, activeQIndex) {
+  try {
+    const cache = caches.default;
+    const cacheUrl = `https://a-l.gayanmadushanka1610.workers.dev/group-qindex/${chatId}/${paperKey}`;
+    await cache.put(cacheUrl, new Response(JSON.stringify({ activeQIndex }), {
+      headers: { 'Cache-Control': 'public, max-age=86400' }
+    }));
+  } catch (e) {}
+}
+
 async function sendNextNativePollStep(chatId, paperKey, qIndex = 0, score = 0, startTime = Date.now(), env = {}) {
   if (!paperKey) return;
+  if (qIndex === 0 && String(chatId).startsWith('-')) {
+    await setGroupActiveQIndex(chatId, paperKey, 0);
+  }
   const parts = paperKey.split('_');
   const subId = parts[0];
   const yearKey = parts.slice(1).join('_');
@@ -1454,7 +1480,21 @@ async function handleUpdate(update, env, ctx) {
         newScore++;
       }
 
-      await sendNextNativePollStep(chatId, paperKey, qIndex + 1, newScore, startTime, env);
+      const isGroup = String(chatId).startsWith('-');
+
+      if (isGroup) {
+        // Prevent duplicate question posts in Telegram Groups when multiple users answer the same poll
+        const currentGroupQIndex = await getGroupActiveQIndex(chatId, paperKey);
+        
+        if (qIndex + 1 > currentGroupQIndex) {
+          await setGroupActiveQIndex(chatId, paperKey, qIndex + 1);
+          await sendNextNativePollStep(chatId, paperKey, qIndex + 1, newScore, startTime, env);
+        } else {
+          console.log(`ℹ️ Group poll answer for Q${qIndex + 1} ignored for group progression as Q${currentGroupQIndex + 1} is already active.`);
+        }
+      } else {
+        await sendNextNativePollStep(chatId, paperKey, qIndex + 1, newScore, startTime, env);
+      }
     }
   }
 
