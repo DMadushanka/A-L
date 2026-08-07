@@ -1766,7 +1766,13 @@ async function handleUpdate(update, env, ctx) {
 
       const isGroup = String(chatId).startsWith('-');
 
-      if (!isGroup) {
+      if (isGroup) {
+        const currentGroupQIndex = await getGroupActiveQIndex(chatId, paperKey);
+        if (qIndex + 1 > currentGroupQIndex) {
+          await setGroupActiveQIndex(chatId, paperKey, qIndex + 1);
+          await sendNextNativePollStep(chatId, paperKey, qIndex + 1, newScore, startTime, env);
+        }
+      } else {
         await sendNextNativePollStep(chatId, paperKey, qIndex + 1, newScore, startTime, env);
       }
     }
@@ -2435,16 +2441,8 @@ async function handleUpdate(update, env, ctx) {
           parse_mode: 'Markdown'
         }, env);
 
-        if (isGroup) {
-          const origin = url.origin;
-          if (ctx && typeof ctx.waitUntil === 'function') {
-            ctx.waitUntil(fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&chatId=${encodeURIComponent(chatId)}&qIndex=0&intervalSec=20&sendHeader=false`));
-          } else {
-            fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&chatId=${encodeURIComponent(chatId)}&qIndex=0&intervalSec=20&sendHeader=false`);
-          }
-        } else {
-          await sendNextNativePollStep(chatId, paperKey, 0, 0, Date.now(), env);
-        }
+        // Send Question 1 Native Poll directly to active chat (Group or DM) without Cloudflare subrequests
+        await sendNextNativePollStep(chatId, paperKey, 0, 0, Date.now(), env);
       }
     }
 
