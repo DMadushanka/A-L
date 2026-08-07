@@ -160,8 +160,256 @@ const QUIZ_DATA = {
       '2024': { title: 'සිංහල 2024 — I පත්‍රය MCQ', file: 'sinhala2024.html', img: 'sinhala2024.png' },
       '2025': { title: 'සිංහල 2025 — I පත්‍රය MCQ', file: 'sinhala2025.html', img: 'sinhala2025.png' }
     }
+  },
+  bs: {
+    name: '💼 ව්‍යාපාර අධ්‍යයනය (Business Studies)',
+    shortName: 'ව්‍යාපාර අධ්‍යයනය',
+    papers: {
+      '2015': { title: 'ව්‍යාපාර අධ්‍යයනය 2015 — MCQ 30', file: 'bs2015.html', img: 'bs5.png' }
+    }
   }
 };
+
+// Database of Part II Questions & Detailed Marking Scheme Model Answers for Native Telegram Chat Reading
+const PART2_QUESTIONS_DATA = {
+  '2026_model_p2': {
+    1: {
+      title: 'ප්‍රශ්නය 01 (ව්‍යුහගත රචනා)',
+      body: 
+        `📜 **බෞද්ධ ශිෂ්ටාචාරය 2026 — ආදර්ශ II පත්‍රය**\n` +
+        `📌 **ප්‍රශ්නය 01 / 08 (I කොටස — ව්‍යුහගත රචනා)**\n` +
+        `*(ප්‍රශ්න 3න් 2කට පිළිතුරු සපයන්න. ලකුණු 20x2=40)*\n\n` +
+        `**[ප්‍රශ්න පත්‍රය]**\n` +
+        `**(i)** වෛදික යුගයේ යාග පැවැත්වූ ප්‍රධාන පූජකවරුන් 04 දෙනා නම් කරන්න. (ලකුණු 04)\n` +
+        `**(ii)** චතුර් වර්ණ ධර්මවලින් 'වෛශ්‍ය' වර්ණයට හිමි වූ 'ස්වධර්ම' 02ක් සඳහන් කරන්න. (ලකුණු 04)\n` +
+        `**(iii)** අජිත කේසකම්බලී ශ්‍රමණයාගේ ප්‍රධාන දර්ශනය කුමක්ද? (ලකුණු 04)\n` +
+        `**(iv)** බුදුසමය මඟින් 'ඊශ්වර නිර්මාණවාදය' විවේචනය කළ ප්‍රධාන තර්කයක් පැහැදිලි කරන්න. (ලකුණු 04)\n` +
+        `**(v)** "ස්ත්‍රියට පරමාර්ථ සාධනය (අර්හත්භාවය) ලැබීමට ලිංගික භේදය බාධාවක් නොවේ." — බෞද්ධ මතය පැහැදිලි කරන්න. (ලකුණු 04)\n\n` +
+        `💡 **[නිල ලකුණු දීමේ පටිපාටිය & පිළිතුරු විග්‍රහය (Marking Scheme)]**\n` +
+        `**(i)** 1. හෝතෘ (Hotri) 2. අධ්වර්යු (Adhvaryu) 3. උද්ගාතෘ (Udgatri) 4. බ්‍රහ්මන් (Brahman)\n` +
+        `**(ii)** ගෝරක්ෂා (ගව පාලනය), කෘෂිකර්මාන්තය, වාණිජ්‍යය (වෙළඳාම).\n` +
+        `**(iii)** උච්ඡේදවාදය / භෞතිකවාදය (මරණින් මතු කිසිවක් ඉතිරි නොවේ, පින/පව හෝ පරලොවක් නැත).\n` +
+        `**(iv)** ඊශ්වරයා සියල්ල මවන ලද්දේ නම් ලොව පවතින දුක, අසමානතාවය, පාපය හා හිංසනයටද වගකිව යුත්තේ ඔහුය (අංගුත්තර නිකාය තිත්ථදර්ශන සූත්‍රය).\n` +
+        `**(v)** චිත්ත පරිශුද්ධියට ඡන්දය, වීර්යය, චිත්තය, විමංසා යන ඉද්ධිපාද අවශ්‍ය වේ. බුදුරජාණන් වහන්සේ යශෝධරා, මහාප්‍රජාපතී ගෝතමී, ඛේමා, උප්පලවණ්ණා ආදී මෙහෙණින් වහන්සේලා අර්හත්ඵලයට පත් වූ බව දේශනා කළහ.`
+    },
+    2: {
+      title: 'ප්‍රශ්නය 02 (ව්‍යුහගත රචනා)',
+      body: 
+        `📜 **බෞද්ධ ශිෂ්ටාචාරය 2026 — ආදර්ශ II පත්‍රය**\n` +
+        `📌 **ප්‍රශ්නය 02 / 08 (I කොටස — ව්‍යුහගත රචනා)**\n\n` +
+        `**[ප්‍රශ්න පත්‍රය]**\n` +
+        `**(i)** ව්‍යග්ඝපජ්ජ සූත්‍රයේ දැක්වෙන දිට්ඨධම්මහිතත්ථ (මෙලොව දියුණුවට හේතු වන) සම්පදා 04 නම් කරන්න. (ලකුණු 04)\n` +
+        `**(ii)** සිඟාලෝවාද සූත්‍රයට අනුව ධනය විනාශ වන 'අපාය මුඛ' 02ක් සඳහන් කරන්න. (ලකුණු 04)\n` +
+        `**(iii)** බුදුසමයෙහි සඳහන් වන 'සුහද මිත්‍රයන්' (කල්‍යාණ මිත්‍රයන්) වර්ග 04 නම් කරන්න. (ලකුණු 04)\n` +
+        `**(iv)** සිඟාලෝවාද සූත්‍රයේ එන ධන විභාජන ප්‍රතිපත්තිය විස්තර කරන්න. (ලකුණු 04)\n` +
+        `**(v)** බුදුසමයෙහි තහනම් කර ඇති 'මිච්ඡා වණිජ්ජා' (මිථ්‍යා වෙළඳාම්) 05 නම් කරන්න. (ලකුණු 04)\n\n` +
+        `💡 **[නිල ලකුණු දීමේ පටිපාටිය & පිළිතුරු විග්‍රහය (Marking Scheme)]**\n` +
+        `**(i)** 1. උට්ඨාන සම්පදා 2. ආරක්ඛ සම්පදා 3. කල්‍යාණමිත්තතා 4. සමජීවිතා\n` +
+        `**(ii)** මත්පැන් පානය, රාත්‍රී සමාජශාලා සංචාරය, සූදුව, පාපමිත්‍ර සේවනය, අලසකම.\n` +
+        `**(iii)** 1. උපකාරක මිත්‍රයා 2. සමාන සුඛදුක්ඛ මිත්‍රයා 3. අත්ථක්ඛායී (අර්ථය කියාදෙන) මිත්‍රයා 4. අනුකම්පක මිත්‍රයා\n` +
+        `**(iv)** 1/4ක් දෛනික පරිභෝජනයට, 2/4ක් (අඩක්) ව්‍යාපාර හා ආයෝජනයට, 1/4ක් ආපදා හා අනාගත අරමුදල් ලෙස ඉතිරි කිරීමට.\n` +
+        `**(v)** 1. සත්ථ වණිජ්ජා (ආයුධ) 2. සත්ත වණිජ්ජා (වහලුන්/මිනිසුන්) 3. මංස වණිජ්ජා (මස්) 4. මජ්ජ වණිජ්ජා (මද්‍යසාර) 5. විස වණිජ්ජා (විෂ වර්ග).`
+    },
+    3: {
+      title: 'ප්‍රශ්නය 03 (ව්‍යුහගත රචනා)',
+      body: 
+        `📜 **බෞද්ධ ශිෂ්ටාචාරය 2026 — ආදර්ශ II පත්‍රය**\n` +
+        `📌 **ප්‍රශ්නය 03 / 08 (I කොටස — ව්‍යුහගත රචනා)**\n\n` +
+        `**[ප්‍රශ්න පත්‍රය]**\n` +
+        `**(i)** ශ්‍රී ලංකාවේ ප්‍රථමයෙන් ඉදිකළ ස්තූපය සහ මෙහෙණවර නම් කරන්න. (ලකුණු 04)\n` +
+        `**(ii)** මිහිඳු හිමියන් අනුරාධපුර මහමෙව්නාවේදී දේශනා කළ ප්‍රථම සූත්‍රය කුමක්ද? (ලකුණු 04)\n` +
+        `**(iii)** මහින්දාගමනයට පෙර ලංකාවේ පැවති පූර්ව මහින්ද ඇදහිලි 03ක් සඳහන් කරන්න. (ලකුණු 04)\n` +
+        `**(iv)** අනුරාධපුර යුගයේ රජවරුන්ට මහා විහාරීය භික්ෂූන් වහන්සේලා ලබාදුන් උපදේශක කාර්යභාරය පැහැදිලි කරන්න. (ලකුණු 04)\n` +
+        `**(v)** අභයගිරි නිකාය ආරම්භ වීමට හේතු වූ ආගමික හා දේශපාලනික පසුබිම කෙටියෙන් විස්තර කරන්න. (ලකුණු 04)\n\n` +
+        `💡 **[නිල ලකුණු දීමේ පටිපාටිය & පිළිතුරු විග්‍රහය (Marking Scheme)]**\n` +
+        `**(i)** ප්‍රථම ස්තූපය: ථූපාරාමය | ප්‍රථම මෙහෙණවර: හත්ථාල්හක මෙහෙණවර\n` +
+        `**(ii)** දේවදූත සූත්‍රය (මජ්ඣිම නිකාය)\n` +
+        `**(iii)** යක්ෂ/නාග ඇදහිලි, වෘක්ෂ ඇදහිලි, පිත්‍රෘ/ප්‍රේත ඇදහිලි, නක්ෂත්‍ර/ජ්‍යොතිෂ ඇදහිලි.\n` +
+        `**(iv)** රාජ්‍ය පාලනයේදී 'දස රාජ ධර්ම' අනුගමනය කිරීමට උපදෙස් දීම, රජු සෙබළුන් හා ප්‍රජාව සමඟ ධාර්මිකව කටයුතු කිරීමට මඟපෙන්වීම.\n` +
+        `**(v)** වළගම්බා රජු ගිරි නිගණ්ඨයාගේ ආරාමය බිඳ අභයගිරි විහාරය කරවා මහාතිස්ස හිමියන්ට පූජා කිරීම සහ මහා විහාරීය කුලසංසර්ග චෝදනාව මත භික්ෂූන් වෙන්වීම.`
+    },
+    4: {
+      title: 'ප්‍රශ්නය 04 (රචනා ප්‍රශ්න)',
+      body: 
+        `📜 **බෞද්ධ ශිෂ්ටාචාරය 2026 — ආදර්ශ II පත්‍රය**\n` +
+        `✍️ **ප්‍රශ්නය 04 / 08 (II කොටස — රචනා ප්‍රශ්න)**\n` +
+        `*(ප්‍රශ්න 5න් 3කට පිළිතුරු සපයන්න. ලකුණු 20x3=60)*\n\n` +
+        `**[ප්‍රශ්න පත්‍රය]**\n` +
+        `**(i)** අග්ගඤ්ඤ සූත්‍රයේ සඳහන් මානව හා සමාජ පරිණාමීය අවස්ථා සහ 'මහාසම්මත' රජුගේ සම්භවය පැහැදිලි කරන්න. (ලකුණු 10)\n` +
+        `**(ii)** චක්කවත්ති සීහනාද සූත්‍රයේ දැක්වෙන 'දස සක්විති වත්' අතුරින් ප්‍රධාන වත් 05ක් දක්වා එහි සමාජ-ආර්ථික වැදගත්කම විග්‍රහ කරන්න. (ලකුණු 10)\n\n` +
+        `💡 **[නිල ලකුණු දීමේ පටිපාටිය & පිළිතුරු විග්‍රහය (Marking Scheme)]**\n` +
+        `**(i)** • රසාපඨවි, පප්පටක, භද්දලතා, ස්වයංජාත ඇල්වී ආදී භෞතික පරිණාමය.\n` +
+        `• මිනිසා තණ්හාවෙන් ඇල්වී අස්වැන්න තැන්පත් කිරීම නිසා පෞද්ගලික දේපළ අයිතිය, මායිම් ආරවුල් හා සොරකම ඇතිවීම.\n` +
+        `• නීතිය හා සාමය පිණිස ජනයා විසින් සම්මත කරගත් 'මහාසම්මත' රජු තෝරා පත් කරගැනීම.\n\n` +
+        `**(ii)** • ධම්මික රක්ඛාව (ධර්මානුකූල ආරක්ෂාව)\n` +
+        `• අධනස්ස ධනනුප්පදානං (දිළිඳුන්ට ධනය ලබාදීම)\n` +
+        `• සමණ බ්‍රාහ්මණ පරියුපාසනං (ශ්‍රමණ බ්‍රාහ්මණයන්ගෙන් උපදෙස් ලැබීම)\n` +
+        `• මනුස්ස-පසු-පක්ඛි ආදී සියලු ජීවීන්ට ආරක්ෂාව දීම.\n` +
+        `• සමාජයේ අපරාධ අඩුවීමට දිළිඳුකම නැති කිරීම අත්‍යවශ්‍ය බව පැහැදිලි කිරීම.`
+    },
+    5: {
+      title: 'ප්‍රශ්නය 05 (රචනා ප්‍රශ්න)',
+      body: 
+        `📜 **බෞද්ධ ශිෂ්ටාචාරය 2026 — ආදර්ශ II පත්‍රය**\n` +
+        `✍️ **ප්‍රශ්නය 05 / 08 (II කොටස — රචනා ප්‍රශ්න)**\n\n` +
+        `**[ප්‍රශ්න පත්‍රය]**\n` +
+        `**(i)** 'සත්ථා දේවමනුස්සානං' බුදුගුණය ප්‍රජාතන්ත්‍රවාදී හා මානවවාදී නායකත්ව ලක්ෂණ සමඟ සසඳමින් පැහැදිලි කරන්න. (ලකුණු 10)\n` +
+        `**(ii)** බුද්ධ චරිතයෙන් හෙළිවන උපදේශන, ගැටලු විසඳීමේ හා සංවාදශීලී නායකත්ව ලක්ෂණ උදාහරණ සහිතව විග්‍රහ කරන්න. (ලකුණු 10)\n\n` +
+        `💡 **[නිල ලකුණු දීමේ පටිපාටිය & පිළිතුරු විග්‍රහය (Marking Scheme)]**\n` +
+        `**(i)** • බුදුරජාණන් වහන්සේ දෙවි මිනිසුන්ගේ ශාස්තෘවරයා ලෙස සැමට එක හා සමානව කරුණාව දැක්වීම.\n` +
+        `• කුල, වර්ණ, වයස්, ලිංගික භේදයකින් තොරව සුනීත, සෝපාක, රජ්ජුමාලා ආදීන්ට ධර්මාවබෝධය ලබාදීම.\n` +
+        `• භික්ෂු සංඝයා සඳහා සංඝ සභා පැවැත්වීම හා සාමූහික ප්‍රජාතන්ත්‍රවාදී තීරණ ගැනීම.\n\n` +
+        `**(ii)** • පටාචාරාවන්ගේ සහ කිසාගෝතමියගේ මහත් වූ සෝකය සමනය කළ අයුරු.\n` +
+        `• කෝලිය-ශාක්‍ය රෝහිණී නදී ජල අර්බුදයේදී යුද්ධය වළක්වා සංවාදයෙන් ගැටලුව විසඳීම (ජලයද ලේද වටිනේ?)\n` +
+        `• අංගුලිමාල දමනය හා සච්චක, උපාලි ගෘහපති ආදීන් සමඟ පැවැත්වූ සංවාදශීලී විග්‍රහයන්.`
+    },
+    6: {
+      title: 'ප්‍රශ්නය 06 (රචනා ප්‍රශ්න)',
+      body: 
+        `📜 **බෞද්ධ ශිෂ්ටාචාරය 2026 — ආදර්ශ II පත්‍රය**\n` +
+        `✍️ **ප්‍රශ්නය 06 / 08 (II කොටස — රචනා ප්‍රශ්න)**\n\n` +
+        `**[ප්‍රශ්න පත්‍රය]**\n` +
+        `**(i)** ප්‍රථම හා තෙවන ධර්ම සංගායනාවල ඓතිහාසික පසුබිම, ධර්ම සංගායනා කිරීමට හේතු සහ ප්‍රතිඵල සැසඳීමක් කරන්න. (ලකුණු 10)\n` +
+        `**(ii)** ධර්මපාල රජු විසින් ආරම්භ කරන ලද 'වික්‍රමශීලා' බෞද්ධ විශ්වවිද්‍යාලයේ අධ්‍යාපනික හා ජාත්‍යන්තර වැදගත්කම පැහැදිලි කරන්න. (ලකුණු 10)\n\n` +
+        `💡 **[නිල ලකුණු දීමේ පටිපාටිය & පිළිතුරු විග්‍රහය (Marking Scheme)]**\n` +
+        `**(i)** • **ප්‍රථම සංගායනාව**: සුභද්ද භික්ෂුවගේ අවගුණ බස් නිසා රජගහනුවර සප්තපණ්ණි ගුහාද්වාරයේදී මහාකස්සප හිමියන්ගේ මූලිකත්වයෙන් පැවැත්වීම. ධර්මය හා විනය සංග්‍රහ කිරීම.\n` +
+        `• **තෙවන සංගායනාව**: අශෝක රජුගේ කාලයේ තීර්ථකයන් සංඝයා අතරට රිංගීම නිසා පැටලුණු සාසන අර්බුදයට පිළියම් ලෙස මොග්ගලීපුත්තතිස්ස හිමියන්ගේ මූලිකත්වයෙන් පැවැත්වීම. නවදෙසට ධර්මදූතයන් යැවීම.\n\n` +
+        `**(ii)** • පාල වංශික ධර්මපාල රජු විසින් බිහාර් හි පිහිටුවීම.\n` +
+        `• ද්වාරපණ්ඩිතවරුන් 6 දෙනා මඟින් විදේශීය සිසුන් ඇතුළත් කරගැනීම.\n` +
+        `• දීපංකර ශ්‍රී ඥාන (අතීශ) හිමියන් ටිබෙටයට බුදුසමය ගෙන යාම.`
+    },
+    7: {
+      title: 'ප්‍රශ්නය 07 (රචනා ප්‍රශ්න)',
+      body: 
+        `📜 **බෞද්ධ ශිෂ්ටාචාරය 2026 — ආදර්ශ II පත්‍රය**\n` +
+        `✍️ **ප්‍රශ්නය 07 / 08 (II කොටස — රචනා ප්‍රශ්න)**\n\n` +
+        `**[ප්‍රශ්න පත්‍රය]**\n` +
+        `**(i)** ඉන්දියාවේ සාංචි ස්තූපයේ නිර්මාණ ලක්ෂණ ලංකාවේ අනුරාධපුර යුගයේ ස්තූප නිර්මාණ සමඟ සසඳන්න. (ලකුණු 10)\n` +
+        `**(ii)** ගන්ධාර සහ මථුරා බුද්ධ ප්‍රතිමා කලාවන්හි පැවති කලාත්මක හා සංස්කෘතික වෙනස්කම් පැහැදිලි කරන්න. (ලකුණු 10)\n\n` +
+        `💡 **[නිල ලකුණු දීමේ පටිපාටිය & පිළිතුරු විග්‍රහය (Marking Scheme)]**\n` +
+        `**(i)** • සාංචි ස්තූපය: අර්ධ ගෝලාකාර ගර්භය, ඡත්‍රාපලිය, තෝරණ 4 (North, South, East, West Toranas) හා වේදිකාව.\n` +
+        `• ලංකාවේ ස්තූප: ඡත්‍රාපලිය වෙනුවට දේවතා කොටුව, කොත්කැරැල්ල, ඡත්‍රය, පෑස, ත්‍රිවිධ පේසා හා වාහල්කඩ ඉදිකිරීම.\n\n` +
+        `**(ii)** • **ගන්ධාර කලාව**: ග්‍රීක-රෝම ආභාසය (Apollo රූප ලක්ෂණ), රැළි සහිත සිවුර, රැළි කොණ්ඩය, යථාර්ථවාදී මාංශ පේශී.\n` +
+        `• **මථුරා කලාව**: දේශීය ඉන්දියානු ආභාසය, මහත සිරුර, පාරදෘශ්‍ය (ඇඟට ඇලුනු) සිවුර, මුහුණේ මන්දහාසය හා ආධ්‍යාත්මික බව.`
+    },
+    8: {
+      title: 'ප්‍රශ්නය 08 (රචනා ප්‍රශ්න)',
+      body: 
+        `📜 **බෞද්ධ ශිෂ්ටාචාරය 2026 — ආදර්ශ II පත්‍රය**\n` +
+        `✍️ **ප්‍රශ්නය 08 / 08 (II කොටස — රචනා ප්‍රශ්න)**\n\n` +
+        `**[ප්‍රශ්න පත්‍රය]**\n` +
+        `**(i)** තායිලන්තයේ බුදුසමයේ ව්‍යාප්තිය සහ ශ්‍රී ලාංකේය සියම් නිකායික උපසම්පදාව නැවත පිහිටුවීමේදී තායිලන්තයෙන් ලැබුණු දායකත්වය විග්‍රහ කරන්න. (ලකුණු 10)\n` +
+        `**(ii)** ජපානයේ ෂෝතොකු කුමරුගේ සේවය සහ 'සෙන් බුදුදහම' (Zen Buddhism) ජපන් සංස්කෘතියට කළ බලපෑම පැහැදිලි කරන්න. (ලකුණු 10)\n\n` +
+        `💡 **[නිල ලකුණු දීමේ පටිපාටිය & පිළිතුරු විග්‍රහය (Marking Scheme)]**\n` +
+        `**(i)** • ලංකාවේ උපසම්පදාව පිරිහී තිබූ 18 වන සියවසේදී කීර්ති ශ්‍රී රාජසිංහ රජු සහ වැලිවිට සරණංකර සංඝරාජ හිමියන්ගේ ඉල්ලීම පරිදි තායිලන්තයේ (සියම) උපාලි හිමියන් ප්‍රමුඛ ධර්මදූත පිරිස ලංකාවට පැමිණ 1753 දී සියම් නිකායික උපසම්පදාව පිහිටුවීම.\n\n` +
+        `**(ii)** • ෂෝතොකු කුමරු (Prince Shotoku) ජපානයේ බුදුසමය රාජ්‍ය ආගම බවට පත් කිරීම, ව්‍යවස්ථාව සකස් කිරීම.\n` +
+        `• සෙන් බුදුදහම (Zen Buddhism): ධ්‍යාන වැඩීම, චා-නො-යූ (තේ පැන් සංග්‍රහය - Tea Ceremony), ඉකෙබානා (මල් සැකසුම) සහ කඩු ශිල්පයට (Bushido) කළ බලපෑම.`
+    }
+  }
+};
+
+// Helper: Render Question by Question with Full Marking Scheme in Telegram Chat
+async function renderPart2Question(chatId, messageId, subId, yearKey, qIndex = 1, queryId = null, isGroup = false) {
+  if (queryId) {
+    await safeAnswerCallback(queryId);
+  }
+  const paperData = QUIZ_DATA[subId]?.papers[yearKey];
+  const qData = PART2_QUESTIONS_DATA[yearKey]?.[qIndex];
+  const totalQ = 8;
+  const quizUrl = `${BASE_URL}/${paperData?.file || 'bc2026_model_part2.html'}`;
+
+  if (!qData) return;
+
+  // Build Question Selector Row (1 to 4 and 5 to 8)
+  const row1 = [];
+  const row2 = [];
+  for (let i = 1; i <= 4; i++) {
+    const label = (i === qIndex) ? `· Q0${i} ·` : `Q0${i}`;
+    row1.push({ text: label, callback_data: `part2_q_${subId}_${yearKey}_${i}` });
+  }
+  for (let i = 5; i <= 8; i++) {
+    const label = (i === qIndex) ? `· Q0${i} ·` : `Q0${i}`;
+    row2.push({ text: label, callback_data: `part2_q_${subId}_${yearKey}_${i}` });
+  }
+
+  const prevIdx = (qIndex > 1) ? qIndex - 1 : totalQ;
+  const nextIdx = (qIndex < totalQ) ? qIndex + 1 : 1;
+
+  const navRow = [
+    { text: '◀️ පූර්ව (Prev)', callback_data: `part2_q_${subId}_${yearKey}_${prevIdx}` },
+    { text: `📌 ${qIndex} / ${totalQ}`, callback_data: `part2_read_${subId}_${yearKey}` },
+    { text: 'ඊළඟ (Next) ▶️', callback_data: `part2_q_${subId}_${yearKey}_${nextIdx}` }
+  ];
+
+  const webAppBtn = isGroup
+    ? { text: '🚀 Open Interactive WebApp (App එක තුළින්)', url: quizUrl }
+    : { text: '🚀 Open Interactive WebApp (App එක තුළින්)', web_app: { url: quizUrl } };
+
+  const keyboard = {
+    inline_keyboard: [
+      row1,
+      row2,
+      navRow,
+      [webAppBtn],
+      [{ text: '⬅️ ප්‍රශ්න පත්‍ර තේරීමට (Back)', callback_data: `cat_${subId}_pp` }]
+    ]
+  };
+
+  const fullText = `${qData.body}`;
+
+  if (messageId) {
+    try {
+      await bot.editMessageText(fullText, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: keyboard
+      });
+      return;
+    } catch (e) {}
+  }
+
+  await bot.sendMessage(chatId, fullText, {
+    parse_mode: 'Markdown',
+    reply_markup: keyboard
+  }).catch(e => console.error('Error sending Part 2 message:', e.message));
+}
+
+function parseCustomTimeInput(inputStr) {
+  if (!inputStr) return null;
+  const str = inputStr.trim().toLowerCase();
+  
+  const relMatch = str.match(/^(\d+)\s*(m|min|mins|minutes|h|hr|hours)?$/);
+  if (relMatch) {
+    const val = parseInt(relMatch[1], 10);
+    const unit = relMatch[2] || 'm';
+    if (unit.startsWith('h')) {
+      return { delayMs: val * 3600 * 1000, label: `තවත් පැය ${val} කින් (In ${val} Hours)` };
+    } else {
+      return { delayMs: val * 60 * 1000, label: `තවත් මිනිත්තු ${val} කින් (In ${val} Mins)` };
+    }
+  }
+
+  const timeMatch = str.match(/^(\d{1,2}):(\d{2})$/);
+  if (timeMatch) {
+    const hours = parseInt(timeMatch[1], 10);
+    const mins = parseInt(timeMatch[2], 10);
+    if (hours >= 0 && hours < 24 && mins >= 0 && mins < 60) {
+      const target = new Date();
+      target.setHours(hours, mins, 0, 0);
+      if (target.getTime() <= Date.now()) {
+        target.setDate(target.getDate() + 1);
+      }
+      const delayMs = target.getTime() - Date.now();
+      const hStr = hours.toString().padStart(2, '0');
+      const mStr = mins.toString().padStart(2, '0');
+      const ampm = hours >= 12 ? 'රාත්‍රී/සවස' : 'උදෑසන';
+      return { delayMs, label: `පැය ${hStr}:${mStr} ට (${ampm})` };
+    }
+  }
+
+  return null;
+}
 
 // State storage for active Native Telegram Poll sessions
 const userPollSessions = {}; // chatId -> { subId, yearKey, paperKey, title, questions, qIndex, score, startTime }
@@ -737,6 +985,7 @@ function getSubjectKeyboard(isGroup = false) {
     [{ text: QUIZ_DATA.hist.name, callback_data: 'sub_hist' }],
     [{ text: QUIZ_DATA.bc.name, callback_data: 'sub_bc' }],
     [{ text: QUIZ_DATA.sin.name, callback_data: 'sub_sin' }],
+    [{ text: QUIZ_DATA.bs.name, callback_data: 'sub_bs' }],
     [
       { text: '🏆 All-Island Leaderboard (ලකුණු පුවරුව)', callback_data: 'view_top_overall' }
     ]
@@ -774,13 +1023,24 @@ function getSubjectKeyboard(isGroup = false) {
 
 // Helper: Generate Category Keyboard (Step 2)
 function getCategoryKeyboard(subId) {
-  return {
-    inline_keyboard: [
-      [{ text: '📑 පසුගිය ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: `cat_${subId}_pp` }],
-      [{ text: '📚 වෙනත් (Model Papers & Revision)', callback_data: `cat_${subId}_other` }],
-      [{ text: '⬅️ ප්‍රධාන මෙගුවට (Back to Subjects)', callback_data: 'nav_subjects' }]
-    ]
-  };
+  const keyboard = [
+    [{ text: '📑 පසුගිය ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: `cat_${subId}_pp` }]
+  ];
+
+  if (subId === 'bc') {
+    keyboard.push([
+      { text: '📜 II පත්‍රය (Structured & Essay Marking Scheme)', callback_data: `part2_read_bc_2026_model_p2` }
+    ]);
+  }
+
+  keyboard.push([
+    { text: '📚 වෙනත් (Model Papers & Revision)', callback_data: `cat_${subId}_other` }
+  ]);
+  keyboard.push([
+    { text: '⬅️ ප්‍රධාන මෙනුවට (Back to Subjects)', callback_data: 'nav_subjects' }
+  ]);
+
+  return { inline_keyboard: keyboard };
 }
 
 // Helper: Generate Year/Paper Selection Grid (Step 3)
@@ -1350,19 +1610,21 @@ bot.on('callback_query', async (query) => {
     // ------------------- ADMIN LIVE QUIZ SCHEDULER WIZARD -------------------
     
     // Admin Step 1: Select Subject for Live Quiz
-    if (data === 'adm_sched_step1') {
+    if (data === 'adm_sched_step1' || data === 'adm_quiz_select' || data === 'adm_quiz_select_sch') {
       if (!isAdminUser(fromId)) {
         await safeAnswerCallback(query.id, '⛔ ඔබට මෙයට අවසර නොමැත.');
         return;
       }
 
-      const text = `🚀 **Publish Live Quiz — පියවර 1/3: විෂය තෝරන්න**\n\nසජීවීව පැවැත්වීමට අවශ්‍ය විෂය පහතින් තෝරන්න:`;
+      const isSch = data.includes('_sch');
+      const text = `🚀 **Publish Live Quiz — ${isSch ? 'Schedule' : 'Step 1/3'}: විෂය තෝරන්න**\n\nසජීවීව පැවැත්වීමට අවශ්‍ය විෂය පහතින් තෝරන්න:`;
       const kb = {
         inline_keyboard: [
           [{ text: QUIZ_DATA.pl.name, callback_data: 'adm_sub_pl' }],
           [{ text: QUIZ_DATA.hist.name, callback_data: 'adm_sub_hist' }],
           [{ text: QUIZ_DATA.bc.name, callback_data: 'adm_sub_bc' }],
           [{ text: QUIZ_DATA.sin.name, callback_data: 'adm_sub_sin' }],
+          [{ text: QUIZ_DATA.bs.name, callback_data: 'adm_sub_bs' }],
           [{ text: '⬅️ ආපසු (Admin Menu)', callback_data: 'adm_home' }]
         ]
       };
@@ -1389,8 +1651,10 @@ bot.on('callback_query', async (query) => {
         const keyboard = [];
         let row = [];
         keys.forEach((key, idx) => {
-          row.push({ text: `📝 ${key}`, callback_data: `adm_paper_${subId}_${key}` });
-          if (row.length === 3 || idx === keys.length - 1) {
+          const paperObj = subData.papers[key];
+          const label = paperObj.btnLabel || key;
+          row.push({ text: `📝 ${label}`, callback_data: `adm_paper_${subId}_${key}` });
+          if (row.length === 2 || idx === keys.length - 1) {
             keyboard.push(row);
             row = [];
           }
@@ -1412,7 +1676,7 @@ bot.on('callback_query', async (query) => {
 
       const parts = data.split('_');
       const subId = parts[2];
-      const yearKey = parts[3];
+      const yearKey = parts.slice(3).join('_');
 
       const subData = QUIZ_DATA[subId];
       const paperData = subData?.papers[yearKey];
@@ -1450,7 +1714,7 @@ bot.on('callback_query', async (query) => {
 
       const parts = data.split('_');
       const subId = parts[4];
-      const yearKey = parts[5];
+      const yearKey = parts.slice(5).join('_');
       const paperKey = `${subId}_${yearKey}`;
 
       pendingCustomSchedule[chatId] = { subId, yearKey, paperKey };
@@ -1471,7 +1735,7 @@ bot.on('callback_query', async (query) => {
       const parts = data.split('_');
       const timeType = parts[2];
       const subId = parts[3];
-      const yearKey = parts[4];
+      const yearKey = parts.slice(4).join('_');
       const paperKey = `${subId}_${yearKey}`;
 
       const subData = QUIZ_DATA[subId];
