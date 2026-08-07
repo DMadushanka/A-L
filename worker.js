@@ -988,52 +988,153 @@ async function sendNextNativePollStep(chatId, paperKey, qIndex = 0, score = 0, s
   }
 }
 
-// Helper: Pure Native Telegram Group Poll Quiz Streamer (Telegram Native Webhook Flow)
-async function processSingleTelegramPollStep(paperKey, env = {}, sendHeader = true) {
-  if (!paperKey) return;
+// Helper: Pure Native Telegram Group Perpetual Step Streamer (15-Second Auto Timer per Question)
+async function processSingleTelegramPollStep(paperKey, qIndex = 0, intervalSec = 15, env = {}, sendHeader = true) {
+  if (!paperKey) return true;
   const parts = paperKey.split('_');
   const subId = parts[0];
   const yearKey = parts.slice(1).join('_');
 
   const subData = QUIZ_DATA[subId];
   const paperData = subData?.papers[yearKey];
-  if (!paperData) return;
+  if (!paperData) return true;
 
   const tgTarget = getTelegramTargetChat(env, '-1004322002704');
   const questions = await fetchQuestionsFromHtml(paperData.file);
-  if (!questions || questions.length === 0) return;
+  if (!questions || questions.length === 0) return true;
 
   const totalQ = questions.length;
+  const startTime = Date.now();
 
-  // Reset stats & Group QIndex for fresh quiz competition
-  await resetUserQuizStats(tgTarget, paperKey);
-  await setGroupActiveQIndex(tgTarget, paperKey, 0);
+  // If starting a fresh quiz, reset stats and send intro banner card
+  if (qIndex === 0) {
+    await resetUserQuizStats(tgTarget, paperKey);
+    await setGroupActiveQIndex(tgTarget, paperKey, 0);
 
-  if (sendHeader) {
-    const startText = 
-      `🚀 **${paperData.title} Native Telegram Quiz තරඟය දැන් ආරම්භ විය!**\n\n` +
-      `⏱️ **ප්‍රශ්නයකට හිමි කාලය:** තත්පර 25යි (⏳ Native Animated Timer Ring)\n` +
-      `📜 **මුළු ප්‍රශ්න ගණන:** MCQ ${totalQ}\n\n` +
-      `👇 **පළමු ප්‍රශ්නය පහත දැක්වේ:**`;
-    const paperImgUrl = getPaperImageUrl(paperKey);
-    const photoRes = await sendApi('sendPhoto', {
-      chat_id: tgTarget,
-      photo: paperImgUrl,
-      caption: startText,
-      parse_mode: 'Markdown'
-    }, env);
-
-    if (!photoRes.ok) {
-      await sendApi('sendMessage', {
+    if (sendHeader) {
+      const startText = 
+        `🚀 **${paperData.title} Native Telegram Quiz තරඟය දැන් ආරම්භ විය!**\n\n` +
+        `⏱️ **ප්‍රශ්නයකට හිමි කාලය:** තත්පර ${intervalSec}යි (⏳ ${intervalSec}s Live Auto Timer)\n` +
+        `📜 **මුළු ප්‍රශ්න ගණන:** MCQ ${totalQ}\n\n` +
+        `👇 **පළමු ප්‍රශ්නය පහත දැක්වේ:**`;
+      const paperImgUrl = getPaperImageUrl(paperKey);
+      const photoRes = await sendApi('sendPhoto', {
         chat_id: tgTarget,
-        text: startText,
+        photo: paperImgUrl,
+        caption: startText,
         parse_mode: 'Markdown'
       }, env);
+
+      if (!photoRes.ok) {
+        await sendApi('sendMessage', {
+          chat_id: tgTarget,
+          text: startText,
+          parse_mode: 'Markdown'
+        }, env);
+      }
     }
   }
 
-  // Immediately send Question 1 poll (Native Telegram Poll Step 0)
-  await sendNextNativePollStep(tgTarget, paperKey, 0, 0, Date.now(), env);
+  if (qIndex >= totalQ) {
+    // Build & Post Final Competition Leaderboard Podium Card
+    const allStatsMap = await getUserQuizStats(tgTarget, paperKey);
+    const userList = Object.keys(allStatsMap).map(uid => ({
+      userId: uid,
+      name: allStatsMap[uid].name,
+      score: allStatsMap[uid].score,
+      totalAnswered: allStatsMap[uid].totalAnswered,
+      wrongCount: (allStatsMap[uid].wrongList || []).length
+    }));
+
+    userList.sort((a, b) => b.score - a.score || a.wrongCount - b.wrongCount);
+
+    let leaderboardText = '';
+    if (userList.length > 0) {
+      const topWinners = userList.slice(0, 5);
+      const podiums = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+      const winnerLines = topWinners.map((u, idx) => {
+        const icon = podiums[idx] || `${idx + 1}.`;
+        const uPct = Math.round((u.score / totalQ) * 100);
+        return `${icon} **${u.name}** — ${u.score}/${totalQ} (${uPct}%)`;
+      });
+
+      leaderboardText = 
+        `\n\n🏆 **සජීවී ප්‍රශ්න පත්‍ර තරඟාවලියේ ජයග්‍රාහකයින් (Live Competition Leaderboard)** 🥇🥈🥉\n` +
+        `─────────────────────────\n` +
+        winnerLines.join('\n') + `\n` +
+        `─────────────────────────\n` +
+        `🎉 **ජයග්‍රාහකයින් සියලු දෙනාටම අපගේ උණුසුම් සුභ පැතුම්! (Congratulations!)** 👏⚡`;
+    }
+
+    const timeSec = Math.max(1, Math.round((Date.now() - startTime) / 1000));
+    const finishMessage = 
+      `🏆 **${paperData.title} — තරඟය සාර්ථකව අවසන්!**\n\n` +
+      `⏱️ **ගත වූ කාලය:** ${formatDuration(timeSec)}\n` +
+      `👥 **සහභාගී වූ සිසුන් ගණන:** ${userList.length || 1}` +
+      leaderboardText + `\n\n` +
+      `💡 **ඔබේ පුද්ගලික ලකුණු සහ වැරදුණු ප්‍රශ්න බලන්න පහත බොත්තම ඔබන්න:**`;
+
+    const finishKeyboard = {
+      inline_keyboard: [
+        [{ text: '📊 මගේ ලකුණු සහ වැරදුණු ප්‍රශ්න (My Individual Summary)', callback_data: `my_report_${subId}_${yearKey}` }],
+        [{ text: '🔄 නැවත තරඟය පවත්වන්න (Retry)', callback_data: `native_${subId}_${yearKey}` }],
+        [{ text: '📑 වෙනත් ප්‍රශ්න පත්‍රයක් (Select Paper)', callback_data: `cat_${subId}_pp` }]
+      ]
+    };
+
+    await sendApi('sendMessage', {
+      chat_id: tgTarget,
+      text: finishMessage,
+      parse_mode: 'Markdown',
+      reply_markup: finishKeyboard
+    }, env);
+    return true; // Completed
+  }
+
+  if (await isQuizStopped(paperKey)) {
+    console.log(`🛑 Active Telegram poll stream immediately aborted by Admin for ${paperKey}!`);
+    return true; // Aborted
+  }
+
+  const q = questions[qIndex];
+  const qNum = qIndex + 1;
+
+  let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
+  rawQText = cleanText(rawQText, 250);
+  rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
+
+  const cleanQ = cleanText(`[${qNum}/${totalQ}] ⏳ ${intervalSec}s | ${rawQText}`, 290);
+  const cleanOpts = (q.o || q.options || []).map(o => cleanText(o, 98));
+  const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
+
+  const rawExplain = cleanText(q.e || '', 185);
+  const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
+
+  // Send Poll with open_period (native animated timer ring)
+  const pollRes = await sendApi('sendPoll', {
+    chat_id: tgTarget,
+    question: cleanQ,
+    options: cleanOpts,
+    type: 'quiz',
+    correct_option_id: correctIdx,
+    explanation: cleanExplain,
+    is_anonymous: false,
+    open_period: intervalSec
+  }, env);
+
+  if (pollRes.ok && pollRes.result) {
+    const pollId = pollRes.result.poll.id;
+    await savePollMapping(pollId, {
+      chatId: tgTarget,
+      paperKey,
+      qIndex,
+      score: 0,
+      correctOption: correctIdx,
+      startTime
+    });
+  }
+
+  return false; // More steps remaining
 }
 
 // Fetch questions dynamically from GitHub Pages HTML
@@ -1935,12 +2036,13 @@ async function handleUpdate(update, env, ctx) {
         await autoPostToWhatsAppChannel(waMsgText, paperImgUrl, env);
 
         // Start Automated WhatsApp & Telegram Poll Quiz Streamers directly on Worker via perpetual HTTP step-chaining
+        const origin = url.origin;
         if (ctx && typeof ctx.waitUntil === 'function') {
           ctx.waitUntil(processSingleWhatsAppPollStep(paperKey, 0, 20, env));
-          ctx.waitUntil(processSingleTelegramPollStep(paperKey, env, false));
+          ctx.waitUntil(fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=0&intervalSec=15&sendHeader=true`));
         } else {
           processSingleWhatsAppPollStep(paperKey, 0, 20, env);
-          processSingleTelegramPollStep(paperKey, env, false);
+          fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=0&intervalSec=15&sendHeader=true`);
         }
 
         await sendApi('answerCallbackQuery', { callback_query_id: query.id, text: '✅ Quiz Published & WhatsApp/Telegram Group Polls Started!' }, env);
@@ -2341,10 +2443,11 @@ async function handleUpdate(update, env, ctx) {
         }, env);
 
         if (isGroup) {
+          const origin = url.origin;
           if (ctx && typeof ctx.waitUntil === 'function') {
-            ctx.waitUntil(processSingleTelegramPollStep(paperKey, env, false));
+            ctx.waitUntil(fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=0&intervalSec=15&sendHeader=true`));
           } else {
-            processSingleTelegramPollStep(paperKey, env, false);
+            fetch(`${origin}/stream-tg-step?paperKey=${encodeURIComponent(paperKey)}&qIndex=0&intervalSec=15&sendHeader=true`);
           }
         } else {
           await sendNextNativePollStep(chatId, paperKey, 0, 0, Date.now(), env);
