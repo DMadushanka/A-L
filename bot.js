@@ -533,6 +533,7 @@ bot.setChatMenuButton({
 bot.setMyCommands([
   { command: 'start', description: '🚀 ප්‍රධාන මෙනුව ආරම්භ කරන්න (Start Quiz Bot)' },
   { command: 'ai', description: '🤖 A/L MCQ HUB AI Tutor (ඕනෑම A/L ප්‍රශ්නයක් අහන්න)' },
+  { command: 'image', description: '🎨 AI Image & Diagram Generator (නොමිලේ ඡායාරූප සෑදීම)' },
   { command: 'leaderboard', description: '🏆 උසස් පෙළ ලකුණු පුවරුව (Leaderboards & Ranks)' },
   { command: 'help', description: '📖 භාවිතය පිළිබඳ උපදෙස් (Help & Instructions)' },
   { command: 'myid', description: '👤 ඔබගේ Telegram User ID එක (View My ID)' }
@@ -1672,6 +1673,158 @@ bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
     }
   } else {
     await bot.sendMessage(chatId, formattedReply).catch(() => {});
+  }
+});
+
+// Command: /image <prompt> or /draw <prompt> (100% Free AI Image Generator)
+bot.onText(/\/(image|draw)(@\w+)?\s*(.*)/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const prompt = match[3] ? match[3].trim() : '';
+
+  if (!prompt) {
+    const usageMsg = 
+      `🎨 **A/L MCQ HUB AI Image Generator — භාවිත කරන ආකාරය**\n\n` +
+      `ඕනෑම රූපසටහනක් හෝ ඡායාරූපයක් නොමිලේ නිර්මාණය කරගන්න:\n\n` +
+      `👉 **ආකෘතිය:** \`/image ඔබගේ රූපයේ විස්තරය\`\n\n` +
+      `📌 **උදාහරණ:**\n` +
+      `• \`/image අනුරාධපුර රුවන්වැලිසෑය\` \n` +
+      `• \`/image Ancient Buddhist Temple Sri Lanka 4k\` \n` +
+      `• \`/image Political Science Parliament Diagram\``;
+
+    return bot.sendMessage(chatId, usageMsg, { parse_mode: 'Markdown' }).catch(() => {});
+  }
+
+  const statusMsg = await bot.sendMessage(chatId, '🎨 **AI විසින් ඔබගේ ඡායාරූපය නිර්මාණය කරමින් පවතී... ⌛**', { parse_mode: 'Markdown' }).catch(() => null);
+
+  try {
+    const imageUrl = `https://image.pollinations.ai/prompt/${encodeURIComponent(prompt)}?width=1024&height=1024&nologo=true`;
+    
+    await bot.sendPhoto(chatId, imageUrl, {
+      caption: `🎨 **A/L MCQ HUB AI Image Generator**\n\n📌 **විස්තරය (Prompt):** ${prompt}\n\n💡 *තවත් ඡායාරූපයක් සාදා ගැනීමට \`/image විස්තරය\` ලෙස එවන්න.*`,
+      parse_mode: 'Markdown'
+    });
+
+    if (statusMsg && statusMsg.message_id) {
+      bot.deleteMessage(chatId, statusMsg.message_id).catch(() => {});
+    }
+  } catch (err) {
+    console.error('Error in AI Image Gen:', err.message);
+    if (statusMsg && statusMsg.message_id) {
+      bot.editMessageText('❌ **ඡායාරූපය සාදා ගැනීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.**', { chat_id: chatId, message_id: statusMsg.message_id, parse_mode: 'Markdown' }).catch(() => {});
+    }
+  }
+});
+
+// Listener for Voice Messages (Speech-to-Text Transcribe & Auto AI Answer)
+async function handleVoiceQuestion(msg) {
+  const chatId = msg.chat.id;
+  const fileObj = msg.voice || msg.audio;
+  if (!fileObj) return;
+
+  const fileId = fileObj.file_id;
+  const statusMsg = await bot.sendMessage(chatId, '🎙️ **ඔබගේ හඬ පණිවිඩයට සවන්දෙමින් පවතී (Listening & Transcribing)... ⌛**', { parse_mode: 'Markdown' }).catch(() => null);
+
+  try {
+    const fileLink = await bot.getFileLink(fileId);
+    const audioRes = await fetch(fileLink);
+    const audioArrayBuffer = await audioRes.arrayBuffer();
+    const audioBuffer = Buffer.from(audioArrayBuffer);
+
+    const formData = new FormData();
+    const blob = new Blob([audioBuffer], { type: 'audio/ogg' });
+    formData.append('file', blob, 'audio.ogg');
+    formData.append('model', 'whisper-large-v3-turbo');
+
+    const groqKey = (process.env.GROQ_API_KEY || '').trim();
+    const whisperRes = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${groqKey}`
+      },
+      body: formData
+    });
+
+    const whisperData = await whisperRes.json();
+    const transcribedText = whisperData?.text;
+
+    if (transcribedText && transcribedText.trim()) {
+      if (statusMsg && statusMsg.message_id) {
+        bot.editMessageText(`🎙️ **ඔබ ඇසූ ප්‍රශ්නය (Transcribed Text):**\n\n"${transcribedText}"\n\n🤖 **A/L MCQ HUB AI විසින් පිළිතුර සූදානම් කරමින් පවතී... ⌛**`, {
+          chat_id: chatId,
+          message_id: statusMsg.message_id,
+          parse_mode: 'Markdown'
+        }).catch(() => {});
+      }
+
+      const aiAnswer = await askGeminiAI(transcribedText);
+      const replyMsg = 
+        `🎙️ **ඔබ ඇසූ හඬ ප්‍රශ්නය:**\n` +
+        `"${transcribedText}"\n\n` +
+        `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
+        `${aiAnswer}`;
+
+      bot.sendMessage(chatId, replyMsg, { parse_mode: 'Markdown' }).catch(() => {});
+    } else {
+      bot.sendMessage(chatId, '❌ **ඔබගේ හඬ පණිවිඩය පැහැදිලිව හඳුනා ගැනීමට නොහැකි විය. කරුණාකර නැවත පැහැදිලිව පවසන්න.**', { parse_mode: 'Markdown' }).catch(() => {});
+    }
+  } catch (err) {
+    console.error('Error handling voice question:', err.message);
+    bot.sendMessage(chatId, '❌ **හඬ පණිවිඩය තේරුම් ගැනීමේදී දෝෂයක් සිදු විය. කරුණාකර නැවත උත්සාහ කරන්න.**', { parse_mode: 'Markdown' }).catch(() => {});
+  }
+}
+
+bot.on('voice', handleVoiceQuestion);
+bot.on('audio', handleVoiceQuestion);
+
+// Listener for Photo Uploads (OCR Question Extractor & Auto AI Answer)
+bot.on('photo', async (msg) => {
+  if (msg.caption && msg.caption.startsWith('/')) return;
+
+  const chatId = msg.chat.id;
+  const photo = msg.photo[msg.photo.length - 1];
+  if (!photo) return;
+
+  const fileId = photo.file_id;
+  const statusMsg = await bot.sendMessage(chatId, '📸 **ඡායාරූපයේ ඇති ප්‍රශ්න සටහන් කියවමින් පවතී (Reading Image Text)... ⌛**', { parse_mode: 'Markdown' }).catch(() => null);
+
+  try {
+    const photoUrl = await bot.getFileLink(fileId);
+    const ocrApiUrl = `https://api.ocr.space/parse/imageurl?apikey=helloworld&url=${encodeURIComponent(photoUrl)}&isOverlayRequired=false`;
+
+    const ocrRes = await fetch(ocrApiUrl);
+    const ocrData = await ocrRes.json();
+    const extractedText = ocrData?.ParsedResults?.[0]?.ParsedText;
+
+    if (extractedText && extractedText.trim().length > 3) {
+      const cleanPrompt = extractedText.trim();
+      
+      if (statusMsg && statusMsg.message_id) {
+        bot.editMessageText(`📸 **ඡායාරූපයේ කියවූ ප්‍රශ්නය (Extracted Text):**\n\n"${cleanPrompt}"\n\n🤖 **A/L MCQ HUB AI විසින් පිළිතුර සූදානම් කරමින් පවතී... ⌛**`, {
+          chat_id: chatId,
+          message_id: statusMsg.message_id,
+          parse_mode: 'Markdown'
+        }).catch(() => {});
+      }
+
+      const aiAnswer = await askGeminiAI(cleanPrompt);
+      const replyMsg = 
+        `📸 **ඡායාරූපයෙන් කියවූ ප්‍රශ්නය:**\n` +
+        `"${cleanPrompt}"\n\n` +
+        `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
+        `${aiAnswer}`;
+
+      bot.sendMessage(chatId, replyMsg, { parse_mode: 'Markdown' }).catch(() => {});
+    } else {
+      if (statusMsg && statusMsg.message_id) {
+        bot.editMessageText(`📸 **ඡායාරූපය සාර්ථකව ලැබුණි!**\n\n💡 ඔබගේ ඡායාරූපයේ ඇති ප්‍රශ්නයට පිළිතුර ලබා ගැනීමට, ඡායාරූපය සමඟ \`/ai [ප්‍රශ්නය]\` ලෙස Caption යොදා එවන්න.`, {
+          chat_id: chatId,
+          message_id: statusMsg.message_id,
+          parse_mode: 'Markdown'
+        }).catch(() => {});
+      }
+    }
+  } catch (err) {
+    console.error('Error reading photo question:', err.message);
   }
 });
 
