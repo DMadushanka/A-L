@@ -36,64 +36,13 @@ process.on('uncaughtException', (err) => {
   console.error('⚠️ Uncaught Exception:', err?.message || err);
 });
 
-// Active WhatsApp Group Live Quiz State Matrix (Anti-Cheating Score Engine)
-let currentWaGroupSession = null;
-
-// Handle Green API Webhooks (Real-Time WhatsApp Poll Votes & Anti-Cheating Tracking)
-function handleGreenApiWebhook(update) {
-  if (!update || !currentWaGroupSession) return;
-
-  const type = update.typeWebhook;
-  if (type === 'pollMessageWebhook' || type === 'incomingMessageReceived') {
-    const pollData = update.messageData?.pollVoteMessageData || update.pollVoteData;
-    const sender = update.senderData?.sender;
-    const senderName = update.senderData?.senderName || 'Student';
-
-    if (pollData && sender) {
-      const { userScores, currentQIndex, currentCorrectIdx } = currentWaGroupSession;
-
-      if (!userScores[sender]) {
-        userScores[sender] = { name: senderName, score: 0, correct: 0, wrong: 0, answered: new Set() };
-      }
-
-      const student = userScores[sender];
-      // Anti-Cheating: Single Vote Lock (Only score the first vote per question)
-      if (!student.answered.has(currentQIndex)) {
-        student.answered.add(currentQIndex);
-        if (pollData.optionId === currentCorrectIdx) {
-          student.score++;
-          student.correct++;
-          console.log(`🎯 WA Group Vote [${senderName}]: CORRECT! (+1 Mark)`);
-        } else {
-          student.wrong++;
-          console.log(`❌ WA Group Vote [${senderName}]: WRONG!`);
-        }
-      }
-    }
-  }
-}
-
-// Tiny HTTP Server (Health Check & Green API Webhook Handler)
+// Tiny HTTP Server (Health Check Listener for 24/7 Uptime)
 const PORT = process.env.PORT || 3000;
 http.createServer((req, res) => {
-  if (req.method === 'POST' && req.url === '/wa-webhook') {
-    let body = '';
-    req.on('data', chunk => { body += chunk; });
-    req.on('end', () => {
-      try {
-        const update = JSON.parse(body);
-        handleGreenApiWebhook(update);
-      } catch (e) {}
-      res.writeHead(200, { 'Content-Type': 'application/json' });
-      res.end(JSON.stringify({ status: 'ok' }));
-    });
-    return;
-  }
-
   res.writeHead(200, { 'Content-Type': 'text/plain; charset=utf-8' });
   res.end('🎓 A/L MCQ Quiz Telegram Bot (@AL_MCQbot) is Running Live 24/7!');
 }).listen(PORT, () => {
-  console.log(`🌐 Health check & Webhook HTTP server listening on port ${PORT}`);
+  console.log(`🌐 Health check HTTP server listening on port ${PORT}`);
 });
 
 // Database mapping of subjects, paper categories, and files
@@ -720,73 +669,6 @@ function getPaperImageUrl(paperKey) {
   return `https://dmadushanka.github.io/A-L/logo.png?v=${Date.now()}`;
 }
 
-// Helper: Zero-Manual-Interaction Automated WhatsApp Channel Publisher via Green API
-async function autoPostToWhatsAppChannel(messageText, imageUrl = null) {
-  const instanceId = (process.env.GREEN_API_INSTANCE || '710722698143').trim();
-  const apiToken = (process.env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
-  const targetChat = (process.env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
-
-  if (!instanceId || !apiToken) return false;
-
-  try {
-    // Send as Image Banner File ONLY when imageUrl is explicitly provided (Start/Announcement Cards)
-    if (imageUrl) {
-      const res = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendFileByUrl/${apiToken}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chatId: targetChat,
-          urlFile: imageUrl,
-          fileName: 'al_mcq_hub_banner.png',
-          caption: messageText
-        })
-      });
-
-      const data = await res.json();
-      if (data && data.idMessage) {
-        console.log(`🟢 100% Automated WhatsApp Image Banner Post sent! Message ID: ${data.idMessage}`);
-        return true;
-      }
-    }
-
-    // Default to clean text sendMessage (Answer Reveals, Final Mark Sheets, In-Quiz Cards)
-    const textRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendMessage/${apiToken}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chatId: targetChat,
-        message: messageText
-      })
-    });
-    const textData = await textRes.json();
-    if (textData && textData.idMessage) {
-      console.log(`🟢 100% Automated WhatsApp Text Post sent! Message ID: ${textData.idMessage}`);
-      return true;
-    } else {
-      console.log('Green API text response:', JSON.stringify(textData));
-      return false;
-    }
-  } catch (err) {
-    console.error('Error auto-posting to WA Channel:', err.message);
-    return false;
-  }
-}
-
-// Helper: Format live countdown time mm:ss or hh:mm:ss
-function formatCountdownText(remSec) {
-  const m = Math.floor(remSec / 60);
-  const s = remSec % 60;
-  const padM = String(m).padStart(2, '0');
-  const padS = String(s).padStart(2, '0');
-  if (m >= 60) {
-    const h = Math.floor(m / 60);
-    const mRem = m % 60;
-    const padH = String(h).padStart(2, '0');
-    return `${padH}:${padM}:${padS} (පැය ${h}, මිනිත්තු ${mRem}, තත්පර ${padS})`;
-  }
-  return `${padM}:${padS} (මිනිත්තු ${padM}, තත්පර ${padS} ⌛)`;
-}
-
 async function publishLiveQuizAnnouncement(paperKey, paperData, targetDate, isNow, jobId = null) {
   const db = readDb();
   const allUsers = Object.keys(db.users);
@@ -853,29 +735,8 @@ async function publishLiveQuizAnnouncement(paperKey, paperData, targetDate, isNo
     }
   }
 
-  // Also auto post preview banner image to WhatsApp Channel
-  const waAnnounceText = 
-    `═════════════════════════\n` +
-    `🎓 *A/L MCQ HUB* — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟය!'}\n` +
-    `═════════════════════════\n\n` +
-    `📚 *ප්‍රශ්න පත්‍රය:* ${paperData.title}\n` +
-    `${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}` +
-    `💡 *විශේෂතා:* Real-time Timer, All-Island Leaderboards & Podiums 🎉\n\n` +
-    `👇 පහත ලින්ක් එක ක්ලික් කර දැන්ම තරඟයට එකතු වන්න:\n` +
-    `${targetGroupUrl}`;
-
-  await autoPostToWhatsAppChannel(waAnnounceText, imageUrl);
-
   if (!isNow && sentTargets.length > 0) {
     startLiveCountdownEngine(paperKey, paperData.title, targetTimeMs, sentTargets, jobId);
-  }
-
-  const waMsgText = `🎓 A/L MCQ HUB — ${isNow ? 'සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය! (Live Quiz Started)' : 'ඉදිරි සජීවී ප්‍රශ්න පත්‍ර තරඟ දැනුම්දීම (Upcoming Live Quiz)'}\n\n📚 **ප්‍රශ්න පත්‍රය:** ${paperData.title}\n${!isNow ? timeNotice.replace(/\*/g, '') + '\n' : ''}\n👇 දැන්ම තරඟයට එකතු වන්න:\n${targetGroupUrl}`;
-  const broadcastPaperImgUrl = getPaperImageUrl(paperKey);
-  await autoPostToWhatsAppChannel(waMsgText, broadcastPaperImgUrl);
-
-  if (isNow) {
-    await runNativeWhatsAppGroupQuiz(paperKey);
   }
 
   return { sentTargets, announceMsg };
@@ -911,15 +772,6 @@ function startLiveCountdownEngine(paperKey, title, targetTime, targets, jobId) {
           await bot.editMessageText(startMsg, { chat_id: t.chatId, message_id: t.messageId, parse_mode: 'Markdown', reply_markup: launchKb });
         } catch(e) {}
       }
-
-      // Send 1 WhatsApp Channel Post when Live Quiz starts with high-res subject image banner
-      const groupUrl = process.env.GROUP_URL || 'https://t.me/+wZUSJyEncD1mYjFl';
-      const waMsgText = `🎓 A/L MCQ HUB — **සජීවී ප්‍රශ්න පත්‍ර තරඟය දැන් ආරම්භ විය!**\n\n📚 **ප්‍රශ්න පත්‍රය:** ${title}\n\n👇 දැන්ම තරඟයට එකතු වන්න:\n${groupUrl}`;
-      const paperImgUrl = getPaperImageUrl(paperKey);
-      await autoPostToWhatsAppChannel(waMsgText, paperImgUrl);
-
-      // Launch WhatsApp Group Quiz Streamer
-      await runNativeWhatsAppGroupQuiz(paperKey);
       return;
     }
 
@@ -942,210 +794,6 @@ function startLiveCountdownEngine(paperKey, title, targetTime, targets, jobId) {
       } catch(e) {}
     }
   }, 2000);
-}
-
-// Helper: Run Automated Native WhatsApp Poll Quiz Streamer directly inside WhatsApp Group
-async function runNativeWhatsAppGroupQuiz(paperKey, intervalSec = 25) {
-  if (!paperKey) return;
-  const parts = paperKey.split('_');
-  const subId = parts[0];
-  const yearKey = parts[1];
-
-  const subData = QUIZ_DATA[subId];
-  const paperData = subData?.papers[yearKey];
-  if (!paperData) return;
-
-  const questions = loadQuestionsFromHtml(paperData.file);
-  if (!questions || questions.length === 0) return;
-
-  console.log(`🚀 Starting Automated Native WhatsApp Poll Quiz Streamer for ${paperData.title} in WhatsApp Group...`);
-
-  const instanceId = (process.env.GREEN_API_INSTANCE || '710722698143').trim();
-  const apiToken = (process.env.GREEN_API_TOKEN || 'b65f5e2285e54499a88b78d13354ba79f7fe2bd4c0d648049f').trim();
-  const targetChat = (process.env.WA_TARGET_CHAT || '120363409065043686@g.us').trim();
-
-  // Send Intro Card to WhatsApp Group with high-res subject cover banner & card framing
-  const waIntro = 
-    `═════════════════════════\n` +
-    `🎓 *${paperData.title}*\n` +
-    `═════════════════════════\n\n` +
-    `🎯 *Native WhatsApp Poll Quiz* එක දැන් මෙම Group එක තුළින්ම ආරම්භ වේ!\n` +
-    `⏱️ සෑම ප්‍රශ්නයකටම තත්පර *${intervalSec}*ක් හිමි වේ.\n` +
-    `⚠️ කාලය අවසන් වූ පසු නිවැරදි පිළිතුර සහ විග්‍රහය ස්වයංක්‍රීයව පෙන්වනු ඇත.\n\n` +
-    `👇 *පළමු ප්‍රශ්නය පහත දැක්වේ:*`;
-  const introImgUrl = getPaperImageUrl(paperKey);
-  await autoPostToWhatsAppChannel(waIntro, introImgUrl);
-
-  // Track group member scores for this session (Anti-Cheating Engine)
-  const groupUserScores = {};
-  currentWaGroupSession = {
-    paperKey,
-    title: paperData.title,
-    questions,
-    currentQIndex: 0,
-    currentCorrectIdx: 0,
-    userScores: groupUserScores
-  };
-
-  // Stream each question sequentially with timed answer reveals
-  for (let i = 0; i < questions.length; i++) {
-    const q = questions[i];
-    const qNum = i + 1;
-    const totalQ = questions.length;
-
-    if (currentWaGroupSession) {
-      currentWaGroupSession.currentQIndex = i;
-      currentWaGroupSession.currentCorrectIdx = q.c || 0;
-    }
-
-    let rawQText = q.q || `ප්‍රශ්නය ${qNum}`;
-    rawQText = cleanText(rawQText, 250);
-    rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
-
-    const cleanQ = cleanText(`[${qNum}/${totalQ}] ${rawQText}`, 290);
-    const cleanOpts = (q.o || []).map((o, idx) => ({ optionName: cleanText(`${idx + 1}. ${cleanText(o, 85)}`, 90) }));
-
-    try {
-      // 1. Send Native WhatsApp Poll
-      const pollRes = await fetch(`https://api.green-api.com/waInstance${instanceId}/sendPoll/${apiToken}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chatId: targetChat,
-          message: cleanQ,
-          options: cleanOpts,
-          multipleAnswers: false
-        })
-      });
-      const pollData = await pollRes.json();
-      const currentPollStanzaId = pollData?.idMessage;
-
-      console.log(`🟢 WhatsApp Poll [${qNum}/${totalQ}] sent to group! (StanzaID: ${currentPollStanzaId})`);
-
-      // 2. Active Notification Polling Loop: Query Green API receiveNotification every 1.5s during intervalSec window
-      const correctNames = [];
-      const wrongNames = [];
-      const endTime = Date.now() + intervalSec * 1000;
-
-      while (Date.now() < endTime) {
-        try {
-          const rx = await fetch(`https://api.green-api.com/waInstance${instanceId}/receiveNotification/${apiToken}`);
-          const note = await rx.json();
-
-          if (note && note.receiptId) {
-            // Delete notification to clear queue
-            await fetch(`https://api.green-api.com/waInstance${instanceId}/deleteNotification/${apiToken}/${note.receiptId}`, { method: 'DELETE' });
-
-            const body = note.body;
-            const type = body?.typeWebhook || body?.typeMessage;
-
-            if (type === 'pollUpdateMessage' || type === 'pollMessageWebhook' || type === 'incomingMessageReceived') {
-              const pData = body.pollMessageData || body.messageData?.pollVoteMessageData;
-              const senderId = body.senderData?.sender || body.senderId || '';
-              const senderName = body.senderData?.senderName || body.senderName || (senderId ? senderId.split('@')[0] : 'Student');
-
-              if (pData && Array.isArray(pData.votes)) {
-                if (pData.stanzaId === currentPollStanzaId || pData.name?.includes(`[${qNum}/${totalQ}]`)) {
-                  pData.votes.forEach((vOpt, optIdx) => {
-                    const voters = vOpt.optionVoters || [];
-                    voters.forEach(vId => {
-                      const studentName = (vId === senderId && senderName) ? senderName : vId.split('@')[0];
-                      if (!groupUserScores[vId]) {
-                        groupUserScores[vId] = { name: studentName, score: 0, correct: 0, wrong: 0, answered: new Set() };
-                      }
-                      const st = groupUserScores[vId];
-                      if (!st.answered.has(i)) {
-                        st.answered.add(i);
-                        if (optIdx === (q.c || 0)) {
-                          st.score++;
-                          st.correct++;
-                          if (!correctNames.includes(studentName)) correctNames.push(studentName);
-                          console.log(`🎯 Direct WA Poll Vote [${studentName}]: CORRECT! (+1 Mark)`);
-                        } else {
-                          st.wrong++;
-                          if (!wrongNames.includes(studentName)) wrongNames.push(studentName);
-                          console.log(`❌ Direct WA Poll Vote [${studentName}]: WRONG!`);
-                        }
-                      }
-                    });
-                  });
-                }
-              }
-            }
-          }
-        } catch (e) {}
-
-        await new Promise(res => setTimeout(res, 1500));
-      }
-
-      const correctIdx = q.c || 0;
-      const rawAnsText = (q.o && q.o[correctIdx]) ? q.o[correctIdx] : '';
-      const correctAnsText = cleanText(rawAnsText, 95);
-      const rawExplain = cleanText(q.e || '', 180);
-      const explainPart = rawExplain ? `\n\n💡 *විග්‍රහය:* ${rawExplain}` : '';
-
-      const answerRevealMsg = 
-        `═════════════════════════\n` +
-        `✅ *ප්‍රශ්න අංක [${qNum}/${totalQ}] නිවැරදි පිළිතුර*\n` +
-        `═════════════════════════\n\n` +
-        `👉 *${correctIdx + 1}. ${correctAnsText}*${explainPart}\n\n` +
-        `─────────────────────────`;
-      
-      await autoPostToWhatsAppChannel(answerRevealMsg);
-
-      // Brief 3-second gap before next question
-      if (i < questions.length - 1) {
-        await new Promise(res => setTimeout(res, 3000));
-      }
-
-    } catch (err) {
-      console.error(`Error in WA Streamer Q${qNum}:`, err.message);
-    }
-  }
-
-  // 4. Final WhatsApp Group Leaderboard Mark Sheet Calculation
-  let waFinishMsg = 
-    `═════════════════════════\n` +
-    `🏆 *${paperData.title}*\n` +
-    `📊 *නිල WhatsApp Group ලකුණු සටහන* ⚡\n` +
-    `═════════════════════════\n\n`;
-
-  const waStudents = Object.values(groupUserScores).sort((a, b) => b.score - a.score);
-
-  if (waStudents.length > 0) {
-    const medals = ['🥇', '🥈', '🥉'];
-    waFinishMsg += `🎖️ *ජයග්‍රාහකයින් (Top Champions):*\n`;
-    waStudents.slice(0, 3).forEach((s, idx) => {
-      const pct = Math.round((s.score / questions.length) * 100);
-      waFinishMsg += `${medals[idx]} *${idx + 1} වන ස්ථානය:* ${s.name} — 🎯 *${s.score} / ${questions.length}* (${pct}%)\n`;
-    });
-    waFinishMsg += `\n📋 *සියලුම සිසුන්ගේ ලකුණු පුවරුව (Group Member Marks):*\n`;
-    waStudents.forEach((s, idx) => {
-      const unanswered = questions.length - (s.correct + s.wrong);
-      waFinishMsg += `${idx + 1}. *${s.name}* — 🎯 *${s.score} Marks* (✅ ${s.correct} | ❌ ${s.wrong} | ⏳ ${unanswered})\n`;
-    });
-    waFinishMsg += `\n`;
-  } else {
-    // If scores tracked via database/registered users
-    const ranks = getLeaderboard(paperKey, 10);
-    const medals = ['🥇', '🥈', '🥉'];
-    waFinishMsg += `🎖️ *ජයග්‍රාහකයින් (Top Champions):*\n`;
-    if (ranks && ranks.length > 0) {
-      ranks.slice(0, 3).forEach((r, idx) => {
-        waFinishMsg += `${medals[idx]} *${idx + 1} වන ස්ථානය:* ${r.name} — 🎯 ලකුණු: *${r.score}* / ${questions.length}\n`;
-      });
-      waFinishMsg += `\n📋 *සියලුම ලකුණු පුවරුව (Leaderboard):*\n`;
-      ranks.forEach((r, idx) => {
-        waFinishMsg += `${idx + 1}. *${r.name}* — 🎯 *${r.score} / ${questions.length}*\n`;
-      });
-    } else {
-      waFinishMsg += `ℹ️ සියලුම සිසුන්ගේ සජීවී ලකුණු සහ All-Island Leaderboard එක Telegram Bot එකෙන් බලන්න:\nhttps://t.me/AL_MCQbot\n`;
-    }
-  }
-
-  waFinishMsg += `\n📊 ඔබගේ සමස්ත ලංකා ශ්‍රේණිගත කිරීම (All-Island Rank) පරීක්ෂා කිරීමට Telegram Bot එක භාවිතා කරන්න:\nhttps://t.me/AL_MCQbot`;
-  await autoPostToWhatsAppChannel(waFinishMsg);
-  currentWaGroupSession = null;
 }
 
 // Helper: Generate Persistent Bottom Reply Keyboard (Floating START bar)
@@ -1181,13 +829,6 @@ function getSubjectKeyboard(isGroup = false) {
       { text: '🏆 All-Island Leaderboard (ලකුණු පුවරුව)', callback_data: 'view_top_overall' }
     ]
   ];
-
-  // Dedicated Full-Width WhatsApp Channel Button
-  if (WA_CHANNEL_URL && WA_CHANNEL_URL.startsWith('http')) {
-    keyboard.push([
-      { text: '🟢 Join Official WhatsApp Channel (WhatsApp චැනලය)', url: WA_CHANNEL_URL }
-    ]);
-  }
 
   // Telegram Group & Facebook Page Row
   const communityRow = [];
