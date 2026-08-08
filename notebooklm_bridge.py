@@ -121,7 +121,20 @@ async def handle_quiz(notebook_id, instructions):
     if not client:
         return
     async with client:
-        prompt = f"උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය විෂය නිර්දේශයේ {instructions if instructions else 'ප්‍රධාන මාතෘකා'} ඇසුරෙන් MCQ බහුවරණ ප්‍රශ්න 5ක් සකස් කරන්න. සෑම ප්‍රශ්නයකටම (1), (2), (3), (4) ලෙස වරණ 4ක් සහ නිවැරදි පිළිතුර හේතු සහිතව සඳහන් කරන්න."
+        topic = instructions if instructions else 'ප්‍රධාන මාතෘකා'
+        prompt = (
+            f"උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය විෂය නිර්දේශයේ {topic} ඇසුරෙන් MCQ බහුවරණ ප්‍රශ්න 5ක් සකස් කරන්න. "
+            "ප්‍රතිදානය (Output) පහත සඳහන් JSON array ආකෘතියෙන් පමණක් ලබා දෙන්න:\n"
+            "[\n"
+            "  {\n"
+            '    "q": "ප්‍රශ්නය",\n'
+            '    "o": ["වරණය 1", "වරණය 2", "වරණය 3", "වරණය 4"],\n'
+            '    "c": 0,\n'
+            '    "e": "නිවැරදි පිළිතුර සඳහා සවිස්තර විග්‍රහය"\n'
+            "  }\n"
+            "]\n"
+            "මෙහි 'c' යනු නිවැරදි වරණයේ 0-indexed අංකයයි (0, 1, 2, හෝ 3). JSON පමණක් සපයන්න."
+        )
         res = await client.chat.ask(notebook_id=notebook_id, question=prompt)
         ans = res.answer if hasattr(res, 'answer') and res.answer else (res if isinstance(res, str) else str(res))
         if ans:

@@ -1602,15 +1602,16 @@ bot.onText(/\/(audio|podcast)(@\w+)?\s*(.*)/i, async (msg, match) => {
     if (initialMsg && initialMsg.message_id) {
       bot.deleteMessage(chatId, initialMsg.message_id).catch(() => {});
     }
-    await bot.sendAudio(chatId, res.path, {
-      caption: `🎙️ **A/L MCQ HUB Audio Overview (Deep Dive Podcast)**\n\n` +
-               `📚 **විෂය:** උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය / A/L Syllabus\n` +
-               `💡 A/L MCQ HUB AI මඟින් සජීවීව නිර්මාණය කර Telegram වෙත එවනු ලැබීය.`
-    }).catch(async () => {
-      await bot.sendDocument(chatId, res.path, {
-        caption: `🎙️ **A/L MCQ HUB Audio Overview (Audio MP3 File)**`
-      }).catch(() => {});
-    });
+    const stats = fs.statSync(res.path);
+    const captionText = `🎙️ **A/L MCQ HUB Audio Overview (Deep Dive Podcast)**\n\n📚 **විෂය:** උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය / A/L Syllabus\n💡 A/L MCQ HUB AI මඟින් සජීවීව නිර්මාණය කර Telegram වෙත එවනු ලැබීය.`;
+    
+    if (stats.size > 48 * 1024 * 1024) {
+      await bot.sendDocument(chatId, res.path, { caption: captionText }).catch(() => {});
+    } else {
+      await bot.sendAudio(chatId, res.path, { caption: captionText }).catch(async () => {
+        await bot.sendDocument(chatId, res.path, { caption: captionText }).catch(() => {});
+      });
+    }
   } else {
     if (initialMsg && initialMsg.message_id) {
       bot.deleteMessage(chatId, initialMsg.message_id).catch(() => {});
@@ -1622,18 +1623,86 @@ bot.onText(/\/(audio|podcast)(@\w+)?\s*(.*)/i, async (msg, match) => {
   }
 });
 
-// Command: /quiz or /quez or /test (A/L MCQ HUB AI Quiz & Study Guide Generator)
+// Helper: Parse Quiz Text or JSON into clean question objects for native Telegram Polls
+function parseQuizTextToJSON(text) {
+  const questions = [];
+  if (!text) return questions;
+
+  // Attempt 1: Direct JSON parsing
+  try {
+    const jsonMatch = text.match(/\[\s*\{[\s\S]*\}\s*\]/);
+    if (jsonMatch) {
+      const parsed = JSON.parse(jsonMatch[0]);
+      if (Array.isArray(parsed) && parsed.length > 0 && parsed[0].q && parsed[0].o) {
+        return parsed.map(item => ({
+          q: String(item.q || '').replace(/^[\d\.\s#]+/, '').trim(),
+          o: Array.isArray(item.o) ? item.o.map(opt => String(opt).replace(/^\(\d+\)\s*/, '').trim()) : [],
+          c: typeof item.c === 'number' ? Math.max(0, item.c) : 0,
+          e: String(item.e || '').replace(/^(සහ හේතුව:|හේතුව:|විග්‍රහය:)\s*/i, '').trim()
+        }));
+      }
+    }
+  } catch (e) {}
+
+  // Attempt 2: Text Markdown Parsing (e.g. ### ප්‍රශ්නය 01 ... (1) ... (2) ... (3) ... (4) ...)
+  const qBlocks = text.split(/(?:###\s*ප්‍රශ්නය|\bප්‍රශ්නය\b\s*\d+)/i).filter(b => b.trim().length > 20);
+  
+  for (const block of qBlocks) {
+    const lines = block.split('\n').map(l => l.trim()).filter(Boolean);
+    let qText = '';
+    const options = [];
+    let correctIdx = 0;
+    let explanation = '';
+
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i];
+      const optMatch = line.match(/^(?:\(\d+\)|\d+[\.\)])\s*(.+)/);
+      const corrMatch = line.match(/(?:නිවැරදි පිළිතුර|සම්මත පිළිතුර|Correct Answer)\s*[:\-]?\s*(?:\(?(\d+)\)?)?\s*(.*)/i);
+      const expMatch = line.match(/(?:විවරණය|විග්‍රහය|හේතුව|Explanation)\s*[:\-]?\s*(.*)/i);
+
+      if (optMatch && options.length < 5) {
+        options.push(optMatch[1].trim());
+      } else if (corrMatch) {
+        if (corrMatch[1]) {
+          correctIdx = Math.max(0, parseInt(corrMatch[1], 10) - 1);
+        }
+        if (corrMatch[2] && !explanation) {
+          explanation = corrMatch[2].trim();
+        }
+      } else if (expMatch) {
+        explanation = expMatch[1].trim() || (lines[i+1] ? lines[i+1].trim() : '');
+      } else if (options.length === 0 && !line.startsWith('---') && !line.startsWith('#')) {
+        qText += (qText ? ' ' : '') + line;
+      }
+    }
+
+    qText = qText.replace(/^[\d\.\s:#]+/, '').trim();
+
+    if (qText && options.length >= 2) {
+      questions.push({
+        q: qText.substring(0, 290),
+        o: options.map(opt => opt.substring(0, 95)),
+        c: Math.min(correctIdx, options.length - 1),
+        e: explanation.substring(0, 190)
+      });
+    }
+  }
+
+  return questions;
+}
+
+// Command: /quiz or /quez or /test (A/L MCQ HUB Native Telegram Quiz Polls Generator)
 bot.onText(/\/(quiz|quez|test)(@\w+)?\s*(.*)/i, async (msg, match) => {
   const chatId = msg.chat.id;
   const userTopic = match[3] ? match[3].trim() : '';
 
   const initialMsg = await bot.sendMessage(
     chatId,
-    `🧩 **A/L MCQ HUB AI Quiz / Study Guide නිර්මාණය වෙමින් පවතී...**\n\n` +
+    `🧩 **A/L MCQ HUB AI Native Telegram Quiz Polls සකස් වෙමින් පවතී...**\n\n` +
     `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
-    `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් විශේෂිත MCQ ප්‍රශ්නාවලියක් හා ව්‍යාකරණ/විෂය විග්‍රහයන් සකස් කරනු ලබයි.\n` +
-    `• මෙම ක්‍රියාවලිය සඳහා **මිනිත්තු 1 සිට 3 දක්වා (සමහර විට මිනිත්තු 5 ක් දක්වා)** කාලයක් ගත විය හැක.\n` +
-    `• එය සූදානම් වූ වහාම පිළිතුරු හා විග්‍රහයන් සමඟින් පහතින් ලැබෙනු ඇත. 📝`,
+    `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සජීවී Interactive Telegram Quiz Polls සකස් කරනු ලබයි.\n` +
+    `• මෙම ක්‍රියාවලිය සඳහා **මිනිත්තු 1 සිට 3 දක්වා** කාලයක් ගත විය හැක.\n` +
+    `• සූදානම් වූ වහාම පිළිතුරු ලබා දිය හැකි සජීවී Polls ලෙස ලැබෙනු ඇත. 📝`,
     { parse_mode: 'Markdown' }
   ).catch(() => null);
 
@@ -1647,7 +1716,32 @@ bot.onText(/\/(quiz|quez|test)(@\w+)?\s*(.*)/i, async (msg, match) => {
   }
 
   if (resText) {
-    await sendLongMessage(chatId, `🧩 **A/L MCQ HUB AI Quiz & Study Guide**\n\n${resText}`).catch(() => {});
+    const parsedQuestions = parseQuizTextToJSON(resText);
+
+    if (parsedQuestions && parsedQuestions.length > 0) {
+      await bot.sendMessage(chatId, `🎯 **A/L MCQ HUB — AI Native Telegram Quiz (${parsedQuestions.length} MCQ Polls)**\n\nපහත ප්‍රශ්න සඳහා ක්ලික් කර සජීවීව පිළිතුරු ලබා දෙන්න:`, { parse_mode: 'Markdown' }).catch(() => {});
+
+      for (let i = 0; i < parsedQuestions.length; i++) {
+        const qObj = parsedQuestions[i];
+        const cleanQ = `[Q${i + 1}] ${qObj.q}`.substring(0, 290);
+        const cleanOpts = qObj.o.map(o => o.substring(0, 95));
+        const correctIdx = Math.min(Math.max(0, qObj.c), cleanOpts.length - 1);
+        const cleanExplain = qObj.e ? `💡 ${qObj.e.substring(0, 190)}` : undefined;
+
+        await bot.sendPoll(chatId, cleanQ, cleanOpts, {
+          type: 'quiz',
+          correct_option_id: correctIdx,
+          explanation: cleanExplain,
+          is_anonymous: false
+        }).catch(async (e) => {
+          console.error(`Error sending poll Q${i + 1}:`, e.message);
+        });
+
+        await new Promise(r => setTimeout(r, 1000));
+      }
+    } else {
+      await sendLongMessage(chatId, `🧩 **A/L MCQ HUB AI Quiz & Study Guide**\n\n${resText}`).catch(() => {});
+    }
   } else {
     await bot.sendMessage(chatId, `⚠️ **Quiz ජනනය කිරීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.**`).catch(() => {});
   }
