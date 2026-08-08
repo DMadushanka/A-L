@@ -689,8 +689,17 @@ async function askNotebookLMPython(userPrompt, notebookId, mode = 'query') {
 
 // Helper: Dynamically resolve subject-specific NotebookLM ID
 function getSubjectNotebookId(userPrompt, explicitSubId = null) {
-  if (explicitSubId) {
-    const envKey = `NOTEBOOK_ID_${explicitSubId.toUpperCase()}`;
+  let subKey = explicitSubId ? String(explicitSubId).trim().toLowerCase() : null;
+
+  if (subKey) {
+    if (['si', 'sin', 'sinhala'].includes(subKey)) subKey = 'SIN';
+    else if (['bc', 'buddhist', 'buddhist_civilization'].includes(subKey)) subKey = 'BC';
+    else if (['hi', 'hist', 'history'].includes(subKey)) subKey = 'HIST';
+    else if (['pl', 'pol', 'political'].includes(subKey)) subKey = 'PL';
+    else if (['bs', 'bus', 'business'].includes(subKey)) subKey = 'BS';
+    else subKey = subKey.toUpperCase();
+
+    const envKey = `NOTEBOOK_ID_${subKey}`;
     if (process.env[envKey] && process.env[envKey].trim()) {
       return process.env[envKey].trim();
     }
@@ -1495,29 +1504,46 @@ bot.onText(/\/start/i, (msg) => {
   sendStartMenu(msg.chat.id, msg.from, isGroup);
 });
 
-// Command: /ai <prompt> or /ask <prompt> (A/L MCQ HUB Free AI Tutor)
-bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
+// Command: /ai <prompt> or /ask <prompt> or /ai_si <prompt> etc.
+bot.onText(/\/(ai|ask)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
   const chatId = msg.chat.id;
-  const userPrompt = match[3] ? match[3].trim() : '';
+  let subCode = match[2] ? match[2].trim().toLowerCase() : null;
+  let userPrompt = match[4] ? match[4].trim() : '';
+
+  // Support space syntax: /ai si ..., /ai sin ..., /ai bc ..., /ai hist ..., /ai pl ..., /ai bs ...
+  if (!subCode && userPrompt) {
+    const parts = userPrompt.split(/\s+/);
+    const candidate = parts[0].toLowerCase();
+    if (['si', 'sin', 'sinhala', 'bc', 'buddhist', 'hi', 'hist', 'history', 'pl', 'pol', 'bs', 'bus'].includes(candidate)) {
+      subCode = candidate;
+      userPrompt = parts.slice(1).join(' ');
+    }
+  }
 
   if (!userPrompt) {
     const usageMsg = 
       `🤖 **A/L MCQ HUB AI Tutor — භාවිත කරන ආකාරය**\n\n` +
-      `ඔබට ඇති ඕනෑම උසස් පෙළ ප්‍රශ්නයක් හෝ සැකයක් අසන්න:\n\n` +
-      `👉 **ආකෘතිය:** \`/ai ඔබගේ ප්‍රශ්නය\`\n\n` +
+      `ඔබට ඇති ඕනෑම උසස් පෙළ ප්‍රශ්නයක් අසන්න:\n\n` +
+      `👉 **සාමාන්‍ය ආකෘතිය:** \`/ai ඔබගේ ප්‍රශ්නය\`\n` +
+      `👉 **විශේෂිත විෂය සටහන් (Subject-Specific):**\n` +
+      `• \`/ai_si\` හෝ \`/ai si\` — සිංහල (Sinhala)\n` +
+      `• \`/ai_bc\` හෝ \`/ai bc\` — බෞද්ධ ශිෂ්ටාචාරය (Buddhist Civ)\n` +
+      `• \`/ai_hist\` හෝ \`/ai hist\` — ඉතිහාසය (History)\n` +
+      `• \`/ai_pl\` හෝ \`/ai pl\` — දේශපාලන විද්‍යාව (Political Science)\n` +
+      `• \`/ai_bs\` හෝ \`/ai bs\` — ව්‍යාපාර අධ්‍යයනය (Business Studies)\n\n` +
       `📌 **උදාහරණ:**\n` +
-      `• \`/ai අභයගිරි නිකාය ආරම්භ වීමට හේතු මොනවාද?\` \n` +
-      `• \`/ai චතුර් වර්ණ ධර්ම පැහැදිලි කරන්න.\` \n` +
-      `• \`/ai ව්‍යග්ඝපජ්ජ සූත්‍රයේ එන දිට්ඨධම්මහිතත්ථ සම්පදා 4 මොනවාද?\``;
+      `• \`/ai_si සන්ධි යනු කුමක්ද?\` \n` +
+      `• \`/ai_bc අභයගිරි නිකාය ආරම්භ වීමට හේතු මොනවාද?\` \n` +
+      `• \`/ai_hist අනුරාධපුර රාජධානියේ සංවර්ධනය\``;
 
     return bot.sendMessage(chatId, usageMsg, { parse_mode: 'Markdown' }).catch(() => {});
   }
 
-  console.log(`🤖 A/L MCQ HUB AI Request received from ${chatId}: "${userPrompt}"`);
+  console.log(`🤖 A/L MCQ HUB AI Request received from ${chatId} (subCode=${subCode || 'auto'}): "${userPrompt}"`);
   const statusMsg = await bot.sendMessage(chatId, '🤖 **A/L MCQ HUB AI විසින් පිළිතුර සූදානම් කරමින් පවතී... ⌛**', { parse_mode: 'Markdown' }).catch(() => null);
 
   try {
-    const aiAnswer = await askGeminiAI(userPrompt);
+    const aiAnswer = await askGeminiAI(userPrompt, subCode);
     console.log(`🤖 A/L MCQ HUB AI Response obtained (${aiAnswer ? aiAnswer.length : 0} chars)`);
 
     if (statusMsg && statusMsg.message_id) {
@@ -1527,7 +1553,7 @@ bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
     const formattedReply = 
       `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
       `${aiAnswer}\n\n` +
-      `💡 *තවත් ප්‍රශ්නයක් ඇසීමට \`/ai ඔබගේ ප්‍රශ්නය\` ලෙස ටයිප් කරන්න.*`;
+      `💡 *තවත් ප්‍රශ්නයක් ඇසීමට \`/ai ඔබගේ ප්‍රශ්නය\` (හෝ \`/ai_si\`, \`/ai_bc\`) ලෙස එවන්න.*`;
 
     await sendLongMessage(chatId, formattedReply).catch(e => console.error('Error sending AI response:', e.message));
   } catch (err) {
@@ -1579,9 +1605,19 @@ bot.onText(/\/(image|draw)(@\w+)?\s*(.*)/i, async (msg, match) => {
 });
 
 // Command: /audio or /podcast (A/L MCQ HUB Audio Overview / Deep Dive AI Podcast Generator)
-bot.onText(/\/(audio|podcast)(@\w+)?\s*(.*)/i, async (msg, match) => {
+bot.onText(/\/(audio|podcast)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
   const chatId = msg.chat.id;
-  const userTopic = match[3] ? match[3].trim() : '';
+  let subCode = match[2] ? match[2].trim().toLowerCase() : null;
+  let userTopic = match[4] ? match[4].trim() : '';
+
+  if (!subCode && userTopic) {
+    const parts = userTopic.split(/\s+/);
+    const candidate = parts[0].toLowerCase();
+    if (['si', 'sin', 'sinhala', 'bc', 'buddhist', 'hi', 'hist', 'history', 'pl', 'pol', 'bs', 'bus'].includes(candidate)) {
+      subCode = candidate;
+      userTopic = parts.slice(1).join(' ');
+    }
+  }
 
   const initialMsg = await bot.sendMessage(
     chatId,
@@ -1589,12 +1625,13 @@ bot.onText(/\/(audio|podcast)(@\w+)?\s*(.*)/i, async (msg, match) => {
     `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
     `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සවිස්තරාත්මක audio podcast එකක් සකස් කරනු ලබයි.\n` +
     `• මෙම ක්‍රියාවලිය සඳහා **මිනිත්තු 3 සිට 5 දක්වා (සමහර විට මිනිත්තු 10 ක් දක්වා)** කාලයක් ගත විය හැක.\n` +
-    `• හඬ පටය සෑදී අවසන් වූ වහාම එය **සෘජුවම මෙම Telegram චැට් එකට Audio File එකක් ලෙස ලැබෙනු ඇත.** 🎧`,
+    `• හඬ පටය සෑදී අවසන් වූ වහාම එය **සෘජුවම මෙම Telegram චැට් එකට Audio File එකක් ලෙස ලැබෙනු ඇත.** 🎧\n\n` +
+    `💡 *විෂය තේරීමට: \`/audio_si\` (සිංහල), \`/audio_bc\` (බෞද්ධ ශිෂ්ටාචාරය), \`/audio_hist\` (ඉතිහාසය)*`,
     { parse_mode: 'Markdown' }
   ).catch(() => null);
 
-  const notebookId = getSubjectNotebookId(userTopic, 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
-  console.log(`🎙️ Audio Overview requested for chat ${chatId}: topic="${userTopic}"`);
+  const notebookId = getSubjectNotebookId(userTopic, subCode || 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
+  console.log(`🎙️ Audio Overview requested for chat ${chatId} (subCode=${subCode || 'auto'}): topic="${userTopic}"`);
   
   const res = await askNotebookLMPython(userTopic, notebookId, 'audio');
 
@@ -1603,7 +1640,7 @@ bot.onText(/\/(audio|podcast)(@\w+)?\s*(.*)/i, async (msg, match) => {
       bot.deleteMessage(chatId, initialMsg.message_id).catch(() => {});
     }
     const stats = fs.statSync(res.path);
-    const captionText = `🎙️ **A/L MCQ HUB Audio Overview (Deep Dive Podcast)**\n\n📚 **විෂය:** උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය / A/L Syllabus\n💡 A/L MCQ HUB AI මඟින් සජීවීව නිර්මාණය කර Telegram වෙත එවනු ලැබීය.`;
+    const captionText = `🎙️ **A/L MCQ HUB Audio Overview (Deep Dive Podcast)**\n\n📚 **විෂය:** උසස් පෙළ A/L Syllabus (${subCode ? subCode.toUpperCase() : 'General'})\n💡 A/L MCQ HUB AI මඟින් සජීවීව නිර්මාණය කර Telegram වෙත එවනු ලැබීය.`;
     
     if (stats.size > 48 * 1024 * 1024) {
       await bot.sendDocument(chatId, res.path, { caption: captionText }).catch(() => {});
@@ -1692,9 +1729,19 @@ function parseQuizTextToJSON(text) {
 }
 
 // Command: /quiz or /quez or /test (A/L MCQ HUB Native Telegram Quiz Polls Generator)
-bot.onText(/\/(quiz|quez|test)(@\w+)?\s*(.*)/i, async (msg, match) => {
+bot.onText(/\/(quiz|quez|test)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
   const chatId = msg.chat.id;
-  const userTopic = match[3] ? match[3].trim() : '';
+  let subCode = match[2] ? match[2].trim().toLowerCase() : null;
+  let userTopic = match[4] ? match[4].trim() : '';
+
+  if (!subCode && userTopic) {
+    const parts = userTopic.split(/\s+/);
+    const candidate = parts[0].toLowerCase();
+    if (['si', 'sin', 'sinhala', 'bc', 'buddhist', 'hi', 'hist', 'history', 'pl', 'pol', 'bs', 'bus'].includes(candidate)) {
+      subCode = candidate;
+      userTopic = parts.slice(1).join(' ');
+    }
+  }
 
   const initialMsg = await bot.sendMessage(
     chatId,
@@ -1702,12 +1749,13 @@ bot.onText(/\/(quiz|quez|test)(@\w+)?\s*(.*)/i, async (msg, match) => {
     `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
     `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සජීවී Interactive Telegram Quiz Polls සකස් කරනු ලබයි.\n` +
     `• මෙම ක්‍රියාවලිය සඳහා **මිනිත්තු 1 සිට 3 දක්වා** කාලයක් ගත විය හැක.\n` +
-    `• සූදානම් වූ වහාම පිළිතුරු ලබා දිය හැකි සජීවී Polls ලෙස ලැබෙනු ඇත. 📝`,
+    `• සූදානම් වූ වහාම පිළිතුරු ලබා දිය හැකි සජීවී Polls ලෙස ලැබෙනු ඇත. 📝\n\n` +
+    `💡 *විෂය තේරීමට: \`/quiz_si\` (සිංහල), \`/quiz_bc\` (බෞද්ධ ශිෂ්ටාචාරය), \`/quiz_hist\` (ඉතිහාසය)*`,
     { parse_mode: 'Markdown' }
   ).catch(() => null);
 
-  const notebookId = getSubjectNotebookId(userTopic, 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
-  console.log(`🧩 Quiz requested for chat ${chatId}: topic="${userTopic}"`);
+  const notebookId = getSubjectNotebookId(userTopic, subCode || 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
+  console.log(`🧩 Quiz requested for chat ${chatId} (subCode=${subCode || 'auto'}): topic="${userTopic}"`);
 
   const resText = await askNotebookLMPython(userTopic, notebookId, 'quiz');
 
