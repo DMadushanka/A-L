@@ -542,58 +542,81 @@ console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
 console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
 console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode)'}`);
 
-// Helper: Google Gemini AI 100% Free Tutor API Caller
+// Helper: 100% Free Ultra-Fast AI Tutor API Caller (Supports Groq Cloud AI & Gemini AI)
 async function askGeminiAI(userPrompt) {
-  const apiKey = (process.env.GEMINI_API_KEY || '').trim();
+  const groqKey = (process.env.GROQ_API_KEY || '').trim();
+  const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
 
-  if (!apiKey) {
-    return '⚠️ **Gemini API Key සකසා නොමැත.**\n\n👉 [Google AI Studio](https://aistudio.google.com/) වෙත ගොස් **Get API key** ඔබා නොමිලේ ලැබෙන Key එක ලබාගෙන `.env` ගොනුවේ `GEMINI_API_KEY=your_key` ලෙස ඇතුළත් කරන්න (100% Free).';
-  }
+  // Priority 1: Groq Cloud Ultra-Fast AI (100% Free, 14,400 Requests/Day, Llama 3.3 70B)
+  if (groqKey) {
+    const url = 'https://api.groq.com/openai/v1/chat/completions';
+    const payload = {
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        {
+          role: 'system',
+          content: 'ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) සිසුන්ට උපකාර කරන මිත්‍රශීලී, ඉතා බුද්ධිමත් A/L AI උපදේශකයෙකි (A/L AI Tutor). සිසුන් අසන ප්‍රශ්නවලට ඉතා පැහැදිලිව, කරුණාවෙන්, සිංහලෙන් සහ අවශ්‍ය කරුණු bullet points මඟින් පැහැදිලි කරන්න.'
+        },
+        {
+          role: 'user',
+          content: userPrompt
+        }
+      ],
+      temperature: 0.7
+    };
 
-  const model = 'gemini-2.0-flash';
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 15000);
 
-  const payload = {
-    contents: [
-      {
-        parts: [
-          {
-            text: `ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) සිසුන්ට උපකාර කරන මිත්‍රශීලී, ඉතා බුද්ධිමත් A/L AI උපදේශකයෙකි (A/L AI Tutor). සිසුන් අසන ප්‍රශ්නවලට ඉතා පැහැදිලිව, කරුණාවෙන්, සිංහලෙන් සහ අවශ්‍ය කරුණු bullet points මඟින් පැහැදිලි කරන්න.\n\nසිසුවාගේ ප්‍රශ්නය: ${userPrompt}`
-          }
-        ]
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${groqKey}`
+        },
+        body: JSON.stringify(payload),
+        signal: controller.signal
+      });
+      clearTimeout(timeoutId);
+
+      const data = await res.json();
+      const replyText = data?.choices?.[0]?.message?.content;
+      if (res.status === 200 && replyText) {
+        return replyText;
       }
-    ]
-  };
-
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 15000);
-
-  try {
-    const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-
-    const data = await res.json();
-    const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-    if (replyText) {
-      return replyText;
+      if (data?.error?.message) {
+        console.error('Groq AI Notice:', data.error.message);
+      }
+    } catch (err) {
+      clearTimeout(timeoutId);
+      console.error('Error calling Groq AI:', err.message);
     }
-    if (data?.error?.message) {
-      return `⚠️ Gemini API Notice: ${data.error.message}`;
-    }
-    return '❌ පිළිතුර ලබාගැනීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.';
-  } catch (err) {
-    clearTimeout(timeoutId);
-    console.error('Error calling Gemini API:', err.message);
-    if (err.name === 'AbortError') {
-      return '⏳ Gemini AI පිළිතුර ලබා ගැනීමට ගතවූ කාලය වැඩි විය. කරුණාකර නැවත උත්සාහ කරන්න.';
-    }
-    return `❌ Gemini AI සම්බන්ධතාවයේ දෝෂයක් සිදු විය: ${err.message}`;
   }
+
+  // Priority 2: Google Gemini AI Fallback
+  if (geminiKey) {
+    const model = 'gemini-2.0-flash';
+    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
+    const payload = {
+      contents: [{ parts: [{ text: `ඔබ A/L AI Tutor කෙනෙකි. සිංහලෙන් පැහැදිලි කරන්න:\n\n${userPrompt}` }] }]
+    };
+
+    try {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (res.status === 200 && replyText) {
+        return replyText;
+      }
+    } catch (e) {}
+  }
+
+  return '⚠️ **AI API Key සකසා නොමැත හෝ දෝෂයක් සිදු විය.**\n\n`.env` ගොනුවේ `GROQ_API_KEY=gsk_...` ඇතුළත් කරන්න (100% Free).';
 }
 
 function getPaperImageUrl(paperKey) {
