@@ -106,6 +106,7 @@ const QUIZ_DATA = {
     papers: {
       '2019_nwp': { title: 'සිංහල 2019 (වයඹ පළාත) — I පත්‍රය MCQ 20', file: 'sinhala2019_nwp.html', img: 'logo.png', btnLabel: '2019 (වයඹ පළාත්)' },
       '2020_nwp': { title: 'සිංහල 2020 (වයඹ පළාත) — I පත්‍රය MCQ 20', file: 'sinhala2020_nwp.html', img: 'logo.png', btnLabel: '2020 (වයඹ පළාත්)' },
+      '2020_term2': { title: 'සිංහල 2020 (12 ශ්‍රේණිය 2 වාරය) — I පත්‍රය MCQ 20', file: 'sinhala2020_term2.html', img: 'logo.png', btnLabel: '2020 (12 ශ්‍රේණිය 2 වාරය)' },
       '2020': { title: 'සිංහල 2020 — I පත්‍රය MCQ', file: 'sinhala2020.html', img: 'sinhala2020.png' },
       '2021': { title: 'සිංහල 2021 — I පත්‍රය MCQ', file: 'sinhala2021.html', img: 'sinhala2021.png' },
       '2022': { title: 'සිංහල 2022 — I පත්‍රය MCQ', file: 'sinhala2022.html', img: 'sinhala2022.png' },
