@@ -540,13 +540,27 @@ function formatTablesForTelegram(text) {
 function findRelevantSyllabusContext(userPrompt) {
   if (!userPrompt) return '';
   const query = userPrompt.toLowerCase();
+  const yearMatch = query.match(/\b(20[0-2][0-9])\b/);
+  const requestedYear = yearMatch ? yearMatch[1] : null;
+
   let matchedContexts = [];
+
+  function matchesYearConstraint(textLower) {
+    if (!requestedYear) return true;
+    if (textLower.includes(requestedYear)) return true;
+    const yearsInText = textLower.match(/\b(20[0-2][0-9])\b/g);
+    if (yearsInText && yearsInText.length > 0 && !yearsInText.includes(requestedYear)) {
+      return false;
+    }
+    return true;
+  }
 
   // 1. Search PART2_QUESTIONS_DATA marking schemes
   Object.values(PART2_QUESTIONS_DATA).forEach(paper => {
     Object.values(paper).forEach(qObj => {
       if (qObj.body) {
         const bodyText = qObj.body.toLowerCase();
+        if (!matchesYearConstraint(bodyText)) return;
         const words = query.split(/\s+/).filter(w => w.length > 3);
         const matches = words.filter(w => bodyText.includes(w));
         if (matches.length >= 2 || bodyText.includes(query)) {
@@ -558,7 +572,12 @@ function findRelevantSyllabusContext(userPrompt) {
 
   // 2. Search local Markdown files for matching A/L questions & marking schemes
   try {
-    const mdFiles = ['al-bc-2026-part2-model-paper.md', 'al-bc-2026-master-shuffled-mcqs.md', 'buddhist-civilization-moe-2026-mcqs.md'];
+    const mdFiles = [
+      'knowledge_base/gce-al-bc-master-chronological-compendium.md',
+      'al-bc-2026-part2-model-paper.md',
+      'al-bc-2026-master-shuffled-mcqs.md',
+      'buddhist-civilization-moe-2026-mcqs.md'
+    ];
     mdFiles.forEach(fileName => {
       const filePath = path.resolve(process.cwd(), fileName);
       if (fs.existsSync(filePath)) {
@@ -566,6 +585,7 @@ function findRelevantSyllabusContext(userPrompt) {
         const sections = content.split(/\n(?=###|\n#|---\n)/);
         sections.forEach(sec => {
           const secLower = sec.toLowerCase();
+          if (!matchesYearConstraint(secLower)) return;
           const words = query.split(/\s+/).filter(w => w.length > 3);
           const matches = words.filter(w => secLower.includes(w));
           if (matches.length >= 2) {
@@ -579,23 +599,23 @@ function findRelevantSyllabusContext(userPrompt) {
   // 3. Search knowledge_base/ folder for custom NotebookLM notes & documents
   try {
     const kbDir = path.resolve(process.cwd(), 'knowledge_base');
-    if (!fs.existsSync(kbDir)) {
-      fs.mkdirSync(kbDir, { recursive: true });
-    }
-    const kbFiles = fs.readdirSync(kbDir).filter(f => f.endsWith('.txt') || f.endsWith('.md') || f.endsWith('.json'));
-    kbFiles.forEach(fileName => {
-      const filePath = path.join(kbDir, fileName);
-      const content = fs.readFileSync(filePath, 'utf8');
-      const paragraphs = content.split(/\n\s*\n/);
-      paragraphs.forEach(para => {
-        const paraLower = para.toLowerCase();
-        const words = query.split(/\s+/).filter(w => w.length > 3);
-        const matches = words.filter(w => paraLower.includes(w));
-        if (matches.length >= 2 || paraLower.includes(query)) {
-          matchedContexts.push(`[NotebookLM Note (${fileName})]:\n${para.trim().substring(0, 800)}`);
-        }
+    if (fs.existsSync(kbDir)) {
+      const kbFiles = fs.readdirSync(kbDir).filter(f => f.endsWith('.txt') || f.endsWith('.md') || f.endsWith('.json'));
+      kbFiles.forEach(fileName => {
+        const filePath = path.join(kbDir, fileName);
+        const content = fs.readFileSync(filePath, 'utf8');
+        const paragraphs = content.split(/\n\s*\n/);
+        paragraphs.forEach(para => {
+          const paraLower = para.toLowerCase();
+          if (!matchesYearConstraint(paraLower)) return;
+          const words = query.split(/\s+/).filter(w => w.length > 3);
+          const matches = words.filter(w => paraLower.includes(w));
+          if (matches.length >= 2 || paraLower.includes(query)) {
+            matchedContexts.push(`[NotebookLM Note (${fileName})]:\n${para.trim().substring(0, 800)}`);
+          }
+        });
       });
-    });
+    }
   } catch (e) {}
 
   if (matchedContexts.length > 0) {
