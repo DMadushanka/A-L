@@ -1386,12 +1386,18 @@ bot.on('poll_answer', (answer) => {
 });
 
 // Background Task: Scheduled Broadcast Engine Safety Guard (Prevents duplicate background broadcasts)
+const processedJobIds = new Set();
+
 setInterval(async () => {
   try {
     const pendingJobs = getPendingScheduledJobs();
     if (pendingJobs.length === 0) return;
 
     for (const job of pendingJobs) {
+      if (!job.id || processedJobIds.has(job.id)) continue;
+      processedJobIds.add(job.id);
+      markJobSent(job.id); // Mark IMMEDIATELY in DB and memory so no second loop can ever duplicate it!
+
       if (job.paperKey) {
         const parts = job.paperKey.split('_');
         const subId = parts[0];
@@ -1413,7 +1419,6 @@ setInterval(async () => {
           await bot.sendMessage(gid, text, { parse_mode: 'Markdown' }).catch(() => {});
         }
       }
-      markJobSent(job.id);
     }
   } catch (err) {
     console.error('Notice in scheduled broadcast safety guard:', err.message);
