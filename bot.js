@@ -622,7 +622,7 @@ function askNotebookLMPython(userPrompt, notebookId) {
     const timeout = setTimeout(() => {
       try { pyProc.kill(); } catch (e) {}
       resolve(null);
-    }, 25000);
+    }, 60000); // 60-second timeout for deep Google NotebookLM queries
 
     pyProc.on('close', (code) => {
       clearTimeout(timeout);
@@ -720,7 +720,7 @@ async function askGeminiAI(userPrompt, explicitSubId = null) {
     };
 
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 15000);
+    const timeoutId = setTimeout(() => controller.abort(), 45000);
 
     try {
       const res = await fetch(url, {
