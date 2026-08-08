@@ -21,13 +21,32 @@ async def query_notebooklm(user_query, notebook_id):
             return
 
         async with NotebookLMClient.from_storage(auth_file) as client:
+            # Attempt 1: Query as asked
             res = await client.chat.ask(notebook_id=notebook_id, question=user_query)
-            if hasattr(res, 'answer') and res.answer:
-                print(res.answer)
-            elif isinstance(res, str):
-                print(res)
+            ans = res.answer if hasattr(res, 'answer') and res.answer else (res if isinstance(res, str) else str(res))
+            
+            ans_lower = ans.lower() if ans else ""
+            if ans and "can't answer" not in ans_lower and "cannot answer" not in ans_lower and len(ans.strip()) > 10:
+                print(ans)
+                return
+
+            # Attempt 2: Auto-rephrase query with contextual syllabus keywords if Attempt 1 returned "can't answer"
+            rephrased_query = f"{user_query} බෞද්ධ ශිෂ්ටාචාරය විෂය සටහන්, පසුගිය විභාග ප්‍රශ්න පත්‍ර සහ ලකුණු දීමේ පටිපාටි (Marking Schemes) ඇසුරින් සවිස්තරාත්මකව පැහැදිලි කරන්න."
+            res2 = await client.chat.ask(notebook_id=notebook_id, question=rephrased_query)
+            ans2 = res2.answer if hasattr(res2, 'answer') and res2.answer else (res2 if isinstance(res2, str) else str(res2))
+            
+            ans2_lower = ans2.lower() if ans2 else ""
+            if ans2 and "can't answer" not in ans2_lower and "cannot answer" not in ans2_lower and len(ans2.strip()) > 10:
+                print(ans2)
+                return
+            
+            # If both return answer text (even short), print it
+            if ans:
+                print(ans)
+            elif ans2:
+                print(ans2)
             else:
-                print(str(res))
+                print("ERROR: NotebookLM returned empty response.")
     except Exception as e:
         print(f"ERROR: {str(e)}")
 

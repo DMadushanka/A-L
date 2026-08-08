@@ -706,83 +706,22 @@ function getSubjectNotebookId(userPrompt, explicitSubId = null) {
   return (process.env.NOTEBOOK_ID || '').trim();
 }
 
-// Helper: Hybrid AI Engine (NotebookLM Priority 0 + Groq AI / Syllabus RAG Priority 1 Fallback)
+// Helper: 100% Exclusive Google NotebookLM Engine (Groq AI & Local RAG Disabled as explicitly requested)
 async function askGeminiAI(userPrompt, explicitSubId = null) {
-  const groqKey = (process.env.GROQ_API_KEY || '').trim();
-  const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
   const notebookId = getSubjectNotebookId(userPrompt, explicitSubId);
 
-  // Priority 0: Live Google NotebookLM Python Bridge
   if (notebookId) {
     try {
       const nbReply = await askNotebookLMPython(userPrompt, notebookId);
-      if (nbReply && !nbReply.toLowerCase().includes("can't answer") && !nbReply.toLowerCase().includes("cannot answer")) {
+      if (nbReply && nbReply.trim()) {
         return formatTablesForTelegram(nbReply);
       }
     } catch (e) {
-      console.error('NotebookLM Python query notice:', e.message);
+      console.error('NotebookLM Python query error:', e.message);
     }
   }
 
-  // Priority 1: Groq Cloud Ultra-Fast AI (Llama 3.3 70B + Syllabus RAG)
-  const syllabusContext = findRelevantSyllabusContext(userPrompt);
-
-  let systemPromptText = 
-    'ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) විභාග දෙපාර්තමේන්තුවේ නිල Syllabus & Marking Scheme අනුව 100% නිවැරදිව පිළිතුරු සපයන ප්‍රවීණ A/L AI උපදේශකයෙකි (A/L MCQ HUB AI Tutor).\n\n' +
-    '⛔ අතිශය වැදගත් රීති (Strict Accuracy Rules):\n' +
-    '1. ඔබ ලබාදෙන සෑම පිළිතුරක්ම ශ්‍රී ලංකාවේ අ.පො.ස. උසස් පෙළ (A/L) නිල විෂය නිර්දේශයට 100%ක් නිවැරදි සහ අනුකූල විය යුතුය.\n' +
-    '2. නොදන්නා හෝ සැක සහිත තොරතුරු කිසිවක් අනුමාන කර (hallucinate) නොලියන්න. 100% සත්‍ය තොරතුරු පමණක් සපයන්න.\n' +
-    '3. කරුණු ඉතා පැහැදිලිව Bullet Points (•) මඟින් පෙන්වන්න.\n\n' +
-    '📌 Telegram ආකෘති උපදෙස්: (| col | col |) වගු වෙනුවට, Emoji Section Cards (🔹 **[මාතෘකාව]** \n • ⏰ **කාලය:** ...) ලෙස සකසන්න.';
-
-  if (syllabusContext) {
-    systemPromptText += `\n\n💡 **[නිල විෂය නිර්දේශ/ලකුණු දීමේ පටිපාටිය (Official Marking Scheme Context)]**:\n${syllabusContext}\n\nඋඩ දැක්වෙන නිල Marking Scheme කරුණු පදනම් කරගෙන 100% නිවැරදි පිළිතුර සකස් කරන්න.`;
-  }
-
-  if (groqKey) {
-    for (let attempt = 1; attempt <= 2; attempt++) {
-      const url = 'https://api.groq.com/openai/v1/chat/completions';
-      const payload = {
-        model: 'llama-3.3-70b-versatile',
-        messages: [
-          { role: 'system', content: systemPromptText },
-          { role: 'user', content: userPrompt }
-        ],
-        temperature: 0.1
-      };
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 45000);
-
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${groqKey}`
-          },
-          body: JSON.stringify(payload),
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-
-        const data = await res.json();
-        const replyText = data?.choices?.[0]?.message?.content;
-        if (res.status === 200 && replyText) {
-          return formatTablesForTelegram(replyText);
-        }
-      } catch (err) {
-        clearTimeout(timeoutId);
-        if (attempt < 2) await new Promise(r => setTimeout(r, 1000));
-      }
-    }
-  }
-
-  if (syllabusContext) {
-    return formatTablesForTelegram(`📚 **A/L MCQ HUB AI Tutor — නිල විෂය සටහන් පිළිතුර:**\n\n${syllabusContext}`);
-  }
-
-  return '⚠️ **AI පද්ධතියේ තාවකාලික කාර්යබහුලතාවයක් ඇත.**\n\nමොහොතකින් නැවත `/ai ඔබගේ ප්‍රශ්නය` ලෙස යොමු කරන්න.';
+  return '⚠️ **Google NotebookLM එකෙන් පිළිතුරු ලබා ගැනීමට නොහැකි විය.**\n\nමොහොතකින් නැවත `/ai ඔබගේ ප්‍රශ්නය` ලෙස යොමු කරන්න.';
 }
 
 // Helper: Dynamically extract the latest og:image URL & cache-busting version directly from HTML files
