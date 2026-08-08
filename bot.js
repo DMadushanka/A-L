@@ -732,7 +732,7 @@ async function askGeminiAI(userPrompt, explicitSubId = null) {
     }
   }
 
-  return '⚠️ **Google NotebookLM එකෙන් පිළිතුරු ලබා ගැනීමට නොහැකි විය.**\n\nමොහොතකින් නැවත `/ai ඔබගේ ප්‍රශ්නය` ලෙස යොමු කරන්න.';
+  return '⚠️ **A/L MCQ HUB AI එකෙන් පිළිතුරු ලබා ගැනීමට නොහැකි විය.**\n\nමොහොතකින් නැවත `/ai ඔබගේ ප්‍රශ්නය` ලෙස යොමු කරන්න.';
 }
 
 // Helper: Dynamically extract the latest og:image URL & cache-busting version directly from HTML files
@@ -1578,22 +1578,22 @@ bot.onText(/\/(image|draw)(@\w+)?\s*(.*)/i, async (msg, match) => {
   }
 });
 
-// Command: /audio or /podcast (NotebookLM Audio Overview / Deep Dive AI Podcast Generator)
+// Command: /audio or /podcast (A/L MCQ HUB Audio Overview / Deep Dive AI Podcast Generator)
 bot.onText(/\/(audio|podcast)(@\w+)?\s*(.*)/i, async (msg, match) => {
   const chatId = msg.chat.id;
   const userTopic = match[3] ? match[3].trim() : '';
 
   const initialMsg = await bot.sendMessage(
     chatId,
-    `🎙️ **Google NotebookLM Audio Overview (Deep Dive AI Podcast) ජනනය කිරීම ආරම්භ කර ඇත...**\n\n` +
+    `🎙️ **A/L MCQ HUB Audio Overview (Deep Dive AI Podcast) ජනනය කිරීම ආරම්භ කර ඇත...**\n\n` +
     `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
-    `• NotebookLM AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සවිස්තරාත්මක audio podcast එකක් සකස් කරනු ලබයි.\n` +
+    `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සවිස්තරාත්මක audio podcast එකක් සකස් කරනු ලබයි.\n` +
     `• මෙම ක්‍රියාවලිය සඳහා **මිනිත්තු 3 සිට 5 දක්වා (සමහර විට මිනිත්තු 10 ක් දක්වා)** කාලයක් ගත විය හැක.\n` +
     `• හඬ පටය සෑදී අවසන් වූ වහාම එය **සෘජුවම මෙම Telegram චැට් එකට Audio File එකක් ලෙස ලැබෙනු ඇත.** 🎧`,
     { parse_mode: 'Markdown' }
   ).catch(() => null);
 
-  const notebookId = NOTEBOOK_ID_MAP['bc'] || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
+  const notebookId = getSubjectNotebookId(userTopic, 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
   console.log(`🎙️ Audio Overview requested for chat ${chatId}: topic="${userTopic}"`);
   
   const res = await askNotebookLMPython(userTopic, notebookId, 'audio');
@@ -1603,12 +1603,12 @@ bot.onText(/\/(audio|podcast)(@\w+)?\s*(.*)/i, async (msg, match) => {
       bot.deleteMessage(chatId, initialMsg.message_id).catch(() => {});
     }
     await bot.sendAudio(chatId, res.path, {
-      caption: `🎙️ **NotebookLM Audio Overview (Deep Dive Podcast)**\n\n` +
+      caption: `🎙️ **A/L MCQ HUB Audio Overview (Deep Dive Podcast)**\n\n` +
                `📚 **විෂය:** උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය / A/L Syllabus\n` +
-               `💡 Google NotebookLM AI මඟින් සජීවීව නිර්මාණය කර Telegram වෙත එවනු ලැබීය.`
+               `💡 A/L MCQ HUB AI මඟින් සජීවීව නිර්මාණය කර Telegram වෙත එවනු ලැබීය.`
     }).catch(async () => {
       await bot.sendDocument(chatId, res.path, {
-        caption: `🎙️ **NotebookLM Audio Overview (Audio MP3 File)**`
+        caption: `🎙️ **A/L MCQ HUB Audio Overview (Audio MP3 File)**`
       }).catch(() => {});
     });
   } else {
@@ -1617,27 +1617,27 @@ bot.onText(/\/(audio|podcast)(@\w+)?\s*(.*)/i, async (msg, match) => {
     }
     await bot.sendMessage(
       chatId,
-      `⚠️ **Audio Overview ජනනය කිරීමේදී ප්‍රමාදයක් සිදු විය.**\n\nGoogle NotebookLM හි ගොනුව සකස් වෙමින් පවතී. කරුණාකර මිනිත්තු කිහිපයකින් නැවත \`/audio\` ලෙස ලබා දෙන්න.`
+      `⚠️ **Audio Overview ජනනය කිරීමේදී ප්‍රමාදයක් සිදු විය.**\n\nA/L MCQ HUB හි ගොනුව සකස් වෙමින් පවතී. කරුණාකර මිනිත්තු කිහිපයකින් නැවත \`/audio\` ලෙස ලබා දෙන්න.`
     ).catch(() => {});
   }
 });
 
-// Command: /quiz or /quez or /test (NotebookLM AI Quiz & Study Guide Generator)
+// Command: /quiz or /quez or /test (A/L MCQ HUB AI Quiz & Study Guide Generator)
 bot.onText(/\/(quiz|quez|test)(@\w+)?\s*(.*)/i, async (msg, match) => {
   const chatId = msg.chat.id;
   const userTopic = match[3] ? match[3].trim() : '';
 
   const initialMsg = await bot.sendMessage(
     chatId,
-    `🧩 **NotebookLM AI Quiz / Study Guide නිර්මාණය වෙමින් පවතී...**\n\n` +
+    `🧩 **A/L MCQ HUB AI Quiz / Study Guide නිර්මාණය වෙමින් පවතී...**\n\n` +
     `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
-    `• NotebookLM AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් විශේෂිත MCQ ප්‍රශ්නාවලියක් හා ව්‍යාකරණ/විෂය විග්‍රහයන් සකස් කරනු ලබයි.\n` +
+    `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් විශේෂිත MCQ ප්‍රශ්නාවලියක් හා ව්‍යාකරණ/විෂය විග්‍රහයන් සකස් කරනු ලබයි.\n` +
     `• මෙම ක්‍රියාවලිය සඳහා **මිනිත්තු 1 සිට 3 දක්වා (සමහර විට මිනිත්තු 5 ක් දක්වා)** කාලයක් ගත විය හැක.\n` +
     `• එය සූදානම් වූ වහාම පිළිතුරු හා විග්‍රහයන් සමඟින් පහතින් ලැබෙනු ඇත. 📝`,
     { parse_mode: 'Markdown' }
   ).catch(() => null);
 
-  const notebookId = NOTEBOOK_ID_MAP['bc'] || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
+  const notebookId = getSubjectNotebookId(userTopic, 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
   console.log(`🧩 Quiz requested for chat ${chatId}: topic="${userTopic}"`);
 
   const resText = await askNotebookLMPython(userTopic, notebookId, 'quiz');
@@ -1647,7 +1647,7 @@ bot.onText(/\/(quiz|quez|test)(@\w+)?\s*(.*)/i, async (msg, match) => {
   }
 
   if (resText) {
-    await sendLongMessage(chatId, `🧩 **NotebookLM AI generated Quiz & Study Guide**\n\n${resText}`).catch(() => {});
+    await sendLongMessage(chatId, `🧩 **A/L MCQ HUB AI Quiz & Study Guide**\n\n${resText}`).catch(() => {});
   } else {
     await bot.sendMessage(chatId, `⚠️ **Quiz ජනනය කිරීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.**`).catch(() => {});
   }
