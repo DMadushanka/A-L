@@ -535,10 +535,69 @@ function formatTablesForTelegram(text) {
   return cardBlocks.join('\n');
 }
 
+// Helper: Dynamic Syllabus & Marking Scheme Search Engine (RAG Grounding)
+function findRelevantSyllabusContext(userPrompt) {
+  if (!userPrompt) return '';
+  const query = userPrompt.toLowerCase();
+  let matchedContexts = [];
+
+  // 1. Search PART2_QUESTIONS_DATA marking schemes
+  Object.values(PART2_QUESTIONS_DATA).forEach(paper => {
+    Object.values(paper).forEach(qObj => {
+      if (qObj.body) {
+        const bodyText = qObj.body.toLowerCase();
+        const words = query.split(/\s+/).filter(w => w.length > 3);
+        const matches = words.filter(w => bodyText.includes(w));
+        if (matches.length >= 2 || bodyText.includes(query)) {
+          matchedContexts.push(qObj.body);
+        }
+      }
+    });
+  });
+
+  // 2. Search local Markdown files for matching A/L questions & marking schemes
+  try {
+    const mdFiles = ['al-bc-2026-part2-model-paper.md', 'al-bc-2026-master-shuffled-mcqs.md', 'buddhist-civilization-moe-2026-mcqs.md'];
+    mdFiles.forEach(fileName => {
+      const filePath = path.resolve(process.cwd(), fileName);
+      if (fs.existsSync(filePath)) {
+        const content = fs.readFileSync(filePath, 'utf8');
+        const sections = content.split(/\n(?=###|\n#|---\n)/);
+        sections.forEach(sec => {
+          const secLower = sec.toLowerCase();
+          const words = query.split(/\s+/).filter(w => w.length > 3);
+          const matches = words.filter(w => secLower.includes(w));
+          if (matches.length >= 2) {
+            matchedContexts.push(sec.trim().substring(0, 800));
+          }
+        });
+      }
+    });
+  } catch (e) {}
+
+  if (matchedContexts.length > 0) {
+    return matchedContexts.slice(0, 3).join('\n---\n');
+  }
+  return '';
+}
+
 // Helper: 100% Free Ultra-Fast AI Tutor API Caller (Supports Groq Cloud AI & Gemini AI)
 async function askGeminiAI(userPrompt) {
   const groqKey = (process.env.GROQ_API_KEY || '').trim();
   const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
+  const syllabusContext = findRelevantSyllabusContext(userPrompt);
+
+  let systemPromptText = 
+    'ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) විභාග දෙපාර්තමේන්තුවේ නිල Syllabus & Marking Scheme අනුව 100% නිවැරදිව පිළිතුරු සපයන ප්‍රවීණ A/L AI උපදේශකයෙකි (A/L MCQ HUB AI Tutor).\n\n' +
+    '⛔ අතිශය වැදගත් රීති (Strict Accuracy Rules):\n' +
+    '1. ඔබ ලබාදෙන සෑම පිළිතුරක්ම ශ්‍රී ලංකාවේ අ.පො.ස. උසස් පෙළ (A/L) නිල විෂය නිර්දේශයට 100%ක් නිවැරදි සහ අනුකූල විය යුතුය.\n' +
+    '2. නොදන්නා හෝ සැක සහිත තොරතුරු කිසිවක් අනුමාන කර (hallucinate) නොලියන්න. 100% සත්‍ය තොරතුරු පමණක් සපයන්න.\n' +
+    '3. කරුණු ඉතා පැහැදිලිව Bullet Points (•) මඟින් පෙන්වන්න.\n\n' +
+    '📌 Telegram ආකෘති උපදෙස්: (| col | col |) වගු වෙනුවට, Emoji Section Cards (🔹 **[මාතෘකාව]** \n • ⏰ **කාලය:** ...) ලෙස සකසන්න.';
+
+  if (syllabusContext) {
+    systemPromptText += `\n\n💡 **[නිල විෂය නිර්දේශ/ලකුණු දීමේ පටිපාටිය (Official Marking Scheme Context)]**:\n${syllabusContext}\n\nඋඩ දැක්වෙන නිල Marking Scheme කරුණු පදනම් කරගෙන 100% නිවැරදි පිළිතුර සකස් කරන්න.`;
+  }
 
   // Priority 1: Groq Cloud Ultra-Fast AI (100% Free, 14,400 Requests/Day, Llama 3.3 70B)
   if (groqKey) {
@@ -548,22 +607,14 @@ async function askGeminiAI(userPrompt) {
       messages: [
         {
           role: 'system',
-          content: 
-            'ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) සිසුන්ට උපකාර කරන මිත්‍රශීලී, ඉතා බුද්ධිමත් A/L AI උපදේශකයෙකි (A/L MCQ HUB AI Tutor). සිසුන් අසන ප්‍රශ්නවලට ඉතා පැහැදිලිව, කරුණාවෙන්, සිංහලෙන් සහ අවශ්‍ය කරුණු bullet points මඟින් පැහැදිලි කරන්න.\n\n' +
-            '📌 Telegram ආකෘති උපදෙස්: Telegram චැට් වල (| col | col |) වගු පටු දුරකථන තිර වල කැඩී අපැහැදිලිව පෙනේ. එබැවින් වගු (tables) හෝ සංසන්දන ඉල්ලූ විට, (| col |) වගු භාවිතා නොකර, ඒ වෙනුවට පහත පරිදි අතිශය පැහැදිලි EMOJI SECTION CARDS ලෙස පිළිතුර සකසන්න:\n\n' +
-            'උදාහරණ ආකෘතිය:\n' +
-            '🔹 **[1 වන ධර්ම සංගායනාව]**\n' +
-            '  • ⏰ **කාලය:** ක්‍රි.පූ. 544\n' +
-            '  • 📍 **ස්ථානය:** රජගහනුවර\n' +
-            '  • 👑 **අනුග්‍රහය:** අජාසත්ත රජතුමා\n' +
-            '  • 🎯 **අරමුණ:** ධර්මය හා විනය සංග්‍රහ කිරීම'
+          content: systemPromptText
         },
         {
           role: 'user',
           content: userPrompt
         }
       ],
-      temperature: 0.7
+      temperature: 0.1 // Strict factual accuracy (Zero Hallucination mode)
     };
 
     const controller = new AbortController();
