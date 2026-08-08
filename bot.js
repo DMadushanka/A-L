@@ -639,11 +639,41 @@ function askNotebookLMPython(userPrompt, notebookId) {
   });
 }
 
+// Helper: Dynamically resolve subject-specific NotebookLM ID
+function getSubjectNotebookId(userPrompt, explicitSubId = null) {
+  if (explicitSubId) {
+    const envKey = `NOTEBOOK_ID_${explicitSubId.toUpperCase()}`;
+    if (process.env[envKey] && process.env[envKey].trim()) {
+      return process.env[envKey].trim();
+    }
+  }
+
+  // Auto-detect subject keywords from question prompt
+  const promptLower = (userPrompt || '').toLowerCase();
+  if (promptLower.includes('සිංහල') || promptLower.includes('සන්ධි') || promptLower.includes('සමාස') || promptLower.includes('කාව්‍ය') || promptLower.includes('ව්‍යාකරණ')) {
+    if (process.env.NOTEBOOK_ID_SIN && process.env.NOTEBOOK_ID_SIN.trim()) return process.env.NOTEBOOK_ID_SIN.trim();
+  }
+  if (promptLower.includes('දේශපාලන') || promptLower.includes('ආණ්ඩුක්‍රම') || promptLower.includes('ජනමාධ්‍ය') || promptLower.includes('පාලන')) {
+    if (process.env.NOTEBOOK_ID_PL && process.env.NOTEBOOK_ID_PL.trim()) return process.env.NOTEBOOK_ID_PL.trim();
+  }
+  if (promptLower.includes('ඉතිහාසය') || promptLower.includes('ලංකා ඉතිහාස') || promptLower.includes('යුගය')) {
+    if (process.env.NOTEBOOK_ID_HIST && process.env.NOTEBOOK_ID_HIST.trim()) return process.env.NOTEBOOK_ID_HIST.trim();
+  }
+  if (promptLower.includes('ව්‍යාපාර') || promptLower.includes('කළමනාකරණ') || promptLower.includes('ගිණුම්')) {
+    if (process.env.NOTEBOOK_ID_BS && process.env.NOTEBOOK_ID_BS.trim()) return process.env.NOTEBOOK_ID_BS.trim();
+  }
+  if (promptLower.includes('බෞද්ධ') || promptLower.includes('ශිෂ්ටාචාරය') || promptLower.includes('තෙරවාද') || promptLower.includes('මහින්දාගමනය') || promptLower.includes('නිකාය')) {
+    if (process.env.NOTEBOOK_ID_BC && process.env.NOTEBOOK_ID_BC.trim()) return process.env.NOTEBOOK_ID_BC.trim();
+  }
+
+  return (process.env.NOTEBOOK_ID || '').trim();
+}
+
 // Helper: 100% Free Ultra-Fast AI Tutor API Caller (Supports NotebookLM Python Bridge, Groq Cloud AI & Gemini AI)
-async function askGeminiAI(userPrompt) {
+async function askGeminiAI(userPrompt, explicitSubId = null) {
   const groqKey = (process.env.GROQ_API_KEY || '').trim();
   const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
-  const notebookId = (process.env.NOTEBOOK_ID || '').trim();
+  const notebookId = getSubjectNotebookId(userPrompt, explicitSubId);
 
   // Priority 0: Live Google NotebookLM Python Bridge (if NOTEBOOK_ID configured in .env)
   if (notebookId) {
