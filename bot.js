@@ -1123,7 +1123,7 @@ async function sendNextGroupNativePollStep(chatId) {
   rawQText = cleanText(rawQText, 250);
   rawQText = rawQText.replace(/^\d+[\.\)\-]?\s*/, '');
 
-  const cleanQ = cleanText(`[${qNum}/${total}] ⏳ 20s | ${rawQText}`, 290);
+  const cleanQ = cleanText(`[${qNum}/${total}] ⏳ 15s | ${rawQText}`, 290);
   const cleanOpts = (q.o || q.options || []).map(o => cleanText(o, 98));
   
   // Ensure valid correct option index bounded by options array length
@@ -1146,7 +1146,7 @@ async function sendNextGroupNativePollStep(chatId) {
         correct_option_id: correctIdx,
         explanation: cleanExplain,
         is_anonymous: false,
-        open_period: 20
+        open_period: 15
       });
     } catch (err) {
       attempts++;
@@ -1164,14 +1164,14 @@ async function sendNextGroupNativePollStep(chatId) {
   }
 
   session.qIndex++;
-  // Wait 22 seconds (20s open_period + 2s buffer for poll answer events) before next question or finish
+  // Wait 17 seconds (15s open_period + 2s reveal buffer for poll answer events) before next question or finish
   session.timerId = setTimeout(() => {
     try {
       sendNextGroupNativePollStep(chatId);
     } catch (err) {
       console.error('Error in sendNextGroupNativePollStep timer:', err.message);
     }
-  }, 22000);
+  }, 17000);
 }
 
 // Register Poll Answer Listener for Real-Time Group Leaderboards
@@ -1732,30 +1732,6 @@ bot.onText(/\/help/i, (msg) => {
     `• 🥇 🥈 🥉 Top 3 Winner Podium & Top 20 Rankings`;
 
   bot.sendMessage(chatId, helpText, { parse_mode: 'Markdown' });
-});
-
-// Listener for Native Poll Answer Events
-bot.on('poll_answer', async (answer) => {
-  const pollId = answer.poll_id;
-  const selectedOptions = answer.option_ids;
-
-  const mapping = pollIdMap[pollId];
-  if (!mapping) return;
-
-  const { chatId, correctOption } = mapping;
-  delete pollIdMap[pollId];
-
-  const session = userPollSessions[chatId];
-  if (session) {
-    if (selectedOptions && selectedOptions[0] === correctOption) {
-      session.score++;
-    }
-    session.qIndex++;
-
-    setTimeout(() => {
-      sendNextGroupNativePollStep(chatId);
-    }, 1200);
-  }
 });
 
 // Callback Query Handler
