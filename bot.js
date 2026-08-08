@@ -1487,6 +1487,53 @@ function sendLeaderboardMenu(chatId) {
 }
 
 // Command: /start (Supports /start, /start@AL_MCQbot, and group start)
+// Helper: Safely split and send long messages exceeding Telegram's 4096 character limit
+async function sendLongMessage(chatId, text, options = { parse_mode: 'Markdown' }) {
+  if (!text) return;
+  const MAX_LENGTH = 3800;
+
+  if (text.length <= MAX_LENGTH) {
+    try {
+      return await bot.sendMessage(chatId, text, options);
+    } catch (err) {
+      if (err.message && err.message.includes('can\'t parse entities')) {
+        return await bot.sendMessage(chatId, text.replace(/[*_`]/g, ''));
+      }
+      return await bot.sendMessage(chatId, text.replace(/[*_`]/g, ''));
+    }
+  }
+
+  // Split long text into clean paragraph chunks
+  const chunks = [];
+  let currentChunk = '';
+  const lines = text.split('\n');
+
+  for (const line of lines) {
+    if ((currentChunk + '\n' + line).length > MAX_LENGTH) {
+      if (currentChunk.trim()) chunks.push(currentChunk.trim());
+      currentChunk = line;
+    } else {
+      currentChunk += (currentChunk ? '\n' : '') + line;
+    }
+  }
+  if (currentChunk.trim()) chunks.push(currentChunk.trim());
+
+  let lastSent = null;
+  for (let i = 0; i < chunks.length; i++) {
+    const chunkHeader = chunks.length > 1 ? `📄 **(කොටස ${i + 1}/${chunks.length})**\n\n` : '';
+    const chunkText = chunkHeader + chunks[i];
+    try {
+      lastSent = await bot.sendMessage(chatId, chunkText, options);
+    } catch (err) {
+      lastSent = await bot.sendMessage(chatId, chunkText.replace(/[*_`]/g, ''));
+    }
+    if (i < chunks.length - 1) {
+      await new Promise(r => setTimeout(r, 400));
+    }
+  }
+  return lastSent;
+}
+
 bot.onText(/\/start/i, (msg) => {
   const isGroup = msg.chat.type !== 'private';
   sendStartMenu(msg.chat.id, msg.from, isGroup);
@@ -1516,32 +1563,16 @@ bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
   const aiAnswer = await askGeminiAI(userPrompt);
   console.log(`🤖 A/L MCQ HUB AI Response obtained (${aiAnswer.length} chars): ${aiAnswer.substring(0, 80)}...`);
 
+  if (statusMsg && statusMsg.message_id) {
+    bot.deleteMessage(chatId, statusMsg.message_id).catch(() => {});
+  }
+
   const formattedReply = 
     `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
     `${aiAnswer}\n\n` +
     `💡 *තවත් ප්‍රශ්නයක් ඇසීමට \`/ai ඔබගේ ප්‍රශ්නය\` ලෙස ටයිප් කරන්න.*`;
 
-  if (statusMsg && statusMsg.message_id) {
-    try {
-      await bot.editMessageText(formattedReply, {
-        chat_id: chatId,
-        message_id: statusMsg.message_id,
-        parse_mode: 'Markdown'
-      });
-    } catch (e) {
-      console.log('Markdown edit failed, falling back to plain text edit:', e.message);
-      try {
-        await bot.editMessageText(formattedReply, {
-          chat_id: chatId,
-          message_id: statusMsg.message_id
-        });
-      } catch (e2) {
-        await bot.sendMessage(chatId, formattedReply).catch(() => {});
-      }
-    }
-  } else {
-    await bot.sendMessage(chatId, formattedReply).catch(() => {});
-  }
+  await sendLongMessage(chatId, formattedReply);
 });
 
 // Command: /image <prompt> or /draw <prompt> (100% Free AI Image Generator)
@@ -1625,13 +1656,16 @@ async function handleVoiceQuestion(msg) {
       }
 
       const aiAnswer = await askGeminiAI(transcribedText);
+      if (statusMsg && statusMsg.message_id) {
+        bot.deleteMessage(chatId, statusMsg.message_id).catch(() => {});
+      }
       const replyMsg = 
         `🎙️ **ඔබ ඇසූ හඬ ප්‍රශ්නය:**\n` +
         `"${transcribedText}"\n\n` +
         `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
         `${aiAnswer}`;
 
-      bot.sendMessage(chatId, replyMsg, { parse_mode: 'Markdown' }).catch(() => {});
+      await sendLongMessage(chatId, replyMsg);
     } else {
       bot.sendMessage(chatId, '❌ **ඔබගේ හඬ පණිවිඩය පැහැදිලිව හඳුනා ගැනීමට නොහැකි විය. කරුණාකර නැවත පැහැදිලිව පවසන්න.**', { parse_mode: 'Markdown' }).catch(() => {});
     }
@@ -1666,22 +1700,17 @@ bot.on('photo', async (msg) => {
     if (extractedText && extractedText.trim().length > 3) {
       const cleanPrompt = extractedText.trim();
       
-      if (statusMsg && statusMsg.message_id) {
-        bot.editMessageText(`📸 **ඡායාරූපයේ කියවූ ප්‍රශ්නය (Extracted Text):**\n\n"${cleanPrompt}"\n\n🤖 **A/L MCQ HUB AI විසින් පිළිතුර සූදානම් කරමින් පවතී... ⌛**`, {
-          chat_id: chatId,
-          message_id: statusMsg.message_id,
-          parse_mode: 'Markdown'
-        }).catch(() => {});
-      }
-
       const aiAnswer = await askGeminiAI(cleanPrompt);
+      if (statusMsg && statusMsg.message_id) {
+        bot.deleteMessage(chatId, statusMsg.message_id).catch(() => {});
+      }
       const replyMsg = 
         `📸 **ඡායාරූපයෙන් කියවූ ප්‍රශ්නය:**\n` +
         `"${cleanPrompt}"\n\n` +
         `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
         `${aiAnswer}`;
 
-      bot.sendMessage(chatId, replyMsg, { parse_mode: 'Markdown' }).catch(() => {});
+      await sendLongMessage(chatId, replyMsg);
     } else {
       if (statusMsg && statusMsg.message_id) {
         bot.editMessageText(`📸 **ඡායාරූපය සාර්ථකව ලැබුණි!**\n\n💡 ඔබගේ ඡායාරූපයේ ඇති ප්‍රශ්නයට පිළිතුර ලබා ගැනීමට, ඡායාරූපය සමඟ \`/ai [ප්‍රශ්නය]\` ලෙස Caption යොදා එවන්න.`, {
