@@ -968,6 +968,12 @@ function getYearKeyboard(subId) {
   return { inline_keyboard: keyboard };
 }
 
+// Helper: Clean Markdown formatting special characters from user inputs & names
+function cleanMarkdown(text) {
+  if (!text) return '';
+  return String(text).replace(/[_*`\[\]()]/g, '').trim();
+}
+
 // Helper: Generate Formatted Leaderboard & Podium Text
 function generateLeaderboardMessage(title, ranks) {
   if (!ranks || ranks.length === 0) {
@@ -986,18 +992,20 @@ function generateLeaderboardMessage(title, ranks) {
   const top3 = ranks.slice(0, 3);
   top3.forEach((r, idx) => {
     const medal = medals[idx] || '🎖️';
-    const userTag = r.username ? ` (${r.username})` : '';
+    const cleanStudentName = cleanMarkdown(r.name);
+    const cleanUserTag = r.username ? ` (@${cleanMarkdown(r.username.replace(/^@/, ''))})` : '';
     const speed = formatDuration(r.timeSec || 0);
-    text += `${medal} **${idx + 1} වන ස්ථානය:** ${r.name}${userTag}\n   🎯 ලකුණු: **${r.score}** | ⏱️ කාලය: **${speed}**\n\n`;
+    text += `${medal} **${idx + 1} වන ස්ථානය:** ${cleanStudentName}${cleanUserTag}\n   🎯 ලකුණු: **${r.score}** | ⏱️ කාලය: **${speed}**\n\n`;
   });
 
   // 2. Top 20 Ranked Table
   text += `📊 **හොඳම ක්‍රීඩකයින් 20 දෙනාගේ ලැයිස්තුව (Top 20 Table):**\n`;
   ranks.forEach((r, idx) => {
     const rankNum = idx + 1;
-    const userTag = r.username ? ` (${r.username})` : '';
+    const cleanStudentName = cleanMarkdown(r.name);
+    const cleanUserTag = r.username ? ` (@${cleanMarkdown(r.username.replace(/^@/, ''))})` : '';
     const speed = formatDuration(r.timeSec || 0);
-    text += `${rankNum}. **${r.name}**${userTag} — 🎯 **${r.score}** | ⏱️ ${speed}\n`;
+    text += `${rankNum}. **${cleanStudentName}**${cleanUserTag} — 🎯 **${r.score}** | ⏱️ ${speed}\n`;
   });
 
   return text;
@@ -1037,8 +1045,9 @@ async function sendNextGroupNativePollStep(chatId) {
       const winnerLines = topWinners.map((u, idx) => {
         const icon = podiums[idx] || `${idx + 1}.`;
         const uPct = Math.round((u.score / total) * 100);
-        const tag = u.username ? ` (${u.username})` : '';
-        return `${icon} **${u.name}**${tag} — ${u.score}/${total} (${uPct}%)`;
+        const cleanStudentName = cleanMarkdown(u.name);
+        const cleanUserTag = u.username ? ` (@${cleanMarkdown(u.username.replace(/^@/, ''))})` : '';
+        return `${icon} **${cleanStudentName}**${cleanUserTag} — ${u.score}/${total} (${uPct}%)`;
       });
 
       leaderboardText = 
@@ -1076,14 +1085,17 @@ async function sendNextGroupNativePollStep(chatId) {
       } catch (e) {
         finishAttempts++;
         console.error(`Attempt ${finishAttempts} error sending finish results to ${chatId}:`, e.message);
-        // Fallback to plain text if Markdown parsing fails due to special characters in username/name
+        // Fallback: Send WITHOUT parse_mode so Telegram renders plain text guaranteed!
         try {
-          await bot.sendMessage(chatId, finishMessage.replace(/[*_`]/g, ''), {
+          const plainFinishMsg = finishMessage.replace(/[*_`]/g, '');
+          await bot.sendMessage(chatId, plainFinishMsg, {
             reply_markup: finishKeyboard
           });
           sentFinish = true;
-        } catch (e2) {}
-        if (finishAttempts < 3 && !sentFinish) await new Promise(r => setTimeout(r, 2000));
+        } catch (e2) {
+          console.error('Fallback finish send error:', e2.message);
+        }
+        if (finishAttempts < 3 && !sentFinish) await new Promise(r => setTimeout(r, 1000));
       }
     }
 
