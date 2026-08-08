@@ -20,7 +20,14 @@ async def query_notebooklm(user_query, notebook_id):
             print("ERROR: Auth storage_state.json not found. Please run 'python -m notebooklm login' first.")
             return
 
-        async with NotebookLMClient.from_storage(auth_file) as client:
+        # Increased timeouts (timeout=180s, chat_timeout=300s) to handle heavy notebooks with 220+ sources
+        async with NotebookLMClient.from_storage(
+            auth_file,
+            timeout=180.0,
+            chat_timeout=300.0,
+            rate_limit_max_retries=5,
+            server_error_max_retries=5
+        ) as client:
             # Attempt 1: Query as asked
             res = await client.chat.ask(notebook_id=notebook_id, question=user_query)
             ans = res.answer if hasattr(res, 'answer') and res.answer else (res if isinstance(res, str) else str(res))
@@ -40,7 +47,6 @@ async def query_notebooklm(user_query, notebook_id):
                 print(ans2)
                 return
             
-            # If both return answer text (even short), print it
             if ans:
                 print(ans)
             elif ans2:

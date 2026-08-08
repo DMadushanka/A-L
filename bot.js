@@ -654,7 +654,7 @@ async function askNotebookLMPython(userPrompt, notebookId) {
       const timeout = setTimeout(() => {
         try { pyProc.kill(); } catch (e) {}
         resolve(null);
-      }, 60000); // 60-second timeout for deep Google NotebookLM queries
+      }, 180000); // 180-second (3-minute) timeout for deep 220+ document Google NotebookLM queries
 
       pyProc.on('close', (code) => {
         clearTimeout(timeout);
