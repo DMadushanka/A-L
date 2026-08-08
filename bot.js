@@ -1054,7 +1054,14 @@ async function sendNextGroupNativePollStep(chatId) {
       } catch (e) {
         finishAttempts++;
         console.error(`Attempt ${finishAttempts} error sending finish results to ${chatId}:`, e.message);
-        if (finishAttempts < 3) await new Promise(r => setTimeout(r, 2000));
+        // Fallback to plain text if Markdown parsing fails due to special characters in username/name
+        try {
+          await bot.sendMessage(chatId, finishMessage.replace(/[*_`]/g, ''), {
+            reply_markup: finishKeyboard
+          });
+          sentFinish = true;
+        } catch (e2) {}
+        if (finishAttempts < 3 && !sentFinish) await new Promise(r => setTimeout(r, 2000));
       }
     }
 
@@ -1084,7 +1091,14 @@ async function sendNextGroupNativePollStep(chatId) {
 
   const cleanQ = cleanText(`[${qNum}/${total}] ⏳ 20s | ${rawQText}`, 290);
   const cleanOpts = (q.o || q.options || []).map(o => cleanText(o, 98));
-  const correctIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
+  
+  // Ensure valid correct option index bounded by options array length
+  let rawCorrectIdx = (q.correct !== undefined) ? q.correct : ((q.c !== undefined) ? q.c : 0);
+  if (isNaN(rawCorrectIdx)) rawCorrectIdx = 0;
+  if (rawCorrectIdx >= cleanOpts.length && rawCorrectIdx === cleanOpts.length) {
+    rawCorrectIdx = cleanOpts.length - 1;
+  }
+  const correctIdx = Math.max(0, Math.min(Number(rawCorrectIdx), cleanOpts.length - 1));
 
   const rawExplain = cleanText(q.e || '', 185);
   const cleanExplain = rawExplain ? `💡 ${rawExplain}` : undefined;
@@ -1118,7 +1132,11 @@ async function sendNextGroupNativePollStep(chatId) {
   session.qIndex++;
   // Wait 22 seconds (20s open_period + 2s buffer for poll answer events) before next question or finish
   session.timerId = setTimeout(() => {
-    sendNextGroupNativePollStep(chatId);
+    try {
+      sendNextGroupNativePollStep(chatId);
+    } catch (err) {
+      console.error('Error in sendNextGroupNativePollStep timer:', err.message);
+    }
   }, 22000);
 }
 
