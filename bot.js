@@ -546,8 +546,8 @@ console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode
 async function askGeminiAI(userPrompt) {
   const apiKey = (process.env.GEMINI_API_KEY || '').trim();
 
-  if (!apiKey || !apiKey.startsWith('AIzaSy')) {
-    return '⚠️ **Gemini API Key එක වැරදියි හෝ සකසා නොමැත.**\n\nGoogle Gemini API Key එකක් සැමවිටම **`AIzaSy...`** ලෙස ආරම්භ වේ.\n\n👉 [Google AI Studio](https://aistudio.google.com/) වෙත ගොස් **Get API key** ඔබා නොමිලේ ලැබෙන **AIzaSy...** Key එක ලබාගෙන `.env` ගොනුවේ `GEMINI_API_KEY=AIzaSy...` ලෙස ඇතුළත් කරන්න (100% Free).';
+  if (!apiKey) {
+    return '⚠️ **Gemini API Key සකසා නොමැත.**\n\n👉 [Google AI Studio](https://aistudio.google.com/) වෙත ගොස් **Get API key** ඔබා නොමිලේ ලැබෙන Key එක ලබාගෙන `.env` ගොනුවේ `GEMINI_API_KEY=your_key` ලෙස ඇතුළත් කරන්න (100% Free).';
   }
 
   const model = 'gemini-2.0-flash';
