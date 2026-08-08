@@ -632,12 +632,23 @@ function askNotebookLMPython(userPrompt, notebookId) {
       return resolve(null);
     }
 
-    const pyProc = spawn('python', [scriptPath, userPrompt, notebookId]);
+    const pyProc = spawn('python', [scriptPath, notebookId], {
+      env: {
+        ...process.env,
+        PYTHONIOENCODING: 'utf-8',
+        PYTHONUTF8: '1'
+      }
+    });
+
     let stdout = '';
     let stderr = '';
 
-    pyProc.stdout.on('data', (d) => { stdout += d.toString(); });
-    pyProc.stderr.on('data', (d) => { stderr += d.toString(); });
+    pyProc.stdout.on('data', (d) => { stdout += d.toString('utf8'); });
+    pyProc.stderr.on('data', (d) => { stderr += d.toString('utf8'); });
+
+    // Send userPrompt via STDIN in UTF-8 to prevent Windows command line string corruption
+    pyProc.stdin.write(userPrompt, 'utf8');
+    pyProc.stdin.end();
 
     const timeout = setTimeout(() => {
       try { pyProc.kill(); } catch (e) {}
@@ -689,13 +700,10 @@ function getSubjectNotebookId(userPrompt, explicitSubId = null) {
   return (process.env.NOTEBOOK_ID || '').trim();
 }
 
-// Helper: 100% Free Ultra-Fast AI Tutor API Caller (Supports NotebookLM Python Bridge, Groq Cloud AI & Gemini AI)
+// Helper: Direct Google NotebookLM Query Engine (Pure NotebookLM Mode - Groq & Local RAG Disabled)
 async function askGeminiAI(userPrompt, explicitSubId = null) {
-  const groqKey = (process.env.GROQ_API_KEY || '').trim();
-  const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
   const notebookId = getSubjectNotebookId(userPrompt, explicitSubId);
 
-  // Priority 0: Live Google NotebookLM Python Bridge (if NOTEBOOK_ID configured in .env)
   if (notebookId) {
     try {
       const nbReply = await askNotebookLMPython(userPrompt, notebookId);
@@ -703,102 +711,11 @@ async function askGeminiAI(userPrompt, explicitSubId = null) {
         return formatTablesForTelegram(nbReply);
       }
     } catch (e) {
-      console.error('NotebookLM Python query notice:', e.message);
+      console.error('NotebookLM Python query error:', e.message);
     }
   }
 
-  const syllabusContext = findRelevantSyllabusContext(userPrompt);
-
-  let systemPromptText = 
-    'ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) විභාග දෙපාර්තමේන්තුවේ නිල Syllabus & Marking Scheme අනුව 100% නිවැරදිව පිළිතුරු සපයන ප්‍රවීණ A/L AI උපදේශකයෙකි (A/L MCQ HUB AI Tutor).\n\n' +
-    '⛔ අතිශය වැදගත් රීති (Strict Accuracy Rules):\n' +
-    '1. ඔබ ලබාදෙන සෑම පිළිතුරක්ම ශ්‍රී ලංකාවේ අ.පො.ස. උසස් පෙළ (A/L) නිල විෂය නිර්දේශයට 100%ක් නිවැරදි සහ අනුකූල විය යුතුය.\n' +
-    '2. නොදන්නා හෝ සැක සහිත තොරතුරු කිසිවක් අනුමාන කර (hallucinate) නොලියන්න. 100% සත්‍ය තොරතුරු පමණක් සපයන්න.\n' +
-    '3. කරුණු ඉතා පැහැදිලිව Bullet Points (•) මඟින් පෙන්වන්න.\n\n' +
-    '📌 Telegram ආකෘති උපදෙස්: (| col | col |) වගු වෙනුවට, Emoji Section Cards (🔹 **[මාතෘකාව]** \n • ⏰ **කාලය:** ...) ලෙස සකසන්න.';
-
-  if (syllabusContext) {
-    systemPromptText += `\n\n💡 **[නිල විෂය නිර්දේශ/ලකුණු දීමේ පටිපාටිය (Official Marking Scheme Context)]**:\n${syllabusContext}\n\nඋඩ දැක්වෙන නිල Marking Scheme කරුණු පදනම් කරගෙන 100% නිවැරදි පිළිතුර සකස් කරන්න.`;
-  }
-
-  // Priority 1: Groq Cloud Ultra-Fast AI (100% Free, 14,400 Requests/Day, Llama 3.3 70B)
-  if (groqKey) {
-    for (let attempt = 1; attempt <= 2; attempt++) {
-      const url = 'https://api.groq.com/openai/v1/chat/completions';
-      const payload = {
-        model: 'llama-3.3-70b-versatile',
-        messages: [
-          {
-            role: 'system',
-            content: systemPromptText
-          },
-          {
-            role: 'user',
-            content: userPrompt
-          }
-        ],
-        temperature: 0.1 // Strict factual accuracy (Zero Hallucination mode)
-      };
-
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 45000);
-
-      try {
-        const res = await fetch(url, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${groqKey}`
-          },
-          body: JSON.stringify(payload),
-          signal: controller.signal
-        });
-        clearTimeout(timeoutId);
-
-        const data = await res.json();
-        const replyText = data?.choices?.[0]?.message?.content;
-        if (res.status === 200 && replyText) {
-          return formatTablesForTelegram(replyText);
-        }
-        if (data?.error?.message) {
-          console.error('Groq AI Notice:', data.error.message);
-        }
-      } catch (err) {
-        clearTimeout(timeoutId);
-        console.error(`Groq AI Attempt ${attempt} error:`, err.message);
-        if (attempt < 2) await new Promise(r => setTimeout(r, 1000));
-      }
-    }
-  }
-
-  // Priority 2: Google Gemini AI Fallback
-  if (geminiKey) {
-    const model = 'gemini-2.0-flash';
-    const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${geminiKey}`;
-    const payload = {
-      contents: [{ parts: [{ text: `ඔබ A/L AI Tutor කෙනෙකි. සිංහලෙන් පැහැදිලි කරන්න:\n\n${userPrompt}` }] }]
-    };
-
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-      const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (res.status === 200 && replyText) {
-        return formatTablesForTelegram(replyText);
-      }
-    } catch (e) {}
-  }
-
-  // Priority 3: Absolute Fallback - Return Syllabus Marking Scheme Context if available
-  if (syllabusContext) {
-    return formatTablesForTelegram(`📚 **A/L MCQ HUB AI Tutor — නිල විෂය සටහන් පිළිතුර:**\n\n${syllabusContext}`);
-  }
-
-  return '⚠️ **AI පද්ධතියේ තාවකාලික කාර්යබහුලතාවයක් ඇත.**\n\nමොහොතකින් නැවත `/ai ඔබගේ ප්‍රශ්නය` යොමු කරන්න.';
+  return '⚠️ **Google NotebookLM එකෙන් පිළිතුරු ලබා ගැනීමට නොහැකි විය.**\n\nමොහොතකින් නැවත `/ai ඔබගේ ප්‍රශ්නය` ලෙස යොමු කරන්න.';
 }
 
 // Helper: Dynamically extract the latest og:image URL & cache-busting version directly from HTML files

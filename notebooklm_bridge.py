@@ -2,8 +2,12 @@ import sys
 import os
 import asyncio
 
-# Ensure UTF-8 stdout encoding for Sinhala Unicode characters on Windows
-sys.stdout.reconfigure(encoding='utf-8')
+# Ensure UTF-8 stdout and stdin encoding for Sinhala Unicode characters on Windows
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8')
+    except Exception:
+        pass
 
 async def query_notebooklm(user_query, notebook_id):
     try:
@@ -28,9 +32,20 @@ async def query_notebooklm(user_query, notebook_id):
         print(f"ERROR: {str(e)}")
 
 if __name__ == "__main__":
+    notebook_id = sys.argv[1] if len(sys.argv) > 1 else ""
+    user_query = ""
+
     if len(sys.argv) >= 3:
-        query = sys.argv[1]
-        nb_id = sys.argv[2]
-        asyncio.run(query_notebooklm(query, nb_id))
+        user_query = sys.argv[2]
     else:
-        print("Usage: python notebooklm_bridge.py <query> <notebook_id>")
+        # Read raw bytes from stdin buffer for 100% uncorrupted UTF-8 Sinhala on Windows
+        try:
+            raw_input = sys.stdin.buffer.read()
+            user_query = raw_input.decode('utf-8').strip()
+        except Exception:
+            user_query = sys.stdin.read().strip()
+
+    if user_query and notebook_id:
+        asyncio.run(query_notebooklm(user_query, notebook_id))
+    else:
+        print(f"ERROR: Missing query (len={len(user_query)}) or notebook_id ({notebook_id})")
