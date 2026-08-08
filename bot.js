@@ -1503,19 +1503,27 @@ bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
   console.log(`🤖 A/L MCQ HUB AI Request received from ${chatId}: "${userPrompt}"`);
   const statusMsg = await bot.sendMessage(chatId, '🤖 **A/L MCQ HUB AI විසින් පිළිතුර සූදානම් කරමින් පවතී... ⌛**', { parse_mode: 'Markdown' }).catch(() => null);
 
-  const aiAnswer = await askGeminiAI(userPrompt);
-  console.log(`🤖 A/L MCQ HUB AI Response obtained (${aiAnswer.length} chars): ${aiAnswer.substring(0, 80)}...`);
+  try {
+    const aiAnswer = await askGeminiAI(userPrompt);
+    console.log(`🤖 A/L MCQ HUB AI Response obtained (${aiAnswer ? aiAnswer.length : 0} chars)`);
 
-  if (statusMsg && statusMsg.message_id) {
-    bot.deleteMessage(chatId, statusMsg.message_id).catch(() => {});
+    if (statusMsg && statusMsg.message_id) {
+      bot.deleteMessage(chatId, statusMsg.message_id).catch(() => {});
+    }
+
+    const formattedReply = 
+      `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
+      `${aiAnswer}\n\n` +
+      `💡 *තවත් ප්‍රශ්නයක් ඇසීමට \`/ai ඔබගේ ප්‍රශ්නය\` ලෙස ටයිප් කරන්න.*`;
+
+    await sendLongMessage(chatId, formattedReply).catch(e => console.error('Error sending AI response:', e.message));
+  } catch (err) {
+    console.error('Error in /ai command execution:', err.message);
+    if (statusMsg && statusMsg.message_id) {
+      bot.deleteMessage(chatId, statusMsg.message_id).catch(() => {});
+    }
+    bot.sendMessage(chatId, '⚠️ **පිළිතුර යැවීමේදී තාවකාලික දෝෂයක් සිදු විය. කරුණාකර නැවත උත්සාහ කරන්න.**').catch(() => {});
   }
-
-  const formattedReply = 
-    `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
-    `${aiAnswer}\n\n` +
-    `💡 *තවත් ප්‍රශ්නයක් ඇසීමට \`/ai ඔබගේ ප්‍රශ්නය\` ලෙස ටයිප් කරන්න.*`;
-
-  await sendLongMessage(chatId, formattedReply);
 });
 
 // Command: /image <prompt> or /draw <prompt> (100% Free AI Image Generator)
