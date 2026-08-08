@@ -629,7 +629,7 @@ function findRelevantSyllabusContext(userPrompt) {
 }
 
 // Helper: Optional Python Bridge to query live Google NotebookLM Notebooks with automatic retry
-async function askNotebookLMPython(userPrompt, notebookId) {
+async function askNotebookLMPython(userPrompt, notebookId, mode = 'query') {
   for (let attempt = 1; attempt <= 2; attempt++) {
     const res = await new Promise((resolve) => {
       const scriptPath = path.resolve(process.cwd(), 'notebooklm_bridge.py');
@@ -637,7 +637,7 @@ async function askNotebookLMPython(userPrompt, notebookId) {
         return resolve(null);
       }
 
-      const pyProc = spawn('python', [scriptPath, notebookId], {
+      const pyProc = spawn('python', [scriptPath, notebookId, mode], {
         env: {
           ...process.env,
           PYTHONIOENCODING: 'utf-8',
@@ -652,17 +652,24 @@ async function askNotebookLMPython(userPrompt, notebookId) {
       pyProc.stderr.on('data', (d) => { stderr += d.toString('utf8'); });
 
       // Send userPrompt via STDIN in UTF-8 to prevent Windows command line string corruption
-      pyProc.stdin.write(userPrompt, 'utf8');
+      pyProc.stdin.write(userPrompt || '', 'utf8');
       pyProc.stdin.end();
 
+      const timeoutMs = mode === 'audio' ? 720000 : 300000; // 12-min timeout for Audio Overview, 5-min for quiz/query
       const timeout = setTimeout(() => {
         try { pyProc.kill(); } catch (e) {}
         resolve(null);
-      }, 180000); // 180-second (3-minute) timeout for deep 220+ document Google NotebookLM queries
+      }, timeoutMs);
 
       pyProc.on('close', (code) => {
         clearTimeout(timeout);
         const output = stdout.trim();
+        if (output.includes('AUDIO_FILE:')) {
+          const match = output.match(/AUDIO_FILE:(.+)/);
+          if (match && match[1]) {
+            return resolve({ type: 'audio', path: match[1].trim() });
+          }
+        }
         if (code === 0 && output && !output.startsWith('ERROR:')) {
           resolve(output);
         } else {

@@ -1,6 +1,8 @@
 import sys
 import os
 import asyncio
+import json
+import time
 from pathlib import Path
 
 # Ensure UTF-8 stdout and stdin encoding for Sinhala Unicode characters on Windows
@@ -10,94 +12,141 @@ if sys.platform == 'win32':
     except Exception:
         pass
 
-async def query_notebooklm(user_query, notebook_id):
-    try:
-        from notebooklm import NotebookLMClient, AuthTokens
-        from notebooklm.auth import get_authuser_for_storage, get_account_email_for_storage
+async def get_notebooklm_client():
+    from notebooklm import NotebookLMClient, AuthTokens
+    from notebooklm.auth import get_authuser_for_storage, get_account_email_for_storage
 
-        auth_file = Path(os.path.expanduser("~/.notebooklm/profiles/default/storage_state.json"))
-        if not auth_file.exists():
-            auth_file = Path(os.path.join(os.getcwd(), "storage_state.json"))
-        
-        if not auth_file.exists():
-            print("ERROR: Auth storage_state.json not found. Please run 'python -m notebooklm login' first.")
+    auth_file = Path(os.path.expanduser("~/.notebooklm/profiles/default/storage_state.json"))
+    if not auth_file.exists():
+        auth_file = Path(os.path.join(os.getcwd(), "storage_state.json"))
+    
+    if not auth_file.exists():
+        print("ERROR: Auth storage_state.json not found. Please run 'python -m notebooklm login' first.")
+        return None
+
+    authuser = get_authuser_for_storage(auth_file)
+    account_email = get_account_email_for_storage(auth_file)
+
+    auth = await AuthTokens.from_storage(auth_file)
+    if authuser is not None:
+        auth.authuser = authuser
+    if account_email:
+        auth.account_email = account_email
+
+    return NotebookLMClient(
+        auth,
+        timeout=300.0,
+        chat_timeout=600.0,
+        rate_limit_max_retries=5,
+        server_error_max_retries=5
+    )
+
+async def handle_query(notebook_id, user_query):
+    client = await get_notebooklm_client()
+    if not client:
+        return
+    async with client:
+        if hasattr(client.chat, 'clear_cache'):
+            client.chat.clear_cache()
+        res = await client.chat.ask(notebook_id=notebook_id, question=user_query)
+        ans = res.answer if hasattr(res, 'answer') and res.answer else (res if isinstance(res, str) else str(res))
+        if ans and len(ans.strip()) > 10 and "can't answer" not in ans.lower():
+            print(ans)
             return
 
-        authuser = get_authuser_for_storage(auth_file)
-        account_email = get_account_email_for_storage(auth_file)
+        rephrased_query = f"උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය විෂය නිර්දේශයේ {user_query} පිළිබඳව සවිස්තරාත්මකව පැහැදිලි කරන්න."
+        res2 = await client.chat.ask(notebook_id=notebook_id, question=rephrased_query)
+        ans2 = res2.answer if hasattr(res2, 'answer') and res2.answer else (res2 if isinstance(res2, str) else str(res2))
+        if ans2 and len(ans2.strip()) > 10:
+            print(ans2)
+        elif ans:
+            print(ans)
+        else:
+            print("ERROR: NotebookLM returned empty response.")
 
-        auth = await AuthTokens.from_storage(auth_file)
-        if authuser is not None:
-            auth.authuser = authuser
-        if account_email:
-            auth.account_email = account_email
+async def handle_audio(notebook_id, instructions):
+    client = await get_notebooklm_client()
+    if not client:
+        return
+    async with client:
+        audio_list = await client.artifacts.list_audio(notebook_id)
+        out_dir = os.path.join(os.getcwd(), "audio_downloads")
+        os.makedirs(out_dir, exist_ok=True)
+        out_file = os.path.join(out_dir, f"audio_{notebook_id[:8]}.mp3")
 
-        async with NotebookLMClient(
-            auth,
-            timeout=180.0,
-            chat_timeout=300.0,
-            rate_limit_max_retries=5,
-            server_error_max_retries=5
-        ) as client:
-            
-            # Clear chat cache for fresh session turn
-            if hasattr(client.chat, 'clear_cache'):
-                client.chat.clear_cache()
+        # If completed audio already exists, download immediately
+        for art in audio_list:
+            if art.status == 1 or (hasattr(art, 'is_completed') and art.is_completed):
+                try:
+                    res_path = await client.artifacts.download_audio(notebook_id, out_file)
+                    print(f"AUDIO_FILE:{res_path}")
+                    return
+                except Exception as e:
+                    pass
 
-            # Attempt 1: Query as asked
-            res = await client.chat.ask(notebook_id=notebook_id, question=user_query)
-            ans = res.answer if hasattr(res, 'answer') and res.answer else (res if isinstance(res, str) else str(res))
-            
-            ans_lower = ans.lower() if ans else ""
-            if ans and "can't answer" not in ans_lower and "cannot answer" not in ans_lower and "rephrasing" not in ans_lower and len(ans.strip()) > 10:
-                print(ans)
-                return
+        # If pending audio artifact exists or none exists, trigger generation
+        if not audio_list:
+            try:
+                await client.artifacts.generate_audio(notebook_id, instructions=instructions if instructions else None)
+            except Exception as e:
+                print(f"Notice on generate_audio: {e}")
 
-            # Attempt 2: Auto-rephrase query with explicit syllabus context if Attempt 1 returned "can't answer"
-            if hasattr(client.chat, 'clear_cache'):
-                client.chat.clear_cache()
+        # Poll for completion (up to 12 minutes = 48 iterations * 15 sec)
+        for i in range(48):
+            await asyncio.sleep(15)
+            try:
+                audio_list = await client.artifacts.list_audio(notebook_id)
+                for art in audio_list:
+                    if art.status == 1 or (hasattr(art, 'is_completed') and art.is_completed):
+                        res_path = await client.artifacts.download_audio(notebook_id, out_file)
+                        print(f"AUDIO_FILE:{res_path}")
+                        return
+            except Exception:
+                pass
 
-            rephrased_query = f"උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය විෂය නිර්දේශයේ {user_query} පිළිබඳව සවිස්තරාත්මකව පැහැදිලි කරන්න."
-            res2 = await client.chat.ask(notebook_id=notebook_id, question=rephrased_query)
-            ans2 = res2.answer if hasattr(res2, 'answer') and res2.answer else (res2 if isinstance(res2, str) else str(res2))
-            
-            ans2_lower = ans2.lower() if ans2 else ""
-            if ans2 and "can't answer" not in ans2_lower and "cannot answer" not in ans2_lower and "rephrasing" not in ans2_lower and len(ans2.strip()) > 10:
-                print(ans2)
-                return
+        print("ERROR: Audio overview generation timed out after 12 minutes.")
 
-            if ans and "can't answer" not in ans_lower:
-                print(ans)
-                return
-            elif ans2 and "can't answer" not in ans2_lower:
-                print(ans2)
-                return
-            elif ans:
-                print(ans)
-                return
-            elif ans2:
-                print(ans2)
-                return
-            else:
-                print("ERROR: NotebookLM returned empty response.")
-    except Exception as e:
-        print(f"ERROR: {str(e)}")
+async def handle_quiz(notebook_id, instructions):
+    client = await get_notebooklm_client()
+    if not client:
+        return
+    async with client:
+        prompt = f"උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය විෂය නිර්දේශයේ {instructions if instructions else 'ප්‍රධාන මාතෘකා'} ඇසුරෙන් MCQ බහුවරණ ප්‍රශ්න 5ක් සකස් කරන්න. සෑම ප්‍රශ්නයකටම (1), (2), (3), (4) ලෙස වරණ 4ක් සහ නිවැරදි පිළිතුර හේතු සහිතව සඳහන් කරන්න."
+        res = await client.chat.ask(notebook_id=notebook_id, question=prompt)
+        ans = res.answer if hasattr(res, 'answer') and res.answer else (res if isinstance(res, str) else str(res))
+        if ans:
+            print(ans)
+        else:
+            print("ERROR: Failed to generate quiz.")
 
 if __name__ == "__main__":
     notebook_id = sys.argv[1] if len(sys.argv) > 1 else ""
+    mode = "query"
     user_query = ""
 
-    if len(sys.argv) >= 3:
-        user_query = sys.argv[2]
-    else:
-        # Read raw bytes from stdin buffer for 100% uncorrupted UTF-8 Sinhala on Windows
+    if len(sys.argv) >= 4:
+        mode = sys.argv[2].lower()
+        user_query = sys.argv[3]
+    elif len(sys.argv) == 3:
+        arg2 = sys.argv[2]
+        if arg2.lower() in ["query", "audio", "quiz"]:
+            mode = arg2.lower()
+        else:
+            user_query = arg2
+    
+    if not user_query:
         try:
             raw_input = sys.stdin.buffer.read()
             user_query = raw_input.decode('utf-8').strip()
         except Exception:
             user_query = sys.stdin.read().strip()
 
-    if user_query and notebook_id:
-        asyncio.run(query_notebooklm(user_query, notebook_id))
+    if notebook_id:
+        if mode == "audio":
+            asyncio.run(handle_audio(notebook_id, user_query))
+        elif mode == "quiz":
+            asyncio.run(handle_quiz(notebook_id, user_query))
+        else:
+            asyncio.run(handle_query(notebook_id, user_query))
     else:
-        print(f"ERROR: Missing query (len={len(user_query)}) or notebook_id ({notebook_id})")
+        print(f"ERROR: Missing notebook_id ({notebook_id})")
