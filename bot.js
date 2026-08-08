@@ -532,7 +532,7 @@ bot.setChatMenuButton({
 // Register Bot Command Autocomplete Registry for Telegram UI
 bot.setMyCommands([
   { command: 'start', description: '🚀 ප්‍රධාන මෙනුව ආරම්භ කරන්න (Start Quiz Bot)' },
-  { command: 'ai', description: '🤖 Gemini AI Tutor (ඕනෑම A/L ප්‍රශ්නයක් අහන්න)' },
+  { command: 'ai', description: '🤖 A/L MCQ HUB AI Tutor (ඕනෑම A/L ප්‍රශ්නයක් අහන්න)' },
   { command: 'leaderboard', description: '🏆 උසස් පෙළ ලකුණු පුවරුව (Leaderboards & Ranks)' },
   { command: 'help', description: '📖 භාවිතය පිළිබඳ උපදෙස් (Help & Instructions)' },
   { command: 'myid', description: '👤 ඔබගේ Telegram User ID එක (View My ID)' }
@@ -1083,6 +1083,7 @@ function getSubjectKeyboard(isGroup = false) {
 
   const keyboard = [
     [portalButton],
+    [{ text: '🤖 A/L MCQ HUB AI ගුරුතුමා (Ask AI Tutor)', callback_data: 'ask_ai_prompt' }],
     [{ text: QUIZ_DATA.pl.name, callback_data: 'sub_pl' }],
     [{ text: QUIZ_DATA.hist.name, callback_data: 'sub_hist' }],
     [{ text: QUIZ_DATA.bc.name, callback_data: 'sub_bc' }],
@@ -1571,14 +1572,14 @@ bot.onText(/\/start/i, (msg) => {
   sendStartMenu(msg.chat.id, msg.from, isGroup);
 });
 
-// Command: /ai <prompt> or /ask <prompt> (Gemini 1.5 Flash Free AI Tutor)
+// Command: /ai <prompt> or /ask <prompt> (A/L MCQ HUB Free AI Tutor)
 bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
   const chatId = msg.chat.id;
   const userPrompt = match[3] ? match[3].trim() : '';
 
   if (!userPrompt) {
     const usageMsg = 
-      `🤖 **A/L Gemini AI Tutor — භාවිත කරන ආකාරය**\n\n` +
+      `🤖 **A/L MCQ HUB AI Tutor — භාවිත කරන ආකාරය**\n\n` +
       `ඔබට ඇති ඕනෑම උසස් පෙළ ප්‍රශ්නයක් හෝ සැකයක් අසන්න:\n\n` +
       `👉 **ආකෘතිය:** \`/ai ඔබගේ ප්‍රශ්නය\`\n\n` +
       `📌 **උදාහරණ:**\n` +
@@ -1589,14 +1590,14 @@ bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
     return bot.sendMessage(chatId, usageMsg, { parse_mode: 'Markdown' }).catch(() => {});
   }
 
-  console.log(`🤖 Gemini AI Request received from ${chatId}: "${userPrompt}"`);
-  const statusMsg = await bot.sendMessage(chatId, '🤖 **Gemini AI විසින් පිළිතුර සූදානම් කරමින් පවතී... ⌛**', { parse_mode: 'Markdown' }).catch(() => null);
+  console.log(`🤖 A/L MCQ HUB AI Request received from ${chatId}: "${userPrompt}"`);
+  const statusMsg = await bot.sendMessage(chatId, '🤖 **A/L MCQ HUB AI විසින් පිළිතුර සූදානම් කරමින් පවතී... ⌛**', { parse_mode: 'Markdown' }).catch(() => null);
 
   const aiAnswer = await askGeminiAI(userPrompt);
-  console.log(`🤖 Gemini AI Response obtained (${aiAnswer.length} chars): ${aiAnswer.substring(0, 80)}...`);
+  console.log(`🤖 A/L MCQ HUB AI Response obtained (${aiAnswer.length} chars): ${aiAnswer.substring(0, 80)}...`);
 
   const formattedReply = 
-    `🤖 **A/L Gemini AI Tutor පිළිතුර:**\n\n` +
+    `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
     `${aiAnswer}\n\n` +
     `💡 *තවත් ප්‍රශ්නයක් ඇසීමට \`/ai ඔබගේ ප්‍රශ්නය\` ලෙස ටයිප් කරන්න.*`;
 
@@ -1786,7 +1787,7 @@ bot.on('callback_query', async (query) => {
   try {
     if (data === 'ask_ai_prompt') {
       const text = 
-        `🤖 **A/L Gemini AI ගුරුතුමා (Google Gemini AI Tutor)**\n\n` +
+        `🤖 **A/L MCQ HUB AI ගුරුතුමා (A/L MCQ HUB AI Tutor)**\n\n` +
         `ඔබට ඇති ඕනෑම උසස් පෙළ MCQ ප්‍රශ්නයක්, විෂය කරුණක්, හෝ සැකයක් සිංහලෙන් අසා පැහැදිලි කරගත හැක.\n\n` +
         `👉 **භාවිතා කරන ආකාරය:**\n` +
         `Chat එකේ **/ai ඔබගේ ප්‍රශ්නය** ලෙස ටයිප් කර එවන්න.\n\n` +
