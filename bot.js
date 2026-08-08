@@ -1504,6 +1504,82 @@ bot.onText(/\/start/i, (msg) => {
   sendStartMenu(msg.chat.id, msg.from, isGroup);
 });
 
+// Helper: Start Live AI Quiz Competition with Native Telegram Polls & 20-Second Timers
+async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
+  const initialMsg = await bot.sendMessage(
+    chatId,
+    `🏆 **A/L MCQ HUB Live AI Quiz Competition සකස් වෙමින් පවතී...**\n\n` +
+    `⏳ **තරඟ විස්තර (Competition Rules):**\n` +
+    `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සජීවී Interactive Telegram Quiz Polls සකස් කරනු ලබයි.\n` +
+    `• **තත්පර 20 ක කාල සීමාවක් (20-Second Interval Timer)** සෑම ප්‍රශ්නයකටම හිමි වේ.\n` +
+    `• ප්‍රශ්නයක් අවසන් වූ වහාම ඊළඟ ප්‍රශ්නය සජීවීව ලැබෙනු ඇත. ⏱️📝\n\n` +
+    `💡 *විෂය තේරීමට: \`/quiz_si\` (සිංහල), \`/quiz_bc\` (බෞද්ධ ශිෂ්ටාචාරය), \`/quiz_hist\` (ඉතිහාසය)*`,
+    { parse_mode: 'Markdown' }
+  ).catch(() => null);
+
+  const notebookId = getSubjectNotebookId(userTopic, subCode || 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
+  console.log(`🧩 Quiz Competition requested for chat ${chatId} (subCode=${subCode || 'auto'}): topic="${userTopic}"`);
+
+  const resText = await askNotebookLMPython(userTopic, notebookId, 'quiz');
+
+  if (initialMsg && initialMsg.message_id) {
+    bot.deleteMessage(chatId, initialMsg.message_id).catch(() => {});
+  }
+
+  if (resText) {
+    const parsedQuestions = parseQuizTextToJSON(resText);
+
+    if (parsedQuestions && parsedQuestions.length > 0) {
+      await bot.sendMessage(
+        chatId,
+        `🏆 **A/L MCQ HUB — Live AI Quiz Competition (${parsedQuestions.length} MCQ Polls)**\n\n` +
+        `⏱️ **සෑම ප්‍රශ්නයකටම තත්පර 20 ක කාලයක් (20 Seconds Timer) හිමි වේ.**\n` +
+        `🔥 සූදානම් වන්න! පළමු ප්‍රශ්නය දැන් සජීවීව ලැබෙනු ඇත...`,
+        { parse_mode: 'Markdown' }
+      ).catch(() => {});
+
+      await new Promise(r => setTimeout(r, 2000));
+
+      for (let i = 0; i < parsedQuestions.length; i++) {
+        const qObj = parsedQuestions[i];
+        const cleanQ = `[Q${i + 1}/${parsedQuestions.length}] ${qObj.q}`.substring(0, 290);
+        const cleanOpts = qObj.o.map(o => o.substring(0, 95));
+        const correctIdx = Math.min(Math.max(0, qObj.c), cleanOpts.length - 1);
+        const cleanExplain = qObj.e ? `💡 ${qObj.e.substring(0, 190)}` : undefined;
+
+        await bot.sendPoll(chatId, cleanQ, cleanOpts, {
+          type: 'quiz',
+          correct_option_id: correctIdx,
+          explanation: cleanExplain,
+          is_anonymous: false,
+          open_period: 20
+        }).catch(async (e) => {
+          console.error(`Error sending poll Q${i + 1}:`, e.message);
+        });
+
+        if (i < parsedQuestions.length - 1) {
+          await new Promise(r => setTimeout(r, 22000));
+        } else {
+          await new Promise(r => setTimeout(r, 5000));
+        }
+      }
+
+      await bot.sendMessage(
+        chatId,
+        `🏆 **A/L MCQ HUB Live AI Quiz Competition සාර්ථකව අවසන් විය!**\n\n` +
+        `✨ තරඟයට එක්වූ සහ සියලුම ප්‍රශ්න සඳහා නිවැරදි පිළිතුරු ලබා දුන් සියලු දෙනාට සුබ පැතුම්! 🎉\n` +
+        `💡 *නැවත තරඟයක් ආරම්භ කිරීමට \`/quiz\` හෝ \`/quiz_si\` ලෙස එවන්න.*`,
+        { parse_mode: 'Markdown' }
+      ).catch(() => {});
+
+    } else {
+      await sendLongMessage(chatId, `🧩 **A/L MCQ HUB AI Quiz & Study Guide**\n\n${resText}`).catch(() => {});
+    }
+  } else {
+    await bot.sendMessage(chatId, `⚠️ **Quiz ජනනය කිරීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.**`).catch(() => {});
+  }
+}
+
 // Command: /ai <prompt> or /ask <prompt> or /ai_si <prompt> etc.
 bot.onText(/\/(ai|ask)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
   const chatId = msg.chat.id;
@@ -1518,6 +1594,11 @@ bot.onText(/\/(ai|ask)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
       subCode = candidate;
       userPrompt = parts.slice(1).join(' ');
     }
+  }
+
+  // If prompt explicitly requests MCQs/Quiz, auto-route to Quiz Competition!
+  if (userPrompt.match(/\b(mcq|mcqs|quiz|quez|test|competition|ප්‍රශ්න|බහුවරණ)\b/i)) {
+    return startAIQuizCompetition(msg, chatId, userPrompt, subCode);
   }
 
   if (!userPrompt) {
@@ -1728,8 +1809,8 @@ function parseQuizTextToJSON(text) {
   return questions;
 }
 
-// Command: /quiz or /quez or /test (A/L MCQ HUB Native Telegram Quiz Polls Generator)
-bot.onText(/\/(quiz|quez|test)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
+// Command: /quiz or /quez or /test or /competition (A/L MCQ HUB Native Telegram Quiz Polls Generator)
+bot.onText(/\/(quiz|quez|test|competition)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
   const chatId = msg.chat.id;
   let subCode = match[2] ? match[2].trim().toLowerCase() : null;
   let userTopic = match[4] ? match[4].trim() : '';
@@ -1743,56 +1824,7 @@ bot.onText(/\/(quiz|quez|test)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match)
     }
   }
 
-  const initialMsg = await bot.sendMessage(
-    chatId,
-    `🧩 **A/L MCQ HUB AI Native Telegram Quiz Polls සකස් වෙමින් පවතී...**\n\n` +
-    `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
-    `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සජීවී Interactive Telegram Quiz Polls සකස් කරනු ලබයි.\n` +
-    `• මෙම ක්‍රියාවලිය සඳහා **මිනිත්තු 1 සිට 3 දක්වා** කාලයක් ගත විය හැක.\n` +
-    `• සූදානම් වූ වහාම පිළිතුරු ලබා දිය හැකි සජීවී Polls ලෙස ලැබෙනු ඇත. 📝\n\n` +
-    `💡 *විෂය තේරීමට: \`/quiz_si\` (සිංහල), \`/quiz_bc\` (බෞද්ධ ශිෂ්ටාචාරය), \`/quiz_hist\` (ඉතිහාසය)*`,
-    { parse_mode: 'Markdown' }
-  ).catch(() => null);
-
-  const notebookId = getSubjectNotebookId(userTopic, subCode || 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
-  console.log(`🧩 Quiz requested for chat ${chatId} (subCode=${subCode || 'auto'}): topic="${userTopic}"`);
-
-  const resText = await askNotebookLMPython(userTopic, notebookId, 'quiz');
-
-  if (initialMsg && initialMsg.message_id) {
-    bot.deleteMessage(chatId, initialMsg.message_id).catch(() => {});
-  }
-
-  if (resText) {
-    const parsedQuestions = parseQuizTextToJSON(resText);
-
-    if (parsedQuestions && parsedQuestions.length > 0) {
-      await bot.sendMessage(chatId, `🎯 **A/L MCQ HUB — AI Native Telegram Quiz (${parsedQuestions.length} MCQ Polls)**\n\nපහත ප්‍රශ්න සඳහා ක්ලික් කර සජීවීව පිළිතුරු ලබා දෙන්න:`, { parse_mode: 'Markdown' }).catch(() => {});
-
-      for (let i = 0; i < parsedQuestions.length; i++) {
-        const qObj = parsedQuestions[i];
-        const cleanQ = `[Q${i + 1}] ${qObj.q}`.substring(0, 290);
-        const cleanOpts = qObj.o.map(o => o.substring(0, 95));
-        const correctIdx = Math.min(Math.max(0, qObj.c), cleanOpts.length - 1);
-        const cleanExplain = qObj.e ? `💡 ${qObj.e.substring(0, 190)}` : undefined;
-
-        await bot.sendPoll(chatId, cleanQ, cleanOpts, {
-          type: 'quiz',
-          correct_option_id: correctIdx,
-          explanation: cleanExplain,
-          is_anonymous: false
-        }).catch(async (e) => {
-          console.error(`Error sending poll Q${i + 1}:`, e.message);
-        });
-
-        await new Promise(r => setTimeout(r, 1000));
-      }
-    } else {
-      await sendLongMessage(chatId, `🧩 **A/L MCQ HUB AI Quiz & Study Guide**\n\n${resText}`).catch(() => {});
-    }
-  } else {
-    await bot.sendMessage(chatId, `⚠️ **Quiz ජනනය කිරීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.**`).catch(() => {});
-  }
+  return startAIQuizCompetition(msg, chatId, userTopic, subCode);
 });
 
 // Listener for Voice Messages (Speech-to-Text Transcribe & Auto AI Answer)
