@@ -1753,7 +1753,7 @@ bot.on('poll_answer', async (answer) => {
     session.qIndex++;
 
     setTimeout(() => {
-      sendNextNativePoll(chatId);
+      sendNextGroupNativePollStep(chatId);
     }, 1200);
   }
 });
