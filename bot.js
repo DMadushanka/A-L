@@ -624,50 +624,56 @@ function findRelevantSyllabusContext(userPrompt) {
   return '';
 }
 
-// Helper: Optional Python Bridge to query live Google NotebookLM Notebooks
-function askNotebookLMPython(userPrompt, notebookId) {
-  return new Promise((resolve) => {
-    const scriptPath = path.resolve(process.cwd(), 'notebooklm_bridge.py');
-    if (!fs.existsSync(scriptPath)) {
-      return resolve(null);
-    }
-
-    const pyProc = spawn('python', [scriptPath, notebookId], {
-      env: {
-        ...process.env,
-        PYTHONIOENCODING: 'utf-8',
-        PYTHONUTF8: '1'
+// Helper: Optional Python Bridge to query live Google NotebookLM Notebooks with automatic retry
+async function askNotebookLMPython(userPrompt, notebookId) {
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    const res = await new Promise((resolve) => {
+      const scriptPath = path.resolve(process.cwd(), 'notebooklm_bridge.py');
+      if (!fs.existsSync(scriptPath)) {
+        return resolve(null);
       }
-    });
 
-    let stdout = '';
-    let stderr = '';
-
-    pyProc.stdout.on('data', (d) => { stdout += d.toString('utf8'); });
-    pyProc.stderr.on('data', (d) => { stderr += d.toString('utf8'); });
-
-    // Send userPrompt via STDIN in UTF-8 to prevent Windows command line string corruption
-    pyProc.stdin.write(userPrompt, 'utf8');
-    pyProc.stdin.end();
-
-    const timeout = setTimeout(() => {
-      try { pyProc.kill(); } catch (e) {}
-      resolve(null);
-    }, 60000); // 60-second timeout for deep Google NotebookLM queries
-
-    pyProc.on('close', (code) => {
-      clearTimeout(timeout);
-      const output = stdout.trim();
-      if (code === 0 && output && !output.startsWith('ERROR:')) {
-        resolve(output);
-      } else {
-        if (output.startsWith('ERROR:')) {
-          console.error('NotebookLM Bridge Notice:', output);
+      const pyProc = spawn('python', [scriptPath, notebookId], {
+        env: {
+          ...process.env,
+          PYTHONIOENCODING: 'utf-8',
+          PYTHONUTF8: '1'
         }
+      });
+
+      let stdout = '';
+      let stderr = '';
+
+      pyProc.stdout.on('data', (d) => { stdout += d.toString('utf8'); });
+      pyProc.stderr.on('data', (d) => { stderr += d.toString('utf8'); });
+
+      // Send userPrompt via STDIN in UTF-8 to prevent Windows command line string corruption
+      pyProc.stdin.write(userPrompt, 'utf8');
+      pyProc.stdin.end();
+
+      const timeout = setTimeout(() => {
+        try { pyProc.kill(); } catch (e) {}
         resolve(null);
-      }
+      }, 60000); // 60-second timeout for deep Google NotebookLM queries
+
+      pyProc.on('close', (code) => {
+        clearTimeout(timeout);
+        const output = stdout.trim();
+        if (code === 0 && output && !output.startsWith('ERROR:')) {
+          resolve(output);
+        } else {
+          if (output.startsWith('ERROR:')) {
+            console.error(`NotebookLM Bridge Attempt ${attempt} Notice:`, output);
+          }
+          resolve(null);
+        }
+      });
     });
-  });
+
+    if (res) return res;
+    if (attempt < 2) await new Promise(r => setTimeout(r, 1000));
+  }
+  return null;
 }
 
 // Helper: Dynamically resolve subject-specific NotebookLM ID
@@ -693,29 +699,90 @@ function getSubjectNotebookId(userPrompt, explicitSubId = null) {
   if (promptLower.includes('ව්‍යාපාර') || promptLower.includes('කළමනාකරණ') || promptLower.includes('ගිණුම්')) {
     if (process.env.NOTEBOOK_ID_BS && process.env.NOTEBOOK_ID_BS.trim()) return process.env.NOTEBOOK_ID_BS.trim();
   }
-  if (promptLower.includes('බෞද්ධ') || promptLower.includes('ශිෂ්ටාචාරය') || promptLower.includes('තෙරවාද') || promptLower.includes('මහින්දාගමනය') || promptLower.includes('නිකාය')) {
+  if (promptLower.includes('බෞද්ධ') || promptLower.includes('ශිෂ්ටාචාරය') || promptLower.includes('තෙරවාද') || promptLower.includes('මහින්දාගමනය') || promptLower.includes('නිකාය') || promptLower.includes('සංගායනා') || promptLower.includes('සංඟායනා') || promptLower.includes('ධර්ම') || promptLower.includes('බුද්ධ')) {
     if (process.env.NOTEBOOK_ID_BC && process.env.NOTEBOOK_ID_BC.trim()) return process.env.NOTEBOOK_ID_BC.trim();
   }
 
   return (process.env.NOTEBOOK_ID || '').trim();
 }
 
-// Helper: Direct Google NotebookLM Query Engine (Pure NotebookLM Mode - Groq & Local RAG Disabled)
+// Helper: Hybrid AI Engine (NotebookLM Priority 0 + Groq AI / Syllabus RAG Priority 1 Fallback)
 async function askGeminiAI(userPrompt, explicitSubId = null) {
+  const groqKey = (process.env.GROQ_API_KEY || '').trim();
+  const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
   const notebookId = getSubjectNotebookId(userPrompt, explicitSubId);
 
+  // Priority 0: Live Google NotebookLM Python Bridge
   if (notebookId) {
     try {
       const nbReply = await askNotebookLMPython(userPrompt, notebookId);
-      if (nbReply) {
+      if (nbReply && !nbReply.toLowerCase().includes("can't answer") && !nbReply.toLowerCase().includes("cannot answer")) {
         return formatTablesForTelegram(nbReply);
       }
     } catch (e) {
-      console.error('NotebookLM Python query error:', e.message);
+      console.error('NotebookLM Python query notice:', e.message);
     }
   }
 
-  return '⚠️ **Google NotebookLM එකෙන් පිළිතුරු ලබා ගැනීමට නොහැකි විය.**\n\nමොහොතකින් නැවත `/ai ඔබගේ ප්‍රශ්නය` ලෙස යොමු කරන්න.';
+  // Priority 1: Groq Cloud Ultra-Fast AI (Llama 3.3 70B + Syllabus RAG)
+  const syllabusContext = findRelevantSyllabusContext(userPrompt);
+
+  let systemPromptText = 
+    'ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) විභාග දෙපාර්තමේන්තුවේ නිල Syllabus & Marking Scheme අනුව 100% නිවැරදිව පිළිතුරු සපයන ප්‍රවීණ A/L AI උපදේශකයෙකි (A/L MCQ HUB AI Tutor).\n\n' +
+    '⛔ අතිශය වැදගත් රීති (Strict Accuracy Rules):\n' +
+    '1. ඔබ ලබාදෙන සෑම පිළිතුරක්ම ශ්‍රී ලංකාවේ අ.පො.ස. උසස් පෙළ (A/L) නිල විෂය නිර්දේශයට 100%ක් නිවැරදි සහ අනුකූල විය යුතුය.\n' +
+    '2. නොදන්නා හෝ සැක සහිත තොරතුරු කිසිවක් අනුමාන කර (hallucinate) නොලියන්න. 100% සත්‍ය තොරතුරු පමණක් සපයන්න.\n' +
+    '3. කරුණු ඉතා පැහැදිලිව Bullet Points (•) මඟින් පෙන්වන්න.\n\n' +
+    '📌 Telegram ආකෘති උපදෙස්: (| col | col |) වගු වෙනුවට, Emoji Section Cards (🔹 **[මාතෘකාව]** \n • ⏰ **කාලය:** ...) ලෙස සකසන්න.';
+
+  if (syllabusContext) {
+    systemPromptText += `\n\n💡 **[නිල විෂය නිර්දේශ/ලකුණු දීමේ පටිපාටිය (Official Marking Scheme Context)]**:\n${syllabusContext}\n\nඋඩ දැක්වෙන නිල Marking Scheme කරුණු පදනම් කරගෙන 100% නිවැරදි පිළිතුර සකස් කරන්න.`;
+  }
+
+  if (groqKey) {
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      const url = 'https://api.groq.com/openai/v1/chat/completions';
+      const payload = {
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          { role: 'system', content: systemPromptText },
+          { role: 'user', content: userPrompt }
+        ],
+        temperature: 0.1
+      };
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${groqKey}`
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        const data = await res.json();
+        const replyText = data?.choices?.[0]?.message?.content;
+        if (res.status === 200 && replyText) {
+          return formatTablesForTelegram(replyText);
+        }
+      } catch (err) {
+        clearTimeout(timeoutId);
+        if (attempt < 2) await new Promise(r => setTimeout(r, 1000));
+      }
+    }
+  }
+
+  if (syllabusContext) {
+    return formatTablesForTelegram(`📚 **A/L MCQ HUB AI Tutor — නිල විෂය සටහන් පිළිතුර:**\n\n${syllabusContext}`);
+  }
+
+  return '⚠️ **AI පද්ධතියේ තාවකාලික කාර්යබහුලතාවයක් ඇත.**\n\nමොහොතකින් නැවත `/ai ඔබගේ ප්‍රශ්නය` ලෙස යොමු කරන්න.';
 }
 
 // Helper: Dynamically extract the latest og:image URL & cache-busting version directly from HTML files
