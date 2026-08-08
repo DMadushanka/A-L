@@ -122,8 +122,22 @@ async def handle_quiz(notebook_id, instructions):
         return
     async with client:
         topic = instructions if instructions else 'ප්‍රධාන මාතෘකා'
+        
+        # Dynamically extract question count from user prompt (default 10, or exact number requested by user e.g. 20)
+        num_questions = 10
+        if instructions:
+            import re
+            num_match = re.search(r'(\d+)\s*(?:mcq|mcqs|questions|ප්‍රශ්න)?', instructions, re.IGNORECASE)
+            if num_match:
+                try:
+                    parsed_num = int(num_match.group(1))
+                    if 3 <= parsed_num <= 30:
+                        num_questions = parsed_num
+                except Exception:
+                    pass
+
         prompt = (
-            f"උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය විෂය නිර්දේශයේ {topic} ඇසුරෙන් MCQ බහුවරණ ප්‍රශ්න 5ක් සකස් කරන්න. "
+            f"උසස් පෙළ විෂය නිර්දේශයේ {topic} ඇසුරෙන් MCQ බහුවරණ ප්‍රශ්න {num_questions}ක් සකස් කරන්න. "
             "ප්‍රතිදානය (Output) පහත සඳහන් JSON array ආකෘතියෙන් පමණක් ලබා දෙන්න:\n"
             "[\n"
             "  {\n"
