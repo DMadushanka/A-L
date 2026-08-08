@@ -542,6 +542,45 @@ console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
 console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
 console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode)'}`);
 
+// Helper: Automatically format raw Markdown tables (| col | col |) into Telegram Monospace Code Blocks
+function formatTablesForTelegram(text) {
+  if (!text) return text;
+  const lines = text.split('\n');
+  let inTable = false;
+  let tableLines = [];
+  let resultLines = [];
+
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+      if (!inTable) {
+        inTable = true;
+        tableLines = [];
+      }
+      if (!trimmed.includes('---')) {
+        tableLines.push(line);
+      }
+    } else {
+      if (inTable) {
+        inTable = false;
+        resultLines.push('```');
+        resultLines.push(...tableLines);
+        resultLines.push('```');
+        tableLines = [];
+      }
+      resultLines.push(line);
+    }
+  }
+
+  if (inTable) {
+    resultLines.push('```');
+    resultLines.push(...tableLines);
+    resultLines.push('```');
+  }
+
+  return resultLines.join('\n');
+}
+
 // Helper: 100% Free Ultra-Fast AI Tutor API Caller (Supports Groq Cloud AI & Gemini AI)
 async function askGeminiAI(userPrompt) {
   const groqKey = (process.env.GROQ_API_KEY || '').trim();
@@ -555,7 +594,9 @@ async function askGeminiAI(userPrompt) {
       messages: [
         {
           role: 'system',
-          content: 'ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) සිසුන්ට උපකාර කරන මිත්‍රශීලී, ඉතා බුද්ධිමත් A/L AI උපදේශකයෙකි (A/L AI Tutor). සිසුන් අසන ප්‍රශ්නවලට ඉතා පැහැදිලිව, කරුණාවෙන්, සිංහලෙන් සහ අවශ්‍ය කරුණු bullet points මඟින් පැහැදිලි කරන්න.'
+          content: 
+            'ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) සිසුන්ට උපකාර කරන මිත්‍රශීලී, ඉතා බුද්ධිමත් A/L AI උපදේශකයෙකි (A/L MCQ HUB AI Tutor). සිසුන් අසන ප්‍රශ්නවලට ඉතා පැහැදිලිව, කරුණාවෙන්, සිංහලෙන් සහ අවශ්‍ය කරුණු bullet points මඟින් පැහැදිලි කරන්න.\n\n' +
+            '📌 Telegram සටහන් උපදෙස්: Telegram හි standard markdown tables (| col | col |) නිසි ලෙස පෙන්වන්නේ නැත. එබැවින් වගු (tables) හෝ සංසන්දන ඉල්ලූ විට, ඒ වෙනුවට Monospace Code Blocks (``` වගුව ```) හෝ පැහැදිලි Emojis, Bullet Points භාවිතා කරමින් Telegram එකෙහි ඉතාම පැහැදිලිව පෙනෙන පරිදි පිළිතුර සකස් කරන්න.'
         },
         {
           role: 'user',
@@ -583,7 +624,7 @@ async function askGeminiAI(userPrompt) {
       const data = await res.json();
       const replyText = data?.choices?.[0]?.message?.content;
       if (res.status === 200 && replyText) {
-        return replyText;
+        return formatTablesForTelegram(replyText);
       }
       if (data?.error?.message) {
         console.error('Groq AI Notice:', data.error.message);
@@ -611,7 +652,7 @@ async function askGeminiAI(userPrompt) {
       const data = await res.json();
       const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
       if (res.status === 200 && replyText) {
-        return replyText;
+        return formatTablesForTelegram(replyText);
       }
     } catch (e) {}
   }
