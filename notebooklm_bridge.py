@@ -10,15 +10,17 @@ async def query_notebooklm(user_query, notebook_id):
             auth_file = os.path.join(os.getcwd(), "storage_state.json")
         
         if not os.path.exists(auth_file):
-            print("ERROR: Auth storage_state.json not found. Please run 'notebooklm login' first.")
+            print("ERROR: Auth storage_state.json not found. Please run 'python -m notebooklm login' first.")
             return
 
-        nb_client = NotebookLMClient.from_storage(auth_file)
-        res = await nb_client.ask(notebook_id=notebook_id, query=user_query)
-        if hasattr(res, 'answer'):
-            print(res.answer)
-        else:
-            print(str(res))
+        async with NotebookLMClient.from_storage(auth_file) as client:
+            res = await client.chat.ask(notebook_id=notebook_id, question=user_query)
+            if hasattr(res, 'answer') and res.answer:
+                print(res.answer)
+            elif isinstance(res, str):
+                print(res)
+            else:
+                print(str(res))
     except Exception as e:
         print(f"ERROR: {str(e)}")
 
