@@ -575,8 +575,30 @@ function findRelevantSyllabusContext(userPrompt) {
     });
   } catch (e) {}
 
+  // 3. Search knowledge_base/ folder for custom NotebookLM notes & documents
+  try {
+    const kbDir = path.resolve(process.cwd(), 'knowledge_base');
+    if (!fs.existsSync(kbDir)) {
+      fs.mkdirSync(kbDir, { recursive: true });
+    }
+    const kbFiles = fs.readdirSync(kbDir).filter(f => f.endsWith('.txt') || f.endsWith('.md') || f.endsWith('.json'));
+    kbFiles.forEach(fileName => {
+      const filePath = path.join(kbDir, fileName);
+      const content = fs.readFileSync(filePath, 'utf8');
+      const paragraphs = content.split(/\n\s*\n/);
+      paragraphs.forEach(para => {
+        const paraLower = para.toLowerCase();
+        const words = query.split(/\s+/).filter(w => w.length > 3);
+        const matches = words.filter(w => paraLower.includes(w));
+        if (matches.length >= 2 || paraLower.includes(query)) {
+          matchedContexts.push(`[NotebookLM Note (${fileName})]:\n${para.trim().substring(0, 800)}`);
+        }
+      });
+    });
+  } catch (e) {}
+
   if (matchedContexts.length > 0) {
-    return matchedContexts.slice(0, 3).join('\n---\n');
+    return matchedContexts.slice(0, 4).join('\n---\n');
   }
   return '';
 }
