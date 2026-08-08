@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import fs from 'fs';
 import path from 'path';
 import http from 'http';
+import { spawn } from 'child_process';
 import { 
   registerUser, 
   registerGroup,
@@ -603,10 +604,59 @@ function findRelevantSyllabusContext(userPrompt) {
   return '';
 }
 
-// Helper: 100% Free Ultra-Fast AI Tutor API Caller (Supports Groq Cloud AI & Gemini AI)
+// Helper: Optional Python Bridge to query live Google NotebookLM Notebooks
+function askNotebookLMPython(userPrompt, notebookId) {
+  return new Promise((resolve) => {
+    const scriptPath = path.resolve(process.cwd(), 'notebooklm_bridge.py');
+    if (!fs.existsSync(scriptPath)) {
+      return resolve(null);
+    }
+
+    const pyProc = spawn('python', [scriptPath, userPrompt, notebookId]);
+    let stdout = '';
+    let stderr = '';
+
+    pyProc.stdout.on('data', (d) => { stdout += d.toString(); });
+    pyProc.stderr.on('data', (d) => { stderr += d.toString(); });
+
+    const timeout = setTimeout(() => {
+      try { pyProc.kill(); } catch (e) {}
+      resolve(null);
+    }, 25000);
+
+    pyProc.on('close', (code) => {
+      clearTimeout(timeout);
+      const output = stdout.trim();
+      if (code === 0 && output && !output.startsWith('ERROR:')) {
+        resolve(output);
+      } else {
+        if (output.startsWith('ERROR:')) {
+          console.error('NotebookLM Bridge Notice:', output);
+        }
+        resolve(null);
+      }
+    });
+  });
+}
+
+// Helper: 100% Free Ultra-Fast AI Tutor API Caller (Supports NotebookLM Python Bridge, Groq Cloud AI & Gemini AI)
 async function askGeminiAI(userPrompt) {
   const groqKey = (process.env.GROQ_API_KEY || '').trim();
   const geminiKey = (process.env.GEMINI_API_KEY || '').trim();
+  const notebookId = (process.env.NOTEBOOK_ID || '').trim();
+
+  // Priority 0: Live Google NotebookLM Python Bridge (if NOTEBOOK_ID configured in .env)
+  if (notebookId) {
+    try {
+      const nbReply = await askNotebookLMPython(userPrompt, notebookId);
+      if (nbReply) {
+        return formatTablesForTelegram(nbReply);
+      }
+    } catch (e) {
+      console.error('NotebookLM Python query notice:', e.message);
+    }
+  }
+
   const syllabusContext = findRelevantSyllabusContext(userPrompt);
 
   let systemPromptText = 
