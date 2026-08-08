@@ -76,7 +76,7 @@ async def handle_audio(notebook_id, instructions):
 
         # If completed audio already exists, download immediately
         for art in audio_list:
-            if art.status == 1 or (hasattr(art, 'is_completed') and art.is_completed):
+            if art.status in [1, 3] or (hasattr(art, 'is_completed') and art.is_completed) or (hasattr(art, 'url') and art.url):
                 try:
                     res_path = await client.artifacts.download_audio(notebook_id, out_file)
                     print(f"AUDIO_FILE:{res_path}")
@@ -97,7 +97,7 @@ async def handle_audio(notebook_id, instructions):
             try:
                 audio_list = await client.artifacts.list_audio(notebook_id)
                 for art in audio_list:
-                    if art.status == 1 or (hasattr(art, 'is_completed') and art.is_completed):
+                    if art.status in [1, 3] or (hasattr(art, 'is_completed') and art.is_completed) or (hasattr(art, 'url') and art.url):
                         res_path = await client.artifacts.download_audio(notebook_id, out_file)
                         print(f"AUDIO_FILE:{res_path}")
                         return
