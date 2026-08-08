@@ -69,36 +69,29 @@ async def handle_audio(notebook_id, instructions):
     if not client:
         return
     async with client:
-        audio_list = await client.artifacts.list_audio(notebook_id)
         out_dir = os.path.join(os.getcwd(), "audio_downloads")
         os.makedirs(out_dir, exist_ok=True)
         out_file = os.path.join(out_dir, f"audio_{notebook_id[:8]}.mp3")
 
-        # If audio artifacts exist, attempt download immediately
-        if audio_list:
-            for art in audio_list:
-                try:
-                    res_path = await client.artifacts.download_audio(notebook_id, out_file, artifact_id=art.id)
-                    if res_path and os.path.exists(res_path):
-                        print(f"AUDIO_FILE:{res_path}")
-                        return
-                except Exception:
-                    pass
-                try:
-                    res_path = await client.artifacts.download_audio(notebook_id, out_file)
-                    if res_path and os.path.exists(res_path):
-                        print(f"AUDIO_FILE:{res_path}")
-                        return
-                except Exception:
-                    pass
+        sinhala_instructions = (
+            "සම්පූර්ණ සාකච්ඡාව (Audio Overview Podcast) ස්වදේශීය සිංහල භාෂාවෙන් (Sinhala Language) පමණක් සිදු කරන්න. "
+            "සියලුම කරුණු, උදාහරණ සහ පැහැදිලි කිරීම් පැහැදිලි සිංහලෙන් ඉදිරිපත් කරන්න."
+        )
+        if instructions and instructions.strip():
+            sinhala_instructions += f" විශේෂ මාතෘකාව: {instructions.strip()}"
 
-        # If not downloaded, trigger generation
+        # Trigger generation with explicit language='si' and Sinhala instructions
+        print("Requesting Sinhala Audio Overview generation (language='si')...")
         try:
-            await client.artifacts.generate_audio(notebook_id, instructions=instructions if instructions else None)
+            await client.artifacts.generate_audio(
+                notebook_id,
+                language='si',
+                instructions=sinhala_instructions
+            )
         except Exception as e:
-            pass
+            print(f"Notice on generate_audio: {e}")
 
-        # Poll for completion (up to 12 minutes = 48 iterations * 15 sec)
+        # Poll for completion and download the latest Sinhala audio artifact (up to 12 minutes = 48 iterations * 15 sec)
         for i in range(48):
             await asyncio.sleep(15)
             try:
@@ -121,7 +114,7 @@ async def handle_audio(notebook_id, instructions):
             except Exception:
                 pass
 
-        print("ERROR: Audio overview generation timed out after 12 minutes.")
+        print("ERROR: Sinhala audio overview generation timed out after 12 minutes.")
 
 async def handle_quiz(notebook_id, instructions):
     client = await get_notebooklm_client()
