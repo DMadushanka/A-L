@@ -1,6 +1,7 @@
 import sys
 import os
 import asyncio
+from pathlib import Path
 
 # Ensure UTF-8 stdout and stdin encoding for Sinhala Unicode characters on Windows
 if sys.platform == 'win32':
@@ -11,25 +12,35 @@ if sys.platform == 'win32':
 
 async def query_notebooklm(user_query, notebook_id):
     try:
-        from notebooklm import NotebookLMClient
-        auth_file = os.path.expanduser("~/.notebooklm/profiles/default/storage_state.json")
-        if not os.path.exists(auth_file):
-            auth_file = os.path.join(os.getcwd(), "storage_state.json")
+        from notebooklm import NotebookLMClient, AuthTokens
+        from notebooklm.auth import get_authuser_for_storage, get_account_email_for_storage
+
+        auth_file = Path(os.path.expanduser("~/.notebooklm/profiles/default/storage_state.json"))
+        if not auth_file.exists():
+            auth_file = Path(os.path.join(os.getcwd(), "storage_state.json"))
         
-        if not os.path.exists(auth_file):
+        if not auth_file.exists():
             print("ERROR: Auth storage_state.json not found. Please run 'python -m notebooklm login' first.")
             return
 
-        # Increased timeouts (timeout=180s, chat_timeout=300s) to handle heavy notebooks with 220+ sources
-        async with NotebookLMClient.from_storage(
-            auth_file,
+        authuser = get_authuser_for_storage(auth_file)
+        account_email = get_account_email_for_storage(auth_file)
+
+        auth = await AuthTokens.from_storage(auth_file)
+        if authuser is not None:
+            auth.authuser = authuser
+        if account_email:
+            auth.account_email = account_email
+
+        async with NotebookLMClient(
+            auth,
             timeout=180.0,
             chat_timeout=300.0,
             rate_limit_max_retries=5,
             server_error_max_retries=5
         ) as client:
             
-            # Clear any cached conversation turns to force a fresh session search every time
+            # Clear chat cache for fresh session turn
             if hasattr(client.chat, 'clear_cache'):
                 client.chat.clear_cache()
 
@@ -55,31 +66,18 @@ async def query_notebooklm(user_query, notebook_id):
                 print(ans2)
                 return
 
-            # Attempt 3: Specific Q&A search query if Attempt 2 also returned "can't answer"
-            if hasattr(client.chat, 'clear_cache'):
-                client.chat.clear_cache()
-
-            rephrased_query3 = f"{user_query} පිළිබඳ ප්‍රශ්න හා පිළිතුරු"
-            res3 = await client.chat.ask(notebook_id=notebook_id, question=rephrased_query3)
-            ans3 = res3.answer if hasattr(res3, 'answer') and res3.answer else (res3 if isinstance(res3, str) else str(res3))
-            
-            ans3_lower = ans3.lower() if ans3 else ""
-            if ans3 and "can't answer" not in ans3_lower and "cannot answer" not in ans3_lower and "rephrasing" not in ans3_lower and len(ans3.strip()) > 10:
-                print(ans3)
-                return
-            
-            # Print best available answer that doesn't contain "can't answer"
-            for a in [ans, ans2, ans3]:
-                if a and "can't answer" not in a.lower() and "cannot answer" not in a.lower() and "rephrasing" not in a.lower() and len(a.strip()) > 10:
-                    print(a)
-                    return
-
-            if ans:
+            if ans and "can't answer" not in ans_lower:
                 print(ans)
+                return
+            elif ans2 and "can't answer" not in ans2_lower:
+                print(ans2)
+                return
+            elif ans:
+                print(ans)
+                return
             elif ans2:
                 print(ans2)
-            elif ans3:
-                print(ans3)
+                return
             else:
                 print("ERROR: NotebookLM returned empty response.")
     except Exception as e:
