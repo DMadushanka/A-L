@@ -1561,9 +1561,11 @@ bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
     return bot.sendMessage(chatId, usageMsg, { parse_mode: 'Markdown' }).catch(() => {});
   }
 
+  console.log(`🤖 Gemini AI Request received from ${chatId}: "${userPrompt}"`);
   const statusMsg = await bot.sendMessage(chatId, '🤖 **Gemini AI විසින් පිළිතුර සූදානම් කරමින් පවතී... ⌛**', { parse_mode: 'Markdown' }).catch(() => null);
 
   const aiAnswer = await askGeminiAI(userPrompt);
+  console.log(`🤖 Gemini AI Response obtained (${aiAnswer.length} chars): ${aiAnswer.substring(0, 80)}...`);
 
   const formattedReply = 
     `🤖 **A/L Gemini AI Tutor පිළිතුර:**\n\n` +
