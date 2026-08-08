@@ -104,6 +104,8 @@ const QUIZ_DATA = {
     name: '✍️ සිංහල (Sinhala Language)',
     shortName: 'සිංහල',
     papers: {
+      '2019_nwp': { title: 'සිංහල 2019 (වයඹ පළාත) — I පත්‍රය MCQ 20', file: 'sinhala2019_nwp.html', img: 'logo.png', btnLabel: '2019 (වයඹ පළාත්)' },
+      '2020_nwp': { title: 'සිංහල 2020 (වයඹ පළාත) — I පත්‍රය MCQ 20', file: 'sinhala2020_nwp.html', img: 'logo.png', btnLabel: '2020 (වයඹ පළාත්)' },
       '2020': { title: 'සිංහල 2020 — I පත්‍රය MCQ', file: 'sinhala2020.html', img: 'sinhala2020.png' },
       '2021': { title: 'සිංහල 2021 — I පත්‍රය MCQ', file: 'sinhala2021.html', img: 'sinhala2021.png' },
       '2022': { title: 'සිංහල 2022 — I පත්‍රය MCQ', file: 'sinhala2022.html', img: 'sinhala2022.png' },
@@ -988,8 +990,10 @@ function getYearKeyboard(subId) {
   let row = [];
 
   keys.forEach((key, index) => {
-    row.push({ text: `📝 ${key}`, callback_data: `paper_${subId}_${key}` });
-    if (row.length === 3 || index === keys.length - 1) {
+    const paperObj = subData.papers[key];
+    const label = paperObj.btnLabel || key;
+    row.push({ text: `📝 ${label}`, callback_data: `paper_${subId}_${key}` });
+    if (row.length === 2 || index === keys.length - 1) {
       keyboard.push(row);
       row = [];
     }
