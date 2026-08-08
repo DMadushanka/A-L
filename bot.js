@@ -542,43 +542,47 @@ console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
 console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
 console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode)'}`);
 
-// Helper: Automatically format raw Markdown tables (| col | col |) into Telegram Monospace Code Blocks
+// Helper: Automatically format raw Markdown tables (| col | col |) into Beautiful Telegram Emoji Cards
 function formatTablesForTelegram(text) {
   if (!text) return text;
   const lines = text.split('\n');
   let inTable = false;
-  let tableLines = [];
-  let resultLines = [];
+  let headers = [];
+  let cardBlocks = [];
 
-  for (const line of lines) {
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
     const trimmed = line.trim();
     if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
+      const cells = trimmed.split('|').map(c => c.trim()).filter(Boolean);
+
+      if (trimmed.includes('---')) {
+        continue;
+      }
+
       if (!inTable) {
         inTable = true;
-        tableLines = [];
-      }
-      if (!trimmed.includes('---')) {
-        tableLines.push(line);
+        headers = cells;
+        cardBlocks.push('\n📊 **වගුගත තොරතුරු (Structured Cards):**\n');
+      } else {
+        const title = cells[0] || 'තොරතුරු';
+        let card = `🔹 **${title}**\n`;
+        for (let j = 1; j < cells.length; j++) {
+          const hName = headers[j] || `කරුණ ${j}`;
+          card += `  • 📌 **${hName}:** ${cells[j]}\n`;
+        }
+        cardBlocks.push(card);
       }
     } else {
       if (inTable) {
         inTable = false;
-        resultLines.push('```');
-        resultLines.push(...tableLines);
-        resultLines.push('```');
-        tableLines = [];
+        headers = [];
       }
-      resultLines.push(line);
+      cardBlocks.push(line);
     }
   }
 
-  if (inTable) {
-    resultLines.push('```');
-    resultLines.push(...tableLines);
-    resultLines.push('```');
-  }
-
-  return resultLines.join('\n');
+  return cardBlocks.join('\n');
 }
 
 // Helper: 100% Free Ultra-Fast AI Tutor API Caller (Supports Groq Cloud AI & Gemini AI)
@@ -596,7 +600,13 @@ async function askGeminiAI(userPrompt) {
           role: 'system',
           content: 
             'ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) සිසුන්ට උපකාර කරන මිත්‍රශීලී, ඉතා බුද්ධිමත් A/L AI උපදේශකයෙකි (A/L MCQ HUB AI Tutor). සිසුන් අසන ප්‍රශ්නවලට ඉතා පැහැදිලිව, කරුණාවෙන්, සිංහලෙන් සහ අවශ්‍ය කරුණු bullet points මඟින් පැහැදිලි කරන්න.\n\n' +
-            '📌 Telegram සටහන් උපදෙස්: Telegram හි standard markdown tables (| col | col |) නිසි ලෙස පෙන්වන්නේ නැත. එබැවින් වගු (tables) හෝ සංසන්දන ඉල්ලූ විට, ඒ වෙනුවට Monospace Code Blocks (``` වගුව ```) හෝ පැහැදිලි Emojis, Bullet Points භාවිතා කරමින් Telegram එකෙහි ඉතාම පැහැදිලිව පෙනෙන පරිදි පිළිතුර සකස් කරන්න.'
+            '📌 Telegram ආකෘති උපදෙස්: Telegram චැට් වල (| col | col |) වගු පටු දුරකථන තිර වල කැඩී අපැහැදිලිව පෙනේ. එබැවින් වගු (tables) හෝ සංසන්දන ඉල්ලූ විට, (| col |) වගු භාවිතා නොකර, ඒ වෙනුවට පහත පරිදි අතිශය පැහැදිලි EMOJI SECTION CARDS ලෙස පිළිතුර සකසන්න:\n\n' +
+            'උදාහරණ ආකෘතිය:\n' +
+            '🔹 **[1 වන ධර්ම සංගායනාව]**\n' +
+            '  • ⏰ **කාලය:** ක්‍රි.පූ. 544\n' +
+            '  • 📍 **ස්ථානය:** රජගහනුවර\n' +
+            '  • 👑 **අනුග්‍රහය:** අජාසත්ත රජතුමා\n' +
+            '  • 🎯 **අරමුණ:** ධර්මය හා විනය සංග්‍රහ කිරීම'
         },
         {
           role: 'user',
