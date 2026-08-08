@@ -703,48 +703,51 @@ async function askGeminiAI(userPrompt, explicitSubId = null) {
 
   // Priority 1: Groq Cloud Ultra-Fast AI (100% Free, 14,400 Requests/Day, Llama 3.3 70B)
   if (groqKey) {
-    const url = 'https://api.groq.com/openai/v1/chat/completions';
-    const payload = {
-      model: 'llama-3.3-70b-versatile',
-      messages: [
-        {
-          role: 'system',
-          content: systemPromptText
-        },
-        {
-          role: 'user',
-          content: userPrompt
+    for (let attempt = 1; attempt <= 2; attempt++) {
+      const url = 'https://api.groq.com/openai/v1/chat/completions';
+      const payload = {
+        model: 'llama-3.3-70b-versatile',
+        messages: [
+          {
+            role: 'system',
+            content: systemPromptText
+          },
+          {
+            role: 'user',
+            content: userPrompt
+          }
+        ],
+        temperature: 0.1 // Strict factual accuracy (Zero Hallucination mode)
+      };
+
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 45000);
+
+      try {
+        const res = await fetch(url, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${groqKey}`
+          },
+          body: JSON.stringify(payload),
+          signal: controller.signal
+        });
+        clearTimeout(timeoutId);
+
+        const data = await res.json();
+        const replyText = data?.choices?.[0]?.message?.content;
+        if (res.status === 200 && replyText) {
+          return formatTablesForTelegram(replyText);
         }
-      ],
-      temperature: 0.1 // Strict factual accuracy (Zero Hallucination mode)
-    };
-
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 45000);
-
-    try {
-      const res = await fetch(url, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${groqKey}`
-        },
-        body: JSON.stringify(payload),
-        signal: controller.signal
-      });
-      clearTimeout(timeoutId);
-
-      const data = await res.json();
-      const replyText = data?.choices?.[0]?.message?.content;
-      if (res.status === 200 && replyText) {
-        return formatTablesForTelegram(replyText);
+        if (data?.error?.message) {
+          console.error('Groq AI Notice:', data.error.message);
+        }
+      } catch (err) {
+        clearTimeout(timeoutId);
+        console.error(`Groq AI Attempt ${attempt} error:`, err.message);
+        if (attempt < 2) await new Promise(r => setTimeout(r, 1000));
       }
-      if (data?.error?.message) {
-        console.error('Groq AI Notice:', data.error.message);
-      }
-    } catch (err) {
-      clearTimeout(timeoutId);
-      console.error('Error calling Groq AI:', err.message);
     }
   }
 
@@ -770,7 +773,12 @@ async function askGeminiAI(userPrompt, explicitSubId = null) {
     } catch (e) {}
   }
 
-  return '⚠️ **AI API Key සකසා නොමැත හෝ දෝෂයක් සිදු විය.**\n\n`.env` ගොනුවේ `GROQ_API_KEY=gsk_...` ඇතුළත් කරන්න (100% Free).';
+  // Priority 3: Absolute Fallback - Return Syllabus Marking Scheme Context if available
+  if (syllabusContext) {
+    return formatTablesForTelegram(`📚 **A/L MCQ HUB AI Tutor — නිල විෂය සටහන් පිළිතුර:**\n\n${syllabusContext}`);
+  }
+
+  return '⚠️ **AI පද්ධතියේ තාවකාලික කාර්යබහුලතාවයක් ඇත.**\n\nමොහොතකින් නැවත `/ai ඔබගේ ප්‍රශ්නය` යොමු කරන්න.';
 }
 
 // Helper: Dynamically extract the latest og:image URL & cache-busting version directly from HTML files
