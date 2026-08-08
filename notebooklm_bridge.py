@@ -2,6 +2,9 @@ import sys
 import os
 import asyncio
 
+# Ensure UTF-8 stdout encoding for Sinhala Unicode characters on Windows
+sys.stdout.reconfigure(encoding='utf-8')
+
 async def query_notebooklm(user_query, notebook_id):
     try:
         from notebooklm import NotebookLMClient
