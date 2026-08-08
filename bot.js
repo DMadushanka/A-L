@@ -367,6 +367,7 @@ function parseCustomTimeInput(inputStr) {
 
 // State storage for active Native Telegram Poll sessions
 const userPollSessions = {}; // chatId -> { subId, yearKey, paperKey, title, questions, qIndex, score, startTime }
+const aiQuizSessions = {}; // chatId -> { creatorName, creatorMention, userScores }
 const pollIdMap = {}; // pollId -> { chatId, correctOption }
 const pendingCustomSchedule = {}; // chatId -> { subId, yearKey, paperKey }
 
@@ -1227,7 +1228,7 @@ async function sendNextGroupNativePollStep(chatId) {
   }, 17000);
 }
 
-// Register Poll Answer Listener for Real-Time Group Leaderboards
+// Register Poll Answer Listener for Real-Time Group Leaderboards & AI Quiz Competitions
 bot.on('poll_answer', (answer) => {
   try {
     const pollId = answer.poll_id;
@@ -1235,36 +1236,50 @@ bot.on('poll_answer', (answer) => {
     if (!mapping) return;
 
     const { chatId, qIndex, correctOption } = mapping;
-    const session = userPollSessions[chatId];
-    if (!session) return;
-
     const user = answer.user;
     if (!user) return;
 
-    if (!session.userScores[user.id]) {
-      const name = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
-      const username = user.username ? `@${user.username}` : '';
-      session.userScores[user.id] = {
-        name,
-        username,
-        score: 0,
-        totalAnswered: 0,
-        wrongList: []
-      };
-    }
-
-    const student = session.userScores[user.id];
     const selectedOpt = (answer.option_ids && answer.option_ids.length > 0) ? answer.option_ids[0] : -1;
 
-    student.totalAnswered++;
-    if (selectedOpt === correctOption) {
-      student.score++;
-    } else {
-      student.wrongList.push({
-        qNum: qIndex + 1,
-        userAns: selectedOpt + 1,
-        correctAns: correctOption + 1
-      });
+    // Track AI Quiz Competition Scores
+    const aiSession = aiQuizSessions[chatId];
+    if (aiSession) {
+      if (!aiSession.userScores[user.id]) {
+        const uName = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
+        const uHandle = user.username ? `@${user.username}` : uName;
+        aiSession.userScores[user.id] = { name: uName, username: uHandle, score: 0 };
+      }
+      if (selectedOpt === correctOption) {
+        aiSession.userScores[user.id].score++;
+      }
+    }
+
+    // Track Standard Scheduled/Interactive Paper Sessions
+    const session = userPollSessions[chatId];
+    if (session) {
+      if (!session.userScores[user.id]) {
+        const name = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
+        const username = user.username ? `@${user.username}` : '';
+        session.userScores[user.id] = {
+          name,
+          username,
+          score: 0,
+          totalAnswered: 0,
+          wrongList: []
+        };
+      }
+
+      const student = session.userScores[user.id];
+      student.totalAnswered++;
+      if (selectedOpt === correctOption) {
+        student.score++;
+      } else {
+        student.wrongList.push({
+          qNum: qIndex + 1,
+          userAns: selectedOpt + 1,
+          correctAns: correctOption + 1
+        });
+      }
     }
   } catch (err) {
     console.error('Error handling poll answer:', err.message);
@@ -1506,9 +1521,20 @@ bot.onText(/\/start/i, (msg) => {
 
 // Helper: Start Live AI Quiz Competition with Native Telegram Polls & 20-Second Timers
 async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
+  const reqUser = msg.from || {};
+  const reqName = [reqUser.first_name, reqUser.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
+  const reqUsername = reqUser.username ? `@${reqUser.username}` : reqName;
+
+  aiQuizSessions[chatId] = {
+    creatorName: reqName,
+    creatorMention: reqUsername,
+    userScores: {}
+  };
+
   const initialMsg = await bot.sendMessage(
     chatId,
     `🏆 **A/L MCQ HUB Live AI Quiz Competition සකස් වෙමින් පවතී...**\n\n` +
+    `👤 **තරඟය ආරම්භ කළේ:** ${reqUsername}\n` +
     `⏳ **තරඟ විස්තර (Competition Rules):**\n` +
     `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සජීවී Interactive Telegram Quiz Polls සකස් කරනු ලබයි.\n` +
     `• **තත්පර 20 ක කාල සීමාවක් (20-Second Interval Timer)** සෑම ප්‍රශ්නයකටම හිමි වේ.\n` +
@@ -1518,7 +1544,7 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
   ).catch(() => null);
 
   const notebookId = getSubjectNotebookId(userTopic, subCode || 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
-  console.log(`🧩 Quiz Competition requested for chat ${chatId} (subCode=${subCode || 'auto'}): topic="${userTopic}"`);
+  console.log(`🧩 Quiz Competition requested for chat ${chatId} by ${reqUsername} (subCode=${subCode || 'auto'}): topic="${userTopic}"`);
 
   const resText = await askNotebookLMPython(userTopic, notebookId, 'quiz');
 
@@ -1533,6 +1559,7 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
       await bot.sendMessage(
         chatId,
         `🏆 **A/L MCQ HUB — Live AI Quiz Competition (${parsedQuestions.length} MCQ Polls)**\n\n` +
+        `👤 **නිර්මාණය කළේ:** ${reqUsername}\n` +
         `⏱️ **සෑම ප්‍රශ්නයකටම තත්පර 20 ක කාලයක් (20 Seconds Timer) හිමි වේ.**\n` +
         `🔥 සූදානම් වන්න! පළමු ප්‍රශ්නය දැන් සජීවීව ලැබෙනු ඇත...`,
         { parse_mode: 'Markdown' }
@@ -1547,7 +1574,7 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
         const correctIdx = Math.min(Math.max(0, qObj.c), cleanOpts.length - 1);
         const cleanExplain = qObj.e ? `💡 ${qObj.e.substring(0, 190)}` : undefined;
 
-        await bot.sendPoll(chatId, cleanQ, cleanOpts, {
+        const pollMsg = await bot.sendPoll(chatId, cleanQ, cleanOpts, {
           type: 'quiz',
           correct_option_id: correctIdx,
           explanation: cleanExplain,
@@ -1555,7 +1582,16 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
           open_period: 20
         }).catch(async (e) => {
           console.error(`Error sending poll Q${i + 1}:`, e.message);
+          return null;
         });
+
+        if (pollMsg && pollMsg.poll) {
+          pollIdMap[pollMsg.poll.id] = {
+            chatId,
+            qIndex: i,
+            correctOption: correctIdx
+          };
+        }
 
         if (i < parsedQuestions.length - 1) {
           await new Promise(r => setTimeout(r, 22000));
@@ -1564,19 +1600,38 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
         }
       }
 
-      await bot.sendMessage(
-        chatId,
-        `🏆 **A/L MCQ HUB Live AI Quiz Competition සාර්ථකව අවසන් විය!**\n\n` +
-        `✨ තරඟයට එක්වූ සහ සියලුම ප්‍රශ්න සඳහා නිවැරදි පිළිතුරු ලබා දුන් සියලු දෙනාට සුබ පැතුම්! 🎉\n` +
-        `💡 *නැවත තරඟයක් ආරම්භ කිරීමට \`/quiz\` හෝ \`/quiz_si\` ලෙස එවන්න.*`,
-        { parse_mode: 'Markdown' }
-      ).catch(() => {});
+      const aiSession = aiQuizSessions[chatId];
+      const sortedWinners = (aiSession && aiSession.userScores) ? 
+        Object.values(aiSession.userScores).sort((a, b) => b.score - a.score) : [];
+
+      let completionMsg = 
+        `🏆 **A/L MCQ HUB — Live AI Quiz Competition ජයග්‍රාහකයින් (Winners Leaderboard)**\n\n`;
+
+      if (sortedWinners.length > 0) {
+        const medalIcons = ['🥇 1st Place', '🥈 2nd Place', '🥉 3rd Place'];
+        sortedWinners.forEach((w, idx) => {
+          const rankTag = idx < 3 ? medalIcons[idx] : `🏅 ${idx + 1}th Place`;
+          completionMsg += `${rankTag}: **${w.username || w.name}** — **${w.score}/${parsedQuestions.length}** ලකුණු 🎉\n`;
+        });
+        completionMsg += `\n✨ ජයග්‍රහණය කළ සහ තරඟයට සාර්ථකව එක්වූ සියලුම සාමාජිකයින්ට අපගේ උණුසුම් සුබ පැතුම්! 👏🎉\n\n`;
+      } else {
+        completionMsg += `✨ තරඟයට එක්වූ සියලුම සාමාජිකයින්ට අපගේ උණුසුම් සුබ පැතුම්! 👏\n\n`;
+      }
+
+      completionMsg += 
+        `🙏 **මෙම AI Quiz තරඟය නිර්මාණය කර දීමට මූලික වූ ${reqUsername} සාමාජිකයාට අපගේ විශේෂ ස්තුතිය! (Special thanks to ${reqUsername} for generating this quiz!)** ❤️\n\n` +
+        `💡 *නැවත තරඟයක් ආරම්භ කිරීමට \`/quiz\` හෝ \`/quiz_si\` ලෙස එවන්න.*`;
+
+      await bot.sendMessage(chatId, completionMsg, { parse_mode: 'Markdown' }).catch(() => {});
+      delete aiQuizSessions[chatId];
 
     } else {
       await sendLongMessage(chatId, `🧩 **A/L MCQ HUB AI Quiz & Study Guide**\n\n${resText}`).catch(() => {});
+      delete aiQuizSessions[chatId];
     }
   } else {
     await bot.sendMessage(chatId, `⚠️ **Quiz ජනනය කිරීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.**`).catch(() => {});
+    delete aiQuizSessions[chatId];
   }
 }
 
