@@ -532,6 +532,7 @@ bot.setChatMenuButton({
 // Register Bot Command Autocomplete Registry for Telegram UI
 bot.setMyCommands([
   { command: 'start', description: '🚀 ප්‍රධාන මෙනුව ආරම්භ කරන්න (Start Quiz Bot)' },
+  { command: 'ai', description: '🤖 Gemini AI Tutor (ඕනෑම A/L ප්‍රශ්නයක් අහන්න)' },
   { command: 'leaderboard', description: '🏆 උසස් පෙළ ලකුණු පුවරුව (Leaderboards & Ranks)' },
   { command: 'help', description: '📖 භාවිතය පිළිබඳ උපදෙස් (Help & Instructions)' },
   { command: 'myid', description: '👤 ඔබගේ Telegram User ID එක (View My ID)' }
@@ -540,6 +541,50 @@ bot.setMyCommands([
 console.log('🚀 A/L MCQ Quiz Telegram Bot is starting...');
 console.log(`🔗 WebApp Portal URL: ${portalUrl}`);
 console.log(`🛡️ Configured ADMIN_ID: ${ADMIN_ID || 'None (Public Admin Mode)'}`);
+
+// Helper: Google Gemini AI 100% Free Tutor API Caller
+async function askGeminiAI(userPrompt) {
+  const apiKey = (process.env.GEMINI_API_KEY || '').trim();
+
+  if (!apiKey) {
+    return '⚠️ **Gemini API Key සකසා නොමැත.**\nනොමිලේ API Key එකක් [Google AI Studio](https://aistudio.google.com/) මඟින් ලබාගෙන `.env` ගොනුවේ `GEMINI_API_KEY=your_key` ඇතුළත් කරන්න (100% Free).';
+  }
+
+  const model = 'gemini-1.5-flash';
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+  const payload = {
+    contents: [
+      {
+        parts: [
+          {
+            text: `ඔබ ශ්‍රී ලංකාවේ අ.පො.ස. (උසස් පෙළ) සිසුන්ට උපකාර කරන මිත්‍රශීලී, ඉතා බුද්ධිමත් A/L AI උපදේශකයෙකි (A/L AI Tutor). සිසුන් අසන ප්‍රශ්නවලට ඉතා පැහැදිලිව, කරුණාවෙන්, සිංහලෙන් සහ අවශ්‍ය කරුණු bullet points මඟින් පැහැදිලි කරන්න.\n\nසිසුවාගේ ප්‍රශ්නය: ${userPrompt}`
+          }
+        ]
+      }
+    ]
+  };
+
+  try {
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (replyText) {
+      return replyText;
+    }
+    if (data?.error?.message) {
+      return `⚠️ **Gemini API Notice:** ${data.error.message}`;
+    }
+    return '❌ පිළිතුර ලබාගැනීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.';
+  } catch (err) {
+    console.error('Error calling Gemini API:', err.message);
+    return '❌ Gemini AI සම්බන්ධතාවයේ දෝෂයක් සිදු විය.';
+  }
+}
 
 function getPaperImageUrl(paperKey) {
   if (!paperKey) return 'https://dmadushanka.github.io/A-L/logo.png';
@@ -1488,6 +1533,46 @@ bot.onText(/\/start/i, (msg) => {
   sendStartMenu(msg.chat.id, msg.from, isGroup);
 });
 
+// Command: /ai <prompt> or /ask <prompt> (Gemini 1.5 Flash Free AI Tutor)
+bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
+  const chatId = msg.chat.id;
+  const userPrompt = match[3] ? match[3].trim() : '';
+
+  if (!userPrompt) {
+    const usageMsg = 
+      `🤖 **A/L Gemini AI Tutor — භාවිත කරන ආකාරය**\n\n` +
+      `ඔබට ඇති ඕනෑම උසස් පෙළ ප්‍රශ්නයක් හෝ සැකයක් අසන්න:\n\n` +
+      `👉 **ආකෘතිය:** \`/ai ඔබගේ ප්‍රශ්නය\`\n\n` +
+      `📌 **උදාහරණ:**\n` +
+      `• \`/ai අභයගිරි නිකාය ආරම්භ වීමට හේතු මොනවාද?\` \n` +
+      `• \`/ai චතුර් වර්ණ ධර්ම පැහැදිලි කරන්න.\` \n` +
+      `• \`/ai ව්‍යග්ඝපජ්ජ සූත්‍රයේ එන දිට්ඨධම්මහිතත්ථ සම්පදා 4 මොනවාද?\``;
+
+    return bot.sendMessage(chatId, usageMsg, { parse_mode: 'Markdown' }).catch(() => {});
+  }
+
+  const statusMsg = await bot.sendMessage(chatId, '🤖 **Gemini AI විසින් පිළිතුර සූදානම් කරමින් පවතී... ⌛**', { parse_mode: 'Markdown' }).catch(() => null);
+
+  const aiAnswer = await askGeminiAI(userPrompt);
+
+  const formattedReply = 
+    `🤖 **A/L Gemini AI Tutor පිළිතුර:**\n\n` +
+    `${aiAnswer}\n\n` +
+    `💡 *තවත් ප්‍රශ්නයක් ඇසීමට \`/ai ඔබගේ ප්‍රශ්නය\` ලෙස ටයිප් කරන්න.*`;
+
+  if (statusMsg && statusMsg.message_id) {
+    await bot.editMessageText(formattedReply, {
+      chat_id: chatId,
+      message_id: statusMsg.message_id,
+      parse_mode: 'Markdown'
+    }).catch(async () => {
+      await bot.sendMessage(chatId, formattedReply, { parse_mode: 'Markdown' }).catch(() => {});
+    });
+  } else {
+    await bot.sendMessage(chatId, formattedReply, { parse_mode: 'Markdown' }).catch(() => {});
+  }
+});
+
 // Command: /myid
 bot.onText(/\/myid/i, (msg) => {
   const chatId = msg.chat.id;
@@ -1649,6 +1734,22 @@ bot.on('callback_query', async (query) => {
   if (query.from) registerUser(query.from);
 
   try {
+    if (data === 'ask_ai_prompt') {
+      const text = 
+        `🤖 **A/L Gemini AI ගුරුතුමා (Google Gemini AI Tutor)**\n\n` +
+        `ඔබට ඇති ඕනෑම උසස් පෙළ MCQ ප්‍රශ්නයක්, විෂය කරුණක්, හෝ සැකයක් සිංහලෙන් අසා පැහැදිලි කරගත හැක.\n\n` +
+        `👉 **භාවිතා කරන ආකාරය:**\n` +
+        `Chat එකේ **/ai ඔබගේ ප්‍රශ්නය** ලෙස ටයිප් කර එවන්න.\n\n` +
+        `📌 **උදාහරණ:**\n` +
+        `• \`/ai අග්ගඤ්ඤ සූත්‍රයේ දැක්වෙන මහාසම්මත රජුගේ සම්භවය පැහැදිලි කරන්න.\` \n` +
+        `• \`/ai ඊශ්වර නිර්මාණවාදය යනු කුමක්ද?\` \n` +
+        `• \`/ai 2024 බස්නාහිර පළාත් පත්‍රයේ 10 ප්‍රශ්නය විග්‍රහ කරන්න.\``;
+
+      await bot.sendMessage(chatId, text, { parse_mode: 'Markdown' }).catch(e => {});
+      await safeAnswerCallback(query.id);
+      return;
+    }
+
     // ------------------- ADMIN LIVE QUIZ SCHEDULER WIZARD -------------------
     
     // Admin Step 1: Select Subject for Live Quiz
