@@ -565,24 +565,34 @@ async function askGeminiAI(userPrompt) {
     ]
   };
 
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 15000);
+
   try {
     const res = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: controller.signal
     });
+    clearTimeout(timeoutId);
+
     const data = await res.json();
     const replyText = data?.candidates?.[0]?.content?.parts?.[0]?.text;
     if (replyText) {
       return replyText;
     }
     if (data?.error?.message) {
-      return `⚠️ **Gemini API Notice:** ${data.error.message}`;
+      return `⚠️ Gemini API Notice: ${data.error.message}`;
     }
     return '❌ පිළිතුර ලබාගැනීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.';
   } catch (err) {
+    clearTimeout(timeoutId);
     console.error('Error calling Gemini API:', err.message);
-    return '❌ Gemini AI සම්බන්ධතාවයේ දෝෂයක් සිදු විය.';
+    if (err.name === 'AbortError') {
+      return '⏳ Gemini AI පිළිතුර ලබා ගැනීමට ගතවූ කාලය වැඩි විය. කරුණාකර නැවත උත්සාහ කරන්න.';
+    }
+    return `❌ Gemini AI සම්බන්ධතාවයේ දෝෂයක් සිදු විය: ${err.message}`;
   }
 }
 
@@ -1561,15 +1571,25 @@ bot.onText(/\/(ai|ask)(@\w+)?\s*(.*)/i, async (msg, match) => {
     `💡 *තවත් ප්‍රශ්නයක් ඇසීමට \`/ai ඔබගේ ප්‍රශ්නය\` ලෙස ටයිප් කරන්න.*`;
 
   if (statusMsg && statusMsg.message_id) {
-    await bot.editMessageText(formattedReply, {
-      chat_id: chatId,
-      message_id: statusMsg.message_id,
-      parse_mode: 'Markdown'
-    }).catch(async () => {
-      await bot.sendMessage(chatId, formattedReply, { parse_mode: 'Markdown' }).catch(() => {});
-    });
+    try {
+      await bot.editMessageText(formattedReply, {
+        chat_id: chatId,
+        message_id: statusMsg.message_id,
+        parse_mode: 'Markdown'
+      });
+    } catch (e) {
+      console.log('Markdown edit failed, falling back to plain text edit:', e.message);
+      try {
+        await bot.editMessageText(formattedReply, {
+          chat_id: chatId,
+          message_id: statusMsg.message_id
+        });
+      } catch (e2) {
+        await bot.sendMessage(chatId, formattedReply).catch(() => {});
+      }
+    }
   } else {
-    await bot.sendMessage(chatId, formattedReply, { parse_mode: 'Markdown' }).catch(() => {});
+    await bot.sendMessage(chatId, formattedReply).catch(() => {});
   }
 });
 
