@@ -165,7 +165,7 @@ const QUIZ_DATA = {
     name: '💼 ව්‍යාපාර අධ්‍යයනය (Business Studies)',
     shortName: 'ව්‍යාපාර අධ්‍යයනය',
     papers: {
-      '2015': { title: 'ව්‍යාපාර අධ්‍යයනය 2015 — MCQ 30', file: 'bs2015.html', img: 'bs5.png' }
+      '2015': { title: 'ව්‍යාපාර අධ්‍යයනය 2015 — MCQ 30', file: 'bs2015.html', img: 'bs2015.png' }
     }
   }
 };
@@ -671,17 +671,53 @@ async function askGeminiAI(userPrompt) {
   return '⚠️ **AI API Key සකසා නොමැත හෝ දෝෂයක් සිදු විය.**\n\n`.env` ගොනුවේ `GROQ_API_KEY=gsk_...` ඇතුළත් කරන්න (100% Free).';
 }
 
+// Helper: Dynamically extract the latest og:image URL & cache-busting version directly from HTML files
 function getPaperImageUrl(paperKey) {
-  if (!paperKey) return 'https://dmadushanka.github.io/A-L/logo.png';
+  if (!paperKey) return `https://dmadushanka.github.io/A-L/logo.png?v=${Date.now()}`;
   const parts = paperKey.split('_');
   const subId = parts[0];
   const yearKey = parts.slice(1).join('_');
   const subData = QUIZ_DATA[subId];
   const paperData = subData?.papers[yearKey];
-  if (paperData && paperData.img) {
-    return `https://dmadushanka.github.io/A-L/${paperData.img}`;
+
+  if (paperData && paperData.file) {
+    try {
+      const htmlPath = path.resolve(process.cwd(), paperData.file);
+      if (fs.existsSync(htmlPath)) {
+        const htmlContent = fs.readFileSync(htmlPath, 'utf8');
+        const match = htmlContent.match(/<meta\s+(?:property|name)=["'](?:og:image|twitter:image)["']\s+content=["']([^"']+)["']/i);
+        const stats = fs.statSync(htmlPath);
+        const version = Math.floor(stats.mtimeMs);
+
+        if (match) {
+          const ogImgUrl = match[1].trim();
+          const imgFilename = path.basename(ogImgUrl);
+          
+          // Check if image file exists to get image mtime for maximum precision
+          const imgPath = path.resolve(process.cwd(), imgFilename);
+          let imgVersion = version;
+          if (fs.existsSync(imgPath)) {
+            imgVersion = Math.floor(fs.statSync(imgPath).mtimeMs);
+          }
+
+          return `https://dmadushanka.github.io/A-L/${imgFilename}?v=${imgVersion}`;
+        }
+      }
+    } catch (err) {
+      console.error(`Notice extracting og:image for ${paperKey}:`, err.message);
+    }
   }
-  return 'https://dmadushanka.github.io/A-L/logo.png';
+
+  if (paperData && paperData.img) {
+    const imgPath = path.resolve(process.cwd(), paperData.img);
+    let v = Date.now();
+    if (fs.existsSync(imgPath)) {
+      v = Math.floor(fs.statSync(imgPath).mtimeMs);
+    }
+    return `https://dmadushanka.github.io/A-L/${paperData.img}?v=${v}`;
+  }
+
+  return `https://dmadushanka.github.io/A-L/logo.png?v=${Date.now()}`;
 }
 
 // Helper: Zero-Manual-Interaction Automated WhatsApp Channel Publisher via Green API
