@@ -73,6 +73,21 @@ async def handle_audio(notebook_id, instructions):
         os.makedirs(out_dir, exist_ok=True)
         out_file = os.path.join(out_dir, f"audio_{notebook_id[:8]}.mp3")
 
+        # Capture existing audio artifact IDs BEFORE triggering new generation
+        initial_ids = set()
+        try:
+            initial_audio = await client.artifacts.list_audio(notebook_id)
+            initial_ids = {art.id for art in initial_audio}
+        except Exception:
+            pass
+
+        # Remove stale cached file
+        if os.path.exists(out_file):
+            try:
+                os.remove(out_file)
+            except Exception:
+                pass
+
         sinhala_instructions = (
             "සම්පූර්ණ සාකච්ඡාව (Audio Overview Podcast) ස්වදේශීය සිංහල භාෂාවෙන් (Sinhala Language) පමණක් සිදු කරන්න. "
             "සියලුම කරුණු, උදාහරණ සහ පැහැදිලි කිරීම් පැහැදිලි සිංහලෙන් ඉදිරිපත් කරන්න."
@@ -80,8 +95,7 @@ async def handle_audio(notebook_id, instructions):
         if instructions and instructions.strip():
             sinhala_instructions += f" විශේෂ මාතෘකාව: {instructions.strip()}"
 
-        # Trigger generation with explicit language='si' and Sinhala instructions
-        print("Requesting Sinhala Audio Overview generation (language='si')...")
+        print("Requesting NEW Sinhala Audio Overview generation (language='si')...")
         try:
             await client.artifacts.generate_audio(
                 notebook_id,
@@ -91,23 +105,23 @@ async def handle_audio(notebook_id, instructions):
         except Exception as e:
             print(f"Notice on generate_audio: {e}")
 
-        # Poll for completion and download the latest Sinhala audio artifact (up to 12 minutes = 48 iterations * 15 sec)
+        # Poll for NEW audio artifact (up to 12 minutes = 48 iterations * 15 sec)
         for i in range(48):
             await asyncio.sleep(15)
             try:
-                audio_list = await client.artifacts.list_audio(notebook_id)
-                for art in audio_list:
+                current_audio = await client.artifacts.list_audio(notebook_id)
+                # Prioritize newly generated audio artifacts
+                new_arts = [art for art in current_audio if art.id not in initial_ids]
+                target_list = new_arts if new_arts else current_audio
+
+                for art in target_list:
                     try:
                         res_path = await client.artifacts.download_audio(notebook_id, out_file, artifact_id=art.id)
-                        if res_path and os.path.exists(res_path):
+                        if res_path and os.path.exists(res_path) and os.path.getsize(res_path) > 1000:
+                            art_title = getattr(art, 'title', '') or (instructions if instructions else 'Audio Overview')
                             print(f"AUDIO_FILE:{res_path}")
-                            return
-                    except Exception:
-                        pass
-                    try:
-                        res_path = await client.artifacts.download_audio(notebook_id, out_file)
-                        if res_path and os.path.exists(res_path):
-                            print(f"AUDIO_FILE:{res_path}")
+                            print(f"AUDIO_TITLE:{art_title}")
+                            print(f"AUDIO_SUMMARY:උසස් පෙළ විෂය කරුණු ({instructions if instructions else 'විෂය කරුණු'}) ඇසුරෙන් 100% සිංහල හඬින් සකස් කරන ලද AI Audio Podcast එක.")
                             return
                     except Exception:
                         pass

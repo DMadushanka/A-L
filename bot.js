@@ -667,8 +667,15 @@ async function askNotebookLMPython(userPrompt, notebookId, mode = 'query') {
         const output = stdout.trim();
         if (output.includes('AUDIO_FILE:')) {
           const match = output.match(/AUDIO_FILE:(.+)/);
+          const titleMatch = output.match(/AUDIO_TITLE:(.+)/);
+          const summaryMatch = output.match(/AUDIO_SUMMARY:(.+)/);
           if (match && match[1]) {
-            return resolve({ type: 'audio', path: match[1].trim() });
+            return resolve({
+              type: 'audio',
+              path: match[1].trim(),
+              title: titleMatch ? titleMatch[1].trim() : '',
+              summary: summaryMatch ? summaryMatch[1].trim() : ''
+            });
           }
         }
         if (code === 0 && output && !output.startsWith('ERROR:')) {
@@ -1798,6 +1805,10 @@ bot.onText(/\/(audio|podcast)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) 
   let subCode = match[2] ? match[2].trim().toLowerCase() : null;
   let userTopic = match[4] ? match[4].trim() : '';
 
+  const reqUser = msg.from || {};
+  const reqName = [reqUser.first_name, reqUser.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
+  const reqUsername = reqUser.username ? `@${reqUser.username}` : reqName;
+
   if (!subCode && userTopic) {
     const parts = userTopic.split(/\s+/);
     const candidate = parts[0].toLowerCase();
@@ -1810,6 +1821,7 @@ bot.onText(/\/(audio|podcast)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) 
   const initialMsg = await bot.sendMessage(
     chatId,
     `🎙️ **A/L MCQ HUB Audio Overview (Deep Dive AI Podcast) ජනනය කිරීම ආරම්භ කර ඇත...**\n\n` +
+    `👤 **ඉල්ලුම් කළේ:** ${reqUsername}\n` +
     `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
     `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සවිස්තරාත්මක audio podcast එකක් සකස් කරනු ලබයි.\n` +
     `• මෙම ක්‍රියාවලිය සඳහා **මිනිත්තු 3 සිට 5 දක්වා (සමහර විට මිනිත්තු 10 ක් දක්වා)** කාලයක් ගත විය හැක.\n` +
@@ -1819,7 +1831,7 @@ bot.onText(/\/(audio|podcast)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) 
   ).catch(() => null);
 
   const notebookId = getSubjectNotebookId(userTopic, subCode || 'bc') || 'cb5c3e92-b77c-4a84-9b7f-11d543a1d46c';
-  console.log(`🎙️ Audio Overview requested for chat ${chatId} (subCode=${subCode || 'auto'}): topic="${userTopic}"`);
+  console.log(`🎙️ Audio Overview requested for chat ${chatId} by ${reqUsername} (subCode=${subCode || 'auto'}): topic="${userTopic}"`);
   
   const res = await askNotebookLMPython(userTopic, notebookId, 'audio');
 
@@ -1828,13 +1840,29 @@ bot.onText(/\/(audio|podcast)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) 
       bot.deleteMessage(chatId, initialMsg.message_id).catch(() => {});
     }
     const stats = fs.statSync(res.path);
-    const captionText = `🎙️ **A/L MCQ HUB Audio Overview (Deep Dive Podcast)**\n\n📚 **විෂය:** උසස් පෙළ A/L Syllabus (${subCode ? subCode.toUpperCase() : 'General'})\n💡 A/L MCQ HUB AI මඟින් සජීවීව නිර්මාණය කර Telegram වෙත එවනු ලැබීය.`;
-    
+
+    let subjectName = 'උසස් පෙළ A/L Syllabus';
+    const s = (subCode || '').toLowerCase();
+    if (['si', 'sin', 'sinhala'].includes(s)) subjectName = 'උසස් පෙළ සිංහල (Sinhala)';
+    else if (['bc', 'buddhist'].includes(s)) subjectName = 'උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය (Buddhist Civ)';
+    else if (['hi', 'hist', 'history'].includes(s)) subjectName = 'උසස් පෙළ ඉතිහාසය (History)';
+    else if (['pl', 'pol', 'political'].includes(s)) subjectName = 'උසස් පෙළ දේශපාලන විද්‍යාව (Political Science)';
+    else if (['bs', 'bus', 'business'].includes(s)) subjectName = 'උසස් පෙළ ව්‍යාපාර අධ්‍යයනය (Business Studies)';
+
+    const captionText = 
+      `🎙️ **A/L MCQ HUB — AI Audio Overview Podcast** 🎧\n\n` +
+      `📌 **මාතෘකාව (Topic):** ${userTopic || 'විෂය කරුණු විග්‍රහය'}\n` +
+      `📚 **විෂය (Subject):** ${subjectName}\n` +
+      `👤 **ඉල්ලුම් කළේ:** ${reqUsername}\n\n` +
+      `💡 **විස්තරය (Description):**\n` +
+      `${res.summary || 'උසස් පෙළ විෂය නිර්දේශයේ කරුණු ඇසුරෙන් 100% සිංහල හඬින් නිර්මාණය කරන ලද සවිස්තරාත්මක AI Audio Podcast එක.'}\n\n` +
+      `✨ *A/L MCQ HUB AI මඟින් සජීවීව නිර්මාණය කර Telegram වෙත එවනු ලැබීය.*`;
+
     if (stats.size > 48 * 1024 * 1024) {
-      await bot.sendDocument(chatId, res.path, { caption: captionText }).catch(() => {});
+      await bot.sendDocument(chatId, res.path, { caption: captionText, parse_mode: 'Markdown' }).catch(() => {});
     } else {
-      await bot.sendAudio(chatId, res.path, { caption: captionText }).catch(async () => {
-        await bot.sendDocument(chatId, res.path, { caption: captionText }).catch(() => {});
+      await bot.sendAudio(chatId, res.path, { caption: captionText, parse_mode: 'Markdown', title: userTopic || res.title || 'A/L AI Podcast', performer: 'A/L MCQ HUB AI' }).catch(async () => {
+        await bot.sendDocument(chatId, res.path, { caption: captionText, parse_mode: 'Markdown' }).catch(() => {});
       });
     }
   } else {
