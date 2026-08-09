@@ -1626,7 +1626,7 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
     `👤 **තරඟය ආරම්භ කළේ:** ${safeReqUsername}\n` +
     `📌 **මාතෘකාව:** ${userTopic || 'උසස් පෙළ විෂය කරුණු'}\n\n` +
     `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
-    `• ඔබ විධානය (Command) ලබා දුන් පසු NotebookLM AI විසින් ප්‍රශ්න පත්‍රය සකස් කරන තෙක් **මිනිත්තු 2 ක් හෝ 3 ක් කරුණාකර සුළු මොහොතක් රැඳී සිටින්න.** ⏱️\n` +
+    `• ඔබ විධානය (Command) ලබා දුන් පසු A/L MCQ HUB AI විසින් ප්‍රශ්න පත්‍රය සකස් කරන තෙක් **මිනිත්තු 2 ක් හෝ 3 ක් කරුණාකර සුළු මොහොතක් රැඳී සිටින්න.** ⏱️\n` +
     `• ප්‍රශ්න සකස් වූ වහාම **සෑම ප්‍රශ්නයකටම තත්පර 20 ක කාලයක් (20s Timer)** සහිතව සජීවීව ලැබෙනු ඇත. 📝🔥`,
     { reply_to_message_id: msg.message_id }
   );
@@ -1886,7 +1886,7 @@ bot.onText(/\/(audio|podcast)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) 
     `🎙️ **A/L MCQ HUB Audio Overview (Deep Dive AI Podcast) ජනනය කිරීම ආරම්භ කර ඇත...**\n\n` +
     `👤 **ඉල්ලුම් කළේ:** ${safeReqUsername}\n` +
     `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
-    `• A/L MCQ HUB NotebookLM AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සවිස්තරාත්මක audio podcast එකක් සකස් කරනු ලබයි.\n` +
+    `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සවිස්තරාත්මක audio podcast එකක් සකස් කරනු ලබයි.\n` +
     `• මෙම ක්‍රියාවලිය සඳහා **මිනිත්තු 3 සිට 5 දක්වා (සමහර විට මිනිත්තු 10 ක් දක්වා)** කාලයක් ගත විය හැක.\n` +
     `• හඬ පටය සෑදී අවසන් වූ වහාම එය **සෘජුවම මෙම Telegram චැට් එකට Audio File එකක් ලෙස ලැබෙනු ඇත.** 🎧\n\n` +
     `💡 *විෂය තේරීමට: \`/audio_si\` (සිංහල), \`/audio_bc\` (බෞද්ධ ශිෂ්ටාචාරය), \`/audio_hist\` (ඉතිහාසය)*`,
