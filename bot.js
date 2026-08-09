@@ -1624,11 +1624,10 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
     `📩 **ඔබගේ Quiz ඉල්ලීම සජීවීව භාරගන්නා ලදී (Request Received)!** ⌛\n\n` +
     `🏆 **A/L MCQ HUB Live AI Quiz Competition සකස් වෙමින් පවතී...**\n\n` +
     `👤 **තරඟය ආරම්භ කළේ:** ${safeReqUsername}\n` +
-    `⏳ **තරඟ විස්තර (Competition Rules):**\n` +
-    `• A/L MCQ HUB AI මඟින් ඔබගේ විෂය කරුණු ඇසුරෙන් සජීවී Interactive Telegram Quiz Polls සකස් කරනු ලබයි.\n` +
-    `• **තත්පර 20 ක කාල සීමාවක් (20-Second Interval Timer)** සෑම ප්‍රශ්නයකටම හිමි වේ.\n` +
-    `• ප්‍රශ්නයක් අවසන් වූ වහාම ඊළඟ ප්‍රශ්නය සජීවීව ලැබෙනු ඇත. ⏱️📝\n\n` +
-    `🤖 *NotebookLM AI විසින් ප්‍රශ්න පත්‍රය සකස් කරන තෙක් කරුණාකර සුළු මොහොතක් රැඳී සිටින්න...*`,
+    `📌 **මාතෘකාව:** ${userTopic || 'උසස් පෙළ විෂය කරුණු'}\n\n` +
+    `⏳ **කරුණාකර අවධානයෙන් සිටින්න (Wait Time Notification):**\n` +
+    `• ඔබ විධානය (Command) ලබා දුන් පසු NotebookLM AI විසින් ප්‍රශ්න පත්‍රය සකස් කරන තෙක් **මිනිත්තු 2 ක් හෝ 3 ක් කරුණාකර සුළු මොහොතක් රැඳී සිටින්න.** ⏱️\n` +
+    `• ප්‍රශ්න සකස් වූ වහාම **සෑම ප්‍රශ්නයකටම තත්පර 20 ක කාලයක් (20s Timer)** සහිතව සජීවීව ලැබෙනු ඇත. 📝🔥`,
     { reply_to_message_id: msg.message_id }
   );
 
@@ -1709,8 +1708,16 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
       }
 
       completionMsg += 
-        `🙏 **මෙම AI Quiz තරඟය නිර්මාණය කර දීමට මූලික වූ ${safeReqUsername} සාමාජිකයාට අපගේ විශේෂ ස්තුතිය! (Special thanks to ${safeReqUsername} for generating this quiz!)** ❤️\n\n` +
-        `💡 *නැවත තරඟයක් ආරම්භ කිරීමට \`/quiz\` හෝ \`/quiz_si\` ලෙස එවන්න.*`;
+        `🙏 **මෙම AI Quiz තරඟය නිර්මාණය කර දීමට මූලික වූ ${safeReqUsername} සාමාජිකයාට අපගේ විශේෂ ස්තුතිය!** ❤️\n\n` +
+        `-----------------------------------------\n` +
+        `💡 **නැවත ඔබ කැමති මාතෘකාවකින් Quiz එකක් ආරම්භ කිරීමට:**\n` +
+        `⏳ *(විධානය ලබා දුන් පසු ප්‍රශ්න පත්‍රය සකස් වන තෙක් මිනිත්තු 2-3 ක් රැඳී සිටින්න)*\n\n` +
+        `👉 **විෂය අනුව Commands භාවිත කරන ආකාරය:**\n` +
+        `• 🇱🇰 **සිංහල:** \`/quiz_si සමාස, සන්ධි 20 mcqs\`\n` +
+        `• ☸️ **බෞද්ධ ශිෂ්ටාචාරය:** \`/quiz_bc සංගායනා 15 mcqs\`\n` +
+        `• 🏛️ **ඉතිහාසය:** \`/quiz_hist අනුරාධපුර යුගය 20 mcqs\`\n` +
+        `• ⚖️ **දේශපාලන විද්‍යාව:** \`/quiz_pl ආණ්ඩුක්‍රම ව්‍යවස්ථාව 15 mcqs\`\n` +
+        `• 💼 **ව්‍යාපාර අධ්‍යයනය:** \`/quiz_bs කළමනාකරණය 20 mcqs\``;
 
       await safeSendMessage(chatId, completionMsg);
       delete aiQuizSessions[chatId];
