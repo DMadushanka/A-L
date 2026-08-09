@@ -1519,6 +1519,58 @@ bot.onText(/\/start/i, (msg) => {
   sendStartMenu(msg.chat.id, msg.from, isGroup);
 });
 
+// Command: /pin_guide or /guide or /features (Pin AI Features Announcement in Group)
+bot.onText(/\/(pin_guide|guide|features)(@\w+)?/i, async (msg) => {
+  const chatId = msg.chat.id;
+  const isGroup = msg.chat.type === 'group' || msg.chat.type === 'supergroup';
+
+  const announcementMsg = 
+    `📢 **උසස් පෙළ (A/L) සිසුන් සඳහා විශේෂ නිවේදනයයි!** 🌟\n\n` +
+    `🎯 **A/L MCQ HUB — AI සජීවී නවතම මෙවලම් සහ විශේෂාංග දැන් සක්‍රීයයි!** 🚀\n\n` +
+    `දැන් ඔබට ස්වයංක්‍රීයව ඔබගේ විෂය කරුණු ඇසුරෙන් **සජීවී Quiz Competitions**, **Audio Podcasts** සහ **AI ප්‍රශ්න පිළිතුරු** ක්ෂණිකව සාදාගත හැක! 🎓✨\n\n` +
+    `--- \n\n` +
+    `### 🧩 1. සජීවී AI Quiz Competitions (Live Polls with 20s Timers)\n` +
+    `ඔබට අවශ්‍ය ඕනෑම මාතෘකාවකින් ප්‍රශ්න ගණන සටහන් කර **සජීවී තරඟයක්** ආරම්භ කරන්න:\n` +
+    `• 🇱🇰 **සිංහල:** \`/quiz_si සමාස, සන්ධි 20 mcqs\`\n` +
+    `• ☸️ **බෞද්ධ ශිෂ්ටාචාරය:** \`/quiz_bc සංගායනා 15 mcqs\`\n` +
+    `• 🏛️ **ඉතිහාසය:** \`/quiz_hist අනුරාධපුර යුගය 20 mcqs\`\n` +
+    `• ⚖️ **දේශපාලන විද්‍යාව:** \`/quiz_pl ආණ්ඩුක්‍රම ව්‍යවස්ථාව 15 mcqs\`\n` +
+    `• 💼 **ව්‍යාපාර අධ්‍යයනය:** \`/quiz_bs කළමනාකරණය 20 mcqs\`\n\n` +
+    `*(⏱️ සෑම ප්‍රශ්නයකටම තත්පර 20 ක කාලයක් හිමිවන අතර, තරඟය අවසානයේ ජයග්‍රාහකයින්ගේ **Leaderboard** සහ Quiz එක නිර්මාණය කළ සාමාජිකයාට **විශේෂ ස්තුතිය** පළ කෙරේ! 🏆)*\n\n` +
+    `--- \n\n` +
+    `### 🎙️ 2. සිංහල Audio Overview (AI Deep Dive Podcasts)\n` +
+    `ඔබගේ විෂය කරුණු ඇසුරෙන් 100% සිංහල හඬින් යුත් **සවිස්තරාත්මක Audio Podcast** එකක් ලබාගන්න:\n` +
+    `• 🇱🇰 \`/audio_si සිංහල ව්‍යාකරණ\`\n` +
+    `• ☸️ \`/audio_bc මහින්දාගමනය\`\n` +
+    `• 🏛️ \`/audio_hist ලංකා ඉතිහාසය\`\n` +
+    `• ⚖️ \`/audio_pl දේශපාලන විද්‍යාව\`\n` +
+    `• 💼 \`/audio_bs ව්‍යාපාර අධ්‍යයනය\`\n\n` +
+    `*(🎧 හඬ පටය සෑදී අවසන් වූ වහාම සෘජුවම Audio File එකක් ලෙස ගෲප් එකටම ලැබෙනු ඇත!)*\n\n` +
+    `--- \n\n` +
+    `### 🤖 3. විෂයානුබද්ධ AI Tutor (Subject-Wise AI Question Answering)\n` +
+    `ඔබගේ විෂය නිර්දේශයේ ඕනෑම ප්‍රශ්නයකට ක්ෂණිකව නිවැරදි විග්‍රහයන් ලබාගන්න:\n` +
+    `• 🇱🇰 \`/ai_si සන්ධි සහ සමාස අතර වෙනස කුමක්ද?\` \n` +
+    `• ☸️ \`/ai_bc අභයගිරි නිකාය ආරම්භ වීමට හේතු මොනවාද?\` \n` +
+    `• 🏛️ \`/ai_hist පොළොන්නරු යුගයේ වාරි පද්ධතිය\` \n` +
+    `• ⚖️ \`/ai_pl 1978 ආණ්ඩුක්‍රම ව්‍යවස්ථාවේ මූලික ලක්ෂණ\` \n` +
+    `• 💼 \`/ai_bs අලෙවිකරණ මිශ්‍රණය යනු කුමක්ද?\` \n\n` +
+    `--- \n\n` +
+    `### 🎨 4. AI Diagram & Image Generator\n` +
+    `ඕනෑම රූපසටහනක් හෝ ඡායාරූපයක් නොමිලේ නිර්මාණය කරගන්න:\n` +
+    `• 🎨 \`/image අනුරාධපුර රුවන්වැලිසෑය\`\n` +
+    `• 🎨 \`/image Political Science Parliament Diagram 4k\`\n\n` +
+    `💡 **දැන්ම ඉහත Commands භාවිත කරමින් ඔබගේ උසස් පෙළ අධ්‍යයන කටයුතු තවත් පහසු කරගන්න!** 📚🔥`;
+
+  try {
+    const sentMsg = await bot.sendMessage(chatId, announcementMsg, { parse_mode: 'Markdown' });
+    if (isGroup) {
+      bot.pinChatMessage(chatId, sentMsg.message_id, { disable_notification: false }).catch(() => {});
+    }
+  } catch (e) {
+    console.error('Error in /pin_guide:', e.message);
+  }
+});
+
 // Helper: Start Live AI Quiz Competition with Native Telegram Polls & 20-Second Timers
 async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
   const reqUser = msg.from || {};
