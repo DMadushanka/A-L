@@ -563,6 +563,49 @@ function formatTablesForTelegram(text) {
   return cardBlocks.join('\n');
 }
 
+// Helper: Format raw AI response text into clean, structured Telegram Markdown
+function formatAITextForTelegram(text) {
+  if (!text) return '';
+
+  let formatted = text;
+
+  // 1. Remove all NotebookLM citation references like [1], [1, 2], [1-3], [12][13]
+  formatted = formatted.replace(/\[\d+(?:\s*,\s*\d+|-?\d+)*\]/g, '');
+
+  // 2. Clean up trailing/multiple spaces left behind after stripping citations
+  formatted = formatted.replace(/[ \t]{2,}/g, ' ');
+  formatted = formatted.replace(/ \./g, '.');
+  formatted = formatted.replace(/ ,/g, ',');
+
+  // 3. Convert Markdown headers (### Header, ## Header, # Header) to styled Telegram titles
+  formatted = formatted.replace(/^[ \t]*#{1,4}\s*\*{0,2}(.*?)\*{0,2}\s*$/gm, (match, title) => {
+    const cleanTitle = title.replace(/^[*_]+|[*_]+$/g, '').trim();
+    if (!cleanTitle) return '';
+    return `\n📌 **${cleanTitle}**\n─────────────────────`;
+  });
+
+  // 4. Clean up lines with raw nested asterisks "* *", "* -", "- *" into indented sub-bullets
+  formatted = formatted.replace(/^[ \t]*[*•-]\s+[*•-]\s+/gm, '   ▸ ');
+  formatted = formatted.replace(/^[ \t]{2,}[*•-]\s+/gm, '   ▸ ');
+
+  // 5. Convert standard top-level list items ("* ", "- ") into clean "• "
+  formatted = formatted.replace(/^[ \t]*[*•-]\s+/gm, '• ');
+
+  // 6. Clean up raw horizontal rules ("---", "___", "***")
+  formatted = formatted.replace(/^[ \t]*[-*_]{3,}[ \t]*$/gm, '━━━━━━━━━━━━━━━━━━━━━');
+
+  // 7. Format sub-headings like "• **නිදසුන්:**" or "• **උදාහරණ:**" into indented callouts
+  formatted = formatted.replace(/•\s+\*\*(නිදසුන්|උදාහරණ|සටහන|විශේෂ):\*\*/gi, '   👉 **$1:**');
+
+  // 8. Convert raw table structures if any (| col | col |)
+  formatted = formatTablesForTelegram(formatted);
+
+  // 9. Remove excessive blank lines (more than 2 consecutive newlines)
+  formatted = formatted.replace(/\n{3,}/g, '\n\n');
+
+  return formatted.trim();
+}
+
 // Helper: Dynamic Syllabus & Marking Scheme Search Engine (RAG Grounding)
 function findRelevantSyllabusContext(userPrompt) {
   if (!userPrompt) return '';
@@ -764,7 +807,7 @@ async function askGeminiAI(userPrompt, explicitSubId = null) {
     try {
       const nbReply = await askNotebookLMPython(userPrompt, notebookId);
       if (nbReply && nbReply.trim()) {
-        return formatTablesForTelegram(nbReply);
+        return formatAITextForTelegram(nbReply);
       }
     } catch (e) {
       console.error('NotebookLM Python query error:', e.message);
