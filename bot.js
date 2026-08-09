@@ -1273,6 +1273,7 @@ bot.on('poll_answer', (answer) => {
     // Track AI Quiz Competition Scores
     const aiSession = aiQuizSessions[chatId];
     if (aiSession) {
+      aiSession.totalAnswers = (aiSession.totalAnswers || 0) + 1;
       if (!aiSession.userScores[user.id]) {
         const uName = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
         const uHandle = user.username ? `@${user.username}` : uName;
@@ -1655,12 +1656,16 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
 
       await new Promise(r => setTimeout(r, 2000));
 
+      let consecutiveInactiveCount = 0;
+
       for (let i = 0; i < parsedQuestions.length; i++) {
         const qObj = parsedQuestions[i];
         const cleanQ = `[Q${i + 1}/${parsedQuestions.length}] ${qObj.q}`.substring(0, 290);
         const cleanOpts = qObj.o.map(o => o.substring(0, 95));
         const correctIdx = Math.min(Math.max(0, qObj.c), cleanOpts.length - 1);
         const cleanExplain = qObj.e ? `💡 ${qObj.e.substring(0, 190)}` : undefined;
+
+        const answersBefore = aiQuizSessions[chatId] ? (aiQuizSessions[chatId].totalAnswers || 0) : 0;
 
         const pollMsg = await bot.sendPoll(chatId, cleanQ, cleanOpts, {
           type: 'quiz',
@@ -1685,6 +1690,22 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
           await new Promise(r => setTimeout(r, 22000));
         } else {
           await new Promise(r => setTimeout(r, 5000));
+        }
+
+        const answersAfter = aiQuizSessions[chatId] ? (aiQuizSessions[chatId].totalAnswers || 0) : 0;
+        if (answersAfter === answersBefore) {
+          consecutiveInactiveCount++;
+        } else {
+          consecutiveInactiveCount = 0; // Reset counter if at least 1 person answered
+        }
+
+        if (consecutiveInactiveCount >= 4) {
+          await safeSendMessage(
+            chatId,
+            `🛑 **අඛණ්ඩව ප්‍රශ්න 4ක් සඳහා කිසිදු සාමාජිකයෙකු පිළිතුරු ලබා නොදුන් බැවින් Quiz Competition තරඟය ස්වයංක්‍රීයව නතර කරන ලදී (Auto-Stopped Due to Inactivity).**\n\n` +
+            `💡 *නැවත තරඟයක් ආරම්භ කිරීමට \`/quiz\` හෝ \`/quiz_si\` ලෙස එවන්න.*`
+          );
+          break;
         }
       }
 
