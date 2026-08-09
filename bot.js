@@ -563,7 +563,7 @@ function formatTablesForTelegram(text) {
   return cardBlocks.join('\n');
 }
 
-// Helper: Format raw AI response text into clean, structured Telegram Markdown
+// Helper: Format raw AI response text into clean, structured Telegram HTML
 function formatAITextForTelegram(text) {
   if (!text) return '';
 
@@ -572,35 +572,47 @@ function formatAITextForTelegram(text) {
   // 1. Remove all NotebookLM citation references like [1], [1, 2], [1-3], [12][13]
   formatted = formatted.replace(/\[\d+(?:\s*,\s*\d+|-?\d+)*\]/g, '');
 
-  // 2. Clean up trailing/multiple spaces left behind after stripping citations
+  // 2. Clean up multiple spaces left behind after stripping citations
   formatted = formatted.replace(/[ \t]{2,}/g, ' ');
   formatted = formatted.replace(/ \./g, '.');
   formatted = formatted.replace(/ ,/g, ',');
 
-  // 3. Convert Markdown headers (### Header, ## Header, # Header) to styled Telegram titles
+  // 3. Convert raw Markdown tables if any before HTML escaping
+  formatted = formatTablesForTelegram(formatted);
+
+  // 4. Escape HTML special characters (&, <, >) to prevent parse crashes
+  formatted = formatted.replace(/&/g, '&amp;');
+  formatted = formatted.replace(/</g, '&lt;');
+  formatted = formatted.replace(/>/g, '&gt;');
+
+  // 5. Convert headers (### Header, ## Header, # Header) to styled HTML titles
   formatted = formatted.replace(/^[ \t]*#{1,4}\s*\*{0,2}(.*?)\*{0,2}\s*$/gm, (match, title) => {
     const cleanTitle = title.replace(/^[*_]+|[*_]+$/g, '').trim();
     if (!cleanTitle) return '';
-    return `\n📌 **${cleanTitle}**\n─────────────────────`;
+    return `\n📌 <b>${cleanTitle}</b>\n─────────────────────`;
   });
 
-  // 4. Clean up lines with raw nested asterisks "* *", "* -", "- *" into indented sub-bullets
+  // 6. Convert double asterisks **bold** or double underscores __bold__ to <b>bold</b>
+  formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
+  formatted = formatted.replace(/__(.*?)__/g, '<b>$1</b>');
+
+  // 7. Clean up lines with raw nested asterisks "* *", "* -", "- *" into indented sub-bullets
   formatted = formatted.replace(/^[ \t]*[*•-]\s+[*•-]\s+/gm, '   ▸ ');
   formatted = formatted.replace(/^[ \t]{2,}[*•-]\s+/gm, '   ▸ ');
 
-  // 5. Convert standard top-level list items ("* ", "- ") into clean "• "
+  // 8. Convert standard top-level list items ("* ", "- ") into clean "• "
   formatted = formatted.replace(/^[ \t]*[*•-]\s+/gm, '• ');
 
-  // 6. Clean up raw horizontal rules ("---", "___", "***")
+  // 9. Convert remaining single asterisk *italic* (not at line start) to <i>italic</i>
+  formatted = formatted.replace(/(?<!\w)\*([^\*\n]+)\*(?!\w)/g, '<i>$1</i>');
+
+  // 10. Clean up raw horizontal rules ("---", "___", "***")
   formatted = formatted.replace(/^[ \t]*[-*_]{3,}[ \t]*$/gm, '━━━━━━━━━━━━━━━━━━━━━');
 
-  // 7. Format sub-headings like "• **නිදසුන්:**" or "• **උදාහරණ:**" into indented callouts
-  formatted = formatted.replace(/•\s+\*\*(නිදසුන්|උදාහරණ|සටහන|විශේෂ):\*\*/gi, '   👉 **$1:**');
+  // 11. Format sub-headings like "• <b>නිදසුන්:</b>" or "• <b>උදාහරණ:</b>" into indented callouts
+  formatted = formatted.replace(/•\s+<b>(නිදසුන්|උදාහරණ|සටහන|විශේෂ):<\/b>/gi, '   👉 <b>$1:</b>');
 
-  // 8. Convert raw table structures if any (| col | col |)
-  formatted = formatTablesForTelegram(formatted);
-
-  // 9. Remove excessive blank lines (more than 2 consecutive newlines)
+  // 12. Remove excessive blank lines (more than 2 consecutive newlines)
   formatted = formatted.replace(/\n{3,}/g, '\n\n');
 
   return formatted.trim();
@@ -1549,10 +1561,11 @@ async function sendLongMessage(chatId, text, options = { parse_mode: 'Markdown' 
     try {
       return await bot.sendMessage(chatId, text, options);
     } catch (err) {
-      if (err.message && err.message.includes('can\'t parse entities')) {
-        return await bot.sendMessage(chatId, text.replace(/[*_`]/g, ''));
-      }
-      return await bot.sendMessage(chatId, text.replace(/[*_`]/g, ''));
+      console.error('sendLongMessage single message error:', err.message);
+      const cleanMsg = text.replace(/<[^>]+>/g, '').replace(/[*_`]/g, '');
+      const plainOpts = { ...options };
+      delete plainOpts.parse_mode;
+      return await bot.sendMessage(chatId, cleanMsg, plainOpts).catch(() => null);
     }
   }
 
@@ -1572,13 +1585,18 @@ async function sendLongMessage(chatId, text, options = { parse_mode: 'Markdown' 
   if (currentChunk.trim()) chunks.push(currentChunk.trim());
 
   let lastSent = null;
+  const isHTML = options && options.parse_mode === 'HTML';
   for (let i = 0; i < chunks.length; i++) {
-    const chunkHeader = chunks.length > 1 ? `📄 **(කොටස ${i + 1}/${chunks.length})**\n\n` : '';
+    const chunkHeader = chunks.length > 1 ? (isHTML ? `📄 <b>(කොටස ${i + 1}/${chunks.length})</b>\n\n` : `📄 **(කොටස ${i + 1}/${chunks.length})**\n\n`) : '';
     const chunkText = chunkHeader + chunks[i];
     try {
       lastSent = await bot.sendMessage(chatId, chunkText, options);
     } catch (err) {
-      lastSent = await bot.sendMessage(chatId, chunkText.replace(/[*_`]/g, ''));
+      console.error(`sendLongMessage chunk ${i + 1} error:`, err.message);
+      const cleanMsg = chunkText.replace(/<[^>]+>/g, '').replace(/[*_`]/g, '');
+      const plainOpts = { ...options };
+      delete plainOpts.parse_mode;
+      lastSent = await bot.sendMessage(chatId, cleanMsg, plainOpts).catch(() => null);
     }
     if (i < chunks.length - 1) {
       await new Promise(r => setTimeout(r, 400));
@@ -1912,11 +1930,11 @@ bot.onText(/\/(ai|ask)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
     }
 
     const formattedReply = 
-      `🤖 **A/L MCQ HUB AI Tutor පිළිතුර:**\n\n` +
+      `🤖 <b>A/L MCQ HUB AI Tutor පිළිතුර:</b>\n\n` +
       `${aiAnswer}\n\n` +
-      `💡 *තවත් ප්‍රශ්නයක් ඇසීමට \`/ai ඔබගේ ප්‍රශ්නය\` (හෝ \`/ai_si\`, \`/ai_bc\`) ලෙස එවන්න.*`;
+      `💡 <i>තවත් ප්‍රශ්නයක් ඇසීමට <code>/ai ඔබගේ ප්‍රශ්නය</code> (හෝ <code>/ai_si</code>, <code>/ai_bc</code>) ලෙස එවන්න.</i>`;
 
-    await sendLongMessage(chatId, formattedReply, { reply_to_message_id: msg.message_id }).catch(e => console.error('Error sending AI response:', e.message));
+    await sendLongMessage(chatId, formattedReply, { parse_mode: 'HTML', reply_to_message_id: msg.message_id }).catch(e => console.error('Error sending AI response:', e.message));
   } catch (err) {
     console.error('Error in /ai command execution:', err.message);
     if (statusMsg && statusMsg.message_id) {
