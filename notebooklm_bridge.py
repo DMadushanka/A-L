@@ -48,13 +48,37 @@ async def handle_query(notebook_id, user_query):
     async with client:
         if hasattr(client.chat, 'clear_cache'):
             client.chat.clear_cache()
-        res = await client.chat.ask(notebook_id=notebook_id, question=user_query)
+            
+        direct_prompt = (
+            "[CRITICAL INSTRUCTION: Provide your full, comprehensive, highly detailed study response directly in this chat message text right now. "
+            "Do NOT save, create, or store any Studio panel notes, study guides, or report artifacts.]\n\n"
+            f"{user_query}"
+        )
+        res = await client.chat.ask(notebook_id=notebook_id, question=direct_prompt)
         ans = res.answer if hasattr(res, 'answer') and res.answer else (res if isinstance(res, str) else str(res))
-        if ans and len(ans.strip()) > 10 and "can't answer" not in ans.lower():
+        
+        if ans and len(ans.strip()) > 15 and "can't answer" not in ans.lower() and "created a note" not in ans.lower() and "saved to studio" not in ans.lower():
             print(ans)
             return
 
-        rephrased_query = f"උසස් පෙළ බෞද්ධ ශිෂ්ටාචාරය විෂය නිර්දේශයේ {user_query} පිළිබඳව සවිස්තරාත්මකව පැහැදිලි කරන්න."
+        # Fallback: If NotebookLM saved the response as a Studio Note, extract and return it!
+        try:
+            notes = await client.notes.list(notebook_id)
+            if notes:
+                latest_note = sorted(notes, key=lambda n: getattr(n, 'created_at', 0), reverse=True)[0]
+                note_content = getattr(latest_note, 'content', '') or getattr(latest_note, 'text', '')
+                if note_content and len(note_content.strip()) > 20:
+                    note_title = getattr(latest_note, 'title', '')
+                    header = f"📌 **{note_title}**\n─────────────────────\n\n" if note_title else ""
+                    print(f"{header}{note_content}")
+                    return
+        except Exception:
+            pass
+
+        rephrased_query = (
+            "[CRITICAL INSTRUCTION: Respond inline in chat text only. Do NOT create Studio notes.]\n\n"
+            f"උසස් පෙළ විෂය නිර්දේශයේ {user_query} පිළිබඳව සවිස්තරාත්මකව පැහැදිලි කරන්න."
+        )
         res2 = await client.chat.ask(notebook_id=notebook_id, question=rephrased_query)
         ans2 = res2.answer if hasattr(res2, 'answer') and res2.answer else (res2 if isinstance(res2, str) else str(res2))
         if ans2 and len(ans2.strip()) > 10:
