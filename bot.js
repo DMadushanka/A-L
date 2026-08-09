@@ -1659,6 +1659,11 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
       let consecutiveInactiveCount = 0;
 
       for (let i = 0; i < parsedQuestions.length; i++) {
+        if (!aiQuizSessions[chatId] || aiQuizSessions[chatId].isStopped) {
+          console.log(`🛑 AI Quiz Competition in chat ${chatId} was manually stopped before question ${i + 1}`);
+          break;
+        }
+
         const qObj = parsedQuestions[i];
         const cleanQ = `[Q${i + 1}/${parsedQuestions.length}] ${qObj.q}`.substring(0, 290);
         const cleanOpts = qObj.o.map(o => o.substring(0, 95));
@@ -1692,6 +1697,11 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
           await new Promise(r => setTimeout(r, 5000));
         }
 
+        if (!aiQuizSessions[chatId] || aiQuizSessions[chatId].isStopped) {
+          console.log(`🛑 AI Quiz Competition in chat ${chatId} was manually stopped after question ${i + 1}`);
+          break;
+        }
+
         const answersAfter = aiQuizSessions[chatId] ? (aiQuizSessions[chatId].totalAnswers || 0) : 0;
         if (answersAfter === answersBefore) {
           consecutiveInactiveCount++;
@@ -1710,37 +1720,39 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
       }
 
       const aiSession = aiQuizSessions[chatId];
-      const sortedWinners = (aiSession && aiSession.userScores) ? 
-        Object.values(aiSession.userScores).sort((a, b) => b.score - a.score) : [];
+      if (aiSession && !aiSession.isStopped) {
+        const sortedWinners = (aiSession && aiSession.userScores) ? 
+          Object.values(aiSession.userScores).sort((a, b) => b.score - a.score) : [];
 
-      let completionMsg = 
-        `🏆 **A/L MCQ HUB — Live AI Quiz Competition ජයග්‍රාහකයින් (Winners Leaderboard)**\n\n`;
+        let completionMsg = 
+          `🏆 **A/L MCQ HUB — Live AI Quiz Competition ජයග්‍රාහකයින් (Winners Leaderboard)**\n\n`;
 
-      if (sortedWinners.length > 0) {
-        const medalIcons = ['🥇 1st Place', '🥈 2nd Place', '🥉 3rd Place'];
-        sortedWinners.forEach((w, idx) => {
-          const rankTag = idx < 3 ? medalIcons[idx] : `🏅 ${idx + 1}th Place`;
-          const safeWinner = escapeMarkdown(w.username || w.name);
-          completionMsg += `${rankTag}: **${safeWinner}** — **${w.score}/${parsedQuestions.length}** ලකුණු 🎉\n`;
-        });
-        completionMsg += `\n✨ ජයග්‍රහණය කළ සහ තරඟයට සාර්ථකව එක්වූ සියලුම සාමාජිකයින්ට අපගේ උණුසුම් සුබ පැතුම්! 👏🎉\n\n`;
-      } else {
-        completionMsg += `✨ තරඟයට එක්වූ සියලුම සාමාජිකයින්ට අපගේ උණුසුම් සුබ පැතුම්! 👏\n\n`;
+        if (sortedWinners.length > 0) {
+          const medalIcons = ['🥇 1st Place', '🥈 2nd Place', '🥉 3rd Place'];
+          sortedWinners.forEach((w, idx) => {
+            const rankTag = idx < 3 ? medalIcons[idx] : `🏅 ${idx + 1}th Place`;
+            const safeWinner = escapeMarkdown(w.username || w.name);
+            completionMsg += `${rankTag}: **${safeWinner}** — **${w.score}/${parsedQuestions.length}** ලකුණු 🎉\n`;
+          });
+          completionMsg += `\n✨ ජයග්‍රහණය කළ සහ තරඟයට සාර්ථකව එක්වූ සියලුම සාමාජිකයින්ට අපගේ උණුසුම් සුබ පැතුම්! 👏🎉\n\n`;
+        } else {
+          completionMsg += `✨ තරඟයට එක්වූ සියලුම සාමාජිකයින්ට අපගේ උණුසුම් සුබ පැතුම්! 👏\n\n`;
+        }
+
+        completionMsg += 
+          `🙏 **මෙම AI Quiz තරඟය නිර්මාණය කර දීමට මූලික වූ ${safeReqUsername} සාමාජිකයාට අපගේ විශේෂ ස්තුතිය!** ❤️\n\n` +
+          `-----------------------------------------\n` +
+          `💡 **නැවත ඔබ කැමති මාතෘකාවකින් Quiz එකක් ආරම්භ කිරීමට:**\n` +
+          `⏳ *(විධානය ලබා දුන් පසු ප්‍රශ්න පත්‍රය සකස් වන තෙක් මිනිත්තු 2-3 ක් රැඳී සිටින්න)*\n\n` +
+          `👉 **විෂය අනුව Commands භාවිත කරන ආකාරය:**\n` +
+          `• 🇱🇰 **සිංහල:** \`/quiz_si සමාස, සන්ධි 20 mcqs\`\n` +
+          `• ☸️ **බෞද්ධ ශිෂ්ටාචාරය:** \`/quiz_bc සංගායනා 15 mcqs\`\n` +
+          `• 🏛️ **ඉතිහාසය:** \`/quiz_hist අනුරාධපුර යුගය 20 mcqs\`\n` +
+          `• ⚖️ **දේශපාලන විද්‍යාව:** \`/quiz_pl ආණ්ඩුක්‍රම ව්‍යවස්ථාව 15 mcqs\`\n` +
+          `• 💼 **ව්‍යාපාර අධ්‍යයනය:** \`/quiz_bs කළමනාකරණය 20 mcqs\``;
+
+        await safeSendMessage(chatId, completionMsg);
       }
-
-      completionMsg += 
-        `🙏 **මෙම AI Quiz තරඟය නිර්මාණය කර දීමට මූලික වූ ${safeReqUsername} සාමාජිකයාට අපගේ විශේෂ ස්තුතිය!** ❤️\n\n` +
-        `-----------------------------------------\n` +
-        `💡 **නැවත ඔබ කැමති මාතෘකාවකින් Quiz එකක් ආරම්භ කිරීමට:**\n` +
-        `⏳ *(විධානය ලබා දුන් පසු ප්‍රශ්න පත්‍රය සකස් වන තෙක් මිනිත්තු 2-3 ක් රැඳී සිටින්න)*\n\n` +
-        `👉 **විෂය අනුව Commands භාවිත කරන ආකාරය:**\n` +
-        `• 🇱🇰 **සිංහල:** \`/quiz_si සමාස, සන්ධි 20 mcqs\`\n` +
-        `• ☸️ **බෞද්ධ ශිෂ්ටාචාරය:** \`/quiz_bc සංගායනා 15 mcqs\`\n` +
-        `• 🏛️ **ඉතිහාසය:** \`/quiz_hist අනුරාධපුර යුගය 20 mcqs\`\n` +
-        `• ⚖️ **දේශපාලන විද්‍යාව:** \`/quiz_pl ආණ්ඩුක්‍රම ව්‍යවස්ථාව 15 mcqs\`\n` +
-        `• 💼 **ව්‍යාපාර අධ්‍යයනය:** \`/quiz_bs කළමනාකරණය 20 mcqs\``;
-
-      await safeSendMessage(chatId, completionMsg);
       delete aiQuizSessions[chatId];
 
     } else {
@@ -1752,6 +1764,50 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
     delete aiQuizSessions[chatId];
   }
 }
+
+// Command: /stop or /stop_quiz or /stopquiz or /cancel or /end_quiz (Manually Stop Active Quiz Sessions)
+bot.onText(/\/(stop|stop_quiz|stopquiz|cancel|end_quiz)(@\w+)?/i, async (msg) => {
+  const chatId = msg.chat.id;
+  const user = msg.from || {};
+  const reqName = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'සාමාජිකයා';
+  const reqUsername = user.username ? `@${user.username}` : reqName;
+  const safeReqUsername = escapeMarkdown(reqUsername);
+
+  let stoppedAny = false;
+
+  // 1. Stop Active Live AI Quiz Competition
+  if (aiQuizSessions[chatId]) {
+    aiQuizSessions[chatId].isStopped = true;
+    delete aiQuizSessions[chatId];
+    stoppedAny = true;
+  }
+
+  // 2. Stop Standard Scheduled / Interactive Paper Session
+  if (userPollSessions[chatId]) {
+    if (userPollSessions[chatId].timerId) {
+      clearTimeout(userPollSessions[chatId].timerId);
+    }
+    delete userPollSessions[chatId];
+    stoppedAny = true;
+  }
+
+  if (stoppedAny) {
+    await safeSendMessage(
+      chatId,
+      `🛑 **A/L MCQ HUB — Quiz Competition තරඟය සාර්ථකව නතර කරන ලදී (Quiz Stopped Successfully)!**\n\n` +
+      `👤 **නතර කළේ:** ${safeReqUsername}\n\n` +
+      `💡 *නැවත අලුත් තරඟයක් ආරම්භ කිරීමට \`/quiz_si\`, \`/quiz_bc\`, හෝ \`/quiz_hist\` ලෙස එවන්න.*`,
+      { reply_to_message_id: msg.message_id }
+    );
+  } else {
+    await safeSendMessage(
+      chatId,
+      `ℹ️ **දැනට මෙම චැට් එක තුළ සක්‍රීය Quiz තරඟයක් පවත්නේ නැත (No Active Quiz Running).**\n\n` +
+      `💡 *නව තරඟයක් ආරම්භ කිරීමට \`/quiz_si\` හෝ \`/quiz_bc\` ලෙස එවන්න.*`,
+      { reply_to_message_id: msg.message_id }
+    );
+  }
+});
 
 // Command: /ai <prompt> or /ask <prompt> or /ai_si <prompt> etc.
 bot.onText(/\/(ai|ask)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
