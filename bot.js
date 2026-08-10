@@ -572,7 +572,15 @@ function formatAITextForTelegram(text) {
   // 1. Remove all NotebookLM citation references like [1], [1, 2], [1-3], [12][13]
   formatted = formatted.replace(/\[\d+(?:\s*,\s*\d+|-?\d+)*\]/g, '');
 
-  // 2. Clean up multiple spaces left behind after stripping citations
+  // 2. Clean raw LaTeX math arrow slashes (\\(\rightarrow\\), \rightarrow, \implies)
+  formatted = formatted.replace(/\\\\?\(\s*\\?rightarrow\s*\\\\?\)/g, ' → ');
+  formatted = formatted.replace(/\\\\?\(\s*\\?implies\s*\\\\?\)/g, ' ⇒ ');
+  formatted = formatted.replace(/\\?rightarrow/g, ' → ');
+  formatted = formatted.replace(/\\?implies/g, ' ⇒ ');
+  formatted = formatted.replace(/\\\\?\([^\)]*\\\\?\)/g, '');
+  formatted = formatted.replace(/\\\\/g, '');
+
+  // 3. Clean up multiple spaces left behind after stripping citations & slashes
   formatted = formatted.replace(/[ \t]{2,}/g, ' ');
   formatted = formatted.replace(/ \./g, '.');
   formatted = formatted.replace(/ ,/g, ',');
