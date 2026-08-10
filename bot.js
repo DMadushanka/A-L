@@ -620,7 +620,11 @@ function formatAITextForTelegram(text) {
   // 11. Format sub-headings like "• <b>නිදසුන්:</b>" or "• <b>උදාහරණ:</b>" into indented callouts
   formatted = formatted.replace(/•\s+<b>(නිදසුන්|උදාහරණ|සටහන|විශේෂ):<\/b>/gi, '   👉 <b>$1:</b>');
 
-  // 12. Remove excessive blank lines (more than 2 consecutive newlines)
+  // 12. Strip conversational ending follow-up question prompts (e.g. "මෙම සන්ධි ක්‍රම ඇසුරෙන්... සාකච්ඡා කිරීමට ඔබ කැමති ද?")
+  formatted = formatted.replace(/[\r\n\s]*(?:💭|💬|🗨️|🗯️|මෙම|තවත්|ඔබට|විභාගයේදී).*?(?:සාකච්ඡා කිරීමට|ඇසීමට|දැනගැනීමට|පැහැදිලි කිරීමට|ගැටලු).*?කැමති\s*ද\??\s*$/gsi, '');
+  formatted = formatted.replace(/[\r\n\s]*(?:💭|💬|🗨️|🗯️)\s*.*?\??\s*$/gsi, '');
+
+  // 13. Remove excessive blank lines (more than 2 consecutive newlines)
   formatted = formatted.replace(/\n{3,}/g, '\n\n');
 
   return formatted.trim();
