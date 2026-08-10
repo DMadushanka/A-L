@@ -630,7 +630,21 @@ function formatAITextForTelegram(text) {
   return formatted.trim();
 }
 
-// Helper: Generate structured Sinhala PDF Study Guide Document via Python ReportLab Bridge
+// Helper: Clean and create a safe filename from topic title
+function sanitizePDFFilename(title) {
+  if (!title) return 'A_L_MCQ_HUB_Study_Note';
+  // Strip command prefixes like /ai_si, /ai_bc, /ai, /ai_hist, /ai_pl, /ai_bs
+  let clean = title.replace(/^\/(ai|ai_si|ai_bc|ai_hist|ai_pl|ai_bs)\s*/i, '');
+  // Remove illegal OS filename characters \ / : * ? " < > |
+  clean = clean.replace(/[\\/:*?"<>|]/g, '');
+  // Replace spaces with underscores
+  clean = clean.trim().replace(/\s+/g, '_');
+  // Truncate length to max 50 chars
+  if (clean.length > 50) clean = clean.substring(0, 50);
+  return clean ? `A_L_MCQ_HUB_${clean}` : 'A_L_MCQ_HUB_Study_Note';
+}
+
+// Helper: Generate structured Sinhala PDF Study Guide Document via Python Bridge
 async function generatePDFNote(topicTitle, textContent) {
   if (!textContent || !textContent.trim()) return null;
 
@@ -639,8 +653,9 @@ async function generatePDFNote(topicTitle, textContent) {
     if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
 
     const timeId = Date.now().toString(36);
+    const safeFilename = sanitizePDFFilename(topicTitle);
     const tempTxtPath = path.join(pdfDir, `temp_note_${timeId}.txt`);
-    const outPdfPath = path.join(pdfDir, `A_L_MCQ_HUB_Study_Note_${timeId}.pdf`);
+    const outPdfPath = path.join(pdfDir, `${safeFilename}_${timeId}.pdf`);
 
     // Write text to temp file
     fs.writeFileSync(tempTxtPath, textContent, 'utf8');

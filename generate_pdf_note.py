@@ -43,8 +43,6 @@ def remove_ending_followup_captions(text):
         return ""
     
     t = text
-    # Strip conversational ending follow-ups like:
-    # "මෙම සන්ධි ක්‍රම ඇසුරෙන් විභාගයේදී අසනු ලබන වියරණ ගැටලු හෝ සන්ධි පද වෙන් කිරීමේ ගැටලු කිහිපයක් සාකච්ඡා කිරීමට ඔබ කැමති ද?"
     t = re.sub(r'[\r\n\s]*(?:💭|💬|🗨️|🗯️|මෙම|තවත්|ඔබට|විභාගයේදී).*?(?:සාකච්ඡා කිරීමට|ඇසීමට|දැනගැනීමට|පැහැදිලි කිරීමට|ගැටලු).*?කැමති\s*ද\??\s*$', '', t, flags=re.IGNORECASE | re.DOTALL)
     t = re.sub(r'[\r\n\s]*(?:💭|💬|🗨️|🗯️)\s*.*?\??\s*$', '', t, flags=re.IGNORECASE | re.DOTALL)
     return t.strip()
@@ -158,14 +156,29 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             print-color-adjust: exact !important;
         }}
 
+        @page {{
+            size: A4;
+            margin: 0;
+        }}
+
         body {{
             font-family: 'Noto Sans Sinhala', 'Nirmala UI', 'Iskoola Pota', 'Segoe UI', sans-serif;
             color: #1F2937;
             background-color: #FFFFFF;
             margin: 0;
-            padding: 0;
-            font-size: 10.5pt;
-            line-height: 1.65;
+            padding: 8mm;
+            font-size: 10pt;
+            line-height: 1.6;
+            position: relative;
+        }}
+
+        /* Two-Line Outer Page Border Frame */
+        .pdf-page-wrapper {{
+            border: 3.5px double #1E3A8A;
+            border-radius: 6px;
+            padding: 12px 16px;
+            min-height: 275mm;
+            box-sizing: border-box;
             position: relative;
         }}
 
@@ -175,7 +188,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            width: 340px;
+            width: 320px;
             height: 340px;
             opacity: 0.06;
             z-index: -1000;
@@ -191,26 +204,26 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         /* Header Card */
         .header-card {{
             background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
-            border-radius: 10px;
-            padding: 16px 20px;
+            border-radius: 8px;
+            padding: 14px 18px;
             color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }}
 
         .header-left {{
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
         }}
 
         .logo-img {{
-            width: 52px;
-            height: 52px;
-            border-radius: 8px;
+            width: 48px;
+            height: 48px;
+            border-radius: 6px;
             object-fit: cover;
             border: 2px solid rgba(255, 255, 255, 0.3);
         }}
@@ -221,7 +234,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         }}
 
         .main-brand {{
-            font-size: 15pt;
+            font-size: 14pt;
             font-weight: 700;
             letter-spacing: 0.3px;
             color: #FFFFFF;
@@ -229,17 +242,17 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         }}
 
         .sub-brand {{
-            font-size: 9.5pt;
+            font-size: 9pt;
             color: #93C5FD;
             margin-top: 2px;
         }}
 
         .header-meta {{
             text-align: right;
-            font-size: 9pt;
+            font-size: 8.5pt;
             color: #E0E7FF;
             background: rgba(255, 255, 255, 0.1);
-            padding: 6px 12px;
+            padding: 5px 10px;
             border-radius: 6px;
             border: 1px solid rgba(255, 255, 255, 0.15);
         }}
@@ -255,14 +268,14 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             background-color: #EFF6FF;
             border-left: 4px solid #2563EB;
             border-radius: 4px 8px 8px 4px;
-            padding: 8px 14px;
-            margin-top: 16px;
-            margin-bottom: 10px;
+            padding: 7px 12px;
+            margin-top: 14px;
+            margin-bottom: 8px;
             page-break-after: avoid;
         }}
 
         .section-title {{
-            font-size: 12pt;
+            font-size: 11.5pt;
             font-weight: 700;
             color: #1E40AF;
         }}
@@ -274,11 +287,11 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         }}
 
         .bullet {{
-            margin: 0 0 5px 14px;
+            margin: 0 0 5px 12px;
         }}
 
         .sub-bullet {{
-            margin: 0 0 4px 28px;
+            margin: 0 0 4px 24px;
             color: #374151;
         }}
 
@@ -287,10 +300,10 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             background-color: #ECFDF5;
             border-left: 4px solid #10B981;
             border-radius: 4px 8px 8px 4px;
-            padding: 10px 14px;
-            margin: 10px 0 12px 0;
+            padding: 8px 12px;
+            margin: 8px 0 10px 0;
             color: #065F46;
-            font-size: 10pt;
+            font-size: 9.5pt;
         }}
 
         .example-item {{
@@ -305,7 +318,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             border: 0;
             height: 1px;
             background-color: #E5E7EB;
-            margin: 14px 0;
+            margin: 12px 0;
         }}
 
         /* Clickable Telegram Join Card */
@@ -313,11 +326,11 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             background-color: #F8FAFC;
             border: 1.5px dashed #3B82F6;
             border-radius: 8px;
-            padding: 12px 16px;
-            margin-top: 24px;
-            margin-bottom: 10px;
+            padding: 10px 14px;
+            margin-top: 20px;
+            margin-bottom: 8px;
             text-align: center;
-            font-size: 9.5pt;
+            font-size: 9pt;
             color: #1E293B;
             page-break-inside: avoid;
         }}
@@ -326,30 +339,32 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             color: #2563EB;
             font-weight: 700;
             text-decoration: underline;
-            font-size: 10pt;
+            font-size: 9.5pt;
         }}
     </style>
 </head>
 <body>
-    {watermark_html}
+    <div class="pdf-page-wrapper">
+        {watermark_html}
 
-    <div class="header-card">
-        <div class="header-left">
-            {logo_img_tag}
-            <div class="header-title-box">
-                <div class="main-brand">A/L MCQ HUB AI TUTOR</div>
-                <div class="sub-brand">උසස් පෙළ විෂය කරුණු සහ අධ්‍යයන සටහන (G.C.E. A/L Study Note)</div>
+        <div class="header-card">
+            <div class="header-left">
+                {logo_img_tag}
+                <div class="header-title-box">
+                    <div class="main-brand">A/L MCQ HUB AI TUTOR</div>
+                    <div class="sub-brand">උසස් පෙළ විෂය කරුණු සහ අධ්‍යයන සටහන (G.C.E. A/L Study Note)</div>
+                </div>
+            </div>
+            <div class="header-meta">
+                <div><b>මාතෘකාව:</b> {sanitized_title}</div>
+                <div>🔗 <a href="https://t.me/AL_MCQbot" target="_blank">Telegram Group Join</a></div>
+                <div>🗓️ {date_str}</div>
             </div>
         </div>
-        <div class="header-meta">
-            <div><b>මාතෘකාව:</b> {sanitized_title}</div>
-            <div>🔗 <a href="https://t.me/AL_MCQbot" target="_blank">Telegram Group Join</a></div>
-            <div>🗓️ {date_str}</div>
-        </div>
-    </div>
 
-    <div class="content-body">
-        {content_html}
+        <div class="content-body">
+            {content_html}
+        </div>
     </div>
 </body>
 </html>
@@ -378,15 +393,15 @@ def generate_pdf_study_note(topic_title, raw_content, output_path):
             path=output_path,
             format="A4",
             margin={
-                "top": "14mm",
-                "bottom": "16mm",
-                "left": "12mm",
-                "right": "12mm"
+                "top": "8mm",
+                "bottom": "10mm",
+                "left": "8mm",
+                "right": "8mm"
             },
             print_background=True,
             display_header_footer=True,
             footer_template="""
-                <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 8pt; color: #6B7280; width: 100%; padding: 0 12mm; display: flex; justify-content: space-between;">
+                <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 8pt; color: #6B7280; width: 100%; padding: 0 10mm; display: flex; justify-content: space-between;">
                     <span>📚 Generated by A/L MCQ HUB AI Tutor | <a href="https://t.me/AL_MCQbot" style="color: #2563EB; text-decoration: underline;">Telegram Group: @AL_MCQbot</a></span>
                     <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
                 </div>
