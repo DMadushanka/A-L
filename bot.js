@@ -1329,19 +1329,30 @@ bot.on('poll_answer', (answer) => {
     const aiSession = aiQuizSessions[chatId];
     if (aiSession) {
       aiSession.totalAnswers = (aiSession.totalAnswers || 0) + 1;
+      aiSession.answeredQuestions = aiSession.answeredQuestions || {};
+      aiSession.answeredQuestions[user.id] = aiSession.answeredQuestions[user.id] || new Set();
+
       if (!aiSession.userScores[user.id]) {
         const uName = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
         const uHandle = user.username ? `@${user.username}` : uName;
         aiSession.userScores[user.id] = { name: uName, username: uHandle, score: 0 };
       }
-      if (selectedOpt === correctOption) {
-        aiSession.userScores[user.id].score++;
+
+      // Count score ONLY ONCE per question (qIndex) per user
+      if (!aiSession.answeredQuestions[user.id].has(qIndex)) {
+        aiSession.answeredQuestions[user.id].add(qIndex);
+        if (selectedOpt === correctOption) {
+          aiSession.userScores[user.id].score++;
+        }
       }
     }
 
     // Track Standard Scheduled/Interactive Paper Sessions
     const session = userPollSessions[chatId];
     if (session) {
+      session.answeredQuestions = session.answeredQuestions || {};
+      session.answeredQuestions[user.id] = session.answeredQuestions[user.id] || new Set();
+
       if (!session.userScores[user.id]) {
         const name = [user.first_name, user.last_name].filter(Boolean).join(' ') || 'ශිෂ්‍යයා';
         const username = user.username ? `@${user.username}` : '';
@@ -1354,16 +1365,20 @@ bot.on('poll_answer', (answer) => {
         };
       }
 
-      const student = session.userScores[user.id];
-      student.totalAnswered++;
-      if (selectedOpt === correctOption) {
-        student.score++;
-      } else {
-        student.wrongList.push({
-          qNum: qIndex + 1,
-          userAns: selectedOpt + 1,
-          correctAns: correctOption + 1
-        });
+      // Count score ONLY ONCE per question (qIndex) per user
+      if (!session.answeredQuestions[user.id].has(qIndex)) {
+        session.answeredQuestions[user.id].add(qIndex);
+        const student = session.userScores[user.id];
+        student.totalAnswered++;
+        if (selectedOpt === correctOption) {
+          student.score++;
+        } else {
+          student.wrongList.push({
+            qNum: qIndex + 1,
+            userAns: selectedOpt + 1,
+            correctAns: correctOption + 1
+          });
+        }
       }
     }
   } catch (err) {
@@ -1752,11 +1767,8 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
           };
         }
 
-        if (i < parsedQuestions.length - 1) {
-          await new Promise(r => setTimeout(r, 22000));
-        } else {
-          await new Promise(r => setTimeout(r, 5000));
-        }
+        // Wait 22 seconds (20s open_period + 2s reveal buffer) for ALL questions, including the final question
+        await new Promise(r => setTimeout(r, 22000));
 
         if (!aiQuizSessions[chatId] || aiQuizSessions[chatId].isStopped) {
           console.log(`🛑 AI Quiz Competition in chat ${chatId} was manually stopped after question ${i + 1}`);
@@ -1780,6 +1792,9 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
         }
       }
 
+      // Allow 3 seconds extra buffer for all final poll_answer events to finish processing
+      await new Promise(r => setTimeout(r, 3000));
+
       const aiSession = aiQuizSessions[chatId];
       if (aiSession && !aiSession.isStopped) {
         const sortedWinners = (aiSession && aiSession.userScores) ? 
@@ -1793,7 +1808,8 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
           sortedWinners.forEach((w, idx) => {
             const rankTag = idx < 3 ? medalIcons[idx] : `🏅 ${idx + 1}th Place`;
             const safeWinner = escapeMarkdown(w.username || w.name);
-            completionMsg += `${rankTag}: **${safeWinner}** — **${w.score}/${parsedQuestions.length}** ලකුණු 🎉\n`;
+            const safeScore = Math.min(Math.max(0, w.score), parsedQuestions.length);
+            completionMsg += `${rankTag}: **${safeWinner}** — **${safeScore}/${parsedQuestions.length}** ලකුණු 🎉\n`;
           });
           completionMsg += `\n✨ ජයග්‍රහණය කළ සහ තරඟයට සාර්ථකව එක්වූ සියලුම සාමාජිකයින්ට අපගේ උණුසුම් සුබ පැතුම්! 👏🎉\n\n`;
         } else {
