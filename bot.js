@@ -888,7 +888,11 @@ async function askGeminiAI(userPrompt, explicitSubId = null) {
 
   if (notebookId) {
     try {
-      const nbReply = await askNotebookLMPython(userPrompt, notebookId);
+      const enrichedPrompt = 
+        `${userPrompt}\n\n` +
+        `[උපදෙස්: මෙම මාතෘකාවට අදාළව උසස් පෙළ විභාගයට පැමිණිය හැකි ප්‍රධාන විචාර ප්‍රශ්න, තේමාත්මක කරුණු, විචාර විග්‍රහයන් සහ විභාගයේදී භාවිත කළ හැකි සියලුම ප්‍රධාන උපුටාගැනීම් (Quotes) ඇතුළත් සවිස්තරාත්මක අධ්‍යයන සටහනක් (Comprehensive Detailed Study Note) සම්පූර්ණයෙන්ම සපයන්න.]`;
+
+      const nbReply = await askNotebookLMPython(enrichedPrompt, notebookId);
       if (nbReply && nbReply.trim()) {
         return formatAITextForTelegram(nbReply);
       }
