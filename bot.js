@@ -620,10 +620,25 @@ function formatAITextForTelegram(text) {
   // 11. Format sub-headings like "• <b>නිදසුන්:</b>" or "• <b>උදාහරණ:</b>" into indented callouts
   formatted = formatted.replace(/•\s+<b>(නිදසුන්|උදාහරණ|සටහන|විශේෂ):<\/b>/gi, '   👉 <b>$1:</b>');
 
-  // 12. Strip conversational ending follow-up question prompts (e.g. "🔍 "බැද්දේගම" නවකතාවේ එන බාබෙහාමි... සාකච්ඡා කර බලමු ද?")
-  formatted = formatted.replace(/[\r\n\s]*(?:[🔍💬💭🗨️🗯️❓💡🤔👉📌]|\bමෙම\b|\bතවත්\b|\bඔබට\b|\bඔබ\b|\bඊළඟ\b|\bවැඩිදුර\b).*?(?:සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි|දැන|ලබා|බලමු|කරමු|කැමති).*?(?:බලමු\s*ද|කරමු\s*ද|කැමති\s*ද|ද)\??\s*$/gsi, '');
-  formatted = formatted.replace(/[\r\n\s]*[^\n]+?(?:සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි).*?(?:බලමු\s*ද|කරමු\s*ද|කැමති\s*ද)\??\s*$/gsi, '');
-  formatted = formatted.replace(/[\r\n\s]*[━─_-]{3,}[\r\n\s]*$/gsi, '');
+  // 12. Safely strip conversational ending follow-up question prompts (ONLY from the last 2 lines)
+  const lines = formatted.trim().split('\n');
+  for (let i = 0; i < 2; i++) {
+    if (lines.length === 0) break;
+    const lastLine = lines[lines.length - 1].trim();
+    if (!lastLine) {
+      lines.pop();
+      continue;
+    }
+    const isFollowup = /(?:දෙන්නද|බලමු\s*ද|කරමු\s*ද|කැමති\s*ද|දන්නද|ද)\??\s*$/i.test(lastLine) &&
+                       /(?:සකස්|සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි|දැන|ලබා|ඊළඟට)/i.test(lastLine);
+    const isDivider = /^[━─_-]{3,}$/.test(lastLine);
+    if (isFollowup || isDivider) {
+      lines.pop();
+    } else {
+      break;
+    }
+  }
+  formatted = lines.join('\n');
 
   // 13. Remove excessive blank lines (more than 2 consecutive newlines)
   formatted = formatted.replace(/\n{3,}/g, '\n\n');

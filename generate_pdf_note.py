@@ -42,18 +42,25 @@ def remove_ending_followup_captions(text):
     if not text:
         return ""
     
-    t = text.strip()
+    lines = text.strip().split('\n')
+    for _ in range(2):
+        if not lines:
+            break
+        last_line = lines[-1].strip()
+        if not last_line:
+            lines.pop()
+            continue
+        
+        is_followup = bool(re.search(r'(?:දෙන්නද|බලමු\s*ද|කරමු\s*ද|කැමති\s*ද|දන්නද|ද)\??\s*$', last_line, re.IGNORECASE)) and \
+                      bool(re.search(r'(?:සකස්|සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි|දැන|ලබා|ඊළඟට)', last_line, re.IGNORECASE))
+        is_divider = bool(re.match(r'^[━─_-]{3,}$', last_line))
+        
+        if is_followup or is_divider:
+            lines.pop()
+        else:
+            break
 
-    # Pattern 1: Strip trailing lines starting with conversational emojis/words and ending in question marks/phrases
-    t = re.sub(r'[\r\n\s]*(?:[🔍💬💭🗨️🗯️❓💡🤔👉📌]|\bමෙම\b|\bතවත්\b|\bඔබට\b|\bඔබ\b|\bඊළඟ\b|\bවැඩිදුර\b).*?(?:සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි|දැන|ලබා|බලමු|කරමු|කැමති).*?(?:බලමු\s*ද|කරමු\s*ද|කැමති\s*ද|ද)\??\s*$', '', t, flags=re.IGNORECASE | re.DOTALL)
-
-    # Pattern 2: Strip any trailing single-line prompt containing question marks or "බලමු ද?"
-    t = re.sub(r'[\r\n\s]*[^\n]+?(?:සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි).*?(?:බලමු\s*ද|කරමු\s*ද|කැමති\s*ද)\??\s*$', '', t, flags=re.IGNORECASE | re.DOTALL)
-
-    # Pattern 3: Strip any leftover trailing horizontal lines (──────)
-    t = re.sub(r'[\r\n\s]*[━─_-]{3,}[\r\n\s]*$', '', t, flags=re.IGNORECASE | re.DOTALL)
-
-    return t.strip()
+    return '\n'.join(lines).strip()
 
 def build_pdf_html(topic_title, raw_content, logo_base64=""):
     clean_raw = remove_ending_followup_captions(raw_content)
