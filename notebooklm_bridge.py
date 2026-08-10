@@ -42,6 +42,7 @@ async def get_notebooklm_client():
     )
 
 async def handle_query(notebook_id, user_query):
+    import re as _re
     client = await get_notebooklm_client()
     if not client:
         return
@@ -57,9 +58,45 @@ async def handle_query(notebook_id, user_query):
         res = await client.chat.ask(notebook_id=notebook_id, question=direct_prompt)
         ans = res.answer if hasattr(res, 'answer') and res.answer else (res if isinstance(res, str) else str(res))
         
-        if ans and len(ans.strip()) > 15 and "can't answer" not in ans.lower() and "created a note" not in ans.lower() and "saved to studio" not in ans.lower():
-            print(ans)
-            return
+        def strip_studio_phrases(text):
+            """Strip NotebookLM Studio-save boilerplate lines from the response, keeping the actual content."""
+            if not text:
+                return text
+            # Patterns that indicate NotebookLM announcing it saved something, but NOT the real content
+            studio_only_patterns = [
+                r"(?i)i'?ve?\s+(created|saved|stored|added)\s+a?\s*(note|study\s*guide|guide|report)",
+                r"(?i)(saved|added|stored)\s+(to|in)\s+(studio|notebook)",
+                r"(?i)the\s+(note|study\s*guide)\s+(has\s+been|is)\s+(saved|created|stored)",
+                r"(?i)you\s+can\s+(find|access|view)\s+(it|the\s+note)\s+in\s+(the\s+)?studio",
+                r"(?i)check\s+(your\s+)?studio\s+(panel|section|tab)",
+            ]
+            lines = text.split('\n')
+            filtered_lines = []
+            for line in lines:
+                if any(_re.search(pat, line) for pat in studio_only_patterns):
+                    continue  # Skip this boilerplate line
+                filtered_lines.append(line)
+            return '\n'.join(filtered_lines).strip()
+
+        # Check if the answer is meaningful (even if it contains Studio phrases)
+        has_studio_phrases = ans and (
+            "created a note" in ans.lower() or
+            "saved to studio" in ans.lower() or
+            "i've created" in ans.lower() or
+            "i have created" in ans.lower() or
+            "check your studio" in ans.lower()
+        )
+        is_answer_only_studio = ans and has_studio_phrases and len(ans.strip()) < 200
+        
+        if ans and len(ans.strip()) > 15 and "can't answer" not in ans.lower() and not is_answer_only_studio:
+            # Strip any Studio boilerplate lines but keep the real content
+            cleaned_ans = strip_studio_phrases(ans)
+            if cleaned_ans and len(cleaned_ans.strip()) > 15:
+                print(cleaned_ans)
+                return
+            elif ans and len(ans.strip()) > 15:
+                print(ans)
+                return
 
         # Fallback: If NotebookLM saved the response as a Studio Note, extract and return it!
         try:
@@ -82,7 +119,8 @@ async def handle_query(notebook_id, user_query):
         res2 = await client.chat.ask(notebook_id=notebook_id, question=rephrased_query)
         ans2 = res2.answer if hasattr(res2, 'answer') and res2.answer else (res2 if isinstance(res2, str) else str(res2))
         if ans2 and len(ans2.strip()) > 10:
-            print(ans2)
+            cleaned_ans2 = strip_studio_phrases(ans2)
+            print(cleaned_ans2 if cleaned_ans2 and len(cleaned_ans2.strip()) > 10 else ans2)
         elif ans:
             print(ans)
         else:
