@@ -42,9 +42,17 @@ def remove_ending_followup_captions(text):
     if not text:
         return ""
     
-    t = text
-    t = re.sub(r'[\r\n\s]*(?:💭|💬|🗨️|🗯️|මෙම|තවත්|ඔබට|විභාගයේදී).*?(?:සාකච්ඡා කිරීමට|ඇසීමට|දැනගැනීමට|පැහැදිලි කිරීමට|ගැටලු).*?කැමති\s*ද\??\s*$', '', t, flags=re.IGNORECASE | re.DOTALL)
-    t = re.sub(r'[\r\n\s]*(?:💭|💬|🗨️|🗯️)\s*.*?\??\s*$', '', t, flags=re.IGNORECASE | re.DOTALL)
+    t = text.strip()
+
+    # Pattern 1: Strip trailing lines starting with conversational emojis/words and ending in question marks/phrases
+    t = re.sub(r'[\r\n\s]*(?:[🔍💬💭🗨️🗯️❓💡🤔👉📌]|\bමෙම\b|\bතවත්\b|\bඔබට\b|\bඔබ\b|\bඊළඟ\b|\bවැඩිදුර\b).*?(?:සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි|දැන|ලබා|බලමු|කරමු|කැමති).*?(?:බලමු\s*ද|කරමු\s*ද|කැමති\s*ද|ද)\??\s*$', '', t, flags=re.IGNORECASE | re.DOTALL)
+
+    # Pattern 2: Strip any trailing single-line prompt containing question marks or "බලමු ද?"
+    t = re.sub(r'[\r\n\s]*[^\n]+?(?:සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි).*?(?:බලමු\s*ද|කරමු\s*ද|කැමති\s*ද)\??\s*$', '', t, flags=re.IGNORECASE | re.DOTALL)
+
+    # Pattern 3: Strip any leftover trailing horizontal lines (──────)
+    t = re.sub(r'[\r\n\s]*[━─_-]{3,}[\r\n\s]*$', '', t, flags=re.IGNORECASE | re.DOTALL)
+
     return t.strip()
 
 def build_pdf_html(topic_title, raw_content, logo_base64=""):
@@ -166,9 +174,9 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             color: #1F2937;
             background-color: #FFFFFF;
             margin: 0;
-            padding: 8mm;
-            font-size: 10pt;
-            line-height: 1.6;
+            padding: 6mm 6mm 10mm 6mm;
+            font-size: 9.8pt;
+            line-height: 1.58;
             position: relative;
         }}
 
@@ -176,8 +184,8 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         .pdf-page-wrapper {{
             border: 3.5px double #1E3A8A;
             border-radius: 6px;
-            padding: 12px 16px;
-            min-height: 275mm;
+            padding: 10px 14px 20px 14px;
+            margin-bottom: 25px;
             box-sizing: border-box;
             position: relative;
         }}
@@ -205,13 +213,13 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         .header-card {{
             background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
             border-radius: 8px;
-            padding: 14px 18px;
+            padding: 12px 16px;
             color: #FFFFFF;
             display: flex;
             align-items: center;
             justify-content: space-between;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
         }}
 
         .header-left {{
@@ -221,8 +229,8 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         }}
 
         .logo-img {{
-            width: 48px;
-            height: 48px;
+            width: 46px;
+            height: 46px;
             border-radius: 6px;
             object-fit: cover;
             border: 2px solid rgba(255, 255, 255, 0.3);
@@ -234,7 +242,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         }}
 
         .main-brand {{
-            font-size: 14pt;
+            font-size: 13.5pt;
             font-weight: 700;
             letter-spacing: 0.3px;
             color: #FFFFFF;
@@ -242,7 +250,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         }}
 
         .sub-brand {{
-            font-size: 9pt;
+            font-size: 8.8pt;
             color: #93C5FD;
             margin-top: 2px;
         }}
@@ -268,14 +276,14 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             background-color: #EFF6FF;
             border-left: 4px solid #2563EB;
             border-radius: 4px 8px 8px 4px;
-            padding: 7px 12px;
-            margin-top: 14px;
+            padding: 6px 12px;
+            margin-top: 12px;
             margin-bottom: 8px;
             page-break-after: avoid;
         }}
 
         .section-title {{
-            font-size: 11.5pt;
+            font-size: 11pt;
             font-weight: 700;
             color: #1E40AF;
         }}
@@ -327,8 +335,8 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             border: 1.5px dashed #3B82F6;
             border-radius: 8px;
             padding: 10px 14px;
-            margin-top: 20px;
-            margin-bottom: 8px;
+            margin-top: 16px;
+            margin-bottom: 12px;
             text-align: center;
             font-size: 9pt;
             color: #1E293B;
@@ -394,15 +402,15 @@ def generate_pdf_study_note(topic_title, raw_content, output_path):
             format="A4",
             margin={
                 "top": "8mm",
-                "bottom": "10mm",
+                "bottom": "24mm",
                 "left": "8mm",
                 "right": "8mm"
             },
             print_background=True,
             display_header_footer=True,
             footer_template="""
-                <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 8pt; color: #6B7280; width: 100%; padding: 0 10mm; display: flex; justify-content: space-between;">
-                    <span>📚 Generated by A/L MCQ HUB AI Tutor | <a href="https://t.me/AL_MCQbot" style="color: #2563EB; text-decoration: underline;">Telegram Group: @AL_MCQbot</a></span>
+                <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 7.8pt; color: #4B5563; width: 100%; padding: 0 10mm; margin-bottom: 1mm; display: flex; justify-content: space-between; align-items: center;">
+                    <span>🎓 <b>A/L MCQ HUB AI Tutor</b> | <a href="https://t.me/AL_MCQbot" style="color: #2563EB; text-decoration: underline;">Telegram Group: @AL_MCQbot</a></span>
                     <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
                 </div>
             """,

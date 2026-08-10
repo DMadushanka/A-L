@@ -620,9 +620,10 @@ function formatAITextForTelegram(text) {
   // 11. Format sub-headings like "• <b>නිදසුන්:</b>" or "• <b>උදාහරණ:</b>" into indented callouts
   formatted = formatted.replace(/•\s+<b>(නිදසුන්|උදාහරණ|සටහන|විශේෂ):<\/b>/gi, '   👉 <b>$1:</b>');
 
-  // 12. Strip conversational ending follow-up question prompts (e.g. "මෙම සන්ධි ක්‍රම ඇසුරෙන්... සාකච්ඡා කිරීමට ඔබ කැමති ද?")
-  formatted = formatted.replace(/[\r\n\s]*(?:💭|💬|🗨️|🗯️|මෙම|තවත්|ඔබට|විභාගයේදී).*?(?:සාකච්ඡා කිරීමට|ඇසීමට|දැනගැනීමට|පැහැදිලි කිරීමට|ගැටලු).*?කැමති\s*ද\??\s*$/gsi, '');
-  formatted = formatted.replace(/[\r\n\s]*(?:💭|💬|🗨️|🗯️)\s*.*?\??\s*$/gsi, '');
+  // 12. Strip conversational ending follow-up question prompts (e.g. "🔍 "බැද්දේගම" නවකතාවේ එන බාබෙහාමි... සාකච්ඡා කර බලමු ද?")
+  formatted = formatted.replace(/[\r\n\s]*(?:[🔍💬💭🗨️🗯️❓💡🤔👉📌]|\bමෙම\b|\bතවත්\b|\bඔබට\b|\bඔබ\b|\bඊළඟ\b|\bවැඩිදුර\b).*?(?:සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි|දැන|ලබා|බලමු|කරමු|කැමති).*?(?:බලමු\s*ද|කරමු\s*ද|කැමති\s*ද|ද)\??\s*$/gsi, '');
+  formatted = formatted.replace(/[\r\n\s]*[^\n]+?(?:සාකච්ඡා|විමසා|කතා|අධ්‍යයනය|පැහැදිලි).*?(?:බලමු\s*ද|කරමු\s*ද|කැමති\s*ද)\??\s*$/gsi, '');
+  formatted = formatted.replace(/[\r\n\s]*[━─_-]{3,}[\r\n\s]*$/gsi, '');
 
   // 13. Remove excessive blank lines (more than 2 consecutive newlines)
   formatted = formatted.replace(/\n{3,}/g, '\n\n');
