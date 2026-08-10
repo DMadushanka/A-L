@@ -1904,7 +1904,29 @@ async function startAIQuizCompetition(msg, chatId, userTopic, subCode = null) {
       delete aiQuizSessions[chatId];
 
     } else {
-      await sendLongMessage(chatId, `🧩 **A/L MCQ HUB AI Quiz & Study Guide**\n\n${resText}`, { reply_to_message_id: msg.message_id });
+      // Fallback: NotebookLM returned a rich AI Study Guide instead of MCQs!
+      console.log(`ℹ️ Quiz parser found 0 MCQs, delivering full AI Study Guide & PDF for chat ${chatId}`);
+      const formattedReply = 
+        `🤖 <b>A/L MCQ HUB AI Tutor — සවිස්තරාත්මක අධ්‍යයන සටහන:</b>\n\n` +
+        `${formatAITextForTelegram(resText)}\n\n` +
+        `💡 <i>තවත් ප්‍රශ්නයක් ඇසීමට <code>/ai ඔබගේ ප්‍රශ්නය</code> (හෝ <code>/ai_si</code>, <code>/ai_bc</code>) ලෙස එවන්න.</i>`;
+
+      await sendLongMessage(chatId, formattedReply, { parse_mode: 'HTML', reply_to_message_id: msg.message_id }).catch(e => console.error('Error sending AI study note fallback:', e.message));
+
+      // Generate & send PDF document
+      bot.sendChatAction(chatId, 'upload_document').catch(() => {});
+      const pdfPath = await generatePDFNote(userTopic, resText);
+      if (pdfPath && fs.existsSync(pdfPath)) {
+        const cleanPrompt = escapeMarkdown(userTopic || 'අධ්‍යයන සටහන');
+        await bot.sendDocument(chatId, pdfPath, {
+          caption: `📄 <b>A/L MCQ HUB AI Tutor — Structured PDF Study Guide</b>\n\n` +
+                   `📌 <b>මාතෘකාව:</b> ${cleanPrompt}\n\n` +
+                   `💡 <i>ඔබට මෙම සම්පූර්ණ අධ්‍යයන සටහන PDF ගොනුවක් ලෙස Download කර මුද්‍රණය (Print) කරගත හැක.</i>`,
+          parse_mode: 'HTML',
+          reply_to_message_id: msg.message_id
+        }).catch(e => console.error('Error sending PDF document fallback:', e.message));
+        fs.unlink(pdfPath, () => {});
+      }
       delete aiQuizSessions[chatId];
     }
   } else {
@@ -1973,8 +1995,11 @@ bot.onText(/\/(ai|ask)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
     }
   }
 
-  // If prompt explicitly requests MCQs/Quiz, auto-route to Quiz Competition!
-  if (userPrompt.match(/\b(mcq|mcqs|quiz|quez|test|competition|ප්‍රශ්න|බහුවරණ)\b/i)) {
+  // If prompt explicitly requests MCQs/Quiz/Competition, auto-route to Quiz Competition!
+  const isExplicitQuizRequest = userPrompt.match(/\b(mcq|mcqs|quiz|quez|competition|බහුවරණ|ක්විස්|තරඟය|mcq\s*ප්‍රශ්න|බහුවරණ\s*ප්‍රශ්න)\b/i) &&
+                                !userPrompt.match(/\b(විචාර|සටහන|විස්තර|පැහැදිලි|උපුටාගැනීම්|රචනා|විභාග\s*ප්‍රශ්න|අධ්‍යයන)\b/i);
+
+  if (isExplicitQuizRequest) {
     return startAIQuizCompetition(msg, chatId, userPrompt, subCode);
   }
 
