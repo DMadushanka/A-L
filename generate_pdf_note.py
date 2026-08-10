@@ -164,29 +164,33 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             print-color-adjust: exact !important;
         }}
 
-        @page {{
-            size: A4;
-            margin: 0;
-        }}
-
         body {{
             font-family: 'Noto Sans Sinhala', 'Nirmala UI', 'Iskoola Pota', 'Segoe UI', sans-serif;
             color: #1F2937;
             background-color: #FFFFFF;
             margin: 0;
-            padding: 6mm 6mm 10mm 6mm;
+            padding: 0;
             font-size: 9.8pt;
             line-height: 1.58;
             position: relative;
         }}
 
-        /* Two-Line Outer Page Border Frame */
-        .pdf-page-wrapper {{
+        /* Two-Line Outer Page Border Frame (Fixed on EVERY page) */
+        .page-border-frame {{
+            position: fixed;
+            top: -14mm;
+            bottom: -18mm;
+            left: -8mm;
+            right: -8mm;
             border: 3.5px double #1E3A8A;
             border-radius: 6px;
-            padding: 10px 14px 20px 14px;
-            margin-bottom: 25px;
-            box-sizing: border-box;
+            pointer-events: none;
+            z-index: 999;
+        }}
+
+        /* Content Container */
+        .content-wrapper {{
+            padding: 0;
             position: relative;
         }}
 
@@ -220,6 +224,8 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             justify-content: space-between;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             margin-bottom: 14px;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }}
 
         .header-left {{
@@ -277,9 +283,12 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             border-left: 4px solid #2563EB;
             border-radius: 4px 8px 8px 4px;
             padding: 6px 12px;
-            margin-top: 12px;
+            margin-top: 14px;
             margin-bottom: 8px;
+            page-break-inside: avoid;
+            break-inside: avoid;
             page-break-after: avoid;
+            break-after: avoid;
         }}
 
         .section-title {{
@@ -292,15 +301,21 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         .paragraph {{
             margin: 0 0 8px 0;
             text-align: justify;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }}
 
         .bullet {{
             margin: 0 0 5px 12px;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }}
 
         .sub-bullet {{
             margin: 0 0 4px 24px;
             color: #374151;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }}
 
         /* Callout Box / Example Box */
@@ -312,6 +327,8 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             margin: 8px 0 10px 0;
             color: #065F46;
             font-size: 9.5pt;
+            page-break-inside: avoid;
+            break-inside: avoid;
         }}
 
         .example-item {{
@@ -341,6 +358,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             font-size: 9pt;
             color: #1E293B;
             page-break-inside: avoid;
+            break-inside: avoid;
         }}
 
         .tg-link {{
@@ -352,7 +370,9 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
     </style>
 </head>
 <body>
-    <div class="pdf-page-wrapper">
+    <div class="page-border-frame"></div>
+
+    <div class="content-wrapper">
         {watermark_html}
 
         <div class="header-card">
@@ -401,15 +421,15 @@ def generate_pdf_study_note(topic_title, raw_content, output_path):
             path=output_path,
             format="A4",
             margin={
-                "top": "8mm",
-                "bottom": "24mm",
-                "left": "8mm",
-                "right": "8mm"
+                "top": "20mm",
+                "bottom": "26mm",
+                "left": "14mm",
+                "right": "14mm"
             },
             print_background=True,
             display_header_footer=True,
             footer_template="""
-                <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 7.8pt; color: #4B5563; width: 100%; padding: 0 10mm; margin-bottom: 1mm; display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 8pt; color: #4B5563; width: 100%; padding: 0 14mm; margin-bottom: 1.5mm; display: flex; justify-content: space-between; align-items: center;">
                     <span>🎓 <b>A/L MCQ HUB AI Tutor</b> | <a href="https://t.me/AL_MCQbot" style="color: #2563EB; text-decoration: underline;">Telegram Group: @AL_MCQbot</a></span>
                     <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
                 </div>
