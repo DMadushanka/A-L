@@ -618,6 +618,49 @@ function formatAITextForTelegram(text) {
   return formatted.trim();
 }
 
+// Helper: Generate structured Sinhala PDF Study Guide Document via Python ReportLab Bridge
+async function generatePDFNote(topicTitle, textContent) {
+  if (!textContent || !textContent.trim()) return null;
+
+  try {
+    const pdfDir = path.resolve(process.cwd(), 'pdf_downloads');
+    if (!fs.existsSync(pdfDir)) fs.mkdirSync(pdfDir, { recursive: true });
+
+    const timeId = Date.now().toString(36);
+    const tempTxtPath = path.join(pdfDir, `temp_note_${timeId}.txt`);
+    const outPdfPath = path.join(pdfDir, `A_L_MCQ_HUB_Study_Note_${timeId}.pdf`);
+
+    // Write text to temp file
+    fs.writeFileSync(tempTxtPath, textContent, 'utf8');
+
+    const pythonScript = path.resolve(process.cwd(), 'generate_pdf_note.py');
+    const safeTitle = (topicTitle || 'උසස් පෙළ අධ්‍යයන සටහන').replace(/["'\\]/g, ' ');
+
+    await new Promise((resolve) => {
+      const pyProc = spawn('python', [pythonScript, safeTitle, tempTxtPath, outPdfPath]);
+      let errOutput = '';
+      pyProc.stderr.on('data', (d) => errOutput += d.toString());
+      pyProc.on('close', (code) => {
+        if (code === 0 && fs.existsSync(outPdfPath)) {
+          resolve(outPdfPath);
+        } else {
+          console.error('PDF Generation python error:', errOutput);
+          resolve(null);
+        }
+      });
+    });
+
+    // Clean up temp txt file
+    if (fs.existsSync(tempTxtPath)) fs.unlink(tempTxtPath, () => {});
+
+    if (fs.existsSync(outPdfPath)) return outPdfPath;
+    return null;
+  } catch (err) {
+    console.error('Error generating PDF note:', err.message);
+    return null;
+  }
+}
+
 // Helper: Dynamic Syllabus & Marking Scheme Search Engine (RAG Grounding)
 function findRelevantSyllabusContext(userPrompt) {
   if (!userPrompt) return '';
@@ -1951,6 +1994,23 @@ bot.onText(/\/(ai|ask)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
       `💡 <i>තවත් ප්‍රශ්නයක් ඇසීමට <code>/ai ඔබගේ ප්‍රශ්නය</code> (හෝ <code>/ai_si</code>, <code>/ai_bc</code>) ලෙස එවන්න.</i>`;
 
     await sendLongMessage(chatId, formattedReply, { parse_mode: 'HTML', reply_to_message_id: msg.message_id }).catch(e => console.error('Error sending AI response:', e.message));
+
+    // Send PDF Study Guide Document as downloadable file
+    bot.sendChatAction(chatId, 'upload_document').catch(() => {});
+    const pdfPath = await generatePDFNote(userPrompt, aiAnswer);
+    if (pdfPath && fs.existsSync(pdfPath)) {
+      const cleanPrompt = escapeMarkdown(userPrompt || 'අධ්‍යයන සටහන');
+      await bot.sendDocument(chatId, pdfPath, {
+        caption: `📄 <b>A/L MCQ HUB AI Tutor — Structured PDF Study Guide</b>\n\n` +
+                 `📌 <b>මාතෘකාව:</b> ${cleanPrompt}\n\n` +
+                 `💡 <i>ඔබට මෙම සම්පූර්ණ අධ්‍යයන සටහන PDF ගොනුවක් ලෙස Download කර මුද්‍රණය (Print) කරගත හැක.</i>`,
+        parse_mode: 'HTML',
+        reply_to_message_id: msg.message_id
+      }).catch(e => console.error('Error sending PDF document:', e.message));
+
+      // Clean up temporary PDF file after sending
+      fs.unlink(pdfPath, () => {});
+    }
   } catch (err) {
     console.error('Error in /ai command execution:', err.message);
     if (statusMsg && statusMsg.message_id) {
