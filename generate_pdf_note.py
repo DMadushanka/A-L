@@ -148,7 +148,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
     body_html_parts.append("""
         <div class="telegram-join-card">
             📢 <b>අපගේ A/L MCQ HUB Telegram සජීවී අධ්‍යයන සමූහයට එක්වන්න:</b><br/>
-            <a href="https://t.me/AL_MCQbot" target="_blank" class="tg-link">👉 මෙතැනින් Click කර Telegram Group එකට Join වන්න (https://t.me/AL_MCQbot)</a>
+            <a href="https://t.me/+wZUSJyEncD1mYjFl" target="_blank" class="tg-link">👉 මෙතැනින් Click කර Telegram Group එකට Join වන්න (https://t.me/+wZUSJyEncD1mYjFl)</a>
         </div>
     """)
 
@@ -392,7 +392,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             </div>
             <div class="header-meta">
                 <div><b>මාතෘකාව:</b> {sanitized_title}</div>
-                <div>🔗 <a href="https://t.me/AL_MCQbot" target="_blank">Telegram Group Join</a></div>
+                <div>🔗 <a href="https://t.me/+wZUSJyEncD1mYjFl" target="_blank">Telegram Group Join</a></div>
                 <div>🗓️ {date_str}</div>
             </div>
         </div>
@@ -437,7 +437,7 @@ def generate_pdf_study_note(topic_title, raw_content, output_path):
             display_header_footer=True,
             footer_template="""
                 <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 8pt; color: #4B5563; width: 100%; padding: 0 14mm; margin-bottom: 1.5mm; display: flex; justify-content: space-between; align-items: center;">
-                    <span>🎓 <b>A/L MCQ HUB AI Tutor</b> | <a href="https://t.me/AL_MCQbot" style="color: #2563EB; text-decoration: underline;">Telegram Group: @AL_MCQbot</a></span>
+                    <span>🎓 <b>A/L MCQ HUB AI Tutor</b> | <a href="https://t.me/+wZUSJyEncD1mYjFl" style="color: #2563EB; text-decoration: underline;">Telegram Group Join</a></span>
                     <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
                 </div>
             """,
