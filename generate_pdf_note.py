@@ -421,6 +421,8 @@ def generate_pdf_study_note(topic_title, raw_content, output_path):
     return output_path
 
 if __name__ == '__main__':
+    if hasattr(sys.stdout, 'reconfigure'):
+        sys.stdout.reconfigure(encoding='utf-8')
     if len(sys.argv) >= 4:
         title = sys.argv[1]
         text_file = sys.argv[2]
@@ -430,6 +432,6 @@ if __name__ == '__main__':
             content = f.read()
             
         generate_pdf_study_note(title, content, out_pdf)
-        print(f"SUCCESS: Playwright PDF created at {out_pdf}")
+        print("SUCCESS: Playwright PDF created successfully")
     else:
         print("Usage: python generate_pdf_note.py <topic_title> <text_file_path> <output_pdf_path>")
