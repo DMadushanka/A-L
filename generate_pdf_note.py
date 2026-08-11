@@ -370,22 +370,22 @@ def build_pdf_html(topic_title, raw_content, logo_base64="", subject_code="auto"
             position: relative;
         }}
 
-        /* Outer Page Border Frame (stays inside Playwright print margins, no bleed) */
+        /* Outer Page Border Frame (Clean Fixed Border around content) */
         .page-border-frame {{
             position: fixed;
-            top: 2mm;
-            bottom: 2mm;
-            left: 2mm;
-            right: 2mm;
+            top: 1mm;
+            bottom: 1mm;
+            left: 1mm;
+            right: 1mm;
             border: 3px double {theme['border_color']};
             border-radius: 6px;
             pointer-events: none;
             z-index: 999;
         }}
 
-        /* Content Container */
+        /* Content Container (Spacious padding on all 4 sides so border never overlaps text) */
         .content-wrapper {{
-            padding: 4px 8px;
+            padding: 14px 22px 14px 22px;
             position: relative;
         }}
 
@@ -634,15 +634,15 @@ def generate_pdf_study_note(topic_title, raw_content, output_path, subject_code=
             path=output_path,
             format="A4",
             margin={
-                "top": "18mm",
-                "bottom": "22mm",
-                "left": "14mm",
-                "right": "14mm"
+                "top": "14mm",
+                "bottom": "18mm",
+                "left": "12mm",
+                "right": "12mm"
             },
             print_background=True,
             display_header_footer=True,
             footer_template=f"""
-                <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 8pt; color: #4B5563; width: 100%; padding: 0 14mm; margin-bottom: 1.5mm; display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 8pt; color: #4B5563; width: 100%; padding: 0 12mm; margin-bottom: 1.5mm; display: flex; justify-content: space-between; align-items: center;">
                     <span>🎓 <b>A/L MCQ HUB AI Tutor ({theme['subject_name']})</b> | <a href="https://t.me/+wZUSJyEncD1mYjFl" style="color: {theme['border_color']}; text-decoration: underline;">Telegram Group Join</a></span>
                     <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
                 </div>
