@@ -6,6 +6,127 @@ from datetime import datetime
 from pathlib import Path
 from playwright.sync_api import sync_playwright
 
+SUBJECT_THEMES = {
+    'si': {
+        'subject_name': 'සිංහල (Sinhala)',
+        'header_gradient': 'linear-gradient(135deg, #065F46 0%, #047857 100%)',
+        'border_color': '#047857',
+        'section_bg': '#ECFDF5',
+        'section_border': '#10B981',
+        'section_title': '#065F46',
+        'callout_bg': '#F0FDF4',
+        'callout_border': '#22C55E',
+        'callout_text': '#14532D',
+        'sub_bullet_color': '#047857',
+        'tg_card_bg': '#F0FDF4',
+        'tg_card_border': '#10B981',
+        'tg_link_color': '#059669',
+        'sub_brand_color': '#A7F3D0',
+        'meta_bg': 'rgba(255, 255, 255, 0.15)',
+        'meta_border': 'rgba(255, 255, 255, 0.25)'
+    },
+    'bc': {
+        'subject_name': 'බෞද්ධ ශිෂ්ටාචාරය (Buddhist Civilization)',
+        'header_gradient': 'linear-gradient(135deg, #7C2D12 0%, #9A3412 100%)',
+        'border_color': '#9A3412',
+        'section_bg': '#FFF7ED',
+        'section_border': '#F97316',
+        'section_title': '#7C2D12',
+        'callout_bg': '#FEF3C7',
+        'callout_border': '#F59E0B',
+        'callout_text': '#78350F',
+        'sub_bullet_color': '#9A3412',
+        'tg_card_bg': '#FFF7ED',
+        'tg_card_border': '#F97316',
+        'tg_link_color': '#EA580C',
+        'sub_brand_color': '#FDE68A',
+        'meta_bg': 'rgba(255, 255, 255, 0.15)',
+        'meta_border': 'rgba(255, 255, 255, 0.25)'
+    },
+    'hi': {
+        'subject_name': 'ඉතිහාසය (History)',
+        'header_gradient': 'linear-gradient(135deg, #881337 0%, #9F1239 100%)',
+        'border_color': '#881337',
+        'section_bg': '#FFF1F2',
+        'section_border': '#E11D48',
+        'section_title': '#881337',
+        'callout_bg': '#FFE4E6',
+        'callout_border': '#F43F5E',
+        'callout_text': '#4C0519',
+        'sub_bullet_color': '#881337',
+        'tg_card_bg': '#FFF1F2',
+        'tg_card_border': '#E11D48',
+        'tg_link_color': '#E11D48',
+        'sub_brand_color': '#FECDD3',
+        'meta_bg': 'rgba(255, 255, 255, 0.15)',
+        'meta_border': 'rgba(255, 255, 255, 0.25)'
+    },
+    'pl': {
+        'subject_name': 'දේශපාලන විද්‍යාව (Political Science)',
+        'header_gradient': 'linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%)',
+        'border_color': '#1E3A8A',
+        'section_bg': '#EFF6FF',
+        'section_border': '#2563EB',
+        'section_title': '#1E40AF',
+        'callout_bg': '#EEF2FF',
+        'callout_border': '#6366F1',
+        'callout_text': '#312E81',
+        'sub_bullet_color': '#1E40AF',
+        'tg_card_bg': '#EFF6FF',
+        'tg_card_border': '#2563EB',
+        'tg_link_color': '#2563EB',
+        'sub_brand_color': '#93C5FD',
+        'meta_bg': 'rgba(255, 255, 255, 0.15)',
+        'meta_border': 'rgba(255, 255, 255, 0.25)'
+    },
+    'bs': {
+        'subject_name': 'ව්‍යාපාර අධ්‍යයනය (Business Studies)',
+        'header_gradient': 'linear-gradient(135deg, #134E4A 0%, #0F766E 100%)',
+        'border_color': '#0F766E',
+        'section_bg': '#F0FDFA',
+        'section_border': '#14B8A6',
+        'section_title': '#134E4A',
+        'callout_bg': '#ECFEFF',
+        'callout_border': '#06B6D4',
+        'callout_text': '#164E63',
+        'sub_bullet_color': '#0F766E',
+        'tg_card_bg': '#F0FDFA',
+        'tg_card_border': '#14B8A6',
+        'tg_link_color': '#0D9488',
+        'sub_brand_color': '#99F6E4',
+        'meta_bg': 'rgba(255, 255, 255, 0.15)',
+        'meta_border': 'rgba(255, 255, 255, 0.25)'
+    }
+}
+
+def resolve_theme(subject_code, topic_title, text_content):
+    sub = (subject_code or '').strip().lower()
+    if sub in ['si', 'sin', 'sinhala']:
+        return SUBJECT_THEMES['si']
+    if sub in ['bc', 'buddhist', 'buddhist_civilization']:
+        return SUBJECT_THEMES['bc']
+    if sub in ['hi', 'hist', 'history']:
+        return SUBJECT_THEMES['hi']
+    if sub in ['pl', 'pol', 'political']:
+        return SUBJECT_THEMES['pl']
+    if sub in ['bs', 'bus', 'business']:
+        return SUBJECT_THEMES['bs']
+
+    # Auto-detect subject from text & title
+    combined = (str(topic_title) + " " + str(text_content)).lower()
+    if any(k in combined for k in ['සිංහල', 'සන්ධි', 'සමාස', 'කාව්‍ය', 'ව්‍යාකරණ', 'නවකතාව', 'බැද්දේගම']):
+        return SUBJECT_THEMES['si']
+    if any(k in combined for k in ['බෞද්ධ', 'ශිෂ්ටාචාරය', 'සංගායනා', 'තෙරවාද', 'මහින්දාගමනය', 'නිකාය', 'ධර්ම', 'බුද්ධ']):
+        return SUBJECT_THEMES['bc']
+    if any(k in combined for k in ['ඉතිහාසය', 'අනුරාධපුර', 'පොළොන්නරුව', 'රාජධානිය', 'යුගය', 'මහවැලි']):
+        return SUBJECT_THEMES['hi']
+    if any(k in combined for k in ['දේශපාලන', 'ආණ්ඩුක්‍රම', 'ජනමාධ්‍ය', 'පාලන', 'ව්‍යවස්ථාව']):
+        return SUBJECT_THEMES['pl']
+    if any(k in combined for k in ['ව්‍යාපාර', 'කළමනාකරණ', 'ගිණුම්', 'ආර්ථික']):
+        return SUBJECT_THEMES['bs']
+
+    return SUBJECT_THEMES['pl']
+
 def sanitize_text_for_pdf(text):
     if not text:
         return ""
@@ -62,7 +183,8 @@ def remove_ending_followup_captions(text):
 
     return '\n'.join(lines).strip()
 
-def build_pdf_html(topic_title, raw_content, logo_base64=""):
+def build_pdf_html(topic_title, raw_content, logo_base64="", subject_code="auto"):
+    theme = resolve_theme(subject_code, topic_title, raw_content)
     clean_raw = remove_ending_followup_captions(raw_content)
     sanitized_title = sanitize_text_for_pdf(topic_title) or "උසස් පෙළ අධ්‍යයන සටහන"
     date_str = datetime.now().strftime('%Y-%m-%d')
@@ -182,14 +304,14 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             position: relative;
         }}
 
-        /* Two-Line Outer Page Border Frame (Fixed on EVERY page) */
+        /* Outer Page Border Frame (stays inside Playwright print margins, no bleed) */
         .page-border-frame {{
             position: fixed;
-            top: -14mm;
-            bottom: -18mm;
-            left: -8mm;
-            right: -8mm;
-            border: 3.5px double #1E3A8A;
+            top: 2mm;
+            bottom: 2mm;
+            left: 2mm;
+            right: 2mm;
+            border: 3px double {theme['border_color']};
             border-radius: 6px;
             pointer-events: none;
             z-index: 999;
@@ -197,7 +319,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
 
         /* Content Container */
         .content-wrapper {{
-            padding: 0;
+            padding: 4px 8px;
             position: relative;
         }}
 
@@ -220,9 +342,9 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
             object-fit: contain;
         }}
 
-        /* Header Card */
+        /* Subject Header Card */
         .header-card {{
-            background: linear-gradient(135deg, #1E3A8A 0%, #1E40AF 100%);
+            background: {theme['header_gradient']};
             border-radius: 8px;
             padding: 12px 16px;
             color: #FFFFFF;
@@ -264,30 +386,31 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
 
         .sub-brand {{
             font-size: 8.8pt;
-            color: #93C5FD;
+            color: {theme['sub_brand_color']};
             margin-top: 2px;
+            font-weight: 500;
         }}
 
         .header-meta {{
             text-align: right;
             font-size: 8.5pt;
-            color: #E0E7FF;
-            background: rgba(255, 255, 255, 0.1);
+            color: #FFFFFF;
+            background: {theme['meta_bg']};
             padding: 5px 10px;
             border-radius: 6px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            border: 1px solid {theme['meta_border']};
         }}
 
         .header-meta a {{
-            color: #93C5FD;
+            color: #FFFFFF;
             text-decoration: underline;
             font-weight: 600;
         }}
 
         /* Section Title Cards */
         .section-card {{
-            background-color: #EFF6FF;
-            border-left: 4px solid #2563EB;
+            background-color: {theme['section_bg']};
+            border-left: 4.5px solid {theme['section_border']};
             border-radius: 4px 8px 8px 4px;
             padding: 6px 12px;
             margin-top: 14px;
@@ -301,7 +424,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         .section-title {{
             font-size: 11pt;
             font-weight: 700;
-            color: #1E40AF;
+            color: {theme['section_title']};
         }}
 
         /* Paragraphs & Lists */
@@ -320,19 +443,20 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
 
         .sub-bullet {{
             margin: 0 0 4px 24px;
-            color: #374151;
+            color: {theme['sub_bullet_color']};
+            font-weight: 500;
             page-break-inside: avoid;
             break-inside: avoid;
         }}
 
         /* Callout Box / Example Box */
         .callout-box {{
-            background-color: #ECFDF5;
-            border-left: 4px solid #10B981;
+            background-color: {theme['callout_bg']};
+            border-left: 4px solid {theme['callout_border']};
             border-radius: 4px 8px 8px 4px;
             padding: 8px 12px;
             margin: 8px 0 10px 0;
-            color: #065F46;
+            color: {theme['callout_text']};
             font-size: 9.5pt;
             page-break-inside: avoid;
             break-inside: avoid;
@@ -355,8 +479,8 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
 
         /* Clickable Telegram Join Card */
         .telegram-join-card {{
-            background-color: #F8FAFC;
-            border: 1.5px dashed #3B82F6;
+            background-color: {theme['tg_card_bg']};
+            border: 1.5px dashed {theme['tg_card_border']};
             border-radius: 8px;
             padding: 10px 14px;
             margin-top: 16px;
@@ -369,7 +493,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
         }}
 
         .tg-link {{
-            color: #2563EB;
+            color: {theme['tg_link_color']};
             font-weight: 700;
             text-decoration: underline;
             font-size: 9.5pt;
@@ -387,7 +511,7 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
                 {logo_img_tag}
                 <div class="header-title-box">
                     <div class="main-brand">A/L MCQ HUB AI TUTOR</div>
-                    <div class="sub-brand">උසස් පෙළ විෂය කරුණු සහ අධ්‍යයන සටහන (G.C.E. A/L Study Note)</div>
+                    <div class="sub-brand">උසස් පෙළ {theme['subject_name']} අධ්‍යයන සටහන</div>
                 </div>
             </div>
             <div class="header-meta">
@@ -406,7 +530,9 @@ def build_pdf_html(topic_title, raw_content, logo_base64=""):
 """
     return html_template
 
-def generate_pdf_study_note(topic_title, raw_content, output_path):
+def generate_pdf_study_note(topic_title, raw_content, output_path, subject_code="auto"):
+    theme = resolve_theme(subject_code, topic_title, raw_content)
+    
     # Encode logo image to base64
     logo_base64 = ""
     possible_logos = ['our_logo.png', 'c:/bak/projects/AL BC/A-L-main/our_logo.png', 'logo.png']
@@ -417,7 +543,7 @@ def generate_pdf_study_note(topic_title, raw_content, output_path):
                 logo_base64 = f"data:image/png;base64,{encoded}"
             break
 
-    html_content = build_pdf_html(topic_title, raw_content, logo_base64)
+    html_content = build_pdf_html(topic_title, raw_content, logo_base64, subject_code=subject_code)
     
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
@@ -428,16 +554,16 @@ def generate_pdf_study_note(topic_title, raw_content, output_path):
             path=output_path,
             format="A4",
             margin={
-                "top": "20mm",
-                "bottom": "26mm",
+                "top": "18mm",
+                "bottom": "22mm",
                 "left": "14mm",
                 "right": "14mm"
             },
             print_background=True,
             display_header_footer=True,
-            footer_template="""
+            footer_template=f"""
                 <div style="font-family: 'Noto Sans Sinhala', 'Nirmala UI', sans-serif; font-size: 8pt; color: #4B5563; width: 100%; padding: 0 14mm; margin-bottom: 1.5mm; display: flex; justify-content: space-between; align-items: center;">
-                    <span>🎓 <b>A/L MCQ HUB AI Tutor</b> | <a href="https://t.me/+wZUSJyEncD1mYjFl" style="color: #2563EB; text-decoration: underline;">Telegram Group Join</a></span>
+                    <span>🎓 <b>A/L MCQ HUB AI Tutor ({theme['subject_name']})</b> | <a href="https://t.me/+wZUSJyEncD1mYjFl" style="color: {theme['border_color']}; text-decoration: underline;">Telegram Group Join</a></span>
                     <span>Page <span class="pageNumber"></span> of <span class="totalPages"></span></span>
                 </div>
             """,
@@ -454,11 +580,12 @@ if __name__ == '__main__':
         title = sys.argv[1]
         text_file = sys.argv[2]
         out_pdf = sys.argv[3]
+        sub_code = sys.argv[4] if len(sys.argv) >= 5 else "auto"
         
         with open(text_file, 'r', encoding='utf-8') as f:
             content = f.read()
             
-        generate_pdf_study_note(title, content, out_pdf)
+        generate_pdf_study_note(title, content, out_pdf, subject_code=sub_code)
         print("SUCCESS: Playwright PDF created successfully")
     else:
-        print("Usage: python generate_pdf_note.py <topic_title> <text_file_path> <output_pdf_path>")
+        print("Usage: python generate_pdf_note.py <topic_title> <text_file_path> <output_pdf_path> [subject_code]")
