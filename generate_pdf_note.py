@@ -185,16 +185,33 @@ def sanitize_text_for_pdf(text):
     t = re.sub(r'\\?rightarrow', ' → ', t)
     t = re.sub(r'\\?implies', ' ⇒ ', t)
     t = re.sub(r'\\\\?\([^\)]*\\\\?\)', '', t)
-    
-    # 2. Strip NotebookLM citation tags [1], [1, 2]
+
+    # 2. Comprehensive Citation & Source Stripping (Files, Pages, Bracket Tags)
+    # 2a. Strip bracketed file citations e.g. [07_Geography_Notes_Tute.pdf, p. 47], [notes.pdf, p. 12]
+    t = re.sub(r'\[[^\]]*?\.(?:pdf|txt|docx|doc|html|md|epub)[^\]]*?\]', '', t, flags=re.IGNORECASE)
+    # 2b. Strip parenthesized file citations e.g. (07_Geography_Notes_Tute.pdf, p. 47)
+    t = re.sub(r'\([^\)]*?\.(?:pdf|txt|docx|doc|html|md|epub)[^\)]*?\)', '', t, flags=re.IGNORECASE)
+    # 2c. Strip bracketed numeric citations e.g. [1], [1, 2], [1-3]
     t = re.sub(r'\[\d+(?:\s*,\s*\d+|-?\d+)*\]', '', t)
+    # 2d. Strip bracketed page references e.g. [p. 47], [pp. 47-50], [page 47], [p. 50, 51]
+    t = re.sub(r'\[\s*(?:p\.|pp\.|page|pages)\s*\d+[^\]]*\]', '', t, flags=re.IGNORECASE)
+    # 2e. Strip parenthesized page references e.g. (p. 47), (pp. 47-50)
+    t = re.sub(r'\(\s*(?:p\.|pp\.|page|pages)\s*\d+[^\)]*\)', '', t, flags=re.IGNORECASE)
+    # 2f. Strip explicit source tags e.g. [Source: ...], [මුලාශ්‍රය: ...], (Source: ...)
+    t = re.sub(r'\[\s*(?:source|සූත්‍ර|මුලාශ්‍රය|මූලාශ්‍රය|මූලාශ්‍ර|ගොනුව|පිටුව)\s*:[^\]]*\]', '', t, flags=re.IGNORECASE)
+    t = re.sub(r'\(\s*(?:source|සූත්‍ර|මුලාශ්‍රය|මූලාශ්‍රය|මූලාශ්‍ර|ගොනුව|පිටුව)\s*:[^\)]*\)', '', t, flags=re.IGNORECASE)
+    # 2g. Strip trailing isolated page numbers e.g. ", p. 47" or ". p. 47"
+    t = re.sub(r'(?:,\s*|\.\s*|\s+)p\.\s*\d+(?:\s*,\s*\d+|-?\d+)*', '', t, flags=re.IGNORECASE)
     
     # 3. Clean up raw double slashes \\
     t = t.replace('\\\\', '').replace('\\', '')
 
-    # 4. Clean up multiple spaces & dots
+    # 4. Clean up punctuation spaces left behind after citation stripping
     t = re.sub(r'[ \t]{2,}', ' ', t)
     t = t.replace(' .', '.').replace(' ,', ',')
+    t = t.replace(' .', '.').replace(' ,', ',')
+    t = re.sub(r'\(\s*\)', '', t)
+    t = re.sub(r'\[\s*\]', '', t)
 
     # 5. Convert Markdown bold **text** or __text__ to <b>text</b>
     t = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', t)
@@ -260,6 +277,9 @@ def build_pdf_html(topic_title, raw_content, logo_base64="", subject_code="auto"
         clean_l = sanitize_text_for_pdf(raw_line)
         if not clean_l:
             continue
+
+        # Format inline examples into elegant badges
+        clean_l = re.sub(r'\(උදා:\s*([^\)]+)\)', r'<span class="example-badge">👉 <b>උදා:</b> <i>\1</i></span>', clean_l)
 
         # Convert Headers (### or 📌) into Styled Card Headers
         if raw_line.startswith('###') or raw_line.startswith('##') or raw_line.startswith('📌') or raw_line.startswith('#'):
@@ -482,17 +502,31 @@ def build_pdf_html(topic_title, raw_content, logo_base64="", subject_code="auto"
         }}
 
         .bullet {{
-            margin: 0 0 5px 12px;
+            margin: 6px 0 8px 10px;
+            line-height: 1.62;
+            text-align: justify;
             page-break-inside: avoid;
             break-inside: avoid;
         }}
 
         .sub-bullet {{
-            margin: 0 0 4px 24px;
+            margin: 4px 0 6px 24px;
             color: {theme['sub_bullet_color']};
             font-weight: 500;
             page-break-inside: avoid;
             break-inside: avoid;
+        }}
+
+        .example-badge {{
+            display: inline-block;
+            background-color: {theme['callout_bg']};
+            border-left: 3px solid {theme['callout_border']};
+            color: {theme['callout_text']};
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 9.2pt;
+            margin-left: 4px;
+            margin-top: 2px;
         }}
 
         /* Callout Box / Example Box */

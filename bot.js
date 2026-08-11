@@ -569,8 +569,22 @@ function formatAITextForTelegram(text) {
 
   let formatted = text;
 
-  // 1. Remove all NotebookLM citation references like [1], [1, 2], [1-3], [12][13]
+  // 1. Comprehensive Citation & Source Stripping (Files, Pages, Bracket Tags)
+  // 1a. Strip bracketed file citations e.g. [07_Geography_Notes_Tute.pdf, p. 47], [notes.pdf, p. 12]
+  formatted = formatted.replace(/\[[^\]]*?\.(?:pdf|txt|docx|doc|html|md|epub)[^\]]*?\]/gi, '');
+  // 1b. Strip parenthesized file citations e.g. (07_Geography_Notes_Tute.pdf, p. 47)
+  formatted = formatted.replace(/\([^\)]*?\.(?:pdf|txt|docx|doc|html|md|epub)[^\)]*?\)/gi, '');
+  // 1c. Strip bracketed numeric citations e.g. [1], [1, 2], [1-3]
   formatted = formatted.replace(/\[\d+(?:\s*,\s*\d+|-?\d+)*\]/g, '');
+  // 1d. Strip bracketed page references e.g. [p. 47], [pp. 47-50], [page 47], [p. 50, 51]
+  formatted = formatted.replace(/\[\s*(?:p\.|pp\.|page|pages)\s*\d+[^\]]*\]/gi, '');
+  // 1e. Strip parenthesized page references e.g. (p. 47), (pp. 47-50)
+  formatted = formatted.replace(/\(\s*(?:p\.|pp\.|page|pages)\s*\d+[^\)]*\)/gi, '');
+  // 1f. Strip explicit source tags e.g. [Source: ...], [මුලාශ්‍රය: ...], (Source: ...)
+  formatted = formatted.replace(/\[\s*(?:source|සූත්‍ර|මුලාශ්‍රය|මූලාශ්‍රය|මූලාශ්‍ර|ගොනුව|පිටුව)\s*:[^\]]*\]/gi, '');
+  formatted = formatted.replace(/\(\s*(?:source|සූත්‍ර|මුලාශ්‍රය|මූලාශ්‍රය|මූලාශ්‍ර|ගොනුව|පිටුව)\s*:[^\)]*\)/gi, '');
+  // 1g. Strip trailing isolated page numbers e.g. ", p. 47" or ". p. 47"
+  formatted = formatted.replace(/(?:,\s*|\.\s*|\s+)p\.\s*\d+(?:\s*,\s*\d+|-?\d+)*/gi, '');
 
   // 2. Clean raw LaTeX math arrow slashes (\\(\rightarrow\\), \rightarrow, \implies)
   formatted = formatted.replace(/\\\\?\(\s*\\?rightarrow\s*\\\\?\)/g, ' → ');
@@ -580,47 +594,52 @@ function formatAITextForTelegram(text) {
   formatted = formatted.replace(/\\\\?\([^\)]*\\\\?\)/g, '');
   formatted = formatted.replace(/\\\\/g, '');
 
-  // 3. Clean up multiple spaces left behind after stripping citations & slashes
+  // 3. Clean up punctuation spaces left behind after citation stripping
   formatted = formatted.replace(/[ \t]{2,}/g, ' ');
   formatted = formatted.replace(/ \./g, '.');
   formatted = formatted.replace(/ ,/g, ',');
+  formatted = formatted.replace(/\(\s*\)/g, '');
+  formatted = formatted.replace(/\[\s*\]/g, '');
 
-  // 3. Convert raw Markdown tables if any before HTML escaping
+  // 4. Convert raw Markdown tables if any before HTML escaping
   formatted = formatTablesForTelegram(formatted);
 
-  // 4. Escape HTML special characters (&, <, >) to prevent parse crashes
+  // 5. Escape HTML special characters (&, <, >) to prevent parse crashes
   formatted = formatted.replace(/&/g, '&amp;');
   formatted = formatted.replace(/</g, '&lt;');
   formatted = formatted.replace(/>/g, '&gt;');
 
-  // 5. Convert headers (### Header, ## Header, # Header) to styled HTML titles
+  // 6. Convert headers (### Header, ## Header, # Header) to styled HTML titles
   formatted = formatted.replace(/^[ \t]*#{1,4}\s*\*{0,2}(.*?)\*{0,2}\s*$/gm, (match, title) => {
     const cleanTitle = title.replace(/^[*_]+|[*_]+$/g, '').trim();
     if (!cleanTitle) return '';
     return `\n📌 <b>${cleanTitle}</b>\n─────────────────────`;
   });
 
-  // 6. Convert double asterisks **bold** or double underscores __bold__ to <b>bold</b>
+  // 7. Convert double asterisks **bold** or double underscores __bold__ to <b>bold</b>
   formatted = formatted.replace(/\*\*(.*?)\*\*/g, '<b>$1</b>');
   formatted = formatted.replace(/__(.*?)__/g, '<b>$1</b>');
 
-  // 7. Clean up lines with raw nested asterisks "* *", "* -", "- *" into indented sub-bullets
+  // 8. Clean up lines with raw nested asterisks "* *", "* -", "- *" into indented sub-bullets
   formatted = formatted.replace(/^[ \t]*[*•-]\s+[*•-]\s+/gm, '   ▸ ');
   formatted = formatted.replace(/^[ \t]{2,}[*•-]\s+/gm, '   ▸ ');
 
-  // 8. Convert standard top-level list items ("* ", "- ") into clean "• "
+  // 9. Convert standard top-level list items ("* ", "- ") into clean "• "
   formatted = formatted.replace(/^[ \t]*[*•-]\s+/gm, '• ');
 
-  // 9. Convert remaining single asterisk *italic* (not at line start) to <i>italic</i>
-  formatted = formatted.replace(/(?<!\w)\*([^\*\n]+)\*(?!\w)/g, '<i>$1</i>');
-
-  // 10. Clean up raw horizontal rules ("---", "___", "***")
-  formatted = formatted.replace(/^[ \t]*[-*_]{3,}[ \t]*$/gm, '━━━━━━━━━━━━━━━━━━━━━');
+  // 10. Format inline examples like (උදා: ඇල්ප්ස් කඳු බැවුම්) into clean indented sub-lines
+  formatted = formatted.replace(/\(උදා:\s*([^\)]+)\)/gi, '\n   👉 <b>උදා:</b> <i>$1</i>');
 
   // 11. Format sub-headings like "• <b>නිදසුන්:</b>" or "• <b>උදාහරණ:</b>" into indented callouts
   formatted = formatted.replace(/•\s+<b>(නිදසුන්|උදාහරණ|සටහන|විශේෂ):<\/b>/gi, '   👉 <b>$1:</b>');
 
-  // 12. Safely strip conversational ending follow-up question prompts (ONLY from the last 2 lines)
+  // 12. Convert remaining single asterisk *italic* (not at line start) to <i>italic</i>
+  formatted = formatted.replace(/(?<!\w)\*([^\*\n]+)\*(?!\w)/g, '<i>$1</i>');
+
+  // 13. Clean up raw horizontal rules ("---", "___", "***")
+  formatted = formatted.replace(/^[ \t]*[-*_]{3,}[ \t]*$/gm, '━━━━━━━━━━━━━━━━━━━━━');
+
+  // 14. Safely strip conversational ending follow-up question prompts (ONLY from the last 2 lines)
   const lines = formatted.trim().split('\n');
   for (let i = 0; i < 2; i++) {
     if (lines.length === 0) break;
@@ -640,7 +659,7 @@ function formatAITextForTelegram(text) {
   }
   formatted = lines.join('\n');
 
-  // 13. Remove excessive blank lines (more than 2 consecutive newlines)
+  // 15. Remove excessive blank lines (more than 2 consecutive newlines)
   formatted = formatted.replace(/\n{3,}/g, '\n\n');
 
   return formatted.trim();
@@ -915,7 +934,7 @@ async function askGeminiAI(userPrompt, explicitSubId = null) {
     try {
       const enrichedPrompt =
         `${userPrompt}\n\n` +
-        `[උපදෙස්: සවිස්තරාත්මක අධ්‍යයන සටහනක් (Comprehensive Detailed Study Note) සම්පූර්ණයෙන්ම සපයන්න.]`;
+        `[උපදෙස්: සවිස්තරාත්මක අධ්‍යයන සටහනක් (Comprehensive Detailed Study Note) සම්පූර්ණයෙන්ම සපයන්න. පිළිතුර තුළ ගොනු නාම (File names e.g. .pdf, .txt), පිටු අංක (Page numbers) හෝ සූත්‍ර/මුලාශ්‍ර උපුටාගැනීම් (Source/Citation tags e.g. [07_Geography...]) කිසිසේත්ම ඇතුළත් නොකරන්න. සටහන කියවීමට සහ පාඩම් කිරීමට පහසු වන සේ පැහැදිලි ලෙස කරුණු, උදාහරණ සහ උප-මාතෘකා සහිතව පිළිවෙළකට සකස් කරන්න.]`;
 
       const nbReply = await askNotebookLMPython(enrichedPrompt, notebookId);
       if (nbReply && nbReply.trim()) {
