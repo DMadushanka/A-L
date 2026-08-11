@@ -96,8 +96,45 @@ SUBJECT_THEMES = {
         'sub_brand_color': '#99F6E4',
         'meta_bg': 'rgba(255, 255, 255, 0.15)',
         'meta_border': 'rgba(255, 255, 255, 0.25)'
+    },
+    'geo': {
+        'subject_name': 'භූගෝල විද්‍යාව (Geography)',
+        'header_gradient': 'linear-gradient(135deg, #4C1D95 0%, #6D28D9 100%)',
+        'border_color': '#6D28D9',
+        'section_bg': '#F5F3FF',
+        'section_border': '#7C3AED',
+        'section_title': '#4C1D95',
+        'callout_bg': '#EDE9FE',
+        'callout_border': '#8B5CF6',
+        'callout_text': '#2E1065',
+        'sub_bullet_color': '#6D28D9',
+        'tg_card_bg': '#F5F3FF',
+        'tg_card_border': '#7C3AED',
+        'tg_link_color': '#7C3AED',
+        'sub_brand_color': '#C4B5FD',
+        'meta_bg': 'rgba(255, 255, 255, 0.15)',
+        'meta_border': 'rgba(255, 255, 255, 0.25)'
+    },
+    'md': {
+        'subject_name': 'මාධ්‍ය අධ්‍යයනය (Media Studies)',
+        'header_gradient': 'linear-gradient(135deg, #0C4A6E 0%, #0369A1 100%)',
+        'border_color': '#0369A1',
+        'section_bg': '#F0F9FF',
+        'section_border': '#0EA5E9',
+        'section_title': '#0C4A6E',
+        'callout_bg': '#E0F2FE',
+        'callout_border': '#38BDF8',
+        'callout_text': '#082F49',
+        'sub_bullet_color': '#0369A1',
+        'tg_card_bg': '#F0F9FF',
+        'tg_card_border': '#0EA5E9',
+        'tg_link_color': '#0284C7',
+        'sub_brand_color': '#7DD3FC',
+        'meta_bg': 'rgba(255, 255, 255, 0.15)',
+        'meta_border': 'rgba(255, 255, 255, 0.25)'
     }
 }
+
 
 def resolve_theme(subject_code, topic_title, text_content):
     sub = (subject_code or '').strip().lower()
@@ -111,6 +148,10 @@ def resolve_theme(subject_code, topic_title, text_content):
         return SUBJECT_THEMES['pl']
     if sub in ['bs', 'bus', 'business']:
         return SUBJECT_THEMES['bs']
+    if sub in ['geo', 'geography', 'geog']:
+        return SUBJECT_THEMES['geo']
+    if sub in ['md', 'media', 'mass_media']:
+        return SUBJECT_THEMES['md']
 
     # Auto-detect subject from text & title
     combined = (str(topic_title) + " " + str(text_content)).lower()
@@ -124,8 +165,13 @@ def resolve_theme(subject_code, topic_title, text_content):
         return SUBJECT_THEMES['pl']
     if any(k in combined for k in ['ව්‍යාපාර', 'කළමනාකරණ', 'ගිණුම්', 'ආර්ථික']):
         return SUBJECT_THEMES['bs']
+    if any(k in combined for k in ['භූගෝල', 'ගංගා', 'කාලගුණ', 'මිනිසාශ්‍රිත', 'ගොවිතැන', 'භූමිය', 'ජල', 'ජනගහන']):
+        return SUBJECT_THEMES['geo']
+    if any(k in combined for k in ['මාධ්‍ය', 'ජනමාධ්‍ය', 'රූපවාහිනී', 'ගුවන්විදුලි', 'සමාජ මාධ්‍ය', 'පුවත්', 'සන්නිවේදන']):
+        return SUBJECT_THEMES['md']
 
     return SUBJECT_THEMES['pl']
+
 
 def sanitize_text_for_pdf(text):
     if not text:

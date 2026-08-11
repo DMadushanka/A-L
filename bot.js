@@ -649,8 +649,8 @@ function formatAITextForTelegram(text) {
 // Helper: Clean and create a safe filename from topic title
 function sanitizePDFFilename(title) {
   if (!title) return 'A_L_MCQ_HUB_Study_Note';
-  // Strip command prefixes like /ai_si, /ai_bc, /ai, /ai_hist, /ai_pl, /ai_bs
-  let clean = title.replace(/^\/(ai|ai_si|ai_bc|ai_hist|ai_pl|ai_bs)\s*/i, '');
+  // Strip command prefixes like /ai_si, /ai_bc, /ai, /ai_hist, /ai_pl, /ai_bs, /ai_geo, /ai_md
+  let clean = title.replace(/^\/(ai|ai_si|ai_bc|ai_hist|ai_pl|ai_bs|ai_geo|ai_md)\s*/i, '');
   // Remove illegal OS filename characters \ / : * ? " < > |
   clean = clean.replace(/[\\/:*?"<>|]/g, '');
   // Replace spaces with underscores
@@ -870,6 +870,8 @@ function getSubjectNotebookId(userPrompt, explicitSubId = null) {
     else if (['hi', 'hist', 'history'].includes(subKey)) subKey = 'HIST';
     else if (['pl', 'pol', 'political'].includes(subKey)) subKey = 'PL';
     else if (['bs', 'bus', 'business'].includes(subKey)) subKey = 'BS';
+    else if (['geo', 'geog', 'geography'].includes(subKey)) subKey = 'GEO';
+    else if (['md', 'media', 'mass_media'].includes(subKey)) subKey = 'MD';
     else subKey = subKey.toUpperCase();
 
     const envKey = `NOTEBOOK_ID_${subKey}`;
@@ -894,6 +896,12 @@ function getSubjectNotebookId(userPrompt, explicitSubId = null) {
   }
   if (promptLower.includes('බෞද්ධ') || promptLower.includes('ශිෂ්ටාචාරය') || promptLower.includes('තෙරවාද') || promptLower.includes('මහින්දාගමනය') || promptLower.includes('නිකාය') || promptLower.includes('සංගායනා') || promptLower.includes('සංඟායනා') || promptLower.includes('ධර්ම') || promptLower.includes('බුද්ධ')) {
     if (process.env.NOTEBOOK_ID_BC && process.env.NOTEBOOK_ID_BC.trim()) return process.env.NOTEBOOK_ID_BC.trim();
+  }
+  if (promptLower.includes('භූගෝල') || promptLower.includes('ගංගා') || promptLower.includes('කාලගුණ') || promptLower.includes('ජනගහන') || promptLower.includes('ගොවිතැන') || promptLower.includes('භූමිය') || promptLower.includes('ජල')) {
+    if (process.env.NOTEBOOK_ID_GEO && process.env.NOTEBOOK_ID_GEO.trim()) return process.env.NOTEBOOK_ID_GEO.trim();
+  }
+  if (promptLower.includes('මාධ්‍ය') || promptLower.includes('රූපවාහිනී') || promptLower.includes('ගුවන්විදුලි') || promptLower.includes('සන්නිවේදන') || promptLower.includes('පුවත්') || promptLower.includes('ජනමාධ්‍ය')) {
+    if (process.env.NOTEBOOK_ID_MD && process.env.NOTEBOOK_ID_MD.trim()) return process.env.NOTEBOOK_ID_MD.trim();
   }
 
   return (process.env.NOTEBOOK_ID || '').trim();
@@ -2010,7 +2018,7 @@ bot.onText(/\/(ai|ask)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
   if (!subCode && userPrompt) {
     const parts = userPrompt.split(/\s+/);
     const candidate = parts[0].toLowerCase();
-    if (['si', 'sin', 'sinhala', 'bc', 'buddhist', 'hi', 'hist', 'history', 'pl', 'pol', 'bs', 'bus'].includes(candidate)) {
+    if (['si', 'sin', 'sinhala', 'bc', 'buddhist', 'hi', 'hist', 'history', 'pl', 'pol', 'bs', 'bus', 'geo', 'geog', 'geography', 'md', 'media'].includes(candidate)) {
       subCode = candidate;
       userPrompt = parts.slice(1).join(' ');
     }
@@ -2034,11 +2042,15 @@ bot.onText(/\/(ai|ask)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) => {
       `• \`/ai_bc\` හෝ \`/ai bc\` — බෞද්ධ ශිෂ්ටාචාරය (Buddhist Civ)\n` +
       `• \`/ai_hist\` හෝ \`/ai hist\` — ඉතිහාසය (History)\n` +
       `• \`/ai_pl\` හෝ \`/ai pl\` — දේශපාලන විද්‍යාව (Political Science)\n` +
-      `• \`/ai_bs\` හෝ \`/ai bs\` — ව්‍යාපාර අධ්‍යයනය (Business Studies)\n\n` +
+      `• \`/ai_bs\` හෝ \`/ai bs\` — ව්‍යාපාර අධ්‍යයනය (Business Studies)\n` +
+      `• \`/ai_geo\` හෝ \`/ai geo\` — භූගෝල විද්‍යාව (Geography)\n` +
+      `• \`/ai_md\` හෝ \`/ai md\` — මාධ්‍ය අධ්‍යයනය (Media Studies)\n\n` +
       `📌 **උදාහරණ:**\n` +
       `• \`/ai_si සන්ධි යනු කුමක්ද?\` \n` +
       `• \`/ai_bc අභයගිරි නිකාය ආරම්භ වීමට හේතු මොනවාද?\` \n` +
-      `• \`/ai_hist අනුරාධපුර රාජධානියේ සංවර්ධනය\``;
+      `• \`/ai_geo ශ්‍රී ලංකාවේ ප්‍රධාන ගංගා ගැන විස්තර කරන්න\` \n` +
+      `• \`/ai_md ජනමාධ්‍ය සහ ප්‍රජාතන්ත්‍රවාදය අතර සම්බන්ධය\``;
+
 
     return bot.sendMessage(chatId, usageMsg, { parse_mode: 'Markdown' }).catch(() => { });
   }
@@ -2156,7 +2168,7 @@ bot.onText(/\/(audio|podcast)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async (msg, match) 
   if (!subCode && userTopic) {
     const parts = userTopic.split(/\s+/);
     const candidate = parts[0].toLowerCase();
-    if (['si', 'sin', 'sinhala', 'bc', 'buddhist', 'hi', 'hist', 'history', 'pl', 'pol', 'bs', 'bus'].includes(candidate)) {
+    if (['si', 'sin', 'sinhala', 'bc', 'buddhist', 'hi', 'hist', 'history', 'pl', 'pol', 'bs', 'bus', 'geo', 'geog', 'geography', 'md', 'media'].includes(candidate)) {
       subCode = candidate;
       userTopic = parts.slice(1).join(' ');
     }
@@ -2306,7 +2318,7 @@ bot.onText(/\/(quiz|quez|test|competition)(?:_([a-z]+))?(@\w+)?\s*(.*)/i, async 
   if (!subCode && userTopic) {
     const parts = userTopic.split(/\s+/);
     const candidate = parts[0].toLowerCase();
-    if (['si', 'sin', 'sinhala', 'bc', 'buddhist', 'hi', 'hist', 'history', 'pl', 'pol', 'bs', 'bus'].includes(candidate)) {
+    if (['si', 'sin', 'sinhala', 'bc', 'buddhist', 'hi', 'hist', 'history', 'pl', 'pol', 'bs', 'bus', 'geo', 'geog', 'geography', 'md', 'media'].includes(candidate)) {
       subCode = candidate;
       userTopic = parts.slice(1).join(' ');
     }
