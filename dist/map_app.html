@@ -11,8 +11,8 @@
   <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <!-- Leaflet Map Engine -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
   <!-- Canvas Confetti -->
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 
@@ -185,14 +185,19 @@
     }
 
     #realMap {
-      width: 100%;
-      height: 100%;
-      z-index: 10;
+      width: 100% !important;
+      height: 100% !important;
+      position: absolute !important;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1;
     }
 
     /* Map Styles */
     .theme-vivid .leaflet-tile {
-      filter: contrast(115%) saturate(120%) !important;
+      filter: contrast(110%) saturate(115%) !important;
     }
 
     .theme-bw .leaflet-tile {
@@ -226,7 +231,7 @@
       align-items: center;
       justify-content: center;
       transform: translate(-50%, -100%);
-      font-size: 26px;
+      font-size: 28px;
       filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.7));
       animation: pinDrop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
     }
@@ -503,9 +508,14 @@
     let targetPulseCircle = null;
     let exploreMarkers = [];
 
-    // Initialize Real Leaflet Map with Clear Ocean Blue & Crisp Boundaries
+    // Initialize Real Leaflet Map
     function initMap() {
       const cfg = locationsDataset[currentMapKey] || EMBEDDED_LOCATIONS.sri_lanka;
+
+      if (map) {
+        map.remove();
+        map = null;
+      }
 
       map = L.map('realMap', {
         center: cfg.center,
@@ -516,14 +526,33 @@
         attributionControl: false
       });
 
-      // Free Standard OpenStreetMap Tile Layer (Clear Soft Blue Ocean, Vivid Green/Beige Land, Sharp Coastlines)
-      tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      // Rock-solid OSM Tile Layer with multi-server subdomains & crossOrigin
+      tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        subdomains: ['a', 'b', 'c'],
         maxZoom: 19,
+        crossOrigin: true,
         attribution: '© OpenStreetMap contributors'
       }).addTo(map);
 
-      // Auto-fit Sri Lanka completely on startup
-      fitCurrentMapBounds();
+      // Fallback to Esri Topo if OSM fails
+      tileLayer.on('tileerror', function() {
+        console.warn("Tile error, applying fallback...");
+      });
+
+      // Essential for Telegram WebView layout rendering
+      setTimeout(() => {
+        if (map) {
+          map.invalidateSize(true);
+          fitCurrentMapBounds();
+        }
+      }, 150);
+
+      setTimeout(() => {
+        if (map) {
+          map.invalidateSize(true);
+          fitCurrentMapBounds();
+        }
+      }, 500);
 
       // Map Click / Tap Handler
       map.on('click', handleMapClick);
@@ -535,6 +564,7 @@
     // Auto Focus Complete Map in Viewport
     function fitCurrentMapBounds() {
       if (!map) return;
+      map.invalidateSize(true);
       const cfg = locationsDataset[currentMapKey] || EMBEDDED_LOCATIONS[currentMapKey];
       if (cfg && cfg.bounds) {
         map.fitBounds(cfg.bounds, { padding: [15, 15], maxZoom: cfg.defaultZoom || 8.5 });
@@ -594,7 +624,7 @@
       document.getElementById('promptTarget').innerText = `📍 ${item.name_si}`;
       document.getElementById('promptHint').innerText = "ස්ථානය සලකුණු කිරීමට සිතියම මත ස්පර්ශ (Tap) කරන්න.";
 
-      // Always auto-fit full country map on every question so student has full overview
+      // Re-fit full country map on every question
       fitCurrentMapBounds();
     }
 
@@ -799,6 +829,13 @@
       const el = document.getElementById('realMap');
       el.className = theme === 'bw' ? 'theme-bw' : 'theme-vivid';
     }
+
+    // Auto invalidate size when window or orientation changes
+    window.addEventListener('resize', () => {
+      if (map) {
+        map.invalidateSize(true);
+      }
+    });
 
     window.addEventListener('DOMContentLoaded', initApp);
   </script>
