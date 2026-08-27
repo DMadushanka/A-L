@@ -1,0 +1,41 @@
+@echo off
+color 0A
+echo ===================================================
+echo   Setting up A/L MCQ Bot Background Auto-Start
+echo ===================================================
+echo.
+
+:: Get current directory where the batch script is running
+set "CURRENT_DIR=%~dp0"
+set "VBS_PATH=%CURRENT_DIR%run_bot_hidden.vbs"
+set "BOT_PATH=%CURRENT_DIR%bot.exe"
+
+:: Optional: Check if python dependencies are present
+python -c "import notebooklm, playwright" >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [INFO] First-time setup detected on this PC.
+    echo Installing required AI & PDF dependencies...
+    echo.
+    call "%CURRENT_DIR%setup_requirements.bat"
+)
+
+:: Step 1: Create the VBScript that hides the command line window (WindowStyle 0 = Hidden)
+echo Set WshShell = CreateObject("WScript.Shell") > "%VBS_PATH%"
+echo WshShell.CurrentDirectory = "%CURRENT_DIR%" >> "%VBS_PATH%"
+echo WshShell.Run chr(34) ^& "%BOT_PATH%" ^& chr(34), 0 >> "%VBS_PATH%"
+
+:: Step 2: Create a shortcut to the VBScript in the Windows Startup folder
+set "STARTUP_FOLDER=%APPDATA%\Microsoft\Windows\Start Menu\Programs\Startup"
+set "SHORTCUT_PATH=%STARTUP_FOLDER%\AL_MCQ_Bot.lnk"
+
+:: Use PowerShell to cleanly create the shortcut
+powershell -Command "$wshell = New-Object -ComObject WScript.Shell; $shortcut = $wshell.CreateShortcut('%SHORTCUT_PATH%'); $shortcut.TargetPath = 'wscript.exe'; $shortcut.Arguments = '\"%VBS_PATH%\"'; $shortcut.WorkingDirectory = '%CURRENT_DIR%'; $shortcut.WindowStyle = 7; $shortcut.Save()"
+
+echo [OK] Hidden script created at: %VBS_PATH%
+echo [OK] Startup shortcut added to: %SHORTCUT_PATH%
+echo.
+echo SUCCESS! The bot is now configured to start completely hidden in the background every time you turn on this computer.
+echo.
+echo To start it right now, you can just double-click 'run_bot_hidden.vbs'.
+echo.
+pause

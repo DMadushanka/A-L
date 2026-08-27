@@ -1,0 +1,5546 @@
+[
+  {
+    "id": 1,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවස ජයග්‍රාහී අධ්‍යාපනික දිනයක් වේවා!",
+    "fullText": "සුබ උදෑසනක්! අද දවස ජයග්‍රාහී අධ්‍යාපනික දිනයක් වේවා!",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 2,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද පාඩම් කරන සෑම අකුරක්ම ඔබේ අනාගතය ආලෝකමත් කරයි.",
+    "fullText": "සුබ දවසක්! අද පාඩම් කරන සෑම අකුරක්ම ඔබේ අනාගතය ආලෝකමත් කරයි.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 3,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අලුත් බලාපොරොත්තු සමඟින් පොතපතේ වැඩ අරඹන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අලුත් බලාපොරොත්තු සමඟින් පොතපතේ වැඩ අරඹන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 4,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවස ඔබේ විභාග සිහිනයට තබන තවත් සාර්ථක පියවරකි.",
+    "fullText": "සුබ උදෑසනක්! අද දවස ඔබේ විභාග සිහිනයට තබන තවත් සාර්ථක පියවරකි.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 5,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "ධනාත්මක සිතුවිලිවලින් අද දවසේ පාඩම් ආරම්භ කරන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! ධනාත්මක සිතුවිලිවලින් අද දවසේ පාඩම් ආරම්භ කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 6,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "කම්මැලිකම පසෙකලා ඔබේ ඉලක්කය හඹා යන්න.",
+    "fullText": "සුබ උදෑසනක්! කම්මැලිකම පසෙකලා ඔබේ ඉලක්කය හඹා යන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 7,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "ඔබ කරන කැපකිරීම් කිසිදා අපතේ යන්නේ නැත.",
+    "fullText": "සුබ දවසක් වේවා! ඔබ කරන කැපකිරීම් කිසිදා අපතේ යන්නේ නැත.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 8,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අමාරු විෂයයන්ට අද නිර්භීතව මුහුණ දෙන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අමාරු විෂයයන්ට අද නිර්භීතව මුහුණ දෙන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 9,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "සතුටින් සහ නිරවුල් මනසකින් ඉගෙන ගන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! සතුටින් සහ නිරවුල් මනසකින් ඉගෙන ගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 10,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබේ හැකියාවන් ගැන නිතරම විශ්වාසය තබන්න.",
+    "fullText": "සුබ උදෑසනක්! ඔබේ හැකියාවන් ගැන නිතරම විශ්වාසය තබන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 11,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ කාලසටහන අකුරටම ඉටු කිරීමට ශක්තිය ලැබේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ කාලසටහන අකුරටම ඉටු කිරීමට ශක්තිය ලැබේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 12,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "කුඩා පියවරකින් අද දවසේ විශාල ඉලක්කයක් ජයගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! කුඩා පියවරකින් අද දවසේ විශාල ඉලක්කයක් ජයගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 13,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "මතක ශක්තිය වර්ධනය වන ඵලදායී දවසක් වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! මතක ශක්තිය වර්ධනය වන ඵලදායී දවසක් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 14,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ පැය 24 න් උපරිම ප්‍රයෝජන ගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ පැය 24 න් උපරිම ප්‍රයෝජන ගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 15,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "වැරදීම්වලින් පාඩම් ඉගෙන ගෙන ඉදිරියටම යන්න.",
+    "fullText": "සුබ දවසක් වේවා! වැරදීම්වලින් පාඩම් ඉගෙන ගෙන ඉදිරියටම යන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 16,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද ඉගෙන ගන්නා දේ හෙට ඔබේ ශක්තිය වනු ඇත.",
+    "fullText": "නැවුම් දවසක්! අද ඉගෙන ගන්නා දේ හෙට ඔබේ ශක්තිය වනු ඇත.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 17,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබේ පාඩම් මේසය අද ඔබේ සාර්ථකත්වයේ මූලස්ථානය කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! ඔබේ පාඩම් මේසය අද ඔබේ සාර්ථකත්වයේ මූලස්ථානය කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 18,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "බාධක ජයගෙන අධ්‍යාපන ඉලක්ක සපුරාගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! බාධක ජයගෙන අධ්‍යාපන ඉලක්ක සපුරාගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 19,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ කිසිදු පාඩම් වැඩක් හෙටට කල් නොදමන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ කිසිදු පාඩම් වැඩක් හෙටට කල් නොදමන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 20,
+    "greeting": "සුබ දවසක්!",
+    "message": "ඔබේ උත්සාහය හමුවේ ඕනෑම විභාගයක් ඉතා පහසුය.",
+    "fullText": "සුබ දවසක්! ඔබේ උත්සාහය හමුවේ ඕනෑම විභාගයක් ඉතා පහසුය.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 21,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "ඉවසීමෙන් සහ උනන්දුවෙන් අලුත් දේවල් ඉගෙන ගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! ඉවසීමෙන් සහ උනන්දුවෙන් අලුත් දේවල් ඉගෙන ගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 22,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "මනස නිදහස් කරගෙන අද දවසේ ඉගෙනීමට යොමු වන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! මනස නිදහස් කරගෙන අද දවසේ ඉගෙනීමට යොමු වන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 23,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබට කළ නොහැකි කිසිවක් නැත; දැඩි අධිෂ්ඨානයෙන් වැඩ කරන්න.",
+    "fullText": "සුබ උදෑසනක්! ඔබට කළ නොහැකි කිසිවක් නැත; දැඩි අධිෂ්ඨානයෙන් වැඩ කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 24,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "නොදන්නා දේ ගුරුවරුන්ගෙන් අසා දැනගන්න පසුබට නොවන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! නොදන්නා දේ ගුරුවරුන්ගෙන් අසා දැනගන්න පසුබට නොවන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 25,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ කෙටි සටහන් සියල්ල සාර්ථකව නිම කරගන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ කෙටි සටහන් සියල්ල සාර්ථකව නිම කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 26,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "හොඳ සෞඛ්‍යයක් සමඟින් පාඩම් වැඩ කරගෙන යන්න.",
+    "fullText": "නැවුම් උදෑසනක්! හොඳ සෞඛ්‍යයක් සමඟින් පාඩම් වැඩ කරගෙන යන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 27,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබ අද පාඩම් කරන සෑම මොහොතක්ම සාර්ථකත්වයේ රහසයි.",
+    "fullText": "සුබ උදෑසනක්! ඔබ අද පාඩම් කරන සෑම මොහොතක්ම සාර්ථකත්වයේ රහසයි.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 28,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "ඔබ වෙනුවෙන් ඔබේ ගමන ඔබම යා යුතු බව සිහි තබාගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! ඔබ වෙනුවෙන් ඔබේ ගමන ඔබම යා යුතු බව සිහි තබාගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 29,
+    "greeting": "සුබ දවසක්!",
+    "message": "පැරණි ප්‍රශ්න පත්‍ර සාකච්ඡා කරමින් දැනුම වර්ධනය කරගන්න.",
+    "fullText": "සුබ දවසක්! පැරණි ප්‍රශ්න පත්‍ර සාකච්ඡා කරමින් දැනුම වර්ධනය කරගන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 30,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "දැනුම සොයා යන ගමනේ නිරතුරුවම නිරත වන්න.",
+    "fullText": "නැවුම් උදෑසනක්! දැනුම සොයා යන ගමනේ නිරතුරුවම නිරත වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 31,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අවධානය වෙනතක යොමු නොකර අද පාඩමටම යොමු වන්න.",
+    "fullText": "සුබ උදෑසනක්! අවධානය වෙනතක යොමු නොකර අද පාඩමටම යොමු වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 32,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ සියලු සමීකරණ නිවැරදිව විසඳාගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ සියලු සමීකරණ නිවැරදිව විසඳාගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 33,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "තරගය ඇත්තේ ඔබ සහ ඔබ අතරම පමණක් බව සිතන්න.",
+    "fullText": "සුබ දවසක් වේවා! තරගය ඇත්තේ ඔබ සහ ඔබ අතරම පමණක් බව සිතන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 34,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "දක්ෂතාවයට කැපවීම එක් වූ තැන ජයග්‍රහණය ස්ථිරයි.",
+    "fullText": "නැවුම් දවසක්! දක්ෂතාවයට කැපවීම එක් වූ තැන ජයග්‍රහණය ස්ථිරයි.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 35,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අධ්‍යාපනික ඉලක්ක සියල්ල සපුරාගැනීමට සුබ පැතුම්!",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අධ්‍යාපනික ඉලක්ක සියල්ල සපුරාගැනීමට සුබ පැතුම්!",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 36,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "ලොකු හීන දකින්න, ඒවා වෙනුවෙන් අදම ක්‍රියාත්මක වන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! ලොකු හීන දකින්න, ඒවා වෙනුවෙන් අදම ක්‍රියාත්මක වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 37,
+    "greeting": "සුබ දවසක්!",
+    "message": "පසුබෑම යනු නැවත ශක්තිමත්ව නැගී සිටීමට අවස්ථාවකි.",
+    "fullText": "සුබ දවසක්! පසුබෑම යනු නැවත ශක්තිමත්ව නැගී සිටීමට අවස්ථාවකි.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 38,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ වැදගත් විෂය කරුණු හොඳින් මතකයේ රැඳේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ වැදගත් විෂය කරුණු හොඳින් මතකයේ රැඳේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 39,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "විභාග කඩඉම ඉතා නිර්භීතව හා විශ්වාසයෙන් පසු කරන්න.",
+    "fullText": "නැවුම් උදෑසනක්! විභාග කඩඉම ඉතා නිර්භීතව හා විශ්වාසයෙන් පසු කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 40,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබේ අරමුණ පැහැදිලි නම් යන මාර්ගය නිතැතින්ම විවර වේ.",
+    "fullText": "සුබ උදෑසනක්! ඔබේ අරමුණ පැහැදිලි නම් යන මාර්ගය නිතැතින්ම විවර වේ.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 41,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ නියමිත වැඩ කොටස නියමිත වේලාවට අවසන් කරන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ නියමිත වැඩ කොටස නියමිත වේලාවට අවසන් කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 42,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අධ්‍යාපනය නම් වූ බලවත්ම ආයුධයෙන් ලෝකය ජයගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අධ්‍යාපනය නම් වූ බලවත්ම ආයුධයෙන් ලෝකය ජයගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 43,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "සෑම ප්‍රශ්නයකටම නිවැරදි විසඳුම් සොයාගන්නා දිනයක් වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! සෑම ප්‍රශ්නයකටම නිවැරදි විසඳුම් සොයාගන්නා දිනයක් වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 44,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "සිහින ලැයිස්තුව සැබෑ කරගැනීමට අද තවත් පියවරක් තබන්න.",
+    "fullText": "සුබ උදෑසනක්! සිහින ලැයිස්තුව සැබෑ කරගැනීමට අද තවත් පියවරක් තබන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 45,
+    "greeting": "සුබ දවසක්!",
+    "message": "ආත්ම විශ්වාසය ඔබේ හොඳම ශක්තිය කරගන්න.",
+    "fullText": "සුබ දවසක්! ආත්ම විශ්වාසය ඔබේ හොඳම ශක්තිය කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 46,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "ධනාත්මක සිතුවිලි මනසේ රඳවාගෙන අද පාඩම් කරන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! ධනාත්මක සිතුවිලි මනසේ රඳවාගෙන අද පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 47,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "නිරවුල් සහ වේගවත් ලිවීමේ හැකියාව අද තවදුරටත් පුහුණු වන්න.",
+    "fullText": "සුබ උදෑසනක්! නිරවුල් සහ වේගවත් ලිවීමේ හැකියාව අද තවදුරටත් පුහුණු වන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 48,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "ඔබේ හැකියාවන් ලෝකයට පෙන්වීමට අදම සූදානම් වන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! ඔබේ හැකියාවන් ලෝකයට පෙන්වීමට අදම සූදානම් වන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 49,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දිනයේ ඵලදායීතාවය අතින් ඔබේ උපරිමය ලබා දෙන්න.",
+    "fullText": "නැවුම් දවසක්! අද දිනයේ ඵලදායීතාවය අතින් ඔබේ උපරිමය ලබා දෙන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 50,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අපැහැදිලි පාඩම් කොටස් නිරවුල් කරගන්නා සාර්ථක දවසක් වේවා.",
+    "fullText": "සුබ දවසක් වේවා! අපැහැදිලි පාඩම් කොටස් නිරවුල් කරගන්නා සාර්ථක දවසක් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 51,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අනාගතයේ ආඩම්බර විය හැකි අයුරින් අද දවස ගත කරන්න.",
+    "fullText": "සුබ උදෑසනක්! අනාගතයේ ආඩම්බර විය හැකි අයුරින් අද දවස ගත කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 52,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "විභාග බිය පසෙක දමා ඔබේ අරමුණට යොමු වන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! විභාග බිය පසෙක දමා ඔබේ අරමුණට යොමු වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 53,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "නොපසුබට උත්සාහයෙන් අද දවසේ සියලු අභියෝග ජයගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! නොපසුබට උත්සාහයෙන් අද දවසේ සියලු අභියෝග ජයගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 54,
+    "greeting": "සුබ දවසක්!",
+    "message": "ඉහළම ප්‍රතිඵලයක් සඳහා අද දවසේ උපරිමයෙන් පාඩම් කරන්න.",
+    "fullText": "සුබ දවසක්! ඉහළම ප්‍රතිඵලයක් සඳහා අද දවසේ උපරිමයෙන් පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 55,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අලුත් දෙයක් ඉගෙන ගන්නා සෑම මොහොතක්ම ආස්වාදයක් කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! අලුත් දෙයක් ඉගෙන ගන්නා සෑම මොහොතක්ම ආස්වාදයක් කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 56,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "පියවරෙන් පියවර ගොස් ඔබේ ජයග්‍රහණයේ කඳු මුදුනට ළඟාවන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! පියවරෙන් පියවර ගොස් ඔබේ ජයග්‍රහණයේ කඳු මුදුනට ළඟාවන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 57,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ ඉලක්කගත පාඩම් කොටස් පහසුවෙන් අවබෝධ වේවා.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ ඉලක්කගත පාඩම් කොටස් පහසුවෙන් අවබෝධ වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 58,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබේ පවුලට ආඩම්බරයක් ගෙන දෙන දරුවෙකු වන්න අද මහන්සි වන්න.",
+    "fullText": "සුබ උදෑසනක්! ඔබේ පවුලට ආඩම්බරයක් ගෙන දෙන දරුවෙකු වන්න අද මහන්සි වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 59,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "දිනපතා කරන අඛණ්ඩ පුහුණුව ඔබව ප්‍රවීණයෙකු කරනු ඇත.",
+    "fullText": "නැවුම් උදෑසනක්! දිනපතා කරන අඛණ්ඩ පුහුණුව ඔබව ප්‍රවීණයෙකු කරනු ඇත.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 60,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ සාර්ථකත්වය හෙට දවසේ ඔබේ ජයග්‍රහණයයි.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ සාර්ථකත්වය හෙට දවසේ ඔබේ ජයග්‍රහණයයි.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 61,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "මානසික නිදහස සමඟින් ගැඹුරු විෂය කරුණු අධ්‍යයනය කරන්න.",
+    "fullText": "සුබ උදෑසනක්! මානසික නිදහස සමඟින් ගැඹුරු විෂය කරුණු අධ්‍යයනය කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 62,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "ඔබේ දක්ෂතා හඳුනාගෙන ඒවා තවදුරටත් වර්ධනය කරගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! ඔබේ දක්ෂතා හඳුනාගෙන ඒවා තවදුරටත් වර්ධනය කරගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 63,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "ඉගෙනීමට ඇති ආශාව කිසිදා අත් නොහරින්න.",
+    "fullText": "නැවුම් උදෑසනක්! ඉගෙනීමට ඇති ආශාව කිසිදා අත් නොහරින්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 64,
+    "greeting": "සුබ දවසක්!",
+    "message": "ඔබේ දැනුමේ සීමාවන් පුළුල් කරගන්නා ප්‍රබෝධමත් දවසක් වේවා.",
+    "fullText": "සුබ දවසක්! ඔබේ දැනුමේ සීමාවන් පුළුල් කරගන්නා ප්‍රබෝධමත් දවසක් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 65,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "විභාග ඉලක්ක කරා යන ගමනේ අද ඉතා වැදගත් දිනයකි.",
+    "fullText": "සුබ උදෑසනක්! විභාග ඉලක්ක කරා යන ගමනේ අද ඉතා වැදගත් දිනයකි.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 66,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "කාලය රන් හා සමාන බව සලකා අද දවස සැලසුම් කරන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! කාලය රන් හා සමාන බව සලකා අද දවස සැලසුම් කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 67,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද පාඩම් කරන සෑම මොහොතක්ම ඔබේ මනස ශක්තිමත් කරයි.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද පාඩම් කරන සෑම මොහොතක්ම ඔබේ මනස ශක්තිමත් කරයි.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 68,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "දිනෙන් දින ඔබේ දැනුම අලුත් කරගන්නා සාර්ථක දිනයක් වේවා.",
+    "fullText": "සුබ උදෑසනක්! දිනෙන් දින ඔබේ දැනුම අලුත් කරගන්නා සාර්ථක දිනයක් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 69,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ අවධානය සම්පූර්ණයෙන්ම පොතපතේ වැඩවලට ලබා දෙන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ අවධානය සම්පූර්ණයෙන්ම පොතපතේ වැඩවලට ලබා දෙන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 70,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "ඔබේ අනාගත වෘත්තීය සිහිනය වෙනුවෙන් අද අඩිතාලම දමන්න.",
+    "fullText": "සුබ දවසක් වේවා! ඔබේ අනාගත වෘත්තීය සිහිනය වෙනුවෙන් අද අඩිතාලම දමන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 71,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "කටපාඩම් කිරීම වෙනුවට කරුණු අවබෝධ කරගැනීමට උත්සාහ කරන්න.",
+    "fullText": "සුබ උදෑසනක්! කටපාඩම් කිරීම වෙනුවට කරුණු අවබෝධ කරගැනීමට උත්සාහ කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 72,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබ කරන වැඩ කොටස හෙට ඔබේ ප්‍රතිඵලයයි.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබ කරන වැඩ කොටස හෙට ඔබේ ප්‍රතිඵලයයි.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 73,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "ඔබට අවශ්‍ය ඉහළම සාමාර්ථය ලබාගැනීමට ශක්තිය ලැබේවා.",
+    "fullText": "නැවුම් උදෑසනක්! ඔබට අවශ්‍ය ඉහළම සාමාර්ථය ලබාගැනීමට ශක්තිය ලැබේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 74,
+    "greeting": "සුබ දවසක්!",
+    "message": "හොඳින් ජලය පානය කර ප්‍රබෝධමත්ව අද දවසේ ඉගෙන ගන්න.",
+    "fullText": "සුබ දවසක්! හොඳින් ජලය පානය කර ප්‍රබෝධමත්ව අද දවසේ ඉගෙන ගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 75,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ධාරණ ශක්තිය ඉහළ යන, ඉතා ඵලදායී උදෑසනක් වේවා.",
+    "fullText": "සුබ උදෑසනක්! ධාරණ ශක්තිය ඉහළ යන, ඉතා ඵලදායී උදෑසනක් වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 76,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "ඔබගේ අධ්‍යයන කටයුතුවලට අද කිසිදු බාධාවක් නොවේවා.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! ඔබගේ අධ්‍යයන කටයුතුවලට අද කිසිදු බාධාවක් නොවේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 77,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ නව න්‍යායන් සහ සමීකරණ පහසුවෙන් ග්‍රහණය වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ නව න්‍යායන් සහ සමීකරණ පහසුවෙන් ග්‍රහණය වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 78,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අධ්‍යාපන ගමනේ කිසිම මොහොතක පසුතැවීමට ඉඩ නොතබන්න.",
+    "fullText": "සුබ දවසක් වේවා! අධ්‍යාපන ගමනේ කිසිම මොහොතක පසුතැවීමට ඉඩ නොතබන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 79,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ හොඳම ශිෂ්‍යයා වී ඔබේ යුතුකම ඉටු කරන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ හොඳම ශිෂ්‍යයා වී ඔබේ යුතුකම ඉටු කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 80,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "දක්ෂතාවයට වඩා උත්සාහය ජයග්‍රහණය ගෙන දෙන බව සිහි තබාගන්න.",
+    "fullText": "සුබ උදෑසනක්! දක්ෂතාවයට වඩා උත්සාහය ජයග්‍රහණය ගෙන දෙන බව සිහි තබාගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 81,
+    "greeting": "සුබ දවසක්!",
+    "message": "ඔබේ විෂය නිර්දේශයේ අමාරුම කොටස් අද ජයගන්න.",
+    "fullText": "සුබ දවසක්! ඔබේ විෂය නිර්දේශයේ අමාරුම කොටස් අද ජයගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 82,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "ඔබේ ජීවිතයේ සාර්ථකම දවස්වලින් එකක් අද වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! ඔබේ ජීවිතයේ සාර්ථකම දවස්වලින් එකක් අද වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 83,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "නිවැරදි සැලසුමකින් යුතුව අද පාඩම් වැඩ පිළිවෙළට කරන්න.",
+    "fullText": "නැවුම් දවසක්! නිවැරදි සැලසුමකින් යුතුව අද පාඩම් වැඩ පිළිවෙළට කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 84,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "විභාගයේදී ලැබෙන ඕනෑම ප්‍රශ්නයකට පිළිතුරු දීමට සූදානම් වන්න.",
+    "fullText": "සුබ උදෑසනක්! විභාගයේදී ලැබෙන ඕනෑම ප්‍රශ්නයකට පිළිතුරු දීමට සූදානම් වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 85,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ පාසලේ/උපකාරක පන්තියේ හොඳම අවධානය ලබා දෙන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ පාසලේ/උපකාරක පන්තියේ හොඳම අවධානය ලබා දෙන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 86,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද ලබාගන්නා දැනුම ජීවිතය පුරා ඔබට ශක්තියක් වනු ඇත.",
+    "fullText": "සුබ දවසක් වේවා! අද ලබාගන්නා දැනුම ජීවිතය පුරා ඔබට ශක්තියක් වනු ඇත.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 87,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "ඔබේ මනස කොතරම් ප්‍රබලද යන්න අද ලෝකයට පෙන්වන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! ඔබේ මනස කොතරම් ප්‍රබලද යන්න අද ලෝකයට පෙන්වන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 88,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "කිසිදු ගැටලුවකට බිය නොවී අභියෝග භාරගන්න.",
+    "fullText": "සුබ උදෑසනක්! කිසිදු ගැටලුවකට බිය නොවී අභියෝග භාරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 89,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "ශක්තිමත් මනසකින් අද දවසේ වැඩකටයුතු ආරම්භ කරන්න.",
+    "fullText": "නැවුම් උදෑසනක්! ශක්තිමත් මනසකින් අද දවසේ වැඩකටයුතු ආරම්භ කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 90,
+    "greeting": "සුබ දවසක්!",
+    "message": "ඔබේ අධ්‍යාපන සිහින මල්ඵල ගැන්වෙන සාර්ථක දිනයක් වේවා.",
+    "fullText": "සුබ දවසක්! ඔබේ අධ්‍යාපන සිහින මල්ඵල ගැන්වෙන සාර්ථක දිනයක් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 91,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "උනන්දුව සහ කැපවීම අද ඔබේ සාර්ථකත්වයේ රහස කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! උනන්දුව සහ කැපවීම අද ඔබේ සාර්ථකත්වයේ රහස කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 92,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබේ දැනුම සාගරයක් සේ පුළුල් වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබේ දැනුම සාගරයක් සේ පුළුල් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 93,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "යහපත් සිතුවිලිවලින් යුතුව අද දවසේ ඉගෙනුම් කටයුතු කරන්න.",
+    "fullText": "නැවුම් උදෑසනක්! යහපත් සිතුවිලිවලින් යුතුව අද දවසේ ඉගෙනුම් කටයුතු කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 94,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අනාගත ලෝකය ජයගන්නා ශ්‍රේෂ්ඨ නායකයෙකු වීමට අදම සූදානම් වන්න.",
+    "fullText": "සුබ දවසක් වේවා! අනාගත ලෝකය ජයගන්නා ශ්‍රේෂ්ඨ නායකයෙකු වීමට අදම සූදානම් වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 95,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "විභාගයේ ඉහළම ලකුණු ලබාගැනීමේ අරමුණින් අද පාඩම් කරන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! විභාගයේ ඉහළම ලකුණු ලබාගැනීමේ අරමුණින් අද පාඩම් කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 96,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඉගෙන ගන්නා දේ කවදාවත් අමතක නොවේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඉගෙන ගන්නා දේ කවදාවත් අමතක නොවේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 97,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "ඔබේ ජීවිතය සාර්ථක කරන තීරණාත්මක දිනයක් අද වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! ඔබේ ජීවිතය සාර්ථක කරන තීරණාත්මක දිනයක් අද වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 98,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "ඔබම ගොඩනගාගත් කාලසටහනට අනුව අද හරියටම වැඩ කරන්න.",
+    "fullText": "නැවුම් දවසක්! ඔබම ගොඩනගාගත් කාලසටහනට අනුව අද හරියටම වැඩ කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 99,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ අධ්‍යාපනයෙන් ලබන ආලෝකය ජීවිතයම ඒකාලෝක කරයි.",
+    "fullText": "සුබ දවසක්! අද දවසේ අධ්‍යාපනයෙන් ලබන ආලෝකය ජීවිතයම ඒකාලෝක කරයි.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 100,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද ඔබේ ඉගෙනුම් කටයුතු 100% ක්ම සාර්ථක වේවා!",
+    "fullText": "සුබ උදෑසනක්! අද ඔබේ ඉගෙනුම් කටයුතු 100% ක්ම සාර්ථක වේවා!",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 101,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "### 101 - 200: විභාග සූදානම සහ කාල කළමනාකරණය (Exam Prep & Time Management)",
+    "fullText": "### 101 - 200: විභාග සූදානම සහ කාල කළමනාකරණය (Exam Prep & Time Management)",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 101,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "විභාගයට ඉතිරිව ඇති සෑම තත්පරයක්ම අද නිසි ලෙස කළමනාකරණය කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! විභාගයට ඉතිරිව ඇති සෑම තත්පරයක්ම අද නිසි ලෙස කළමනාකරණය කරගන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 102,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "පසුගිය විභාග ප්‍රශ්න පත්‍රවලින් ඔබේ දැනුම මුවහත් කරගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! පසුගිය විභාග ප්‍රශ්න පත්‍රවලින් ඔබේ දැනුම මුවහත් කරගන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 103,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද පාඩම් කරන කරුණු විභාගයේදී හරියටම මතකයට නැගේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද පාඩම් කරන කරුණු විභාගයේදී හරියටම මතකයට නැගේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 104,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද විෂයයන් කිහිපයක්ම සමබරව අධ්‍යයනය කරන්න උත්සාහ කරන්න.",
+    "fullText": "සුබ දවසක්! අද විෂයයන් කිහිපයක්ම සමබරව අධ්‍යයනය කරන්න උත්සාහ කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 105,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද ඔබේ ලකුණු මට්ටම තවත් ඉහළ නංවා ගන්නා දවසක් කරගන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද ඔබේ ලකුණු මට්ටම තවත් ඉහළ නංවා ගන්නා දවසක් කරගන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 106,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "විභාගයේදී වේලාව කළමනාකරණය කරගැනීමට අද සිටම පුහුණු වන්න.",
+    "fullText": "සුබ උදෑසනක්! විභාගයේදී වේලාව කළමනාකරණය කරගැනීමට අද සිටම පුහුණු වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 107,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ දුර්වල විෂයයන් කෙරෙහි වැඩි අවධානයක් යොමු කරන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ දුර්වල විෂයයන් කෙරෙහි වැඩි අවධානයක් යොමු කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 108,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද කටපාඩම් කරන සූත්‍ර සහ සමීකරණ හොඳින් මතකයේ රැඳේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද කටපාඩම් කරන සූත්‍ර සහ සමීකරණ හොඳින් මතකයේ රැඳේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 109,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අනුමාන ප්‍රශ්න පත්‍ර සාකච්ඡා කරමින් සාර්ථකව විභාගයට සූදානම් වන්න.",
+    "fullText": "නැවුම් දවසක්! අනුමාන ප්‍රශ්න පත්‍ර සාකච්ඡා කරමින් සාර්ථකව විභාගයට සූදානම් වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 110,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබට අවශ්‍ය A සාමාර්ථය අද දවසේ ඔබේ කැපවීම මත තීරණය වේ.",
+    "fullText": "සුබ උදෑසනක්! ඔබට අවශ්‍ය A සාමාර්ථය අද දවසේ ඔබේ කැපවීම මත තීරණය වේ.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 111,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ කිසිදු පාඩමක් අතපසු නොකර නියමිත වේලාවට අවසන් කරන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ කිසිදු පාඩමක් අතපසු නොකර නියමිත වේලාවට අවසන් කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 112,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "වේගයෙන් ලිවීමේ හැකියාව අද දවසේ තවත් වර්ධනය කරගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! වේගයෙන් ලිවීමේ හැකියාව අද දවසේ තවත් වර්ධනය කරගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 113,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබ කරන ස්වයං අධ්‍යයනයන් සියල්ල සාර්ථක වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබ කරන ස්වයං අධ්‍යයනයන් සියල්ල සාර්ථක වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 114,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "විභාග ආතතිය දුරු කර සන්සුන් මනසකින් අද පාඩම් කරන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! විභාග ආතතිය දුරු කර සන්සුන් මනසකින් අද පාඩම් කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 115,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ලියා තබාගන්නා කෙටි සටහන් විභාගයට මහත් පිටිවහලක් වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ලියා තබාගන්නා කෙටි සටහන් විභාගයට මහත් පිටිවහලක් වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 116,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද විෂය නිර්දේශයේ ඉතිරිව ඇති කොටස් සාර්ථකව අවසන් කරගන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද විෂය නිර්දේශයේ ඉතිරිව ඇති කොටස් සාර්ථකව අවසන් කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 117,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "ඔබේ පන්තියේ/කණ්ඩායමේ ඉහළම දක්ෂයා වීමට අද මහන්සි වන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! ඔබේ පන්තියේ/කණ්ඩායමේ ඉහළම දක්ෂයා වීමට අද මහන්සි වන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 118,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ අන්තර්ජාලය සහ පොතපත භාවිතයෙන් දැනුම සොයා යන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ අන්තර්ජාලය සහ පොතපත භාවිතයෙන් දැනුම සොයා යන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 119,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "බහුරණ ප්‍රශ්න (MCQ) සඳහා ඉක්මනින් පිළිතුරු දීමේ හැකියාව අද පුහුණු වන්න.",
+    "fullText": "සුබ උදෑසනක්! බහුරණ ප්‍රශ්න (MCQ) සඳහා ඉක්මනින් පිළිතුරු දීමේ හැකියාව අද පුහුණු වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 120,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ රචනා ප්‍රශ්න සඳහා නිවැරදිව කරුණු ගළපන්න පුහුණු වන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ රචනා ප්‍රශ්න සඳහා නිවැරදිව කරුණු ගළපන්න පුහුණු වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 121,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "විභාග ශාලාවේදී අවශ්‍ය වන මානසික ඒකාග්‍රතාවය අදම ගොඩනගා ගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! විභාග ශාලාවේදී අවශ්‍ය වන මානසික ඒකාග්‍රතාවය අදම ගොඩනගා ගන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 122,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද පාඩම් කරන සෑම වචනයක්ම ඔබේ ප්‍රතිඵලය වෙනස් කරනු ඇත.",
+    "fullText": "නැවුම් උදෑසනක්! අද පාඩම් කරන සෑම වචනයක්ම ඔබේ ප්‍රතිඵලය වෙනස් කරනු ඇත.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 123,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද අලුත් විෂය කරුණු ඉතා ඉක්මනින් අවබෝධ වන දවසක් වේවා.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද අලුත් විෂය කරුණු ඉතා ඉක්මනින් අවබෝධ වන දවසක් වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 124,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබගේ විභාග අංකය ජයග්‍රාහී ලැයිස්තුවේ ඉහළින්ම තබන්න අද කැපවෙන්න.",
+    "fullText": "සුබ උදෑසනක්! ඔබගේ විභාග අංකය ජයග්‍රාහී ලැයිස්තුවේ ඉහළින්ම තබන්න අද කැපවෙන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 125,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ නිදිමත පාලනය කරගෙන උනන්දුවෙන් පාඩම් කරන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ නිදිමත පාලනය කරගෙන උනන්දුවෙන් පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 126,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "ස්මාර්ට් ජංගම දුරකථනය පසෙකලා අද පොතට පමණක් අවධානය දෙන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! ස්මාර්ට් ජංගම දුරකථනය පසෙකලා අද පොතට පමණක් අවධානය දෙන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 127,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ පැය ගණන නොව, පාඩම් කළ කරුණු ගණන ගැන සිතන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ පැය ගණන නොව, පාඩම් කළ කරුණු ගණන ගැන සිතන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 128,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද ඔබේ ඉගෙනුම් පරිසරය ඉතා නිස්කලංක හා ප්‍රබෝධමත් එකක් වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද ඔබේ ඉගෙනුම් පරිසරය ඉතා නිස්කලංක හා ප්‍රබෝධමත් එකක් වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 129,
+    "greeting": "සුබ දවසක්!",
+    "message": "අපහසු යැයි සිතූ ගණිත ගැටලු සියල්ල අද පහසුවෙන්ම විසඳාගන්න.",
+    "fullText": "සුබ දවසක්! අපහසු යැයි සිතූ ගණිත ගැටලු සියල්ල අද පහසුවෙන්ම විසඳාගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 130,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "විද්‍යාත්මක සිද්ධාන්ත අද ඉතා නිරවුල්ව අවබෝධ කරගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! විද්‍යාත්මක සිද්ධාන්ත අද ඉතා නිරවුල්ව අවබෝධ කරගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 131,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "භාෂා මාධ්‍ය කුමක් වුවත් අද දවසේ භාෂා දැනුම තියුණු කරගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! භාෂා මාධ්‍ය කුමක් වුවත් අද දවසේ භාෂා දැනුම තියුණු කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 132,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ ඔබගේ භූගෝලීය සහ ඓතිහාසික දැනුම තවත් පුළුල් වේවා.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ ඔබගේ භූගෝලීය සහ ඓතිහාසික දැනුම තවත් පුළුල් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 133,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "වාණිජ සහ ගණකාධිකරණ ගැටලු අද ඉතා නිවැරදිව විසඳාගන්න.",
+    "fullText": "සුබ උදෑසනක්! වාණිජ සහ ගණකාධිකරණ ගැටලු අද ඉතා නිවැරදිව විසඳාගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 134,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "කලා විෂයයන්හි රසවින්දනය සහ ගැඹුර අද හොඳින් ස්පර්ශ කරන්න.",
+    "fullText": "සුබ දවසක් වේවා! කලා විෂයයන්හි රසවින්දනය සහ ගැඹුර අද හොඳින් ස්පර්ශ කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 135,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "තාක්ෂණවේදය විෂයයන්හි ප්‍රායෝගික දැනුම අද තවත් වර්ධනය කරගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! තාක්ෂණවේදය විෂයයන්හි ප්‍රායෝගික දැනුම අද තවත් වර්ධනය කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 136,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ පරිගණක සහ තොරතුරු තාක්ෂණ දැනුම යාවත්කාලීන කරගන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ පරිගණක සහ තොරතුරු තාක්ෂණ දැනුම යාවත්කාලීන කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 137,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබ ලබන සෑම ජයග්‍රහණයක්ම විභාග ජයට හේතු වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබ ලබන සෑම ජයග්‍රහණයක්ම විභාග ජයට හේතු වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 138,
+    "greeting": "සුබ දවසක්!",
+    "message": "විභාගයට පෙර ඉලක්කගත ප්‍රතිශෝධන (Revision) අද සාර්ථකව සිදු කරන්න.",
+    "fullText": "සුබ දවසක්! විභාගයට පෙර ඉලක්කගත ප්‍රතිශෝධන (Revision) අද සාර්ථකව සිදු කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 139,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබ කරන කණ්ඩායම් අධ්‍යයනයන් (Group studies) ඉතා සාර්ථක වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබ කරන කණ්ඩායම් අධ්‍යයනයන් (Group studies) ඉතා සාර්ථක වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 140,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අන් අයට කියා දීමෙන් ඔබේ දැනුම අද තවදුරටත් තහවුරු කරගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අන් අයට කියා දීමෙන් ඔබේ දැනුම අද තවදුරටත් තහවුරු කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 141,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ ගුරුවරුන්ගෙන් සහ දේශකයන්ගෙන් උපරිම ගුරුහරුකම් ලබාගන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ ගුරුවරුන්ගෙන් සහ දේශකයන්ගෙන් උපරිම ගුරුහරුකම් ලබාගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 142,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ සිතෙහි කිසිදු සැකයක් නොතබා පාඩම් කරුණු තහවුරු කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ සිතෙහි කිසිදු සැකයක් නොතබා පාඩම් කරුණු තහවුරු කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 143,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද උදෑසන ඔබේ මතකය ඉහළම මට්ටමක පවතින වේලාවකි; එයින් වැඩ ගන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද උදෑසන ඔබේ මතකය ඉහළම මට්ටමක පවතින වේලාවකි; එයින් වැඩ ගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 144,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "රාත්‍රියට පාඩම් කිරීමට වඩා අද දහවල් කාලය උපරිමයෙන් ප්‍රයෝජනයට ගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! රාත්‍රියට පාඩම් කිරීමට වඩා අද දහවල් කාලය උපරිමයෙන් ප්‍රයෝජනයට ගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 145,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "විභාග ලකුණු ගැන කරදර නොවී අද විෂය කරුණු ප්‍රගුණ කිරීමට මහන්සි වන්න.",
+    "fullText": "නැවුම් දවසක්! විභාග ලකුණු ගැන කරදර නොවී අද විෂය කරුණු ප්‍රගුණ කිරීමට මහන්සි වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 146,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ කැපවීම විභාග සහතිකයේ රන් අකුරින් ලියැවෙනු ඇත.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ කැපවීම විභාග සහතිකයේ රන් අකුරින් ලියැවෙනු ඇත.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 147,
+    "greeting": "සුබ දවසක්!",
+    "message": "විභාග කාලසටහනට බිය නොවී අද දවසේ විශ්වාසයෙන් සූදානම් වන්න.",
+    "fullText": "සුබ දවසක්! විභාග කාලසටහනට බිය නොවී අද දවසේ විශ්වාසයෙන් සූදානම් වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 148,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබ යොදන කුඩා උත්සාහය හෙට විශාල A සාමාර්ථයකි.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබ යොදන කුඩා උත්සාහය හෙට විශාල A සාමාර්ථයකි.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 149,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ සෑම විනාඩියක්ම විභාගය වෙනුවෙන් ඵලදායීව ආයෝජනය කරන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ සෑම විනාඩියක්ම විභාගය වෙනුවෙන් ඵලදායීව ආයෝජනය කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 150,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවස විභාග සූදානමේ හොඳම දිනය කරගැනීමට ඔබට සුබ පැතුම්!",
+    "fullText": "සුබ උදෑසනක්! අද දවස විභාග සූදානමේ හොඳම දිනය කරගැනීමට ඔබට සුබ පැතුම්!",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 152,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "### 201 - 300: ධනාත්මක ආකල්ප සහ ආත්ම විශ්වාසය (Positive Attitude & Self-Confidence)",
+    "fullText": "### 201 - 300: ධනාත්මක ආකල්ප සහ ආත්ම විශ්වාසය (Positive Attitude & Self-Confidence)",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 151,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබ විශ්වයේ සිටින අද්විතීය හැකියාවන් ඇති ශිෂ්‍යයෙකි; අද එය ඔප්පු කරන්න.",
+    "fullText": "සුබ උදෑසනක්! ඔබ විශ්වයේ සිටින අද්විතීය හැකියාවන් ඇති ශිෂ්‍යයෙකි; අද එය ඔප්පු කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 152,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවස ආරම්භයේදීම \"මට මෙය කළ හැකියි\" කියා තෙවරක් සිතන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවස ආරම්භයේදීම \"මට මෙය කළ හැකියි\" කියා තෙවරක් සිතන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 153,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද අන් අය කුමක් කීවත් ඔබේ අරමුණ වෙනුවෙන් නොසැලී සිටින්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද අන් අය කුමක් කීවත් ඔබේ අරමුණ වෙනුවෙන් නොසැලී සිටින්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 154,
+    "greeting": "සුබ දවසක්!",
+    "message": "ධනාත්මක මනසක් යනු අධ්‍යාපනයේ සාර්ථකත්වයට ඇති බලවත්ම යතුරයි.",
+    "fullText": "සුබ දවසක්! ධනාත්මක මනසක් යනු අධ්‍යාපනයේ සාර්ථකත්වයට ඇති බලවත්ම යතුරයි.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 155,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ සිනහමුසු මුහුණින් යුතුව අමාරුම පාඩම අතට ගන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ සිනහමුසු මුහුණින් යුතුව අමාරුම පාඩම අතට ගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 156,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද ඔබට එරෙහිව එන මානසික බාධක සියල්ල සුනුවිසුනු කර දමන්න.",
+    "fullText": "සුබ උදෑසනක්! අද ඔබට එරෙහිව එන මානසික බාධක සියල්ල සුනුවිසුනු කර දමන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 157,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "ඔබ ඉපදී ඇත්තේ සාමාන්‍ය කෙනෙකු වීමට නොවේ; අද විශිෂ්ටයෙකු වන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! ඔබ ඉපදී ඇත්තේ සාමාන්‍ය කෙනෙකු වීමට නොවේ; අද විශිෂ්ටයෙකු වන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 158,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබේ හැකියාවන් හෑල්ලු කරන කිසිවෙකුට සවන් නොදෙන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබේ හැකියාවන් හෑල්ලු කරන කිසිවෙකුට සවන් නොදෙන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 159,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ එකම තරගකරුවා ඊයේ සිටි ඔබම පමණක් කරගන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ එකම තරගකරුවා ඊයේ සිටි ඔබම පමණක් කරගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 160,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ කුඩා ජයග්‍රහණ පවා අගය කරමින් ඉදිරියටම යන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ කුඩා ජයග්‍රහණ පවා අගය කරමින් ඉදිරියටම යන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 161,
+    "greeting": "සුබ දවසක්!",
+    "message": "අසාර්ථකත්වය යනු අවසානය නොවේ; එය අද නැවත ආරම්භ කිරීමට අවස්ථාවකි.",
+    "fullText": "සුබ දවසක්! අසාර්ථකත්වය යනු අවසානය නොවේ; එය අද නැවත ආරම්භ කිරීමට අවස්ථාවකි.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 162,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ යහපත් ආකල්ප ඔබේ අධ්‍යාපනික චාරිකාව සුවදායක කරනු ඇත.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ යහපත් ආකල්ප ඔබේ අධ්‍යාපනික චාරිකාව සුවදායක කරනු ඇත.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 163,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "ඔබේ මනසේ ඇති බිය අද දවසේ ධෛර්යය බවට පරිවර්තනය කරගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! ඔබේ මනසේ ඇති බිය අද දවසේ ධෛර්යය බවට පරිවර්තනය කරගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 164,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද ඔබ දකින විශාල හීනයට හෙට යථාර්ථයක් වීමට ඉඩ දෙන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද ඔබ දකින විශාල හීනයට හෙට යථාර්ථයක් වීමට ඉඩ දෙන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 165,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ උද්යෝගය අන් අයටත් ආදර්ශයක් වන පරිදි කටයුතු කරන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ උද්යෝගය අන් අයටත් ආදර්ශයක් වන පරිදි කටයුතු කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 166,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ආත්ම දමනය පුහුණු කරමින් අධ්‍යාපනයට යොමු වන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ආත්ම දමනය පුහුණු කරමින් අධ්‍යාපනයට යොමු වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 167,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ගැටලු දෙස වෙනස් කෝණයකින් බලා විසඳුම් සොයන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ගැටලු දෙස වෙනස් කෝණයකින් බලා විසඳුම් සොයන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 168,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "ඔබේ බුද්ධිය කිසිදා කිසිවෙකුට සොරකම් කළ නොහැක; අද එය වර්ධනය කරගන්න.",
+    "fullText": "නැවුම් දවසක්! ඔබේ බුද්ධිය කිසිදා කිසිවෙකුට සොරකම් කළ නොහැක; අද එය වර්ධනය කරගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 169,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ වගකීමෙන් යුතුව වැඩ කරන විශිෂ්ට ශිෂ්‍යයෙකු වන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ වගකීමෙන් යුතුව වැඩ කරන විශිෂ්ට ශිෂ්‍යයෙකු වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 170,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ අභියෝග යනු ඔබේ ශක්තිය මැන බලන පරීක්ෂණ පමණි.",
+    "fullText": "සුබ දවසක්! අද දවසේ අභියෝග යනු ඔබේ ශක්තිය මැන බලන පරීක්ෂණ පමණි.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 171,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ නිදහස් සිතුවිලි සමඟින් නිර්මාණශීලීව ඉගෙන ගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ නිදහස් සිතුවිලි සමඟින් නිර්මාණශීලීව ඉගෙන ගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 172,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද අලුතින් ඉගෙන ගන්නා දේවල් ගැන ආඩම්බර වන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද අලුතින් ඉගෙන ගන්නා දේවල් ගැන ආඩම්බර වන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 173,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ අනාගතයට වටිනාකමක් එකතු කරන වැඩක් කරන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ ඔබේ අනාගතයට වටිනාකමක් එකතු කරන වැඩක් කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 174,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ කාලය නාස්ති කරන දේවලින් ඈත් වී සිටින්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ කාලය නාස්ති කරන දේවලින් ඈත් වී සිටින්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 175,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබ අත්කරගන්නා දැනුම කිසිදා වියපත් නොවන සම්පතකි.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබ අත්කරගන්නා දැනුම කිසිදා වියපත් නොවන සම්පතකි.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 176,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ දුර්වලතා හඳුනාගෙන ඒවා ශක්තීන් බවට පත් කරගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ දුර්වලතා හඳුනාගෙන ඒවා ශක්තීන් බවට පත් කරගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 177,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබගේ උත්සාහය ලෝකයම පුදුම කරන ජයග්‍රහණයක් ගෙනදේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබගේ උත්සාහය ලෝකයම පුදුම කරන ජයග්‍රහණයක් ගෙනදේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 178,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ බලාපොරොත්තු අහස තරම් උසට තබාගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ බලාපොරොත්තු අහස තරම් උසට තබාගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 179,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ අධ්‍යාපනයෙන් පූර්ණත්වය ලබන සාර්ථක මිනිසෙකු වන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ අධ්‍යාපනයෙන් පූර්ණත්වය ලබන සාර්ථක මිනිසෙකු වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 180,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබගේ අධිෂ්ඨානය කන්දක් සේ නොසැලී පවතීවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබගේ අධිෂ්ඨානය කන්දක් සේ නොසැලී පවතීවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 181,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ සිත එකඟ කරගෙන වැඩ කිරීමෙන් හාස්කම් කළ හැක.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබේ සිත එකඟ කරගෙන වැඩ කිරීමෙන් හාස්කම් කළ හැක.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 182,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ සෑම මොහොතකම ඔබට ඔබ ගැනම විශ්වාසයක් ගොඩනැගේවා.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ සෑම මොහොතකම ඔබට ඔබ ගැනම විශ්වාසයක් ගොඩනැගේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 183,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ ඉගෙනුම් වේගය සහ ග්‍රහණ ශක්තිය උපරිම වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ ඉගෙනුම් වේගය සහ ග්‍රහණ ශක්තිය උපරිම වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 184,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබගේ හැකියාවන් ගැන අන් අයද මවිතයට පත් වනු ඇත.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබගේ හැකියාවන් ගැන අන් අයද මවිතයට පත් වනු ඇත.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 185,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ කිසිදු පාඩමක් අපහසු යැයි සිතා අත්නොහරින්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ කිසිදු පාඩමක් අපහසු යැයි සිතා අත්නොහරින්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 186,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ විභාග සාමාර්ථය ෂුවර් කරගන්න හොඳටම පාඩම් කරන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ විභාග සාමාර්ථය ෂුවර් කරගන්න හොඳටම පාඩම් කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 187,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබ කරන මහන්සියට සොබාදහම පවා ආශිර්වාද කරනු ඇත.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබ කරන මහන්සියට සොබාදහම පවා ආශිර්වාද කරනු ඇත.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 188,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබගේ දක්ෂතා ඔප්නැංවෙන සාර්ථක දිනයක් වේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබගේ දක්ෂතා ඔප්නැංවෙන සාර්ථක දිනයක් වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 189,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ අවංකවම ඔබේ අධ්‍යාපනය වෙනුවෙන් කැපවෙන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ අවංකවම ඔබේ අධ්‍යාපනය වෙනුවෙන් කැපවෙන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 190,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ සියලු ඍණාත්මක අදහස් බැහැර කර ධනාත්මකව සිතන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ සියලු ඍණාත්මක අදහස් බැහැර කර ධනාත්මකව සිතන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 191,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ යහපත් පුරුදු වර්ධනය කරගනිමින් ඉගෙන ගන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ යහපත් පුරුදු වර්ධනය කරගනිමින් ඉගෙන ගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 192,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ලබන දැනුමෙන් අනාගත ලෝකය ලස්සන කරන කෙනෙකු වන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ලබන දැනුමෙන් අනාගත ලෝකය ලස්සන කරන කෙනෙකු වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 193,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ අධ්‍යාපනය නම් ආයෝජනයෙන් උපරිම ලාභ ලබන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ අධ්‍යාපනය නම් ආයෝජනයෙන් උපරිම ලාභ ලබන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 194,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ ජයග්‍රහණය කිසිවෙකුට වැළැක්විය නොහැකි වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ ජයග්‍රහණය කිසිවෙකුට වැළැක්විය නොහැකි වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 195,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ අලුත් බලාපොරොත්තුවකින් පොත් මේසය වෙත යන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ අලුත් බලාපොරොත්තුවකින් පොත් මේසය වෙත යන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 196,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ මනසේ සැඟවී ඇති සැබෑ දක්ෂයා අවදි කරන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ මනසේ සැඟවී ඇති සැබෑ දක්ෂයා අවදි කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 197,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ කඩිසරව සහ ක්‍රියාශීලීව අධ්‍යයන කටයුතු සිදු කරන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ කඩිසරව සහ ක්‍රියාශීලීව අධ්‍යයන කටයුතු සිදු කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 198,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබගේ ඉලක්කය කරා යන ගමන ඉතා සුමට වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබගේ ඉලක්කය කරා යන ගමන ඉතා සුමට වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 199,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ දැනුම තරුවක් සේ දිදුලන දිනයක් වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබගේ දැනුම තරුවක් සේ දිදුලන දිනයක් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 200,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ධනාත්මක බවෙන් පිරුණු සාර්ථකම ශිෂ්‍යයා ඔබ වේවා!",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ධනාත්මක බවෙන් පිරුණු සාර්ථකම ශිෂ්‍යයා ඔබ වේවා!",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 203,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "### 301 - 400: දෙමාපිය බලාපොරොත්තු සහ අනාගත සිහින (Parents' Hopes & Future Dreams)",
+    "fullText": "### 301 - 400: දෙමාපිය බලාපොරොත්තු සහ අනාගත සිහින (Parents' Hopes & Future Dreams)",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 201,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ මහන්සිය දෙමාපියන්ගේ දෙනෙතට සතුටු කඳුළු ගෙනදේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ මහන්සිය දෙමාපියන්ගේ දෙනෙතට සතුටු කඳුළු ගෙනදේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 202,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අම්මාගේ සහ තාත්තාගේ සිහින සැබෑ කිරීමට අද උපරිමයෙන් කැපවෙන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අම්මාගේ සහ තාත්තාගේ සිහින සැබෑ කිරීමට අද උපරිමයෙන් කැපවෙන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 203,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද ඔබ ලබන අධ්‍යාපනය හෙට ඔබේ පවුලේ ආර්ථිකය ශක්තිමත් කරනු ඇත.",
+    "fullText": "නැවුම් උදෑසනක්! අද ඔබ ලබන අධ්‍යාපනය හෙට ඔබේ පවුලේ ආර්ථිකය ශක්තිමත් කරනු ඇත.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 204,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ විශ්වවිද්‍යාල සිහිනය තවත් එක් පියවරකින් සමීප කරගන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ විශ්වවිද්‍යාල සිහිනය තවත් එක් පියවරකින් සමීප කරගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 205,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ ඉංජිනේරු, වෛද්‍ය හෝ ඔබේ වෘත්තීය සිහිනයට අඩිතාලම දමන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ ඉංජිනේරු, වෛද්‍ය හෝ ඔබේ වෘත්තීය සිහිනයට අඩිතාලම දමන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 206,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "ඔබේ සාර්ථකත්වය දැකීමට පෙරුම් පුරන දෙමාපියන් වෙනුවෙන් අද පාඩම් කරන්න.",
+    "fullText": "සුබ උදෑසනක්! ඔබේ සාර්ථකත්වය දැකීමට පෙරුම් පුරන දෙමාපියන් වෙනුවෙන් අද පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 207,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබ කරන වැඩ කොටසින් හෙට ලෝකය ජයගන්නා නායකයෙකු වන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබ කරන වැඩ කොටසින් හෙට ලෝකය ජයගන්නා නායකයෙකු වන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 208,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "සමාජයේ ගෞරවනීය පුරවැසියෙකු වීමට අද දවසේ දැනුම ආයුධයක් කරගන්න.",
+    "fullText": "සුබ දවසක් වේවා! සමාජයේ ගෞරවනීය පුරවැසියෙකු වීමට අද දවසේ දැනුම ආයුධයක් කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 209,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ අනාගතය සැලසුම් කරමින් වර්තමානයේ වැඩ කරන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ අනාගතය සැලසුම් කරමින් වර්තමානයේ වැඩ කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 210,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ උත්සාහය හෙට දවසේ ඔබේ පරම්පරාවම වෙනස් කරනු ඇත.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ උත්සාහය හෙට දවසේ ඔබේ පරම්පරාවම වෙනස් කරනු ඇත.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 211,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ලබන අධ්‍යාපනයෙන් හෙට සමාජයට වැඩදායී පුද්ගලයෙකු වන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ ලබන අධ්‍යාපනයෙන් හෙට සමාජයට වැඩදායී පුද්ගලයෙකු වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 212,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ විද්‍යාඥයෙකු, කලාකරුවෙකු හෝ විද්වතෙකු වීමේ සිහිනය පෝෂණය කරන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ විද්‍යාඥයෙකු, කලාකරුවෙකු හෝ විද්වතෙකු වීමේ සිහිනය පෝෂණය කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 213,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ ජයග්‍රහණය දැක දෙමාපියන්ට ආඩම්බර විය හැකි සෙයක් ගොඩනගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබේ ජයග්‍රහණය දැක දෙමාපියන්ට ආඩම්බර විය හැකි සෙයක් ගොඩනගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 214,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ උපාධි සිහිනය සැබෑ කරගැනීමේ මාර්ගය වඩාත් පැහැදිලි වේවා.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ උපාධි සිහිනය සැබෑ කරගැනීමේ මාර්ගය වඩාත් පැහැදිලි වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 215,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ සාර්ථකත්වය අනාගතයේදී සහෝදර සහෝදරියන්ට ආදර්ශයක් වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ සාර්ථකත්වය අනාගතයේදී සහෝදර සහෝදරියන්ට ආදර්ශයක් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 216,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබ හෙළන දහඩිය බිඳුවක් පාසා අනාගතය රන්වන් වනු ඇත.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබ හෙළන දහඩිය බිඳුවක් පාසා අනාගතය රන්වන් වනු ඇත.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 217,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ යහපත් ගුණධර්ම සහ උසස් දැනුම එකට කැටි කරගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ යහපත් ගුණධර්ම සහ උසස් දැනුම එකට කැටි කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 218,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ අරමුණ සමාජයේ ඉහළම තලයට යාම බව නිතරම සිහිපත් කරන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ අරමුණ සමාජයේ ඉහළම තලයට යාම බව නිතරම සිහිපත් කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 219,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ දක්ෂතාවය අනාගතයේ ලෝකයම කතා කරන මාතෘකාවක් වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ දක්ෂතාවය අනාගතයේ ලෝකයම කතා කරන මාතෘකාවක් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 220,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ දෙමාපියන්ගේ ආශිර්වාදය සමඟින් ජයග්‍රාහීව පාඩම් වැඩ අරඹන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ දෙමාපියන්ගේ ආශිර්වාදය සමඟින් ජයග්‍රාහීව පාඩම් වැඩ අරඹන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 221,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබේ වෘත්තීය ඉලක්කය සිතින් මවාගෙන උනන්දුවෙන් ඉගෙන ගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබේ වෘත්තීය ඉලක්කය සිතින් මවාගෙන උනන්දුවෙන් ඉගෙන ගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 222,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ අධ්‍යාපනික චාරිකාව අනාගතයේ සුන්දර මතකයක් වනු ඇත.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබේ අධ්‍යාපනික චාරිකාව අනාගතයේ සුන්දර මතකයක් වනු ඇත.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 223,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ පොත්පත් සමඟ ගතකරන කාලය අනාගත ආයෝජනයක්ම පමණි.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ පොත්පත් සමඟ ගතකරන කාලය අනාගත ආයෝජනයක්ම පමණි.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 224,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබ ලබන දැනුම හෙට දවසේ රට දැය ගොඩනැගීමට දායක වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබ ලබන දැනුම හෙට දවසේ රට දැය ගොඩනැගීමට දායක වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 225,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබේ අනාගත නිවස, වාහනය සහ සුවපහසු ජීවිතය වෙනුවෙන් මහන්සි වන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබේ අනාගත නිවස, වාහනය සහ සුවපහසු ජීවිතය වෙනුවෙන් මහන්සි වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 226,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ දියුණුව වෙනුවෙන් යාඥා කරන දෙමාපියන් වෙනුවෙන් දිනන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ දියුණුව වෙනුවෙන් යාඥා කරන දෙමාපියන් වෙනුවෙන් දිනන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 227,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ කටුක අධ්‍යාපන රටාව හෙට මල් පිරුණු මාවතක් නිර්මාණය කරනු ඇත.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ කටුක අධ්‍යාපන රටාව හෙට මල් පිරුණු මාවතක් නිර්මාණය කරනු ඇත.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 228,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබට ඇති බාධක අනාගතයේ සාර්ථකත්වයේ කතන්දරය බවට පත්වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබට ඇති බාධක අනාගතයේ සාර්ථකත්වයේ කතන්දරය බවට පත්වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 229,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ අනාගත ලෝකයේ නව නිපැයුම්කරුවෙකු වීමට අලුත් දෙයක් සිතන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ අනාගත ලෝකයේ නව නිපැයුම්කරුවෙකු වීමට අලුත් දෙයක් සිතන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 230,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබ ලබාගන්නා සහතික පත් අනාගතයේ ස්වර්ණමය යතුරු වනු ඇත.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබ ලබාගන්නා සහතික පත් අනාගතයේ ස්වර්ණමය යතුරු වනු ඇත.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 231,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ගුරුවරුන්ගේ අවවාද අනාගත ජීවිතයට මාර්ගෝපදේශයක් කරගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ගුරුවරුන්ගේ අවවාද අනාගත ජීවිතයට මාර්ගෝපදේශයක් කරගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 232,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ තාරකා විද්‍යාව, වෛද්‍ය විද්‍යාව වැනි ක්ෂේත්‍ර ජයගැනීමේ සිහින දකින්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ තාරකා විද්‍යාව, වෛද්‍ය විද්‍යාව වැනි ක්ෂේත්‍ර ජයගැනීමේ සිහින දකින්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 233,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඉහළම රැකියාවක් ඉලක්ක කරගෙන හොඳින්ම අධ්‍යාපනය ලබන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඉහළම රැකියාවක් ඉලක්ක කරගෙන හොඳින්ම අධ්‍යාපනය ලබන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 234,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබ කරන පූජාවක් බඳු කැපවීම අනාගතයේ රජෙකු කරනු ඇත.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබ කරන පූජාවක් බඳු කැපවීම අනාගතයේ රජෙකු කරනු ඇත.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 235,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ලෝකය වෙනස් කළ හැකි අදහසක් ඔබේ මනසට ගලා එනු ඇත.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ලෝකය වෙනස් කළ හැකි අදහසක් ඔබේ මනසට ගලා එනු ඇත.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 236,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ දැනුමේ සීමාව අහස දක්වා පුළුල් කරගන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ දැනුමේ සීමාව අහස දක්වා පුළුල් කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 237,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ විදෙස් අධ්‍යාපන සිහින දකින සිසුන්ගේ එම බලාපොරොත්තු ඉටුවේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ විදෙස් අධ්‍යාපන සිහින දකින සිසුන්ගේ එම බලාපොරොත්තු ඉටුවේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 238,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබේ පවුලට ලෝකය ඉදිරියේ අභිමානයෙන් ජීවත් වීමට පරිසරය සකසන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබේ පවුලට ලෝකය ඉදිරියේ අභිමානයෙන් ජීවත් වීමට පරිසරය සකසන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 239,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබගේ උත්සාහය හෙට දවසේ ඉතිහාසයේ රන් අකුරින් ලියැවෙනු ඇත.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබගේ උත්සාහය හෙට දවසේ ඉතිහාසයේ රන් අකුරින් ලියැවෙනු ඇත.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 240,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ දෙමාපියන්ගේ මහන්සියට උපරිම සාධාරණයක් ඉටු කරන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබේ දෙමාපියන්ගේ මහන්සියට උපරිම සාධාරණයක් ඉටු කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 241,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ හෙට දවසේ විශිෂ්ටතම ව්‍යවසායකයෙකු වීමේ මූලික දැනුම ලබන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ හෙට දවසේ විශිෂ්ටතම ව්‍යවසායකයෙකු වීමේ මූලික දැනුම ලබන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 242,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ අනාගතය අලංකාර කරන චිත්‍රයේ මූලික රේඛා අඳින්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ අනාගතය අලංකාර කරන චිත්‍රයේ මූලික රේඛා අඳින්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 243,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ සාර්ථකත්වයේ පඩිපෙළේ තවත් එක් ඉහළ පඩියකට පා තබන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ සාර්ථකත්වයේ පඩිපෙළේ තවත් එක් ඉහළ පඩියකට පා තබන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 244,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ දැනුම අනාගතයේ දුගී බව දුරු කරන අමෘතය වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ දැනුම අනාගතයේ දුගී බව දුරු කරන අමෘතය වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 245,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ අනාගත සහකරුට/සහකාරියට ආඩම්බර විය හැකි කෙනෙකු වන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ අනාගත සහකරුට/සහකාරියට ආඩම්බර විය හැකි කෙනෙකු වන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 246,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ සාමාන්‍ය පෙළ, උසස් පෙළ ජයගෙන කැම්පස් යන ගමන පැහැදිලි වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ සාමාන්‍ය පෙළ, උසස් පෙළ ජයගෙන කැම්පස් යන ගමන පැහැදිලි වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 247,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබගේ ප්‍රියතම විෂය ක්ෂේත්‍රයෙන් ඉහළටම යාමට ශක්තිය ලැබේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබගේ ප්‍රියතම විෂය ක්ෂේත්‍රයෙන් ඉහළටම යාමට ශක්තිය ලැබේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 248,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ දෙමාපියන්ගේ බලාපොරොත්තු කඩ නොකරන හොඳම දරුවා ඔබ වන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ දෙමාපියන්ගේ බලාපොරොත්තු කඩ නොකරන හොඳම දරුවා ඔබ වන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 249,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ අනාගතයේ ඔබ ලබන සම්මාන ගැන සිතමින් පාඩම් කරන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ අනාගතයේ ඔබ ලබන සම්මාන ගැන සිතමින් පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 250,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අනාගතය සුරක්ෂිත කරන අධ්‍යාපන ගමනේ සාර්ථකම දිනය වේවා!",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අනාගතය සුරක්ෂිත කරන අධ්‍යාපන ගමනේ සාර්ථකම දිනය වේවා!",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 254,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "### 401 - 500: කෙටි සහ ප්‍රබල අභිප්‍රේරණ (Short & Powerful Reminders) - *Note: Numbering continues from 251 to 500",
+    "fullText": "### 401 - 500: කෙටි සහ ප්‍රබල අභිප්‍රේරණ (Short & Powerful Reminders) - *Note: Numbering continues from 251 to 500",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 251,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවස අධ්‍යාපනයෙන් ජයගමු!",
+    "fullText": "සුබ උදෑසනක්! අද දවස අධ්‍යාපනයෙන් ජයගමු!",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 252,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "ඔබේ මතකය තියුණු වේවා!",
+    "fullText": "ජයග්‍රාහී දවසක්! ඔබේ මතකය තියුණු වේවා!",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 253,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "බාධක අමතක කර පාඩම් කරමු.",
+    "fullText": "නැවුම් උදෑසනක්! බාධක අමතක කර පාඩම් කරමු.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 254,
+    "greeting": "සුබ දවසක්!",
+    "message": "උත්සාහය කිසිදා අත්නොහරින්න.",
+    "fullText": "සුබ දවසක්! උත්සාහය කිසිදා අත්නොහරින්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 255,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද අලුත් දැනුමෙන් පිරුණු දවසකි.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද අලුත් දැනුමෙන් පිරුණු දවසකි.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 256,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "විභාග බිය අදින් අවසන් වේවා.",
+    "fullText": "සුබ උදෑසනක්! විභාග බිය අදින් අවසන් වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 257,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "කාලය රන් හා සමානයි, වැඩ කරන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! කාලය රන් හා සමානයි, වැඩ කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 258,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "විශ්වාසයෙන් යුතුව ඉලක්කයට යන්න.",
+    "fullText": "සුබ දවසක් වේවා! විශ්වාසයෙන් යුතුව ඉලක්කයට යන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 259,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ උපරිම ඵලදායීතාවය ලබන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ උපරිම ඵලදායීතාවය ලබන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 260,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "කම්මැලිකම අද පරදවමු.",
+    "fullText": "සුබ උදෑසනක්! කම්මැලිකම අද පරදවමු.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 261,
+    "greeting": "සුබ දවසක්!",
+    "message": "හොඳින් පාඩම් කරන ප්‍රබෝධමත් දවසක් වේවා.",
+    "fullText": "සුබ දවසක්! හොඳින් පාඩම් කරන ප්‍රබෝධමත් දවසක් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 262,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද ඔබට සියල්ල කළ හැකියි.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද ඔබට සියල්ල කළ හැකියි.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 263,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "කෙටි සටහන් අදම හදාගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! කෙටි සටහන් අදම හදාගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 264,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "සිනහවෙන් යුතුව අමාරු ගැටලු විසඳන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! සිනහවෙන් යුතුව අමාරු ගැටලු විසඳන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 265,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද ජයග්‍රහණයේ ආරම්භයයි.",
+    "fullText": "සුබ උදෑසනක්! අද ජයග්‍රහණයේ ආරම්භයයි.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 266,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "පොතපත ඔබේ හොඳම මිතුරා කරගන්න.",
+    "fullText": "සුබ දවසක් වේවා! පොතපත ඔබේ හොඳම මිතුරා කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 267,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ පන්තියේ පළමුවැනියා වන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ පන්තියේ පළමුවැනියා වන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 268,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ මොළය පරිගණකයක් සේ ක්‍රියාත්මක වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ මොළය පරිගණකයක් සේ ක්‍රියාත්මක වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 269,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "විභාග ශාලාව ජයගන්න අද සූදානම් වන්න.",
+    "fullText": "සුබ උදෑසනක්! විභාග ශාලාව ජයගන්න අද සූදානම් වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 270,
+    "greeting": "සුබ දවසක්!",
+    "message": "ඔබ තරම් දක්ෂයෙකු තවත් නැත.",
+    "fullText": "සුබ දවසක්! ඔබ තරම් දක්ෂයෙකු තවත් නැත.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 271,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ පාස්ට් පේපර්ස් (Past Papers) කරන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ පාස්ට් පේපර්ස් (Past Papers) කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 272,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද නින්දට පෙර ඉලක්කය සපුරාගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද නින්දට පෙර ඉලක්කය සපුරාගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 273,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "ගුරුවරුන්ගේ පැසසුම් ලබන දවසක් වේවා.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! ගුරුවරුන්ගේ පැසසුම් ලබන දවසක් වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 274,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවස නව සොයාගැනීම්වලින් පිරේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවස නව සොයාගැනීම්වලින් පිරේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 275,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "ඔබේ අරමුණ පැහැදිලියි, ගමන යන්න.",
+    "fullText": "සුබ දවසක් වේවා! ඔබේ අරමුණ පැහැදිලියි, ගමන යන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 276,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ අමතක වන කරුණු නැවත පාඩම් කරන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ අමතක වන කරුණු නැවත පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 277,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද සාර්ථකත්වයේ සලකුණ ඔබේ නම වේවා.",
+    "fullText": "නැවුම් දවසක්! අද සාර්ථකත්වයේ සලකුණ ඔබේ නම වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 278,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ කිසිදු පාඩමක් අතපසු නොවේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ කිසිදු පාඩමක් අතපසු නොවේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 279,
+    "greeting": "සුබ දවසක්!",
+    "message": "ධෛර්යය සහ බලාපොරොත්තුව පෙරටු කරගන්න.",
+    "fullText": "සුබ දවසක්! ධෛර්යය සහ බලාපොරොත්තුව පෙරටු කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 280,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ලෝකය ජයගන්නා දැනුම ලබන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ලෝකය ජයගන්නා දැනුම ලබන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 281,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ අකුරු ලස්සනට ලියන්න පුහුණු වන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ අකුරු ලස්සනට ලියන්න පුහුණු වන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 282,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ ගණිත සමීකරණ පහසු වේවා.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ ගණිත සමීකරණ පහසු වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 283,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "විද්‍යාව විෂය අද සරලව තේරුම් යාවි.",
+    "fullText": "සුබ උදෑසනක්! විද්‍යාව විෂය අද සරලව තේරුම් යාවි.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 284,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "ඉතිහාසය විෂයේ කරුණු හොඳින් මතක හිටීවි.",
+    "fullText": "සුබ දවසක් වේවා! ඉතිහාසය විෂයේ කරුණු හොඳින් මතක හිටීවි.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 285,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "භාෂා දැනුම අද තවත් වැඩි දියුණු වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! භාෂා දැනුම අද තවත් වැඩි දියුණු වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 286,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ වාණිජ විෂයයන්හි දක්ෂතා පෙන්වන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ වාණිජ විෂයයන්හි දක්ෂතා පෙන්වන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 287,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "කලා විෂයයන් අද රසවත්ව අධ්‍යයනය කරන්න.",
+    "fullText": "සුබ උදෑසනක්! කලා විෂයයන් අද රසවත්ව අධ්‍යයනය කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 288,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද තොරතුරු තාක්ෂණ දැනුමෙන් සන්නද්ධ වන්න.",
+    "fullText": "සුබ දවසක්! අද තොරතුරු තාක්ෂණ දැනුමෙන් සන්නද්ධ වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 289,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ උසස් පෙළ ඉලක්කය ජයගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ උසස් පෙළ ඉලක්කය ජයගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 290,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ සාමාන්‍ය පෙළ සාර්ථක කරගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ සාමාන්‍ය පෙළ සාර්ථක කරගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 291,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද ශිෂ්‍යත්වය ජයගන්න අඩිතාලම දාන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද ශිෂ්‍යත්වය ජයගන්න අඩිතාලම දාන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 292,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද ඔබේ ඉගෙනුම් වටපිටාව නිස්කලංක වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද ඔබේ ඉගෙනුම් වටපිටාව නිස්කලංක වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 293,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ හොඳම පාඩම් කාලසටහන ක්‍රියාත්මක කරන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ හොඳම පාඩම් කාලසටහන ක්‍රියාත්මක කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 294,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ බාහිර වැඩ පසෙකලා පොතට අවධානය දෙන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ බාහිර වැඩ පසෙකලා පොතට අවධානය දෙන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 295,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ මොළයට හොඳ විවේකයක් සමඟින් වැඩ ගන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ මොළයට හොඳ විවේකයක් සමඟින් වැඩ ගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 296,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ පෝෂ්‍යදායී ආහාර වේලක් ගෙන පාඩම් අරඹන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ පෝෂ්‍යදායී ආහාර වේලක් ගෙන පාඩම් අරඹන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 297,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ යහපත් මිතුරන් සමඟ අධ්‍යාපන කරුණු සාකච්ඡා කරන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ යහපත් මිතුරන් සමඟ අධ්‍යාපන කරුණු සාකච්ඡා කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 298,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබේ ජයග්‍රහණය පවුලේම සතුටයි.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබේ ජයග්‍රහණය පවුලේම සතුටයි.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 299,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ නව න්‍යායන් සොයා යන ගමන සාර්ථක වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ නව න්‍යායන් සොයා යන ගමන සාර්ථක වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 300,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඉහළම අධ්‍යාපන සුදුසුකම් කරා පියනගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඉහළම අධ්‍යාපන සුදුසුකම් කරා පියනගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 301,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද ඔබේ හිතේ හයිය ලෝකයටම පෙන්වන්න.",
+    "fullText": "සුබ දවසක්! අද ඔබේ හිතේ හයිය ලෝකයටම පෙන්වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 302,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ අමාරුම විෂය ඔබේ ප්‍රියතම විෂය කරගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ අමාරුම විෂය ඔබේ ප්‍රියතම විෂය කරගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 303,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ සටහන් පොත් අලුත් කරුණු වලින් පිරේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ සටහන් පොත් අලුත් කරුණු වලින් පිරේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 304,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ සාර්ථක ප්‍රතිඵලයකට මඟ පෑදේවා.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ සාර්ථක ප්‍රතිඵලයකට මඟ පෑදේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 305,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ මහන්සිය හෙට පත්තරේ මුල් පිටුවට එනු ඇත.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ මහන්සිය හෙට පත්තරේ මුල් පිටුවට එනු ඇත.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 306,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ විශ්වවිද්‍යාල පිවිසුම් දොරටුව ඔබට විවර වේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ විශ්වවිද්‍යාල පිවිසුම් දොරටුව ඔබට විවර වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 307,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ පාඩම් කරන සෑම මොහොතක්ම වටිනවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ පාඩම් කරන සෑම මොහොතක්ම වටිනවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 308,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ තර්කන ශක්තිය තවත් දියුණු වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ තර්කන ශක්තිය තවත් දියුණු වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 309,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ විභාග ඉලක්ක ප්‍රශ්න සියල්ල හඳුනාගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ විභාග ඉලක්ක ප්‍රශ්න සියල්ල හඳුනාගන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 310,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ අධ්‍යාපනයෙන් සමාජයට වැඩදායී කෙනෙකු වන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ අධ්‍යාපනයෙන් සමාජයට වැඩදායී කෙනෙකු වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 311,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබේ ආකල්ප යහපත් වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබේ ආකල්ප යහපත් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 312,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ හොඳ ශ්‍රවණයකින් සහ අවධානයකින් ඉගෙන ගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ හොඳ ශ්‍රවණයකින් සහ අවධානයකින් ඉගෙන ගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 313,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ සිනහවෙන් යුතුව විභාග බිය දුරු කරන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ සිනහවෙන් යුතුව විභාග බිය දුරු කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 314,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අලුත් භාෂාවක් ඉගෙන ගැනීමට උත්සාහ කරන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අලුත් භාෂාවක් ඉගෙන ගැනීමට උත්සාහ කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 315,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ජීවිතය ජයගන්නා අධ්‍යාපනයක් ලබන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ජීවිතය ජයගන්නා අධ්‍යාපනයක් ලබන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 316,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ධනාත්මක පුද්ගලයන් ආශ්‍රය කරමින් ඉගෙන ගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ධනාත්මක පුද්ගලයන් ආශ්‍රය කරමින් ඉගෙන ගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 317,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ අරමුණ පැහැදිලි ආලෝකයක් සේ බැබළේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ අරමුණ පැහැදිලි ආලෝකයක් සේ බැබළේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 318,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ සාර්ථකත්වයේ රහස ඔබ තුළම ඇති බව තේරුම් ගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ සාර්ථකත්වයේ රහස ඔබ තුළම ඇති බව තේරුම් ගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 319,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ අන් අයටත් පාඩම් කියාදෙමින් ඔබේ දැනුම වර්ධනය කරගන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ අන් අයටත් පාඩම් කියාදෙමින් ඔබේ දැනුම වර්ධනය කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 320,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබේ අකුරු මුතු ඇට සේ ලස්සන වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබේ අකුරු මුතු ඇට සේ ලස්සන වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 321,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ විද්‍යාගාර පරීක්ෂණ සියල්ල සාර්ථක වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ විද්‍යාගාර පරීක්ෂණ සියල්ල සාර්ථක වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 322,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ නිර්මාණශීලී රචනා ලිවීමේ හැකියාව වර්ධනය වේවා.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ නිර්මාණශීලී රචනා ලිවීමේ හැකියාව වර්ධනය වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 323,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ මතකය ගබඩා කරගැනීමේ විශේෂ ක්‍රම භාවිත කරන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ මතකය ගබඩා කරගැනීමේ විශේෂ ක්‍රම භාවිත කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 324,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ මනස සැහැල්ලු කරන භාවනාවකින් වැඩ අරඹන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ මනස සැහැල්ලු කරන භාවනාවකින් වැඩ අරඹන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 325,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ රූපසටහන් ඇඳීමෙන් පාඩම් කරුණු මතක තබාගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ රූපසටහන් ඇඳීමෙන් පාඩම් කරුණු මතක තබාගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 326,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ විෂය මාලාවේ ඇති වැදගත්ම කරුණු උලුප්පා දක්වන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ විෂය මාලාවේ ඇති වැදගත්ම කරුණු උලුප්පා දක්වන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 327,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අධ්‍යාපනයෙන් ජාතියට ආඩම්බරයක් වන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අධ්‍යාපනයෙන් ජාතියට ආඩම්බරයක් වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 328,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ පෞරුෂ වර්ධනය සමඟින් දැනුමද වර්ධනය කරගන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ පෞරුෂ වර්ධනය සමඟින් දැනුමද වර්ධනය කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 329,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ජීවිතයේ වටිනාම කාලය අධ්‍යාපනයට යොදවන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ජීවිතයේ වටිනාම කාලය අධ්‍යාපනයට යොදවන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 330,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ තවත් එක් සාර්ථක පියවරක් ඉදිරියට තබන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ තවත් එක් සාර්ථක පියවරක් ඉදිරියට තබන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 331,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ සාමකාමී පරිසරයකින් උපරිම ඵල නෙළාගන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ සාමකාමී පරිසරයකින් උපරිම ඵල නෙළාගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 332,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ ගමනාන්තය ජයග්‍රහණයම පමණි.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ ගමනාන්තය ජයග්‍රහණයම පමණි.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 333,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ප්‍රායෝගික දැනුම පොත්පත් දැනුම හා මුසු කරන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ප්‍රායෝගික දැනුම පොත්පත් දැනුම හා මුසු කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 334,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ දක්ෂයන් සමඟ තරග කරමින් ඉහළටම යන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ දක්ෂයන් සමඟ තරග කරමින් ඉහළටම යන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 335,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ හෘදසාක්ෂියට එකඟව අවංකව පාඩම් කරන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ හෘදසාක්ෂියට එකඟව අවංකව පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 336,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඉවසීම ඔබේ ප්‍රධානම ආයුධය කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඉවසීම ඔබේ ප්‍රධානම ආයුධය කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 337,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ මොළයට අවශ්‍ය ව්‍යායාම ලබාදෙමින් ඉගෙන ගන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ මොළයට අවශ්‍ය ව්‍යායාම ලබාදෙමින් ඉගෙන ගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 338,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ නායකත්ව ලක්ෂණ වර්ධනය කරගනිමින් වැඩ කරන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ නායකත්ව ලක්ෂණ වර්ධනය කරගනිමින් වැඩ කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 339,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ විෂයානුබද්ධ ගැටලු සියල්ලටම පිළිතුරු ලැබේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ විෂයානුබද්ධ ගැටලු සියල්ලටම පිළිතුරු ලැබේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 340,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ ධනාත්මක පොත්පත් කියවා මනස පෝෂණය කරන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ ධනාත්මක පොත්පත් කියවා මනස පෝෂණය කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 341,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අධ්‍යාපනය ඔබේ ජීවිතයේ ලස්සනම කලාව කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අධ්‍යාපනය ඔබේ ජීවිතයේ ලස්සනම කලාව කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 342,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ දක්ෂතාවයන් සැඟවී යාමට ඉඩ නොදී මුවහත් කරන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ දක්ෂතාවයන් සැඟවී යාමට ඉඩ නොදී මුවහත් කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 343,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ නාමය පාසලේ අභිමානය බවට පත්වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ නාමය පාසලේ අභිමානය බවට පත්වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 344,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ අලුත් මිතුරන් සමඟ අධ්‍යාපන තොරතුරු හුවමාරු කරගන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ අලුත් මිතුරන් සමඟ අධ්‍යාපන තොරතුරු හුවමාරු කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 345,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ගණිතය සහ විද්‍යාව ඔබට ක්‍රීඩාවක් සේ පහසු වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ගණිතය සහ විද්‍යාව ඔබට ක්‍රීඩාවක් සේ පහසු වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 346,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ විභාග කාලසටහන දෙස බලා ධෛර්යයමත වන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ විභාග කාලසටහන දෙස බලා ධෛර්යයමත වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 347,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ පසුතැවීමකින් තොරව නින්දට යාමට හැකිවන පරිදි වැඩ කරන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ පසුතැවීමකින් තොරව නින්දට යාමට හැකිවන පරිදි වැඩ කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 348,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඉලක්කය දැවැන්තයි, උත්සාහය ඊටත් වඩා දැවැන්තයි!",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඉලක්කය දැවැන්තයි, උත්සාහය ඊටත් වඩා දැවැන්තයි!",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 349,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ ජීවිතයේ හැරවුම් ලක්ෂ්‍යය සනිටුහන් කරන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ ජීවිතයේ හැරවුම් ලක්ෂ්‍යය සනිටුහන් කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 350,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබ විශ්වයේ සිටින වාසනාවන්තම ශිෂ්‍යයා වන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබ විශ්වයේ සිටින වාසනාවන්තම ශිෂ්‍යයා වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 351,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ලෝකය වෙනස් කරන අලුත් චින්තනයක් ගොඩනගන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ලෝකය වෙනස් කරන අලුත් චින්තනයක් ගොඩනගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 352,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ පීඩනයක් නොමැතිව නිදහසේ ඉගෙන ගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ පීඩනයක් නොමැතිව නිදහසේ ඉගෙන ගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 353,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබ කරන සෑම දෙයක්ම නිවැරදි වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබ කරන සෑම දෙයක්ම නිවැරදි වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 354,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ තනිවම පාඩම් කිරීමේ හැකියාව තවදුරටත් පුහුණු වන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ තනිවම පාඩම් කිරීමේ හැකියාව තවදුරටත් පුහුණු වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 355,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ලෝක සිතියම මතකයේ රඳවාගන්නා දවසක් කරගන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ ලෝක සිතියම මතකයේ රඳවාගන්නා දවසක් කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 356,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ සියලුම ඓතිහාසික දිනයන් හරියටම මතක හිටීවි.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ සියලුම ඓතිහාසික දිනයන් හරියටම මතක හිටීවි.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 357,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඉංග්‍රීසි භාෂාව කතා කිරීමේ හා ලිවීමේ හැකියාව වැඩි වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඉංග්‍රීසි භාෂාව කතා කිරීමේ හා ලිවීමේ හැකියාව වැඩි වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 358,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ විභාග මධ්‍යස්ථානයේදී නොබියව සිටින්න පුහුණු වන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ විභාග මධ්‍යස්ථානයේදී නොබියව සිටින්න පුහුණු වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 359,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබ සාර්ථකත්වය කරා යන ගමනේ වේගය වැඩි කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබ සාර්ථකත්වය කරා යන ගමනේ වේගය වැඩි කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 360,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ මනස පිරිසිදු කරගෙන අලුත් පාඩම් ආරම්භ කරන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ මනස පිරිසිදු කරගෙන අලුත් පාඩම් ආරම්භ කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 361,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබ අසන සෑම ප්‍රශ්නයකටම හොඳම පිළිතුර ලැබේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබ අසන සෑම ප්‍රශ්නයකටම හොඳම පිළිතුර ලැබේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 362,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ සෞඛ්‍යය මෙන්ම අධ්‍යාපනයද සුරක්ෂිත වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ සෞඛ්‍යය මෙන්ම අධ්‍යාපනයද සුරක්ෂිත වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 363,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ මව්පියන්ගේ ආශිර්වාදයෙන් සියලු බාධක දුරු වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ මව්පියන්ගේ ආශිර්වාදයෙන් සියලු බාධක දුරු වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 364,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබට අවශ්‍යම කරන පොතපත පහසුවෙන් සොයාගැනීමට හැකිවේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබට අවශ්‍යම කරන පොතපත පහසුවෙන් සොයාගැනීමට හැකිවේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 365,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබ ලියන සෑම වචනයක්ම සාර්ථකත්වයේ සංකේතයක් වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබ ලියන සෑම වචනයක්ම සාර්ථකත්වයේ සංකේතයක් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 366,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබට ඉගැන්වූ ගුරුවරුන්ට කෘතවේදීව පාඩම් කරන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබට ඉගැන්වූ ගුරුවරුන්ට කෘතවේදීව පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 367,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ අන්තර්ජාලය ඔබේ අධ්‍යාපනයට පමණක් යොදාගන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ අන්තර්ජාලය ඔබේ අධ්‍යාපනයට පමණක් යොදාගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 368,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ සමාජ ජාලා වලින් ඈත් වී පොත්වලට සමීප වන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ සමාජ ජාලා වලින් ඈත් වී පොත්වලට සමීප වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 369,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ අනාගතය ලස්සන කරන හොඳම සැලසුම සකස් කරන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ අනාගතය ලස්සන කරන හොඳම සැලසුම සකස් කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 370,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ කටපාඩම් කිරීමේ කලාව මනාව ප්‍රගුණ කරන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ කටපාඩම් කිරීමේ කලාව මනාව ප්‍රගුණ කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 371,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ අලුත් උද්යෝගයක් සමඟින් නින්දෙන් අවදි වන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ අලුත් උද්යෝගයක් සමඟින් නින්දෙන් අවදි වන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 372,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ වර්ණ පෑන් භාවිතයෙන් ලස්සනට සටහන් හදාගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ වර්ණ පෑන් භාවිතයෙන් ලස්සනට සටහන් හදාගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 373,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ දවල් කාලයේ නින්ද පාලනය කරගෙන පාඩම් කරන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ දවල් කාලයේ නින්ද පාලනය කරගෙන පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 374,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ මධ්‍යම රාත්‍රිය වනතුරු නොසිට නියමිත වෙලාවට වැඩ නිම කරන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ මධ්‍යම රාත්‍රිය වනතුරු නොසිට නියමිත වෙලාවට වැඩ නිම කරන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 375,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ උදෑසනම අවදි වී පාඩම් කිරීමේ පුරුද්ද ඇති කරගන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ උදෑසනම අවදි වී පාඩම් කිරීමේ පුරුද්ද ඇති කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 376,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ උදෑසන පාඩම් කාලය ඉතා ඵලදායී වේවා.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ ඔබගේ උදෑසන පාඩම් කාලය ඉතා ඵලදායී වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 377,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ කිසිම දෙයකට පසුබට නොවී නිර්භීතව ඉගෙන ගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ කිසිම දෙයකට පසුබට නොවී නිර්භීතව ඉගෙන ගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 378,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබේ අධ්‍යාපන පදනම කළුගලක් සේ ශක්තිමත් වේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබේ අධ්‍යාපන පදනම කළුගලක් සේ ශක්තිමත් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 379,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ ප්‍රතිඵල සටහන 'A' අකුරු වලින් පිරී යන අයුරු සිතන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ ප්‍රතිඵල සටහන 'A' අකුරු වලින් පිරී යන අයුරු සිතන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 380,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ විභාගයෙන් පසු ලැබෙන නිදහස ගැන සිතමින් පාඩම් කරන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ විභාගයෙන් පසු ලැබෙන නිදහස ගැන සිතමින් පාඩම් කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 381,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ මනස කොතරම් වේගවත්ද යන්න තේරුම් ගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ මනස කොතරම් වේගවත්ද යන්න තේරුම් ගන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 382,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබ ඉගෙන ගන්නා දේ ජීවිතයට ප්‍රායෝගිකව එකතු කරගන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබ ඉගෙන ගන්නා දේ ජීවිතයට ප්‍රායෝගිකව එකතු කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 383,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ විශ්වයේ සියලු යහපත් ශක්තීන් ඔබ වටා එකතු වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ විශ්වයේ සියලු යහපත් ශක්තීන් ඔබ වටා එකතු වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 384,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ සෑම මිනිත්තුවක්ම අර්ථවත් ලෙස ගතකරන්න.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ සෑම මිනිත්තුවක්ම අර්ථවත් ලෙස ගතකරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 385,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ විනෝදාංශ සමඟින් අධ්‍යාපනයද සමබරව ගෙන යන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ විනෝදාංශ සමඟින් අධ්‍යාපනයද සමබරව ගෙන යන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 386,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ සිතුවිලි පැහැදිලි දිය දහරක් සේ නිරවුල් වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ සිතුවිලි පැහැදිලි දිය දහරක් සේ නිරවුල් වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 387,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ කිසිවෙකුට ඔබව අධෛර්යමත් කිරීමට ඉඩ නොදෙන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ කිසිවෙකුට ඔබව අධෛර්යමත් කිරීමට ඉඩ නොදෙන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 388,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ වටිනාකම ලෝකයට ඔප්පු කිරීමට කාලයයි.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ වටිනාකම ලෝකයට ඔප්පු කිරීමට කාලයයි.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 389,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ අධ්‍යාපනයෙන් උපරිම තලයට යාමට අදිටන් කරගන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ අධ්‍යාපනයෙන් උපරිම තලයට යාමට අදිටන් කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 390,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ දක්ෂතා හඳුනාගෙන ජාතික මට්ටමෙන් ජයගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබේ දක්ෂතා හඳුනාගෙන ජාතික මට්ටමෙන් ජයගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 391,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබේ ජීවිතයේ හොඳම අධ්‍යයන දිනය බවට පත් කරගන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබේ ජීවිතයේ හොඳම අධ්‍යයන දිනය බවට පත් කරගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 392,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඉලක්කයට ඊතලයක් සේ වේගයෙන් ඇදී යන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඉලක්කයට ඊතලයක් සේ වේගයෙන් ඇදී යන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 393,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ ජයග්‍රහණය වෙනුවෙන් ස්වභාවධර්මයත් මඟ පාදාවි.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබේ ජයග්‍රහණය වෙනුවෙන් ස්වභාවධර්මයත් මඟ පාදාවි.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 394,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ විභාගයේ මුල් තැන ලබාගැනීමට හදවතින්ම අදිටන් කරන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ විභාගයේ මුල් තැන ලබාගැනීමට හදවතින්ම අදිටන් කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 395,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අපහසුම පාඩම් කොටස් මුලින්ම අවසන් කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අපහසුම පාඩම් කොටස් මුලින්ම අවසන් කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 396,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ මානසික ආතතියෙන් තොරව නිදහසේ ඉගෙනගන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ මානසික ආතතියෙන් තොරව නිදහසේ ඉගෙනගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 397,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ හඬ අනාගතයේ මුළු රටටම ඇසෙනු ඇත.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ හඬ අනාගතයේ මුළු රටටම ඇසෙනු ඇත.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 398,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ පෑනෙන් ලියවෙන සෑම අකුරක්ම රත්තරන් වටී.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ පෑනෙන් ලියවෙන සෑම අකුරක්ම රත්තරන් වටී.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 399,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ කුමන බාධක ආවත් ඒවා සිනහවකින් යුතුව ජයගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ කුමන බාධක ආවත් ඒවා සිනහවකින් යුතුව ජයගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 400,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබේ විභාග ජයග්‍රහණය ස්ථිරයි; ඒ වෙනුවෙන් වැඩ කරන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබේ විභාග ජයග්‍රහණය ස්ථිරයි; ඒ වෙනුවෙන් වැඩ කරන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 401,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවස ඔබට සියලු ජයග්‍රහණ ගෙනෙන ප්‍රබල දිනයක් වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවස ඔබට සියලු ජයග්‍රහණ ගෙනෙන ප්‍රබල දිනයක් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 402,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ විද්‍යාත්මක සොයාගැනීම් ගැන ඔබේ උනන්දුව වැඩි වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ විද්‍යාත්මක සොයාගැනීම් ගැන ඔබේ උනන්දුව වැඩි වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 403,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ අධ්‍යාපනයෙන් සදාචාර සම්පන්න පුද්ගලයෙකු වන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ අධ්‍යාපනයෙන් සදාචාර සම්පන්න පුද්ගලයෙකු වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 404,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අමතක වන සූත්‍ර බිත්තියේ අලවා මතක තබාගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අමතක වන සූත්‍ර බිත්තියේ අලවා මතක තබාගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 405,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ උසස් අධ්‍යාපනය වෙනුවෙන් ශිෂ්‍යත්වයක් දිනාගන්නට හැකිවේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ උසස් අධ්‍යාපනය වෙනුවෙන් ශිෂ්‍යත්වයක් දිනාගන්නට හැකිවේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 406,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ ජීවිතය වෙනස් කරන තීරණාත්මක පාඩම ඉගෙන ගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ ජීවිතය වෙනස් කරන තීරණාත්මක පාඩම ඉගෙන ගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 407,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ විභාග සහතිකයේ ඉහළම සාමාර්ථය ඔබේ නමට ඉදිරියෙන් ලියවේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ විභාග සහතිකයේ ඉහළම සාමාර්ථය ඔබේ නමට ඉදිරියෙන් ලියවේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 408,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ කිසිදු හීනයක් අත්නොහැර එය පසුපසම යන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ කිසිදු හීනයක් අත්නොහැර එය පසුපසම යන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 409,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබේ හැකියාවන් මල් පිපෙන්නා සේ විකසිත වේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබේ හැකියාවන් මල් පිපෙන්නා සේ විකසිත වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 410,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබ සිතන පතන සියලු අධ්‍යාපනික ප්‍රාර්ථනා ඉටුවේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබ සිතන පතන සියලු අධ්‍යාපනික ප්‍රාර්ථනා ඉටුවේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 411,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ගුරු දෙගුරුන්ගේ ආශිර්වාදයෙන් පාඩම් වැඩ පහසු වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ගුරු දෙගුරුන්ගේ ආශිර්වාදයෙන් පාඩම් වැඩ පහසු වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 412,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ පවුලට කීර්තියක් ගෙනදෙන දරුවෙකු වන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ ඔබේ පවුලට කීර්තියක් ගෙනදෙන දරුවෙකු වන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 413,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ මනස එකඟ කරගෙන ඉතා ගැඹුරින් පාඩම් කරන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ මනස එකඟ කරගෙන ඉතා ගැඹුරින් පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 414,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ අධ්‍යාපන ක්ෂේත්‍රයේ ඉහළම තලයට යාමට අඩිතාලම දාන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ අධ්‍යාපන ක්ෂේත්‍රයේ ඉහළම තලයට යාමට අඩිතාලම දාන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 415,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ උත්සාහය ලොවටම ආදර්ශයක් වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබගේ උත්සාහය ලොවටම ආදර්ශයක් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 416,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ අකුරු ලිවීමේ වේගය විභාගයට සරිලන සේ වැඩි වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ අකුරු ලිවීමේ වේගය විභාගයට සරිලන සේ වැඩි වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 417,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ හොඳම මිතුරන් සමඟ තරඟකාරීව නමුත් සාමකාමීව ඉගෙනගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ හොඳම මිතුරන් සමඟ තරඟකාරීව නමුත් සාමකාමීව ඉගෙනගන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 418,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ පරිගණක තිරයෙන් ඔබ්බට ගොස් පොතපතින් දැනුම සොයන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ පරිගණක තිරයෙන් ඔබ්බට ගොස් පොතපතින් දැනුම සොයන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 419,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබ යොමු කරන අවධානයෙන් අනාගතය අලංකාර වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබ යොමු කරන අවධානයෙන් අනාගතය අලංකාර වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 420,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ නිදිවරා කරන පාඩම් වැඩවලට ඉහළම ප්‍රතිඵල ලැබේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ නිදිවරා කරන පාඩම් වැඩවලට ඉහළම ප්‍රතිඵල ලැබේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 421,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ ඔබේ ඉලක්කය වෙන කිසිවෙකුටවත් වෙනස් කළ නොහැකි වේවා.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ ඔබේ ඉලක්කය වෙන කිසිවෙකුටවත් වෙනස් කළ නොහැකි වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 422,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ විභාග ජයග්‍රහණය වෙනුවෙන් ඔබේ මනස සම්පූර්ණයෙන්ම විවෘත වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ විභාග ජයග්‍රහණය වෙනුවෙන් ඔබේ මනස සම්පූර්ණයෙන්ම විවෘත වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 423,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබගේ දක්ෂතාවයට සරිලන ඉහළම වටිනාකම ලැබේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබගේ දක්ෂතාවයට සරිලන ඉහළම වටිනාකම ලැබේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 424,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ අධ්‍යාපනයේ රහස් අගුළු සියල්ල විවෘත කරගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ අධ්‍යාපනයේ රහස් අගුළු සියල්ල විවෘත කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 425,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ මතක ශක්තිය සාගරයක් තරමට ගැඹුරු වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ මතක ශක්තිය සාගරයක් තරමට ගැඹුරු වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 426,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ සාර්ථකත්වය අත්කරගැනීමට අවශ්‍ය සියලු ශක්තිය ඔබට ලැබේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ සාර්ථකත්වය අත්කරගැනීමට අවශ්‍ය සියලු ශක්තිය ඔබට ලැබේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 427,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබගේ ගමනට අකුල් හෙළන සියල්ලන්ම මවිතයට පත් කරන්න.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබගේ ගමනට අකුල් හෙළන සියල්ලන්ම මවිතයට පත් කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 428,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබ ගන්නා කුඩා උත්සාහයක් පවා අනාගතයට මහත් ආයෝජනයකි.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබ ගන්නා කුඩා උත්සාහයක් පවා අනාගතයට මහත් ආයෝජනයකි.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 429,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ අරමුණ පැහැදිලි හිරු එළිය සේ තියුණු වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබගේ අරමුණ පැහැදිලි හිරු එළිය සේ තියුණු වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 430,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ සිනහමුසු මුහුණින් විභාග ශාලාවට යාමට අදම පුහුණු වන්න.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ සිනහමුසු මුහුණින් විභාග ශාලාවට යාමට අදම පුහුණු වන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 431,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබ ලබන සෑම ජයග්‍රහණයක්ම අනාගතය වෙනුවෙන් කරන කැපකිරීමකි.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබ ලබන සෑම ජයග්‍රහණයක්ම අනාගතය වෙනුවෙන් කරන කැපකිරීමකි.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 432,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබේ ජීවිතයේ වටිනාම කාලය අපතේ නොයවා වැඩ කරන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබේ ජීවිතයේ වටිනාම කාලය අපතේ නොයවා වැඩ කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 433,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ හැකියාවන් ලෝකයට පෙන්වීමට ලැබෙන හොඳම දිනය කරගන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ හැකියාවන් ලෝකයට පෙන්වීමට ලැබෙන හොඳම දිනය කරගන්න.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 434,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ බලාපොරොත්තු බිඳ නොගෙන දිගටම ඉදිරියට ගමන් කරන්න.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ බලාපොරොත්තු බිඳ නොගෙන දිගටම ඉදිරියට ගමන් කරන්න.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 435,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අධ්‍යාපනයේ වටිනාකම තේරුම් ගෙන ඉතා ආසාවෙන් පාඩම් කරන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අධ්‍යාපනයේ වටිනාකම තේරුම් ගෙන ඉතා ආසාවෙන් පාඩම් කරන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 436,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබේ මනස ශක්තිමත් බලකොටුවක් මෙන් ස්ථාවර වේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබේ මනස ශක්තිමත් බලකොටුවක් මෙන් ස්ථාවර වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 437,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඉහළම ප්‍රතිඵලයක් කරා යන ඔබේ ගමනට මගේ උණුසුම් සුබ පැතුම්.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඉහළම ප්‍රතිඵලයක් කරා යන ඔබේ ගමනට මගේ උණුසුම් සුබ පැතුම්.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 438,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ ජයග්‍රහණයේ ප්‍රීතිය පවුලේ සියල්ලන් සමඟ බෙදාගැනීමට හැකිවේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබේ ජයග්‍රහණයේ ප්‍රීතිය පවුලේ සියල්ලන් සමඟ බෙදාගැනීමට හැකිවේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 439,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ ඔබේ අනාගත බලාපොරොත්තු මල්ඵල ගැන්වෙන ආරම්භය සනිටුහන් කරන්න.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ ඔබේ අනාගත බලාපොරොත්තු මල්ඵල ගැන්වෙන ආරම්භය සනිටුහන් කරන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 440,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ විභාග අසමත් වීමේ බිය සම්පූර්ණයෙන්ම මනසින් ඉවත් කරගන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ විභාග අසමත් වීමේ බිය සම්පූර්ණයෙන්ම මනසින් ඉවත් කරගන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 441,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබගේ අනාගතය ලස්සන කරන හොඳම තීරණය ගන්නා දිනය වේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබගේ අනාගතය ලස්සන කරන හොඳම තීරණය ගන්නා දිනය වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 442,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ අධ්‍යාපනයෙන් ලෝකය ජයගන්නා ශ්‍රේෂ්ඨ පුරවැසියෙකු වන්න.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ අධ්‍යාපනයෙන් ලෝකය ජයගන්නා ශ්‍රේෂ්ඨ පුරවැසියෙකු වන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 443,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබගේ සිහින සියල්ල එකින් එක සැබෑ කරගන්නට මාර්ගය පෑදේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබගේ සිහින සියල්ල එකින් එක සැබෑ කරගන්නට මාර්ගය පෑදේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 444,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ විභාග ජයග්‍රහණය අතේ දුරින් ඇති බව සිතා කැපවෙන්න.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ විභාග ජයග්‍රහණය අතේ දුරින් ඇති බව සිතා කැපවෙන්න.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 445,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබගේ මහන්සියට සරිලන ඉහළම ජයග්‍රහණය නිතැතින්ම හිමිවේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබගේ මහන්සියට සරිලන ඉහළම ජයග්‍රහණය නිතැතින්ම හිමිවේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 446,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ අධ්‍යාපන ඉලක්ක සියල්ල 100% ක්ම සපුරාගැනීමට ශක්තිය ලැබේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ අධ්‍යාපන ඉලක්ක සියල්ල 100% ක්ම සපුරාගැනීමට ශක්තිය ලැබේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 447,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබ ගන්නා සෑම තීරණයක්ම ඔබේ විභාග ජයග්‍රහණයට හේතු වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබ ගන්නා සෑම තීරණයක්ම ඔබේ විභාග ජයග්‍රහණයට හේතු වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 448,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ අනාගතය අලංකාර කරන විශිෂ්ටතම දිනයක් වේවා.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ ඔබේ අනාගතය අලංකාර කරන විශිෂ්ටතම දිනයක් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 449,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඉගෙන ගන්නා සෑම දෙයක්ම කිසිදා අමතක නොවන මතකයක් වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඉගෙන ගන්නා සෑම දෙයක්ම කිසිදා අමතක නොවන මතකයක් වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 450,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ජීවිතය ජයගන්නා ගමනේ සාර්ථකම පියවරක් ඉදිරියට තබන්න.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ජීවිතය ජයගන්නා ගමනේ සාර්ථකම පියවරක් ඉදිරියට තබන්න.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 451,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ සාර්ථකත්වය දැක ලෝකයම මවිතයට පත් වනු ඇත.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබේ සාර්ථකත්වය දැක ලෝකයම මවිතයට පත් වනු ඇත.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 452,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබගේ දක්ෂතා සම්පූර්ණයෙන්ම එළිදැක්වෙන සාර්ථක දිනයක් වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබගේ දක්ෂතා සම්පූර්ණයෙන්ම එළිදැක්වෙන සාර්ථක දිනයක් වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 453,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අධ්‍යාපනයේ වටිනාකමෙන් ඔබේ අනාගතය රන්වන් පැහැ ගැන්වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අධ්‍යාපනයේ වටිනාකමෙන් ඔබේ අනාගතය රන්වන් පැහැ ගැන්වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 454,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ විභාග ජයග්‍රහණය වෙනුවෙන් ඔබේ හදවතින්ම නැගෙන උත්සාහය සාර්ථක වේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ විභාග ජයග්‍රහණය වෙනුවෙන් ඔබේ හදවතින්ම නැගෙන උත්සාහය සාර්ථක වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 455,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබේ මනසේ ඇති සියලු බලාපොරොත්තු ඉහළින්ම ඉටු වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබේ මනසේ ඇති සියලු බලාපොරොත්තු ඉහළින්ම ඉටු වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 456,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබේ පෑනෙන් ලියවෙන සෑම අකුරක්ම ඔබේ ජයග්‍රහණයේ සංකේතයක් වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබේ පෑනෙන් ලියවෙන සෑම අකුරක්ම ඔබේ ජයග්‍රහණයේ සංකේතයක් වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 457,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපන චාරිකාව ඉතාමත් සුන්දර සහ සාර්ථක එකක් වේවා.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ ඔබගේ අධ්‍යාපන චාරිකාව ඉතාමත් සුන්දර සහ සාර්ථක එකක් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 458,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ විභාග ඉලක්ක කරා යන ගමනේ කිසිදු බාධාවක් නොපැමිණේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ විභාග ඉලක්ක කරා යන ගමනේ කිසිදු බාධාවක් නොපැමිණේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 459,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබගේ අනාගතය සුරක්ෂිත කරන අධ්‍යාපන පදනම අතිශය ශක්තිමත් වේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබගේ අනාගතය සුරක්ෂිත කරන අධ්‍යාපන පදනම අතිශය ශක්තිමත් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 460,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ ඉගෙනුම් කටයුතු සියල්ලම ඉතාමත් පහසුවෙන් අවබෝධ වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබගේ ඉගෙනුම් කටයුතු සියල්ලම ඉතාමත් පහසුවෙන් අවබෝධ වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 461,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබේ විභාග ප්‍රතිඵල සටහන දැක දෙමාපියන් අතිශයින් සතුටට පත්වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබේ විභාග ප්‍රතිඵල සටහන දැක දෙමාපියන් අතිශයින් සතුටට පත්වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 462,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ අනාගත ලෝකය දිනන අභිමානවත් නායකයෙකු වීමට ඔබට ශක්තිය ලැබේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ අනාගත ලෝකය දිනන අභිමානවත් නායකයෙකු වීමට ඔබට ශක්තිය ලැබේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 463,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබගේ දක්ෂතාවයට සහ කැපවීමට සොබාදහමේ ආශිර්වාදයද ලැබේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබගේ දක්ෂතාවයට සහ කැපවීමට සොබාදහමේ ආශිර්වාදයද ලැබේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 464,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ අධ්‍යාපනයෙන් පූර්ණත්වය ලැබූ ශ්‍රේෂ්ඨ මනුෂ්‍යයෙකු වීමට අදිටන් කරගන්න.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ අධ්‍යාපනයෙන් පූර්ණත්වය ලැබූ ශ්‍රේෂ්ඨ මනුෂ්‍යයෙකු වීමට අදිටන් කරගන්න.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 465,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ ඉලක්කය දැවැන්ත කන්දක් වුවත් එය පහසුවෙන් තරණය කිරීමට හැකිවේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබගේ ඉලක්කය දැවැන්ත කන්දක් වුවත් එය පහසුවෙන් තරණය කිරීමට හැකිවේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 466,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපනික ඉලක්ක සියල්ල ඉතාමත් ඉක්මනින් සැබෑ වේවා.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ ඔබගේ අධ්‍යාපනික ඉලක්ක සියල්ල ඉතාමත් ඉක්මනින් සැබෑ වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 467,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ ජීවිතයේ සාර්ථකම සහ ඵලදායීම දිනය බවට පත්වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ ජීවිතයේ සාර්ථකම සහ ඵලදායීම දිනය බවට පත්වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 468,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබගේ අනාගත සිහින මාලිගාව ඉතා ශක්තිමත්ව ගොඩනැගේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබගේ අනාගත සිහින මාලිගාව ඉතා ශක්තිමත්ව ගොඩනැගේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 469,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ විභාග ජයග්‍රහණයෙන් පසු ලැබෙන නිදහස සහ සතුට ඔබට හිමිවේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ විභාග ජයග්‍රහණයෙන් පසු ලැබෙන නිදහස සහ සතුට ඔබට හිමිවේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 470,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබගේ දක්ෂතාවය අනාගත ලෝකයට ආලෝකයක් සපයන පහනක් වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබගේ දක්ෂතාවය අනාගත ලෝකයට ආලෝකයක් සපයන පහනක් වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 471,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ උත්සාහය අනාගතයේ ඔබ ලබන උසස්ම සම්මානයට හේතු වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ උත්සාහය අනාගතයේ ඔබ ලබන උසස්ම සම්මානයට හේතු වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 472,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපනය සමාජයට වැඩදායී සේවයක් සැපයීමට උපකාරී වේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබගේ අධ්‍යාපනය සමාජයට වැඩදායී සේවයක් සැපයීමට උපකාරී වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 473,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබගේ හැකියාවන් තුළින් අනාගතය අතිශයින් අලංකාරවත් වේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබගේ හැකියාවන් තුළින් අනාගතය අතිශයින් අලංකාරවත් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 474,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ බලාපොරොත්තු සියල්ල මල්ඵල ගැන්වෙන සාර්ථක දිනයක් වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබගේ බලාපොරොත්තු සියල්ල මල්ඵල ගැන්වෙන සාර්ථක දිනයක් වේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 475,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ ඔබගේ විභාග සූදානම 100% ක්ම සාර්ථක වී ඉහළම ප්‍රතිඵල ලැබේවා.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ ඔබගේ විභාග සූදානම 100% ක්ම සාර්ථක වී ඉහළම ප්‍රතිඵල ලැබේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 476,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ මනසේ ශක්තියෙන් ඕනෑම අභියෝගයක් පහසුවෙන් ජයගැනීමට හැකිවේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ මනසේ ශක්තියෙන් ඕනෑම අභියෝගයක් පහසුවෙන් ජයගැනීමට හැකිවේවා.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 477,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපනය ජීවිතයේ සාර්ථකත්වයට තබන ස්ථිරම පදනම වේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබගේ අධ්‍යාපනය ජීවිතයේ සාර්ථකත්වයට තබන ස්ථිරම පදනම වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 478,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ දක්ෂතා ඔප්නැංවී අනාගතය ආලෝකමත් කරන තාරකාවක් වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබගේ දක්ෂතා ඔප්නැංවී අනාගතය ආලෝකමත් කරන තාරකාවක් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 479,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබගේ උත්සාහය හෙට දවසේ ඔබගේ ජීවිතයේ විශිෂ්ටතම ජයග්‍රහණය වනු ඇත.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබගේ උත්සාහය හෙට දවසේ ඔබගේ ජීවිතයේ විශිෂ්ටතම ජයග්‍රහණය වනු ඇත.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 480,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපනික සිහින සියල්ල යථාර්ථයක් බවට පත්වීමට සුබ පැතුම්.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ අධ්‍යාපනික සිහින සියල්ල යථාර්ථයක් බවට පත්වීමට සුබ පැතුම්.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 481,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබගේ පෑනෙන් ලියවෙන කරුණු විභාග ජයග්‍රහණයට සෘජුවම බලපාන ඒවා වේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබගේ පෑනෙන් ලියවෙන කරුණු විභාග ජයග්‍රහණයට සෘජුවම බලපාන ඒවා වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 482,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබගේ හැකියාවන් තුළින් අනාගත ලෝකයේ පෙරළියක් කිරීමට ඔබට හැකිවේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබගේ හැකියාවන් තුළින් අනාගත ලෝකයේ පෙරළියක් කිරීමට ඔබට හැකිවේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 483,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපන චාරිකාව ඉතාමත් සුමට සහ බාධක වලින් තොර එකක් වේවා.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබගේ අධ්‍යාපන චාරිකාව ඉතාමත් සුමට සහ බාධක වලින් තොර එකක් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 484,
+    "greeting": "ප්‍රීතිමත් උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ ජීවිතයේ සියලුම අධ්‍යාපනික ප්‍රාර්ථනා ඉහළින්ම ඉටු වේවා.",
+    "fullText": "ප්‍රීතිමත් උදෑසනක්! අද දවසේ ඔබගේ ජීවිතයේ සියලුම අධ්‍යාපනික ප්‍රාර්ථනා ඉහළින්ම ඉටු වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 485,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ දක්ෂතාවයට නිසි අගයක් ලැබෙන අනාගතයක් ඔබට උරුම වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ දක්ෂතාවයට නිසි අගයක් ලැබෙන අනාගතයක් ඔබට උරුම වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 486,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබගේ උත්සාහය සහ කැපවීම කිසිදා අපතේ නොයන වටිනා ආයෝජනයක් වේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබගේ උත්සාහය සහ කැපවීම කිසිදා අපතේ නොයන වටිනා ආයෝජනයක් වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 487,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ මනසේ ඇති ශක්තියෙන් අනාගත ලෝකය ඔබේ පාමුලට ගෙන එනු ඇත.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබගේ මනසේ ඇති ශක්තියෙන් අනාගත ලෝකය ඔබේ පාමුලට ගෙන එනු ඇත.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 488,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබගේ විභාග ජයග්‍රහණය සම්පූර්ණයෙන්ම තහවුරු කරන ඉතා සාර්ථක දිනයක් වේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබගේ විභාග ජයග්‍රහණය සම්පූර්ණයෙන්ම තහවුරු කරන ඉතා සාර්ථක දිනයක් වේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 489,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපනයෙන් ලෝකය දිනන අභිමානවත් ශ්‍රී ලාංකිකයෙකු වීමට හැකිවේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ අධ්‍යාපනයෙන් ලෝකය දිනන අභිමානවත් ශ්‍රී ලාංකිකයෙකු වීමට හැකිවේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 490,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබගේ හැකියාවන් තුළින් ඔබේ පවුලේ අනාගතය අතිශයින් දීප්තිමත් වේවා.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබගේ හැකියාවන් තුළින් ඔබේ පවුලේ අනාගතය අතිශයින් දීප්තිමත් වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 491,
+    "greeting": "ජයග්‍රාහී දවසක්!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපන කටයුතු සියල්ලම ඉතාමත් සාර්ථකව අවසන් කරගැනීමට හැකිවේවා.",
+    "fullText": "ජයග්‍රාහී දවසක්! අද දවසේ ඔබගේ අධ්‍යාපන කටයුතු සියල්ලම ඉතාමත් සාර්ථකව අවසන් කරගැනීමට හැකිවේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 492,
+    "greeting": "නැවුම් උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ දක්ෂතාවය අනාගතයේ ඔබ ලබන උසස්ම වෘත්තියට මාර්ගය පාදාවි.",
+    "fullText": "නැවුම් උදෑසනක්! අද දවසේ ඔබගේ දක්ෂතාවය අනාගතයේ ඔබ ලබන උසස්ම වෘත්තියට මාර්ගය පාදාවි.",
+    "category": "Mindfulness & Energy",
+    "tags": [
+      "morning_wish",
+      "mindfulness_&_energy"
+    ]
+  },
+  {
+    "id": 493,
+    "greeting": "ප්‍රීතිමත් දවසක්!",
+    "message": "අද දවසේ ඔබගේ විභාග සූදානම තුළින් ඔබට අවශ්‍යම ඉහළම සාමාර්ථය නිතැතින්ම ලැබේවා.",
+    "fullText": "ප්‍රීතිමත් දවසක්! අද දවසේ ඔබගේ විභාග සූදානම තුළින් ඔබට අවශ්‍යම ඉහළම සාමාර්ථය නිතැතින්ම ලැබේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 494,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපනික සිහින සියල්ල අකුරටම ඉටුවන ඉතා වාසනාවන්ත දිනයක් වේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ අධ්‍යාපනික සිහින සියල්ල අකුරටම ඉටුවන ඉතා වාසනාවන්ත දිනයක් වේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 495,
+    "greeting": "සුබ දවසක් වේවා!",
+    "message": "අද දවසේ ඔබගේ ජීවිතයේ සාර්ථකත්වය වෙනුවෙන් ඔබ ගන්නා සෑම උත්සාහයක්ම මල්ඵල ගැන්වේවා.",
+    "fullText": "සුබ දවසක් වේවා! අද දවසේ ඔබගේ ජීවිතයේ සාර්ථකත්වය වෙනුවෙන් ඔබ ගන්නා සෑම උත්සාහයක්ම මල්ඵල ගැන්වේවා.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 496,
+    "greeting": "ජයග්‍රාහී උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ අනාගතය අලංකාර කරන ඒ විශිෂ්ට ජයග්‍රහණයට ඔබ තවත් සමීප වේවා.",
+    "fullText": "ජයග්‍රාහී උදෑසනක්! අද දවසේ ඔබගේ අනාගතය අලංකාර කරන ඒ විශිෂ්ට ජයග්‍රහණයට ඔබ තවත් සමීප වේවා.",
+    "category": "Goals & Leadership",
+    "tags": [
+      "morning_wish",
+      "goals_&_leadership"
+    ]
+  },
+  {
+    "id": 497,
+    "greeting": "නැවුම් දවසක්!",
+    "message": "අද දවසේ ඔබගේ අධ්‍යාපන චාරිකාව තුළින් ඔබ අපේක්ෂා කරන ඉහළම තලයට ළඟාවීමට ශක්තිය ලැබේවා.",
+    "fullText": "නැවුම් දවසක්! අද දවසේ ඔබගේ අධ්‍යාපන චාරිකාව තුළින් ඔබ අපේක්ෂා කරන ඉහළම තලයට ළඟාවීමට ශක්තිය ලැබේවා.",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  },
+  {
+    "id": 498,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවසේ ඔබගේ දක්ෂතාවයට සහ කැපවීමට සරිලන ඉහළම විභාග ප්‍රතිඵලයක් ඔබට හිමිවේවා.",
+    "fullText": "සුබ උදෑසනක්! අද දවසේ ඔබගේ දක්ෂතාවයට සහ කැපවීමට සරිලන ඉහළම විභාග ප්‍රතිඵලයක් ඔබට හිමිවේවා.",
+    "category": "Exam Success",
+    "tags": [
+      "morning_wish",
+      "exam_success"
+    ]
+  },
+  {
+    "id": 499,
+    "greeting": "සුබ දවසක්!",
+    "message": "අද දවසේ ඔබගේ උත්සාහය අනාගත ලෝකයේ ශ්‍රේෂ්ඨ නායකයෙකු වීමේ ආරම්භය සනිටුහන් කරනු ඇත.",
+    "fullText": "සුබ දවසක්! අද දවසේ ඔබගේ උත්සාහය අනාගත ලෝකයේ ශ්‍රේෂ්ඨ නායකයෙකු වීමේ ආරම්භය සනිටුහන් කරනු ඇත.",
+    "category": "Motivation",
+    "tags": [
+      "morning_wish",
+      "motivation"
+    ]
+  },
+  {
+    "id": 500,
+    "greeting": "සුබ උදෑසනක්!",
+    "message": "අද දවස ඔබගේ ජීවිතයේ සියලුම අධ්‍යාපනික අරමුණු සහ සිහින සැබෑ කරගන්නා, ජයග්‍රාහී සහ අතිශය සාර්ථකම දිනය වේවා!",
+    "fullText": "සුබ උදෑසනක්! අද දවස ඔබගේ ජීවිතයේ සියලුම අධ්‍යාපනික අරමුණු සහ සිහින සැබෑ කරගන්නා, ජයග්‍රාහී සහ අතිශය සාර්ථකම දිනය වේවා!",
+    "category": "Study Focus",
+    "tags": [
+      "morning_wish",
+      "study_focus"
+    ]
+  }
+]
