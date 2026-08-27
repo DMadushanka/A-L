@@ -1,13 +1,12 @@
 {
-  "version": "2.0",
+  "version": "3.0",
   "maps": {
     "sri_lanka": {
-      "name_si": "ශ්‍රී ලංකා සිතියම (Real Geo Map)",
+      "name_si": "🇱🇰 ශ්‍රී ලංකා සිතියම (Sri Lanka Full)",
       "name_en": "Sri Lanka Map",
+      "bounds": [[5.8, 79.4], [9.9, 81.95]],
       "center": [7.8731, 80.7718],
-      "zoom": 8,
-      "minZoom": 7,
-      "maxZoom": 14,
+      "defaultZoom": 7.4,
       "locations": [
         {
           "id": "sl_jambukola",
@@ -276,12 +275,11 @@
       ]
     },
     "india_bc": {
-      "name_si": "දඹදිව සිතියම (ඉන්දියාව)",
+      "name_si": "🇮🇳 දඹදිව සිතියම (Ancient India / BC)",
       "name_en": "Ancient India / Buddhist Civilization Map",
+      "bounds": [[21.0, 76.0], [28.8, 88.0]],
       "center": [25.5, 82.5],
-      "zoom": 6,
-      "minZoom": 4,
-      "maxZoom": 12,
+      "defaultZoom": 5.5,
       "locations": [
         {
           "id": "in_lumbini",
@@ -370,6 +368,92 @@
           "tolerance_km": 35,
           "description": "අශෝක රජු විසින් ඉදිකළ මහා ස්තූපය හා විසිතුරු තොරණ 4 (තෝරණ) පිහිටි ලෝක උරුමයකි.",
           "exam_points": "• මිහිඳු මහරහතන් වහන්සේ ලංකාවට වැඩම කිරීමට පෙර වැඩසිටි විහාරයයි."
+        }
+      ]
+    },
+    "world_geo": {
+      "name_si": "🌍 ලෝක සිතියම (World Geography)",
+      "name_en": "World Map",
+      "bounds": [[-40, -110], [60, 140]],
+      "center": [20.0, 30.0],
+      "defaultZoom": 2.2,
+      "locations": [
+        {
+          "id": "w_suez",
+          "name_si": "සූවස් ඇළ (Suez Canal)",
+          "name_en": "Suez Canal",
+          "subject": ["geo"],
+          "category_si": "ජාත්‍යන්තර නාවික මාර්ග",
+          "coords": { "lat": 30.6000, "lng": 32.3000 },
+          "tolerance_km": 60,
+          "description": "මධ්‍යධරණී මුහුද සහ රතු මුහුද යා කරන ලොව කාර්යබහුලම කෘත්‍රිම නාවික ඇළ මාර්ගයයි.",
+          "exam_points": "• යුරෝපය සහ ආසියාව අතර නාවික ගමන් දුර විශාල ලෙස කෙටි කරයි."
+        },
+        {
+          "id": "w_panama",
+          "name_si": "පැනමා ඇළ (Panama Canal)",
+          "name_en": "Panama Canal",
+          "subject": ["geo"],
+          "category_si": "ජාත්‍යන්තර නාවික මාර්ග",
+          "coords": { "lat": 9.1000, "lng": -79.7000 },
+          "tolerance_km": 60,
+          "description": "අත්ලාන්තික් සාගරය හා ශාන්තිකර සාගරය යා කරන මධ්‍යම ඇමරිකානු ජල විවරයයි.",
+          "exam_points": "• ලොක් (Lock) දොරටු ක්‍රමවේදය සහිතව ක්‍රියාත්මක වේ."
+        },
+        {
+          "id": "w_malacca",
+          "name_si": "මලක්කා සමුද්‍ර සන්ධිය (Strait of Malacca)",
+          "name_en": "Strait of Malacca",
+          "subject": ["geo"],
+          "category_si": "ජාත්‍යන්තර සමුද්‍ර සන්ධි",
+          "coords": { "lat": 4.1000, "lng": 99.5000 },
+          "tolerance_km": 70,
+          "description": "මැලේසියාව සහ ඉන්දුනීසියාව අතර පිහිටි ආසියානු ප්‍රධානතම තෙල් හා බහාලුම් නාවික මාර්ගයයි.",
+          "exam_points": "• ඉන්දියන් සාගරය හා දකුණු චීන මුහුද යා කරයි."
+        },
+        {
+          "id": "w_hormuz",
+          "name_si": "හෝමූස් සමුද්‍ර සන්ධිය (Strait of Hormuz)",
+          "name_en": "Strait of Hormuz",
+          "subject": ["geo"],
+          "category_si": "ජාත්‍යන්තර සමුද්‍ර සන්ධි",
+          "coords": { "lat": 26.5000, "lng": 56.5000 },
+          "tolerance_km": 60,
+          "description": "පර්සියානු බොක්කෙන් පිටවන ලෝක බොරතෙල් සැපයුමේ ප්‍රධානතම උපායමාර්ගික ද්වාරයයි.",
+          "exam_points": "• ලොව තෙල් ප්‍රවාහනයෙන් 20% කට වැඩි ප්‍රමාණයක් මේ හරහා ගමන් කරයි."
+        },
+        {
+          "id": "w_amazon",
+          "name_si": "ඇමසන් නිම්නය / ගංගාව (Amazon Basin)",
+          "name_en": "Amazon Basin",
+          "subject": ["geo"],
+          "category_si": "වැසි වනාන්තර හා ගංගා",
+          "coords": { "lat": -3.4000, "lng": -62.2000 },
+          "tolerance_km": 100,
+          "description": "දකුණු ඇමරිකාවේ පිහිටි ලොව විශාලතම ජලධාරිතාව සහිත ගංගා නිම්නය හා වැසි වනාන්තරයයි.",
+          "exam_points": "• 'මිහිතලයේ පෙනහළු' ලෙස හැඳින්වේ."
+        },
+        {
+          "id": "w_sahara",
+          "name_si": "සහරා කාන්තාරය (Sahara Desert)",
+          "name_en": "Sahara Desert",
+          "subject": ["geo"],
+          "category_si": "කාන්තාර කලාප",
+          "coords": { "lat": 23.4000, "lng": 12.6000 },
+          "tolerance_km": 120,
+          "description": "උතුරු අප්‍රිකාවේ පිහිටි ලොව විශාලතම නිවර්තන උණුසුම් කාන්තාරයයි.",
+          "exam_points": "• අප්‍රිකා මහද්වීපයේ වර්ගඵලයෙන් 31% ක් ආවරණය කරයි."
+        },
+        {
+          "id": "w_everest",
+          "name_si": "හිමාල කඳුකරය / එවරස්ට් (Mt. Everest)",
+          "name_en": "Mt. Everest",
+          "subject": ["geo"],
+          "category_si": "ලෝකයේ උසම කඳු",
+          "coords": { "lat": 27.9881, "lng": 86.9250 },
+          "tolerance_km": 50,
+          "description": "ලෝකයේ උසම කඳු මුදුනයි (මීටර් 8848.86). නේපාල-ටිබෙට් දේශසීමාවේ පිහිටා ඇත.",
+          "exam_points": "• ඉන්දු-ඕස්ට්‍රේලියානු හා යුරේසියානු තල ගැටුමෙන් නිර්මාණය විය."
         }
       ]
     }

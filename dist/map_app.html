@@ -10,7 +10,7 @@
 
   <!-- Telegram Web App SDK -->
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <!-- Leaflet Interactive Map Engine (100% Free & Open Source) -->
+  <!-- Leaflet Map Engine -->
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
   <!-- Canvas Confetti -->
@@ -53,7 +53,7 @@
     header {
       width: 100%;
       max-width: 650px;
-      padding: 12px 16px;
+      padding: 10px 16px;
       background: rgba(15, 23, 42, 0.96);
       backdrop-filter: blur(12px);
       border-bottom: 1px solid var(--card-border);
@@ -90,19 +90,19 @@
     .nav-tabs {
       width: 100%;
       max-width: 650px;
-      padding: 10px 16px;
+      padding: 8px 16px;
       display: flex;
-      gap: 8px;
+      gap: 6px;
     }
 
     .tab-btn {
       flex: 1;
-      padding: 8px 4px;
+      padding: 7px 4px;
       background: rgba(30, 41, 59, 0.75);
       border: 1px solid var(--card-border);
       border-radius: 12px;
       color: var(--text-secondary);
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
@@ -120,19 +120,21 @@
     .controls-bar {
       width: 100%;
       max-width: 650px;
-      padding: 0 16px 10px;
+      padding: 0 16px 8px;
       display: flex;
-      gap: 8px;
+      flex-wrap: wrap;
+      gap: 6px;
     }
 
     .select-input {
       flex: 1;
-      padding: 8px 10px;
+      min-width: 130px;
+      padding: 7px 10px;
       background: rgba(30, 41, 59, 0.88);
       border: 1px solid var(--card-border);
       border-radius: 10px;
       color: var(--text-primary);
-      font-size: 0.82rem;
+      font-size: 0.8rem;
       outline: none;
     }
 
@@ -140,33 +142,32 @@
     .prompt-card {
       width: calc(100% - 32px);
       max-width: 618px;
-      margin: 0 16px 10px;
+      margin: 0 16px 8px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       text-align: center;
       position: relative;
       box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
     }
 
     .prompt-subtitle {
-      font-size: 0.75rem;
+      font-size: 0.72rem;
       color: var(--accent-cyan);
       text-transform: uppercase;
       letter-spacing: 0.5px;
-      margin-bottom: 2px;
     }
 
     .prompt-target-name {
-      font-size: 1.25rem;
+      font-size: 1.2rem;
       font-weight: 800;
       color: #fff;
-      margin-bottom: 2px;
+      margin: 2px 0;
     }
 
     .prompt-hint {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-secondary);
     }
 
@@ -180,18 +181,43 @@
       position: relative;
       overflow: hidden;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      background: #aad3df;
     }
 
     #realMap {
       width: 100%;
       height: 100%;
-      background: #f8fafc;
       z-index: 10;
     }
 
-    /* Pure Black & White Filter on Map Tiles (High-contrast exam paper look) */
-    .bw-tiles .leaflet-tile {
+    /* Map Styles */
+    .theme-vivid .leaflet-tile {
+      filter: contrast(115%) saturate(120%) !important;
+    }
+
+    .theme-bw .leaflet-tile {
       filter: grayscale(100%) contrast(140%) brightness(102%) !important;
+    }
+
+    /* Reset Center Floating Button */
+    .recenter-btn {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      z-index: 500;
+      background: rgba(15, 23, 42, 0.92);
+      backdrop-filter: blur(8px);
+      color: #fff;
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 8px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
     }
 
     /* Custom Leaflet Pin Markers */
@@ -214,40 +240,40 @@
     .feedback-drawer {
       width: calc(100% - 32px);
       max-width: 618px;
-      margin: 10px 16px 20px;
+      margin: 8px 16px 16px;
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 14px 16px;
+      padding: 12px 16px;
       display: none;
       animation: fadeIn 0.3s ease;
     }
 
     .feedback-title {
-      font-size: 1rem;
+      font-size: 0.95rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 4px;
     }
 
     .feedback-desc {
-      font-size: 0.85rem;
+      font-size: 0.82rem;
       color: #cbd5e1;
-      line-height: 1.45;
-      margin-bottom: 10px;
+      line-height: 1.4;
+      margin-bottom: 8px;
       white-space: pre-line;
     }
 
     .next-btn {
       width: 100%;
-      padding: 11px;
+      padding: 10px;
       background: linear-gradient(135deg, #22c55e, #16a34a);
       border: none;
       border-radius: 12px;
       color: #fff;
-      font-size: 0.95rem;
+      font-size: 0.92rem;
       font-weight: 700;
       cursor: pointer;
       box-shadow: 0 4px 12px rgba(34, 197, 94, 0.3);
@@ -323,17 +349,22 @@
     <button class="tab-btn" id="tabExplore" onclick="switchMode('explore')">📖 අධ්‍යයනය</button>
   </div>
 
-  <!-- Subject Controls -->
+  <!-- Controls Bar -->
   <div class="controls-bar">
+    <select class="select-input" id="mapSelect" onchange="onMapChange()">
+      <option value="sri_lanka">🇱🇰 ශ්‍රී ලංකා සිතියම (Sri Lanka Full Map)</option>
+      <option value="india_bc">🇮🇳 දඹදිව සිතියම (Ancient India / BC)</option>
+      <option value="world_geo">🌍 ලෝක සිතියම (World Geography)</option>
+    </select>
     <select class="select-input" id="subjectFilter" onchange="onSubjectChange()">
-      <option value="all">📚 සියලුම විෂයයන් (History / Geo / BC)</option>
+      <option value="all">📚 සියලුම විෂයයන් (All)</option>
       <option value="history">📜 ඉතිහාසය (History)</option>
       <option value="geo">🌍 භූගෝල විද්‍යාව (Geography)</option>
-      <option value="bc">☸️ බෞද්ධ ශිෂ්ටාචාරය (Buddhist Civ)</option>
+      <option value="bc">☸️ බෞද්ධ ශිෂ්ටාචාරය (BC)</option>
     </select>
-    <select class="select-input" id="mapSelect" onchange="onMapChange()">
-      <option value="sri_lanka">🇱🇰 ශ්‍රී ලංකා සිතියම (Real B&amp;W Map)</option>
-      <option value="india_bc">🇮🇳 දඹදිව / ඉන්දීය සිතියම</option>
+    <select class="select-input" id="themeSelect" onchange="onThemeChange()" style="max-width: 140px;">
+      <option value="vivid">🗺️ ස්වාභාවික සිතියම</option>
+      <option value="bw">📄 කළු-සුදු විභාග සිතියම</option>
     </select>
   </div>
 
@@ -346,7 +377,10 @@
 
   <!-- Real Leaflet Map Viewport Container -->
   <div class="map-container" id="mapViewport">
-    <div id="realMap"></div>
+    <div id="realMap" class="theme-vivid"></div>
+    <button class="recenter-btn" onclick="fitCurrentMapBounds()">
+      <span>🎯</span> සම්පූර්ණ සිතියම (Fit Map)
+    </button>
   </div>
 
   <!-- Feedback Drawer -->
@@ -387,10 +421,9 @@
     const EMBEDDED_LOCATIONS = {
       sri_lanka: {
         name_si: "ශ්‍රී ලංකා සිතියම",
+        bounds: [[5.8, 79.4], [9.9, 81.95]],
         center: [7.8731, 80.7718],
-        zoom: 8,
-        minZoom: 7,
-        maxZoom: 14,
+        defaultZoom: 7.4,
         locations: [
           { id: "sl_jambukola", name_si: "ජම්බුකෝලපට්ටන (දඹකොළපටුන)", subject: ["history", "bc"], category_si: "පුරාණ වරායවල්", coords: { lat: 9.8183, lng: 80.0244 }, tolerance_km: 18, description: "යාපන අර්ධද්වීපයේ උතුරු වෙරළේ (කන්කසන්තුරේ අසල) පිහිටි ඓතිහාසික වරායයි.", exam_points: "• සංඝමිත්තා තෙරණිය ශ්‍රී මහා බෝධි දක්ෂිණ ශාඛාව වැඩමවාගෙන ගොඩබට ස්ථානයයි.\n• දේවානම්පියතිස්ස රජු විසින් සම්බුද්ධ ජයන්ති විහාරය කරවන ලදී." },
           { id: "sl_urathota", name_si: "ඌරාතොට (කයිට්ස්)", subject: ["history"], category_si: "පුරාණ වරායවල්", coords: { lat: 9.6833, lng: 79.8667 }, tolerance_km: 15, description: "යාපනය කයිට්ස් දූපතේ පිහිටි පුරාණ නාවික කඳවුරක් සහ වරායකි.", exam_points: "• I වන පරාක්‍රමබාහු රජුගේ නාවික හමුදාව බුරුමය ආක්‍රමණයට නැව් නැංවූ ස්ථානයයි." },
@@ -420,10 +453,9 @@
       },
       india_bc: {
         name_si: "දඹදිව සිතියම",
+        bounds: [[21.0, 76.0], [28.8, 88.0]],
         center: [25.5, 82.5],
-        zoom: 6,
-        minZoom: 4,
-        maxZoom: 12,
+        defaultZoom: 5.5,
         locations: [
           { id: "in_lumbini", name_si: "ලුම්බිණිය", subject: ["bc", "history"], category_si: "සතර මහා පූජනීය ස්ථාන", coords: { lat: 27.4833, lng: 83.2750 }, tolerance_km: 35, description: "සිද්ධාර්ථ කුමාරෝත්පත්තිය සිදුවූ පූජනීය ස්ථානයයි.", exam_points: "• අශෝක රජුගේ ලුම්බිණි ටැම් ලිපිය පිහිටා ඇත." },
           { id: "in_bodhgaya", name_si: "බුද්ධගයාව (උරුවේලාව)", subject: ["bc", "history"], category_si: "සතර මහා පූජනීය ස්ථාන", coords: { lat: 24.6951, lng: 84.9913 }, tolerance_km: 35, description: "සිද්ධාර්ථ තවුසාණන් සම්මා සම්බුද්ධත්වයට පත්වූ ස්ථානයයි.", exam_points: "• මහාබෝධි විහාරය හා වජ්‍රාසනය පිහිටා ඇත." },
@@ -433,6 +465,21 @@
           { id: "in_savatthi", name_si: "සැවැත්නුවර (කොසොල්)", subject: ["bc", "history"], category_si: "පුරාණ නගර", coords: { lat: 27.5167, lng: 82.0333 }, tolerance_km: 35, description: "බුදුරදුන් වස් 25ක් වැඩ විසූ ජේතවනාරාමය පිහිටි නගරයයි.", exam_points: "• අනේපිඬු සිටුතුමා විසින් ඉදිකරවන ලදී." },
           { id: "in_nalanda", name_si: "නාලන්දාව", subject: ["bc", "history"], category_si: "පුරාණ විශ්වවිද්‍යාල", coords: { lat: 25.1367, lng: 85.4439 }, tolerance_km: 30, description: "ලොව සුප්‍රකට පුරාණ බෞද්ධ විශ්වවිද්‍යාලයයි.", exam_points: "• දසදහස් ගණනක් භික්ෂූන් අධ්‍යාපනය ලැබූ මධ්‍යස්ථානයකි." },
           { id: "in_sanchi", name_si: "සාංචිය", subject: ["bc", "history"], category_si: "බෞද්ධ කලා මධ්‍යස්ථාන", coords: { lat: 23.4794, lng: 77.7397 }, tolerance_km: 35, description: "අශෝක රජු විසින් ඉදිකළ මහා ස්තූපය හා තොරණ 4 පිහිටි ලෝක උරුමයකි.", exam_points: "• මිහිඳු හිමියන් ලංකාවට වැඩම කිරීමට පෙර වැඩසිටි විහාරයයි." }
+        ]
+      },
+      world_geo: {
+        name_si: "ලෝක සිතියම",
+        bounds: [[-40, -110], [60, 140]],
+        center: [20.0, 30.0],
+        defaultZoom: 2.2,
+        locations: [
+          { id: "w_suez", name_si: "සූවස් ඇළ (Suez Canal)", subject: ["geo"], category_si: "ජාත්‍යන්තර නාවික මාර්ග", coords: { lat: 30.6000, lng: 32.3000 }, tolerance_km: 80, description: "මධ්‍යධරණී මුහුද සහ රතු මුහුද යා කරන ලොව කාර්යබහුලම නාවික ඇළ මාර්ගයයි.", exam_points: "• යුරෝපය සහ ආසියාව අතර නාවික ගමන් දුර විශාල ලෙස කෙටි කරයි." },
+          { id: "w_panama", name_si: "පැනමා ඇළ (Panama Canal)", subject: ["geo"], category_si: "ජාත්‍යන්තර නාවික මාර්ග", coords: { lat: 9.1000, lng: -79.7000 }, tolerance_km: 80, description: "අත්ලාන්තික් හා ශාන්තිකර සාගර යා කරන මධ්‍යම ඇමරිකානු ජල මාර්ගයයි.", exam_points: "• ලොක් (Lock) දොරටු ක්‍රමවේදය සහිතව ක්‍රියාත්මක වේ." },
+          { id: "w_malacca", name_si: "මලක්කා සමුද්‍ර සන්ධිය (Strait of Malacca)", subject: ["geo"], category_si: "ජාත්‍යන්තර සමුද්‍ර සන්ධි", coords: { lat: 4.1000, lng: 99.5000 }, tolerance_km: 80, description: "මැලේසියාව සහ ඉන්දුනීසියාව අතර පිහිටි ප්‍රධානතම තෙල් හා බහාලුම් නාවික මාර්ගයයි.", exam_points: "• ඉන්දියන් සාගරය හා දකුණු චීන මුහුද යා කරයි." },
+          { id: "w_hormuz", name_si: "හෝමූස් සමුද්‍ර සන්ධිය (Strait of Hormuz)", subject: ["geo"], category_si: "ජාත්‍යන්තර සමුද්‍ර සන්ධි", coords: { lat: 26.5000, lng: 56.5000 }, tolerance_km: 80, description: "පර්සියානු බොක්කෙන් පිටවන ලෝක බොරතෙල් සැපයුමේ ප්‍රධානතම උපායමාර්ගික ද්වාරයයි.", exam_points: "• ලොව තෙල් ප්‍රවාහනයෙන් 20% කට වැඩි ප්‍රමාණයක් ගමන් කරයි." },
+          { id: "w_amazon", name_si: "ඇමසන් නිම්නය / ගංගාව (Amazon Basin)", subject: ["geo"], category_si: "වැසි වනාන්තර හා ගංගා", coords: { lat: -3.4000, lng: -62.2000 }, tolerance_km: 120, description: "දකුණු ඇමරිකාවේ පිහිටි ලොව විශාලතම වැසි වනාන්තරය හා ගංගා නිම්නයයි.", exam_points: "• 'මිහිතලයේ පෙනහළු' ලෙස හැඳින්වේ." },
+          { id: "w_sahara", name_si: "සහරා කාන්තාරය (Sahara Desert)", subject: ["geo"], category_si: "කාන්තාර කලාප", coords: { lat: 23.4000, lng: 12.6000 }, tolerance_km: 140, description: "උතුරු අප්‍රිකාවේ පිහිටි ලොව විශාලතම නිවර්තන උණුසුම් කාන්තාරයයි.", exam_points: "• අප්‍රිකා මහද්වීපයේ වර්ගඵලයෙන් 31% ක් ආවරණය කරයි." },
+          { id: "w_everest", name_si: "හිමාල කඳුකරය / එවරස්ට් (Mt. Everest)", subject: ["geo"], category_si: "ලෝකයේ උසම කඳු", coords: { lat: 27.9881, lng: 86.9250 }, tolerance_km: 60, description: "ලෝකයේ උසම කඳු මුදුනයි (මීටර් 8848.86). නේපාල-ටිබෙට් දේශසීමාවේ පිහිටා ඇත.", exam_points: "• ඉන්දු-ඕස්ට්‍රේලියානු හා යුරේසියානු තල ගැටුමෙන් නිර්මාණය විය." }
         ]
       }
     };
@@ -456,32 +503,44 @@
     let targetPulseCircle = null;
     let exploreMarkers = [];
 
-    // Initialize Real Leaflet Map
+    // Initialize Real Leaflet Map with Clear Ocean Blue & Crisp Boundaries
     function initMap() {
       const cfg = locationsDataset[currentMapKey] || EMBEDDED_LOCATIONS.sri_lanka;
 
       map = L.map('realMap', {
         center: cfg.center,
-        zoom: cfg.zoom,
-        minZoom: cfg.minZoom || 5,
-        maxZoom: cfg.maxZoom || 16,
+        zoom: cfg.defaultZoom || 7.5,
+        minZoom: 2,
+        maxZoom: 16,
         zoomControl: true,
         attributionControl: false
       });
 
-      // 100% Free Public Tile Service (Zero API Key, Zero Watermarks)
-      // Esri World Light Gray Base - Clean, high-contrast Black & White exam style
-      tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
-        maxZoom: 16,
-        attribution: '© Esri, OpenStreetMap',
-        className: 'bw-tiles'
+      // Free Standard OpenStreetMap Tile Layer (Clear Soft Blue Ocean, Vivid Green/Beige Land, Sharp Coastlines)
+      tileLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '© OpenStreetMap contributors'
       }).addTo(map);
+
+      // Auto-fit Sri Lanka completely on startup
+      fitCurrentMapBounds();
 
       // Map Click / Tap Handler
       map.on('click', handleMapClick);
 
       // Start Quiz Session
       startQuizSession();
+    }
+
+    // Auto Focus Complete Map in Viewport
+    function fitCurrentMapBounds() {
+      if (!map) return;
+      const cfg = locationsDataset[currentMapKey] || EMBEDDED_LOCATIONS[currentMapKey];
+      if (cfg && cfg.bounds) {
+        map.fitBounds(cfg.bounds, { padding: [15, 15], maxZoom: cfg.defaultZoom || 8.5 });
+      } else if (cfg && cfg.center) {
+        map.setView(cfg.center, cfg.defaultZoom || 7);
+      }
     }
 
     async function initApp() {
@@ -535,9 +594,8 @@
       document.getElementById('promptTarget').innerText = `📍 ${item.name_si}`;
       document.getElementById('promptHint').innerText = "ස්ථානය සලකුණු කිරීමට සිතියම මත ස්පර්ශ (Tap) කරන්න.";
 
-      // Smooth pan to country view
-      const cfg = locationsDataset[currentMapKey];
-      map.setView(cfg.center, cfg.zoom, { animate: true });
+      // Always auto-fit full country map on every question so student has full overview
+      fitCurrentMapBounds();
     }
 
     // Handle Real Map Tap / Click
@@ -601,13 +659,13 @@
         radius: tolerance * 1000,
         color: '#22c55e',
         fillColor: '#22c55e',
-        fillOpacity: 0.18,
-        weight: 2
+        fillOpacity: 0.22,
+        weight: 2.5
       }).addTo(map);
 
       // Fit map bounds to view both user tap and target
       const group = L.featureGroup([userMarker, targetMarker]);
-      map.fitBounds(group.getBounds().pad(0.4), { animate: true });
+      map.fitBounds(group.getBounds().pad(0.35), { animate: true });
 
       // Display Feedback Drawer
       const drawer = document.getElementById('feedbackDrawer');
@@ -704,9 +762,9 @@
       locs.forEach(loc => {
         const icon = L.divIcon({
           className: 'custom-map-pin',
-          html: '<span style="font-size:22px;">📍</span>',
-          iconSize: [26, 26],
-          iconAnchor: [13, 26]
+          html: '<span style="font-size:24px;">📍</span>',
+          iconSize: [28, 28],
+          iconAnchor: [14, 28]
         });
         const marker = L.marker([loc.coords.lat, loc.coords.lng], { icon: icon }).addTo(map);
         marker.on('click', () => {
@@ -716,12 +774,11 @@
           document.getElementById('feedbackNotes').innerHTML = `<b>${loc.category_si || ''}</b><br>${loc.description}<br><br>${loc.exam_points || ''}`;
           document.getElementById('nextBtn').style.display = 'none';
           drawer.style.display = 'block';
-          map.setView([loc.coords.lat, loc.coords.lng], 10, { animate: true });
+          map.setView([loc.coords.lat, loc.coords.lng], 9, { animate: true });
         });
         exploreMarkers.push(marker);
       });
-      const cfg = locationsDataset[currentMapKey];
-      map.setView(cfg.center, cfg.zoom);
+      fitCurrentMapBounds();
     }
 
     function onSubjectChange() {
@@ -732,10 +789,15 @@
 
     function onMapChange() {
       currentMapKey = document.getElementById('mapSelect').value;
-      const cfg = locationsDataset[currentMapKey];
-      map.setView(cfg.center, cfg.zoom);
+      fitCurrentMapBounds();
       if (currentMode !== 'explore') startQuizSession();
       else renderExploreMarkers();
+    }
+
+    function onThemeChange() {
+      const theme = document.getElementById('themeSelect').value;
+      const el = document.getElementById('realMap');
+      el.className = theme === 'bw' ? 'theme-bw' : 'theme-vivid';
     }
 
     window.addEventListener('DOMContentLoaded', initApp);
