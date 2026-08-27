@@ -28,8 +28,9 @@ export function loadMapLocations() {
  * Supports Telegram Mini App (TWA) + In-Chat Fast Drills
  */
 export function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L') {
-  // Ensure HTTPS for Telegram Mini App
-  let webAppUrl = `${baseUrl.replace(/\/$/, '')}/map_app.html`;
+  // Ensure HTTPS and append dynamic version to bust Telegram WebView cache
+  const cacheBuster = Date.now();
+  let webAppUrl = `${baseUrl.replace(/\/$/, '')}/map_app.html?v=${cacheBuster}`;
   if (!webAppUrl.startsWith('https://') && !webAppUrl.startsWith('http://localhost')) {
     webAppUrl = `https://${webAppUrl.replace(/^http:\/\//, '')}`;
   }
