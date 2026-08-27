@@ -2,15 +2,31 @@
   "name": "al-mcq-quiz-bot",
   "version": "1.0.0",
   "description": "Interactive Telegram Quiz Bot for A/L Past Papers (Sinhala Medium)",
-  "main": "bot.js",
+  "main": "bot.cjs",
+  "bin": "bot.cjs",
   "type": "module",
+  "pkg": {
+    "assets": [
+      "*.html",
+      "*.png",
+      "*.md",
+      "*.json",
+      "pdf_downloads/**/*",
+      "audio_downloads/**/*",
+      "normal_quiz/**/*"
+    ]
+  },
   "scripts": {
     "start": "node bot.js",
     "start:bot": "node bot.js"
   },
   "dependencies": {
+    "@rollup/plugin-commonjs": "^29.0.3",
+    "@rollup/plugin-json": "^6.1.0",
+    "@rollup/plugin-node-resolve": "^16.0.3",
     "dotenv": "^16.4.5",
-    "node-telegram-bot-api": "^0.66.0"
+    "node-telegram-bot-api": "^0.66.0",
+    "rollup": "^4.62.4"
   },
   "keywords": [
     "telegram-bot",

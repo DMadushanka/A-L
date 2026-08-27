@@ -10,8 +10,8 @@
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     :root {
-      --bg-gradient: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
-      --card-bg: rgba(30, 41, 59, 0.85);
+      --bg-gradient: linear-gradient(135deg, #0b1329 0%, #1e1b4b 100%);
+      --card-bg: rgba(30, 41, 59, 0.88);
       --card-border: rgba(255, 255, 255, 0.12);
       --text-primary: #f8fafc;
       --text-secondary: #94a3b8;
@@ -166,13 +166,13 @@
     .map-container {
       width: calc(100% - 32px);
       max-width: 568px;
-      height: 480px;
-      background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+      height: 520px;
+      background: radial-gradient(circle at center, #0f172a 0%, #020617 100%);
       border: 1px solid var(--card-border);
       border-radius: 20px;
       position: relative;
       overflow: hidden;
-      box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5), 0 10px 30px rgba(0, 0, 0, 0.4);
+      box-shadow: inset 0 0 25px rgba(0, 0, 0, 0.6), 0 10px 30px rgba(0, 0, 0, 0.4);
       touch-action: none;
     }
 
@@ -189,10 +189,10 @@
     /* Pin Marker Styles */
     .pin {
       position: absolute;
-      width: 22px;
-      height: 22px;
-      margin-left: -11px;
-      margin-top: -22px;
+      width: 24px;
+      height: 24px;
+      margin-left: -12px;
+      margin-top: -24px;
       pointer-events: none;
       transform: scale(0);
       animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
@@ -200,19 +200,19 @@
     }
 
     .pin-user {
-      filter: drop-shadow(0 2px 6px rgba(239, 68, 68, 0.8));
+      filter: drop-shadow(0 2px 8px rgba(239, 68, 68, 0.9));
     }
 
     .pin-correct {
-      filter: drop-shadow(0 2px 6px rgba(34, 197, 94, 0.8));
+      filter: drop-shadow(0 2px 8px rgba(34, 197, 94, 0.9));
     }
 
     .pulse-ring {
       position: absolute;
-      width: 40px;
-      height: 40px;
-      margin-left: -20px;
-      margin-top: -20px;
+      width: 44px;
+      height: 44px;
+      margin-left: -22px;
+      margin-top: -22px;
       border: 2px solid var(--accent-green);
       border-radius: 50%;
       animation: pulseAnim 1.5s infinite;
@@ -285,7 +285,7 @@
     .zoom-btn {
       width: 36px;
       height: 36px;
-      background: rgba(15, 23, 42, 0.8);
+      background: rgba(15, 23, 42, 0.85);
       backdrop-filter: blur(8px);
       border: 1px solid var(--card-border);
       border-radius: 10px;
@@ -378,7 +378,7 @@
       <option value="bc">☸️ බෞද්ධ ශිෂ්ටාචාරය (Buddhist Civ)</option>
     </select>
     <select class="select-input" id="mapSelect" onchange="onMapChange()">
-      <option value="sri_lanka">🇱🇰 ශ්‍රී ලංකා සිතියම</option>
+      <option value="sri_lanka">🇱🇰 ශ්‍රී ලංකා සිතියම (Real Outline)</option>
       <option value="india_bc">🇮🇳 දඹදිව / ඉන්දීය සිතියම</option>
     </select>
   </div>
@@ -393,13 +393,14 @@
   <!-- Map Interactive Container -->
   <div class="map-container" id="mapViewport">
     <div class="map-svg-wrap" id="mapWrapper">
-      <!-- Embedded Vector Base Maps -->
-      <svg id="svgMap" viewBox="0 0 500 800" width="100%" height="100%">
+      <!-- High-Precision Embedded Vector Base Maps -->
+      <svg id="svgMap" viewBox="0 0 1024 1024" width="100%" height="100%">
         <defs>
-          <radialGradient id="landGrad" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stop-color="#334155" />
+          <linearGradient id="landGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stop-color="#1e293b" />
+            <stop offset="50%" stop-color="#334155" />
             <stop offset="100%" stop-color="#1e293b" />
-          </radialGradient>
+          </linearGradient>
           <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
             <feGaussianBlur stdDeviation="3" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
@@ -458,34 +459,90 @@
       tg.expand();
     }
 
-    // Dataset of Vector Maps (Sri Lanka High-Accuracy Outline & India)
+    // Geographically Accurate Real Sri Lanka Map Vectors (Exact Coastline + Jaffna Peninsula + Islands + Mannar)
     const MAP_DATA = {
       sri_lanka: {
-        viewBox: "0 0 500 800",
-        // Scaled high-precision Sri Lanka Outline SVG Path
-        path: "M 200 45 C 220 50, 240 70, 235 90 C 230 110, 205 130, 200 150 C 195 170, 160 175, 140 190 C 120 205, 130 240, 140 270 C 150 300, 145 340, 130 380 C 115 420, 105 470, 120 520 C 135 570, 150 610, 190 640 C 230 670, 260 700, 300 710 C 340 720, 370 700, 385 660 C 400 620, 425 560, 420 500 C 415 440, 400 380, 410 320 C 420 260, 400 230, 380 210 C 360 190, 340 150, 300 120 C 260 90, 220 55, 200 45 Z",
+        viewBox: "0 0 1024 1024",
+        isFlippedGroup: true,
+        mainland: `M3473 10224 c-22 -57 74 -122 182 -124 l60 -1 105 -121 c64 -74 162 -169 252 -246 82 -69 146 -127 145 -129 -10 -9 -123 48 -212 108 -71 47 -106 78 -122 105 -12 22 -43 59 -68 84 -25 25 -62 71 -82 104 -36 58 -36 58 -76 53 -29 -4 -53 1 -91 19 -28 13 -70 28 -93 34 -40 10 -42 12 -54 65 -14 62 -12 61 -105 41 -50 -11 -76 -10 -157 2 l-97 15 -53 -50 c-28 -27 -69 -61 -89 -77 l-37 -28 32 -56 c17 -31 34 -74 37 -96 l5 -40 65 -14 c54 -11 73 -21 110 -58 26 -25 71 -54 105 -68 33 -13 85 -38 115 -55 30 -17 63 -31 74 -31 15 0 13 6 -14 36 -17 20 -29 39 -26 41 3 3 29 -11 58 -31 29 -21 75 -53 102 -72 56 -39 72 -42 81 -13 5 16 -3 31 -34 63 -44 45 -53 76 -22 76 33 0 279 -139 410 -232 125 -88 135 -92 181 -79 17 6 31 3 43 -8 16 -14 20 -14 28 -1 23 39 28 43 50 37 22 -6 362 -216 384 -238 5 -5 -4 -9 -25 -9 -37 0 -103 27 -148 59 -15 10 -65 35 -112 56 -74 33 -94 37 -154 36 -40 -1 -82 -9 -100 -18 -118 -61 -315 -95 -330 -57 -11 28 -6 41 19 52 30 14 26 23 -27 84 -32 37 -35 38 -133 49 -94 10 -107 14 -211 70 -90 48 -120 59 -158 59 -43 0 -46 -2 -37 -19 11 -20 171 -123 252 -161 38 -19 50 -31 67 -72 l21 -50 -47 -19 c-41 -17 -50 -27 -70 -72 l-23 -53 -99 -33 -100 -32 0 -92 0 -92 73 -46 73 -46 12 -66 c11 -62 10 -75 -13 -169 -17 -69 -37 -120 -59 -153 -25 -37 -40 -81 -61 -170 -15 -66 -31 -127 -36 -136 -4 -9 -29 -22 -55 -29 -33 -10 -71 -35 -134 -89 -47 -42 -101 -83 -117 -93 l-31 -16 -1 -196 0 -195 36 -77 35 -77 -13 -136 c-11 -121 -15 -140 -39 -173 -17 -23 -30 -57 -34 -88 -7 -49 -8 -51 -66 -80 l-60 -30 0 -103 c0 -100 -1 -103 -31 -140 -29 -36 -31 -42 -27 -100 4 -53 1 -70 -22 -117 -21 -42 -29 -77 -35 -150 -7 -83 -11 -101 -38 -139 l-30 -45 21 -37 c14 -25 22 -55 22 -86 0 -26 5 -64 10 -83 10 -32 7 -43 -31 -122 l-43 -87 48 -62 c46 -59 47 -63 41 -109 -8 -60 -31 -74 -109 -68 -45 4 -63 11 -86 33 -41 40 -46 62 -21 96 26 35 26 41 2 63 -14 12 -20 37 -25 102 -5 73 -3 92 14 131 11 25 20 66 20 91 0 38 6 52 31 78 20 21 32 45 36 73 5 39 4 42 -26 52 -17 6 -31 17 -31 25 0 8 19 51 41 97 l41 82 -55 -60 c-38 -42 -60 -76 -72 -114 -9 -30 -35 -79 -57 -109 l-40 -54 9 -104 c5 -61 5 -108 0 -113 -17 -17 44 -320 124 -626 82 -316 119 -524 119 -676 0 -71 -2 -80 -15 -69 -9 8 -15 8 -15 2 0 -6 29 -203 65 -439 59 -384 65 -437 59 -520 -7 -91 -6 -93 19 -113 26 -20 47 -88 47 -150 0 -51 -15 -34 -51 57 -21 53 -41 89 -51 91 -12 2 -1 -45 53 -225 58 -191 69 -240 69 -300 0 -64 -4 -79 -31 -123 l-31 -50 28 -167 c24 -149 36 -191 101 -368 44 -117 88 -218 107 -245 24 -32 46 -89 80 -206 45 -155 46 -162 32 -201 -14 -39 -13 -42 9 -63 16 -15 27 -42 35 -87 14 -81 38 -147 80 -215 30 -49 32 -57 27 -119 -5 -62 -4 -69 19 -90 14 -13 33 -52 45 -93 12 -39 36 -91 54 -116 21 -28 36 -63 40 -92 6 -42 12 -50 51 -73 24 -14 44 -30 44 -35 0 -5 12 -16 28 -24 15 -8 53 -46 86 -85 47 -57 64 -71 87 -71 40 0 75 -16 124 -56 33 -27 58 -37 106 -45 35 -6 78 -19 96 -30 24 -15 41 -18 68 -13 32 6 40 3 71 -27 29 -28 40 -33 76 -30 22 1 50 7 60 12 23 12 48 -4 48 -31 0 -26 19 -30 154 -30 97 0 135 -4 184 -21 l61 -21 60 46 59 46 84 0 c77 0 87 2 108 25 13 14 29 25 36 25 7 0 22 13 33 29 11 15 33 31 49 34 15 3 53 26 84 52 54 44 58 46 105 39 46 -6 49 -5 58 21 9 24 29 34 175 87 146 53 182 62 315 79 83 10 155 19 162 19 6 0 20 13 29 29 14 23 30 33 73 43 48 12 58 18 73 48 32 66 58 80 58 30 0 -16 3 -30 7 -30 3 0 27 13 52 29 32 20 65 31 108 35 73 8 162 45 218 90 22 18 63 45 90 61 28 16 75 49 105 75 30 25 78 62 106 83 28 20 69 58 90 83 28 35 57 56 113 81 41 19 90 47 108 64 19 16 52 38 74 49 89 46 177 147 307 354 125 198 142 234 142 294 0 18 7 43 15 56 8 12 33 65 56 117 34 79 41 104 40 157 -2 54 2 68 28 105 21 31 31 59 36 106 3 36 17 85 30 111 13 25 28 81 34 124 6 42 18 90 27 107 13 26 14 44 4 127 -6 53 -18 122 -25 152 -11 44 -12 93 -5 246 5 105 12 197 15 206 19 49 -122 513 -155 513 -9 0 -22 -22 -34 -60 -11 -32 -21 -55 -22 -50 -2 6 -8 29 -14 52 -10 40 -12 42 -37 32 -32 -12 -38 -7 -22 18 9 16 7 27 -11 63 l-22 44 21 17 21 18 -21 15 c-20 14 -21 21 -15 78 8 79 -14 147 -62 189 -36 32 -62 38 -62 14 0 -8 -4 -15 -9 -15 -12 0 -21 25 -21 59 0 19 -15 42 -54 81 -32 31 -56 64 -58 79 -2 19 -11 27 -37 34 -22 5 -37 5 -44 -2 -14 -14 -28 -14 -63 -1 l-27 11 24 25 c22 24 29 26 82 20 71 -7 72 -8 98 -57 l20 -40 32 18 c23 14 33 27 35 49 3 27 -6 39 -68 94 -39 35 -84 82 -100 105 -21 31 -38 44 -63 49 -28 5 -37 15 -65 71 -37 75 -44 149 -16 170 15 10 11 16 -29 49 -25 20 -48 43 -50 50 -3 8 6 29 20 49 21 30 23 38 13 57 -10 18 -17 21 -45 16 -28 -6 -36 -3 -45 14 -6 12 -21 20 -36 20 -19 0 -26 6 -31 30 -3 18 -21 44 -44 64 -37 31 -39 36 -39 88 0 50 -3 56 -26 67 -24 11 -30 9 -54 -14 -38 -37 -56 -32 -85 24 -13 27 -34 52 -45 56 -16 5 -20 15 -19 43 3 95 12 92 59 -16 24 -56 46 -102 50 -102 3 0 11 5 17 11 14 14 6 184 -10 214 -6 11 -34 108 -62 215 l-51 195 -36 3 c-49 4 -71 37 -62 92 4 22 9 40 13 40 3 0 14 -20 24 -45 13 -31 25 -45 38 -45 10 0 19 5 19 11 0 5 -18 78 -40 162 -32 117 -46 157 -65 172 -13 11 -31 35 -39 53 -17 33 -30 40 -42 21 -3 -6 -20 -17 -38 -24 -27 -12 -30 -17 -27 -50 2 -29 -3 -43 -25 -66 -32 -34 -43 -35 -129 -13 -61 15 -65 18 -71 49 -5 28 -13 36 -54 53 l-48 20 -33 -24 c-28 -21 -35 -22 -47 -10 -12 12 -11 18 3 40 29 44 46 47 104 20 29 -13 63 -24 76 -24 30 0 39 33 14 56 -12 11 -19 31 -19 56 0 34 3 38 25 38 21 0 26 -6 31 -39 6 -37 8 -39 30 -29 36 17 32 62 -11 126 -20 28 -42 52 -50 52 -27 0 -16 17 15 23 26 6 30 11 30 39 0 26 -8 39 -35 61 -19 15 -49 55 -66 88 -24 48 -33 58 -43 50 -17 -14 -26 14 -26 80 0 46 -1 47 -74 102 -63 48 -81 68 -117 135 -35 65 -50 83 -87 103 -41 22 -47 30 -66 90 -18 57 -30 74 -82 123 -34 31 -64 56 -68 56 -3 0 -6 -10 -6 -23 0 -30 -36 -63 -77 -72 -59 -12 -100 40 -51 66 14 8 18 14 10 17 -6 2 -12 16 -12 31 0 22 -12 36 -65 74 -36 26 -65 51 -65 57 0 5 19 10 43 10 37 0 48 -6 82 -40 41 -42 71 -51 82 -24 4 10 -10 32 -40 62 -31 31 -58 74 -81 127 -34 77 -36 80 -66 77 -28 -3 -30 -1 -30 27 0 29 -2 31 -39 31 -44 0 -70 20 -48 38 10 8 26 7 62 -3 26 -8 50 -13 52 -11 2 1 -31 73 -73 160 -56 115 -81 156 -94 156 -10 0 -26 3 -35 7 -14 5 -16 2 -10 -17 7 -23 6 -23 -31 6 -22 17 -53 36 -71 43 -26 11 -53 50 -53 77 0 13 41 -1 74 -26 31 -23 42 -27 58 -19 17 9 1 29 -152 189 -139 145 -197 197 -303 274 -73 52 -250 186 -395 298 l-263 204 -134 172 c-91 118 -139 188 -150 222 l-17 50 -139 0 c-119 0 -141 -2 -146 -16z`,
         islands: [
-          "M 160 60 C 170 65, 175 75, 165 80 C 155 85, 150 75, 160 60 Z", // Kayts / Jaffna Islands
-          "M 130 90 C 140 95, 145 105, 135 110 C 125 115, 120 105, 130 90 Z",
-          "M 140 180 C 155 185, 160 195, 145 200 C 130 205, 125 190, 140 180 Z"  // Mannar Island
+          `M2754 10059 c-15 -8 -23 -27 -32 -80 -17 -96 -16 -104 16 -141 16 -18 32 -44 35 -58 17 -63 54 -80 179 -80 l103 0 -70 51 c-39 28 -73 58 -76 67 -3 8 -25 20 -50 26 l-44 11 -3 64 c-2 35 2 77 8 94 5 17 7 34 3 38 -15 14 -48 17 -69 8z`,
+          `M2607 9632 c-7 -57 5 -70 68 -74 l55 -3 0 38 c0 36 -2 38 -28 36 -17 -2 -40 6 -59 19 l-31 22 -5 -38z`,
+          `M2200 9456 l0 -64 44 -26 c99 -58 161 -41 144 40 -9 43 -24 54 -74 54 -12 0 -38 14 -59 30 -21 17 -42 30 -46 30 -5 0 -9 -29 -9 -64z`,
+          `M2403 8333 c-81 -3 -93 -6 -93 -22 0 -21 53 -49 155 -81 95 -31 226 -111 271 -166 l37 -45 26 25 25 26 -39 40 -40 41 53 -7 c28 -3 52 -4 52 -1 0 2 -34 31 -77 62 -71 54 -239 138 -266 133 -7 -1 -54 -4 -104 -5z`
+        ],
+        // Geographic reference boundaries
+        provinces: [
+          "M 300 240 Q 420 300 650 280", // Northern / North Central
+          "M 260 480 Q 400 480 620 460", // North Central / Central
+          "M 260 680 Q 450 670 700 700", // Western / Sabaragamuwa / Southern
+          "M 450 480 Q 520 620 540 760"  // Central Highlands Ridge
         ],
         rivers: [
-          "M 260 520 Q 340 400 380 250", // Mahaweli
-          "M 240 550 Q 180 540 145 530", // Kelani
-          "M 220 260 Q 180 230 150 195"  // Malwathu Oya
+          "M 510 600 Q 640 480 755 310", // Mahaweli
+          "M 465 700 Q 340 680 265 675", // Kelani
+          "M 425 305 Q 350 260 280 205"  // Malwathu Oya
         ]
       },
       india_bc: {
-        viewBox: "0 0 600 600",
-        path: "M 180 120 L 450 120 L 490 250 L 400 420 L 300 550 L 200 420 L 120 260 Z",
+        viewBox: "0 0 1024 1024",
+        isFlippedGroup: false,
+        mainland: "M 250 150 L 750 150 L 820 400 L 680 720 L 512 950 L 340 720 L 200 400 Z",
         islands: [],
+        provinces: [],
         rivers: [
-          "M 240 180 Q 380 240 500 280" // Ganges
+          "M 400 280 Q 600 380 820 440"
         ]
       }
     };
 
-    let locationsDataset = {};
+    // Full Embedded Curriculum Dataset (Guaranteed Instant Offline/Online Availability)
+    const EMBEDDED_LOCATIONS = {
+      sri_lanka: {
+        name_si: "ශ්‍රී ලංකා සිතියම",
+        locations: [
+          { id: "sl_jambukola", name_si: "ජම්බුකෝලපට්ටන (දඹකොළපටුන)", subject: ["history", "bc"], coords: { x: 35.0, y: 3.5 }, tolerance: 4.0, description: "යාපන අර්ධද්වීපයේ උතුරු වෙරළේ පිහිටි ඓතිහාසික වරායයි.", exam_points: "• සංඝමිත්තා තෙරණිය ශ්‍රී මහා බෝධිය වැඩමවාගෙන ගොඩබට ස්ථානයයි." },
+          { id: "sl_urathota", name_si: "ඌරාතොට (කයිට්ස්)", subject: ["history"], coords: { x: 27.5, y: 4.5 }, tolerance: 4.0, description: "යාපනය කයිට්ස් දූපතේ පිහිටි පුරාණ නාවික කඳවුරක් සහ වරායකි.", exam_points: "• පළමුවන පරාක්‍රමබාහු රජුගේ නාවික හමුදාව බුරුමය ආක්‍රමණයට නැව් නැංවූ ස්ථානයයි." },
+          { id: "sl_pulmoddai", name_si: "පුල්මුඩේ (ඛනිජ වැලි)", subject: ["geo"], coords: { x: 65.5, y: 19.5 }, tolerance: 4.0, description: "ඉල්මනයිට්, රූටයිල් බහුල ආසියාවේ විශාලතම ඛනිජ වැලි නිධියයි.", exam_points: "• ටයිටේනියම් නිස්සාරණය සඳහා අපනයනය කෙරේ." },
+          { id: "sl_manthai", name_si: "මාන්තොට (මහාතිත්ථ)", subject: ["history", "bc"], coords: { x: 28.0, y: 20.5 }, tolerance: 4.5, description: "අනුරාධපුර යුගයේ ප්‍රධානතම ජාත්‍යන්තර වෙළෙඳ වරායයි. මල්වතු ඔය මෝය අසල පිහිටා ඇත.", exam_points: "• සේද මාවත (Silk Route) ප්‍රධාන මධ්‍යස්ථානයකි." },
+          { id: "sl_malwathu_oya", name_si: "මල්වතු ඔය (කදම්බ නදිය)", subject: ["geo", "history"], coords: { x: 34.0, y: 25.0 }, tolerance: 5.0, description: "අනුරාධපුර ශිෂ්ටාචාරයේ මව් ගංගාවයි.", exam_points: "• අනුරාධපුරය හරහා ගලා ගොස් මන්නාරමෙන් මුහුදට වැටේ." },
+          { id: "sl_anuradhapura", name_si: "අනුරාධපුරය", subject: ["history", "bc"], coords: { x: 42.5, y: 30.5 }, tolerance: 4.0, description: "වසර 1400කට අධික කාලයක් ලංකාවේ අගනුවරව පැවති ශ්‍රේෂ්ඨතම රාජධානියයි.", exam_points: "• පණ්ඩුකාභය රජු විසින් සැලසුම් සහගත නගරයක් ලෙස ගොඩනැගීය.\n• අටමස්ථාන පිහිටා ඇත." },
+          { id: "sl_mihintale", name_si: "මිහින්තලය (චේතියගිරිය)", subject: ["history", "bc"], coords: { x: 45.8, y: 31.5 }, tolerance: 3.8, description: "මිහිඳු හිමියන් ලක්දිවට බුදුදහම හඳුන්වා දුන් පූජනීය පොසොන් උදා බිමයි.", exam_points: "• දේවානම්පියතිස්ස රජු හා මිහිඳු හිමියන්ගේ හමුව සිදුවූ ස්ථානයයි." },
+          { id: "sl_gokanna", name_si: "ගෝකණ්ණ (ත්‍රිකුණාමලය)", subject: ["history", "geo", "bc"], coords: { x: 75.5, y: 31.0 }, tolerance: 4.5, description: "නැගෙනහිර වෙරළේ පිහිටි ප්‍රධාන ස්වභාවික වරායයි.", exam_points: "• භද්දකච්චායනා කුමරිය ගොඩබට වරායයි.\n• ලොව ප්‍රමුඛතම ස්වභාවික ගැඹුරු මුහුදු වරායකි." },
+          { id: "sl_eppawala", name_si: "එප්පාවල (ඇපටයිට් නිධිය)", subject: ["geo"], coords: { x: 40.5, y: 37.0 }, tolerance: 4.0, description: "ලෝකයේ උසස්ම තත්ත්වයේ රොක් පොස්පේට් (ඇපටයිට්) නිධියයි.", exam_points: "• පොස්පරස් පොහොර නිෂ්පාදනයට යොදා ගැනේ." },
+          { id: "sl_somawathiya", name_si: "සෝමාවතිය", subject: ["history", "bc"], coords: { x: 67.5, y: 37.5 }, tolerance: 4.0, description: "මහවැලි නිම්නයේ පිහිටි දකුණු දළදා වහන්සේ තැන්පත් කර ඇති චෛත්‍යයයි.", exam_points: "• ගිරිඅභය රජු හා සෝමදේවිය විසින් කරවන ලදී." },
+          { id: "sl_sigiriya", name_si: "සීගිරිය", subject: ["history"], coords: { x: 52.8, y: 41.5 }, tolerance: 3.8, description: "කාශ්‍යප රජු විසින් ඉදිකළ ලෝක උරුම පර්වත මාලිගයයි.", exam_points: "• 5 වන සියවසේ වාස්තු විද්‍යා හා බිතුසිතුවම් නිර්මාණයකි." },
+          { id: "sl_polonnaruwa", name_si: "පොළොන්නරුව (පුලත්ථිපුර)", subject: ["history", "bc"], coords: { x: 61.8, y: 42.0 }, tolerance: 4.0, description: "ශ්‍රී ලංකාවේ දෙවන ඓතිහාසික අගනගරයයි.", exam_points: "• පරාක්‍රම සමුද්‍රය හා ගල් විහාරය පිහිටා ඇත." },
+          { id: "sl_mahaweli_river", name_si: "මහවැලි ගඟ", subject: ["geo", "history"], coords: { x: 66.0, y: 44.0 }, tolerance: 5.5, description: "ශ්‍රී ලංකාවේ දිගම ගංගාව (335 km).", exam_points: "• ශ්‍රී පාද අඩවියෙන් ඇරඹී ත්‍රිකුණාමලයේ කොඩ්ඩියාර් බොක්කෙන් මුහුදට වැටේ." },
+          { id: "sl_yapahuwa", name_si: "යාපහුව (සුභපබ්බත)", subject: ["history"], coords: { x: 41.0, y: 45.0 }, tolerance: 4.0, description: "පළමුවන බුවනෙකබාහු රජුගේ පර්වත බලකොටු අගනගරයයි.", exam_points: "• විචිත්‍ර ශෛලමය සිංහ රූ සහිත පියගැට පෙළ." },
+          { id: "sl_knuckles", name_si: "නකල්ස් කඳුවැටිය (දුම්බර)", subject: ["geo"], coords: { x: 55.0, y: 55.5 }, tolerance: 4.0, description: "යුනෙස්කෝ ලෝක ස්වභාවික උරුම කඳුවැටියකි.", exam_points: "• මිට මොළවාගත් අතක ඇඟිලි පුරුක් හැඩැති කඳු මුදුන් පහක් සහිතය." },
+          { id: "sl_dambadeniya", name_si: "දඹදෙණිය", subject: ["history"], coords: { x: 36.5, y: 57.0 }, tolerance: 4.0, description: "තුන්වන විජයබාහු රජු පිහිටුවූ රාජධානියයි.", exam_points: "• දෙවන පරාක්‍රමබාහු රජුගේ ස්වර්ණමය සාහිත්‍ය යුගය." },
+          { id: "sl_kandy", name_si: "සෙංකඩගල (මහනුවර)", subject: ["history", "bc"], coords: { x: 50.5, y: 60.5 }, tolerance: 4.0, description: "ශ්‍රී ලංකාවේ අවසාන සිංහල රාජධානියයි.", exam_points: "• ශ්‍රී දළදා මාළිගාව පිහිටා ඇත.\n• 1815 දී බ්‍රිතාන්‍යයන්ට යටත් විය." },
+          { id: "sl_dighavapi", name_si: "දීඝවාපිය", subject: ["history", "bc"], coords: { x: 79.5, y: 62.5 }, tolerance: 4.5, description: "අම්පාර දිස්ත්‍රික්කයේ පිහිටි සොළොස්මස්ථානයන්ගෙන් එකකි.", exam_points: "• සද්ධාතිස්ස කුමරු විසින් කෘෂිකාර්මිකව සංවර්ධනය කරන ලදී." },
+          { id: "sl_pidurutalagala", name_si: "පිදුරුතලාගල කන්ද", subject: ["geo"], coords: { x: 54.5, y: 65.0 }, tolerance: 3.8, description: "ශ්‍රී ලංකාවේ උසම කඳු මුදුනයි (මීටර් 2524).", exam_points: "• නුවරඑළිය මධ්‍යම උස්බිම් කලාපයේ පිහිටා ඇත." },
+          { id: "sl_colombo_port", name_si: "කොළඹ වරාය", subject: ["geo", "history"], coords: { x: 26.5, y: 67.5 }, tolerance: 4.0, description: "දකුණු ආසියාවේ ප්‍රමුඛතම බහාලුම් ප්‍රතිනැව්ගත කිරීමේ වරායයි.", exam_points: "• කෝට්ටේ යුගයේ සිට ප්‍රධාන වෙළෙඳ වරාය විය." },
+          { id: "sl_kelani_river", name_si: "කැළණි ගඟ", subject: ["geo", "history"], coords: { x: 32.5, y: 67.5 }, tolerance: 5.0, description: "බස්නාහිර පළාතේ ප්‍රධාන ගංගාවයි.", exam_points: "• කැළණි රජමහා විහාරය පිහිටා ඇත." },
+          { id: "sl_adams_peak", name_si: "ශ්‍රී පාදය (සමනල කන්ද)", subject: ["geo", "history", "bc"], coords: { x: 46.5, y: 70.5 }, tolerance: 3.8, description: "උස මීටර් 2243 කි. සිව් මහා ගංගාවන්ගේ ජල පෝෂක ප්‍රදේශයයි.", exam_points: "• බුදුරදුන්ගේ ශ්‍රී පාද ලාංඡනය පිහිටි පුදබිමයි." },
+          { id: "sl_hambantota_port", name_si: "හම්බන්තොට වරාය (මාගම්පුර)", subject: ["geo"], coords: { x: 66.5, y: 88.5 }, tolerance: 4.0, description: "ජාත්‍යන්තර නාවික මාර්ගයට ආසන්න ගැඹුරු මුහුදු වරායකි.", exam_points: "• වාහන ප්‍රතිනැව්ගත කිරීමේ මධ්‍යස්ථානයකි." },
+          { id: "sl_godawaya", name_si: "ගෝදාවාය (ගෝඨපබ්බත)", subject: ["history"], coords: { x: 60.5, y: 90.0 }, tolerance: 4.5, description: "දකුණු ලංකාවේ වලවේ ගං මෝය අසල පිහිටි පුරාණ ජාත්‍යන්තර වරායකි.", exam_points: "• ගජබාහු රජුගේ සෙල්ලිපිය හා පැරණිතම නෞකා සුන්බුන් හමුවිය." }
+        ]
+      },
+      india_bc: {
+        name_si: "දඹදිව සිතියම",
+        locations: [
+          { id: "in_lumbini", name_si: "ලුම්බිණිය", subject: ["bc", "history"], coords: { x: 57.5, y: 32.5 }, tolerance: 4.5, description: "සිද්ධාර්ථ කුමාරෝත්පත්තිය සිදුවූ පූජනීය ස්ථානයයි.", exam_points: "• අශෝක රජුගේ ලුම්බිණි ටැම් ලිපිය පිහිටා ඇත." },
+          { id: "in_bodhgaya", name_si: "බුද්ධගයාව (උරුවේලාව)", subject: ["bc", "history"], coords: { x: 64.0, y: 42.0 }, tolerance: 4.5, description: "සිද්ධාර්ථ තවුසාණන් සම්මා සම්බුද්ධත්වයට පත්වූ ස්ථානයයි.", exam_points: "• මහාබෝධි විහාරය හා වජ්‍රාසනය පිහිටා ඇත." },
+          { id: "in_sarnath", name_si: "බරණැස ඉසිපතනය (සාරානාත්)", subject: ["bc", "history"], coords: { x: 58.8, y: 41.0 }, tolerance: 4.5, description: "ප්‍රථම ධර්ම දේශනාව (දම්සක් පැවතුම් සූත්‍රය) දේශනා කළ ස්ථානයයි.", exam_points: "• ධම්මේඛ ස්තූපය හා අශෝක සිංහ හිස ටැඹ පිහිටා ඇත." },
+          { id: "in_kusinara", name_si: "කුසිනාරාව", subject: ["bc", "history"], coords: { x: 60.5, y: 35.8 }, tolerance: 4.5, description: "බුදුරජාණන් වහන්සේ පිරිනිවන් පෑ උතුම් පුණ්‍ය භූමියයි.", exam_points: "• මල්ල රජවරුන්ගේ උපවත්තන සල් උයන." },
+          { id: "in_rajagaha", name_si: "රජගහනුවර (මගධය)", subject: ["bc", "history"], coords: { x: 65.5, y: 42.8 }, tolerance: 4.5, description: "මගධ අගනුවරයි. වේළුවනාරාමය හා ගිජ්ඣකූටය පිහිටා ඇත.", exam_points: "• ප්‍රථම ධර්ම සංගායනාව පැවැත්වුණි." },
+          { id: "in_savatthi", name_si: "සැවැත්නුවර (කොසොල්)", subject: ["bc", "history"], coords: { x: 52.5, y: 34.0 }, tolerance: 4.5, description: "බුදුරදුන් වස් 25ක් වැඩ විසූ ජේතවනාරාමය පිහිටි නගරයයි.", exam_points: "• අනේපිඬු සිටුතුමා විසින් ඉදිකරවන ලදී." },
+          { id: "in_nalanda", name_si: "නාලන්දාව", subject: ["bc", "history"], coords: { x: 64.8, y: 41.5 }, tolerance: 4.0, description: "ලොව සුප්‍රකට පුරාණ බෞද්ධ විශ්වවිද්‍යාලයයි.", exam_points: "• දසදහස් ගණනක් භික්ෂූන් අධ්‍යාපනය ලැබූ මධ්‍යස්ථානයකි." },
+          { id: "in_sanchi", name_si: "සාංචිය", subject: ["bc", "history"], coords: { x: 41.2, y: 49.5 }, tolerance: 4.5, description: "අශෝක රජු විසින් ඉදිකළ මහා ස්තූපය හා තොරණ 4 පිහිටි ලෝක උරුමයකි.", exam_points: "• මිහිඳු හිමියන් ලංකාවට වැඩම කිරීමට පෙර වැඩසිටි විහාරයයි." }
+        ]
+      }
+    };
+
+    let locationsDataset = EMBEDDED_LOCATIONS;
     let currentMapKey = "sri_lanka";
     let currentMode = "exam"; // 'exam', 'practice', 'explore'
     let currentSubject = "all";
@@ -499,64 +556,62 @@
     // Zoom and Pan State
     let zoomScale = 1;
     let panX = 0, panY = 0;
-    let isDragging = false;
-    let startX, startY;
 
     // Fetch Syllabus Locations
     async function initApp() {
       try {
         const res = await fetch('normal_quiz/map_locations.json');
-        const data = await res.json();
-        locationsDataset = data.maps;
-      } catch (e) {
-        console.warn("Using fallback local dataset:", e);
-        locationsDataset = {
-          sri_lanka: {
-            name_si: "ශ්‍රී ලංකා සිතියම",
-            locations: [
-              { id: "sl_manthai", name_si: "මාන්තොට (මහාතිත්ථ)", subject: ["history", "bc"], coords: { x: 30.5, y: 24.2 }, tolerance: 4.5, description: "අනුරාධපුර යුගයේ ප්‍රධානතම ජාත්‍යන්තර වෙළෙඳ වරායයි." },
-              { id: "sl_gokanna", name_si: "ගෝකණ්ණ (ත්‍රිකුණාමලය)", subject: ["history", "geo", "bc"], coords: { x: 76.2, y: 30.8 }, tolerance: 4.5, description: "නැගෙනහිර වෙරළේ පිහිටි ප්‍රධාන ස්වභාවික වරායයි." },
-              { id: "sl_anuradhapura", name_si: "අනුරාධපුරය", subject: ["history", "bc"], coords: { x: 43.8, y: 32.5 }, tolerance: 4.0, description: "වසර 1400කට අධික කාලයක් ලංකාවේ අගනුවරව පැවති ශ්‍රේෂ්ඨ රාජධානිය." },
-              { id: "sl_polonnaruwa", name_si: "පොළොන්නරුව", subject: ["history", "bc"], coords: { x: 62.5, y: 42.0 }, tolerance: 4.0, description: "ශ්‍රී ලංකාවේ දෙවන ඓතිහාසික රාජධානියයි." },
-              { id: "sl_sigiriya", name_si: "සීගිරිය", subject: ["history"], coords: { x: 54.2, y: 41.2 }, tolerance: 3.8, description: "කාශ්‍යප රජුගේ ලෝක උරුම පර්වත මාලිගයයි." },
-              { id: "sl_mahaweli_river", name_si: "මහවැලි ගඟ", subject: ["geo", "history"], coords: { x: 68.0, y: 45.0 }, tolerance: 5.5, description: "ශ්‍රී ලංකාවේ දිගම ගංගාව (335km)." },
-              { id: "sl_pidurutalagala", name_si: "පිදුරුතලාගල කන්ද", subject: ["geo"], coords: { x: 55.4, y: 64.2 }, tolerance: 3.8, description: "ශ්‍රී ලංකාවේ උසම කඳු මුදුනයි (2524m)." }
-            ]
-          },
-          india_bc: {
-            name_si: "දඹදිව සිතියම",
-            locations: [
-              { id: "in_lumbini", name_si: "ලුම්බිණිය", subject: ["bc", "history"], coords: { x: 57.5, y: 32.5 }, tolerance: 4.5, description: "සිද්ධාර්ථ කුමාරෝත්පත්තිය සිදුවූ ස්ථානයයි." },
-              { id: "in_bodhgaya", name_si: "බුද්ධගයාව", subject: ["bc", "history"], coords: { x: 64.0, y: 42.0 }, tolerance: 4.5, description: "බුදුරජාණන් වහන්සේ සම්බුද්ධත්වයට පත්වූ ස්ථානයයි." }
-            ]
+        if (res.ok) {
+          const data = await res.json();
+          if (data.maps && data.maps.sri_lanka) {
+            locationsDataset = data.maps;
           }
-        };
+        }
+      } catch (e) {
+        console.log("Using guaranteed embedded dataset.");
       }
       renderMapPaths();
       startQuizSession();
       setupMapInteractions();
     }
 
-    // Render Base SVG Maps
+    // Render Real Base SVG Maps
     function renderMapPaths() {
       const mapMeta = MAP_DATA[currentMapKey];
       const svg = document.getElementById('svgMap');
       svg.setAttribute('viewBox', mapMeta.viewBox);
 
       const bgGroup = document.getElementById('mapBackgroundGroup');
-      let html = `<path d="${mapMeta.path}" fill="url(#landGrad)" stroke="#475569" stroke-width="2.5" />`;
-      if (mapMeta.islands) {
-        mapMeta.islands.forEach(isl => {
-          html += `<path d="${isl}" fill="url(#landGrad)" stroke="#475569" stroke-width="1.8" />`;
+      let html = '';
+
+      if (mapMeta.isFlippedGroup) {
+        // High-Precision Real Sri Lanka Vector Group
+        html += `<g transform="translate(0,1024) scale(0.1,-0.1)">`;
+        html += `<path d="${mapMeta.mainland}" fill="url(#landGradient)" stroke="#64748b" stroke-width="12" />`;
+        if (mapMeta.islands) {
+          mapMeta.islands.forEach(isl => {
+            html += `<path d="${isl}" fill="url(#landGradient)" stroke="#64748b" stroke-width="10" />`;
+          });
+        }
+        html += `</g>`;
+      } else {
+        html += `<path d="${mapMeta.mainland}" fill="url(#landGradient)" stroke="#64748b" stroke-width="3" />`;
+      }
+
+      // Provincial & District Reference Guidelines
+      if (mapMeta.provinces) {
+        mapMeta.provinces.forEach(pr => {
+          html += `<path d="${pr}" fill="none" stroke="#475569" stroke-width="1.5" stroke-dasharray="4,4" opacity="0.6" />`;
         });
       }
       bgGroup.innerHTML = html;
 
+      // Rivers
       const riversGroup = document.getElementById('mapRiversGroup');
       let riverHtml = '';
       if (mapMeta.rivers) {
         mapMeta.rivers.forEach(riv => {
-          riverHtml += `<path d="${riv}" fill="none" stroke="#38bdf8" stroke-width="2" stroke-dasharray="3,3" opacity="0.75" />`;
+          riverHtml += `<path d="${riv}" fill="none" stroke="#38bdf8" stroke-width="2.5" stroke-dasharray="4,3" opacity="0.85" />`;
         });
       }
       riversGroup.innerHTML = riverHtml;
@@ -639,7 +694,7 @@
         title = '🎯 නියමයි! නිවැරදි සලකුණු කිරීමක් (10/10)';
         isSuccess = true;
         confetti({ particleCount: 60, spread: 60, origin: { y: 0.6 } });
-      } else if (dist <= tolerance * 2) {
+      } else if (dist <= tolerance * 2.2) {
         gained = 5;
         title = '🟡 ඉතා ආසන්නයි! (5/10)';
       } else {
@@ -672,7 +727,7 @@
       pin.className = `pin ${className}`;
       pin.style.left = `${x}%`;
       pin.style.top = `${y}%`;
-      pin.innerHTML = `<span style="font-size:18px;">${symbol}</span>`;
+      pin.innerHTML = `<span style="font-size:20px;">${symbol}</span>`;
       document.getElementById('pinLayer').appendChild(pin);
     }
 
@@ -758,14 +813,12 @@
       const group = document.getElementById('mapExploreMarkersGroup');
       let html = '';
       locs.forEach(loc => {
-        const svgW = currentMapKey === 'sri_lanka' ? 500 : 600;
-        const svgH = currentMapKey === 'sri_lanka' ? 800 : 600;
-        const cx = (loc.coords.x / 100) * svgW;
-        const cy = (loc.coords.y / 100) * svgH;
+        const cx = (loc.coords.x / 100) * 1024;
+        const cy = (loc.coords.y / 100) * 1024;
         html += `
           <g cursor="pointer" onclick="onExploreMarkerClick('${loc.id}')">
-            <circle cx="${cx}" cy="${cy}" r="12" fill="#38bdf8" opacity="0.3" class="pulse-ring" />
-            <circle cx="${cx}" cy="${cy}" r="6" fill="#fbbf24" stroke="#fff" stroke-width="1.5" />
+            <circle cx="${cx}" cy="${cy}" r="14" fill="#38bdf8" opacity="0.3" class="pulse-ring" />
+            <circle cx="${cx}" cy="${cy}" r="6.5" fill="#fbbf24" stroke="#fff" stroke-width="1.8" />
           </g>
         `;
       });
@@ -800,11 +853,8 @@
 
     // Zoom & Pan Engine
     function setupMapInteractions() {
-      const wrap = document.getElementById('mapWrapper');
       const viewport = document.getElementById('mapViewport');
-
       viewport.addEventListener('click', handleMapTap);
-
       viewport.addEventListener('wheel', (e) => {
         e.preventDefault();
         const factor = e.deltaY < 0 ? 1.15 : 0.85;
