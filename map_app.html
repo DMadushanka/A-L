@@ -469,9 +469,11 @@
         attributionControl: false
       });
 
-      // Free CartoDB Clean Positron / OSM Tiles (Clean No-Labels for pure testing)
-      tileLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
-        maxZoom: 19,
+      // 100% Free Public Tile Service (Zero API Key, Zero Watermarks)
+      // Esri World Light Gray Base - Clean, high-contrast Black & White exam style
+      tileLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+        maxZoom: 16,
+        attribution: '© Esri, OpenStreetMap',
         className: 'bw-tiles'
       }).addTo(map);
 
