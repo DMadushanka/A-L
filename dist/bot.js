@@ -1419,11 +1419,11 @@ function normalizeSubjectCode(input) {
 // Distinctive subject keyword dictionaries to detect cross-subject conflicts accurately
 const SUBJECT_KEYWORDS_MAP = {
   si: [
-    'සන්ධි', 'සමාස', 'කර්මධාරය', 'ද්වන්ද', 'තත්පුරුෂ', 'බහුව්‍රීහි', 'අව්‍යයීභාව', 'ප්‍රකෘති ස්වර',
+    'සන්ධි', 'සමාස', 'කර්මධාරය', 'ද්වන්ද', 'තත්පුරුෂ', 'බහුව්‍රීහි', 'අව්‍යයීභාව',
     'ව්‍යංජන', 'විභක්ති', 'ආඛ්‍යාත', 'කර්මකාරක', 'කර්තෘකාරක', 'තත්සම', 'තද්භව', 'නිපාත', 'උපසර්ග',
     'සිදත් සඟරා', 'ගුරුළුගෝමී', 'අමාවතුර', 'බුත්සරණ', 'ධර්මසේන', 'සද්ධර්මරත්නාවලිය', 'කාව්‍යශේඛර',
     'සැළලිහිණි', 'ගුත්තිල', 'මුනිදාස කුමාරතුංග', 'මාටින් වික්‍රමසිංහ', 'සිංහල භාෂාව', 'සිංහල සාහිත්‍ය',
-    'පද බෙදීම', 'අක්ෂර වින්‍යාසය', 'ව්‍යාකරණ', 'ප්‍රකෘති'
+    'පද බෙදීම', 'අක්ෂර වින්‍යාසය', 'ව්‍යාකරණ',
   ],
   bc: [
     'බෞද්ධ ශිෂ්ටාචාරය', 'ථෙරවාද', 'මහායාන', 'සංගායනා', 'සංඟායනා', 'අභයගිරි', 'ජේතවන', 'මහාවිහාර',
@@ -3327,7 +3327,7 @@ async function generateAndSendDailyMorningWish(targetChatId = null, threadId = n
 
     // Generate Animated SVG Document (1400x1000 resolution with embedded clean background image)
     const svgPath = createMorningWishFile(phrase, null, base64Bg || bgImageUrl);
-    
+
     // Render animated GIF from SVG for native in-chat animation playback in Telegram
     const gifPath = await renderSvgToGif(svgPath);
     const dateFormatted = formatMorningDate();
@@ -3580,7 +3580,7 @@ async function runMegaScheduledQuizSession(subCode, slotType = 'morning', target
     if (stickerPath && fs.existsSync(stickerPath)) {
       try {
         await bot.sendSticker(chatId, stickerPath, threadOpts).catch(async () => {
-          await bot.sendPhoto(chatId, stickerPath, threadOpts).catch(() => {});
+          await bot.sendPhoto(chatId, stickerPath, threadOpts).catch(() => { });
         });
       } catch (stkErr) {
         console.warn(`[MegaQuizScheduler] sendSticker warning:`, stkErr.message);
@@ -3709,7 +3709,7 @@ async function runMegaScheduledQuizSession(subCode, slotType = 'morning', target
                 open_period: 20,
                 ...threadOpts
               });
-            } catch (e3) {}
+            } catch (e3) { }
           }
         }
 
@@ -4549,11 +4549,11 @@ bot.onText(/^\/(quiz_schedule|schedule_quiz)(?:@\w+)?(?:\s|$)/i, async (msg) => 
     await bot.sendSticker(chatId, stickerPath, replyOpts).catch(async (err) => {
       console.warn('⚠️ Could not send timetable sticker, falling back to PNG photo:', err.message);
       if (fs.existsSync(pngPath)) {
-        await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => {});
+        await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => { });
       }
     });
   } else if (fs.existsSync(pngPath)) {
-    await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => {});
+    await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => { });
   }
 
   const msgText =
@@ -5083,7 +5083,7 @@ function parseQuizTextToJSON(text) {
     if (corrMatch || expMatch) {
       isQHeader = false;
     } else if (/^(?:#{1,4}\s*)?(?:\*{1,2})?(?:ප්‍රශ්නය\s*\d+|\bQ\d+[\.:\-]?)(?:\*{1,2})?[\s\.\:\-]/i.test(rawLine) ||
-               /^(?:###\s*)?ප්‍රශ්නය\s*\d+/i.test(rawLine)) {
+      /^(?:###\s*)?ප්‍රශ්නය\s*\d+/i.test(rawLine)) {
       isQHeader = true;
     } else if (/^(?:\*{1,2})?\d{1,2}[\.\)](?:\*{1,2})?\s+/i.test(rawLine)) {
       if (!curQ || curQ.hasAnswer || (curQ.options.length >= 2 && optMatch && (optMatch[1] === '1' || !optMatch))) {

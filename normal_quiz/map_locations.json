@@ -1,10 +1,13 @@
 {
-  "version": "1.0",
+  "version": "2.0",
   "maps": {
     "sri_lanka": {
-      "name_si": "ශ්‍රී ලංකා සිතියම",
+      "name_si": "ශ්‍රී ලංකා සිතියම (Real Geo Map)",
       "name_en": "Sri Lanka Map",
-      "svg_viewBox": "0 0 1024 1024",
+      "center": [7.8731, 80.7718],
+      "zoom": 8,
+      "minZoom": 7,
+      "maxZoom": 14,
       "locations": [
         {
           "id": "sl_jambukola",
@@ -12,10 +15,9 @@
           "name_en": "Jambukolapattana",
           "subject": ["history", "bc"],
           "category_si": "පුරාණ වරායවල්",
-          "category_en": "Ancient Ports",
-          "coords": { "x": 35.0, "y": 3.5 },
-          "tolerance": 4.0,
-          "description": "යාපන අර්ධද්වීපයේ උතුරු වෙරළේ පිහිටි ඓතිහාසික වරායයි.",
+          "coords": { "lat": 9.8183, "lng": 80.0244 },
+          "tolerance_km": 18,
+          "description": "යාපන අර්ධද්වීපයේ උතුරු වෙරළේ (කන්කසන්තුරේ අසල) පිහිටි ඓතිහාසික වරායයි.",
           "exam_points": "• සංඝමිත්තා තෙරණිය ශ්‍රී මහා බෝධි දක්ෂිණ ශාඛාව වැඩමවාගෙන ගොඩබට ස්ථානයයි.\n• දේවානම්පියතිස්ස රජු විසින් සම්බුද්ධ ජයන්ති විහාරය කරවන ලදී."
         },
         {
@@ -24,11 +26,10 @@
           "name_en": "Urathota (Kayts)",
           "subject": ["history"],
           "category_si": "පුරාණ වරායවල්",
-          "category_en": "Ancient Ports",
-          "coords": { "x": 27.5, "y": 4.5 },
-          "tolerance": 4.0,
+          "coords": { "lat": 9.6833, "lng": 79.8667 },
+          "tolerance_km": 15,
           "description": "යාපනය කයිට්ස් දූපතේ පිහිටි පුරාණ නාවික කඳවුරක් සහ වරායකි.",
-          "exam_points": "• පළමුවන පරාක්‍රමබාහු රජුගේ නාවික හමුදාව බුරුමය (රාමඤ්ඤය) ආක්‍රමණය කිරීමට නැව් නැංවූ ස්ථානයයි.\n• Iවන පරාක්‍රමබාහු රජුගේ ඌරාතොට සෙල්ලිපිය පිහිටා ඇත."
+          "exam_points": "• I වන පරාක්‍රමබාහු රජුගේ නාවික හමුදාව බුරුමය ආක්‍රමණයට නැව් නැංවූ ස්ථානයයි.\n• I වන පරාක්‍රමබාහු රජුගේ ඌරාතොට දෙමළ සෙල්ලිපිය පිහිටා ඇත."
         },
         {
           "id": "sl_pulmoddai",
@@ -36,9 +37,8 @@
           "name_en": "Pulmoddai (Mineral Sands)",
           "subject": ["geo"],
           "category_si": "ඛනිජ සම්පත් කලාප",
-          "category_en": "Mineral Resources",
-          "coords": { "x": 65.5, "y": 19.5 },
-          "tolerance": 4.0,
+          "coords": { "lat": 8.9500, "lng": 80.9833 },
+          "tolerance_km": 18,
           "description": "නැගෙනහිර වෙරළ තීරයේ පිහිටි ඉල්මනයිට්, රූටයිල් හා සර්කෝන් බහුල ආසියාවේ විශාලතම ඛනිජ වැලි නිධියයි.",
           "exam_points": "• ටයිටේනියම් නිස්සාරණය සඳහා අපනයනය කෙරේ."
         },
@@ -48,11 +48,10 @@
           "name_en": "Mantai (Mahatittha)",
           "subject": ["history", "bc"],
           "category_si": "පුරාණ වරායවල්",
-          "category_en": "Ancient Ports",
-          "coords": { "x": 28.0, "y": 20.5 },
-          "tolerance": 4.5,
+          "coords": { "lat": 8.9667, "lng": 79.9167 },
+          "tolerance_km": 18,
           "description": "අනුරාධපුර යුගයේ ප්‍රධානතම ජාත්‍යන්තර වෙළෙඳ වරායයි. මන්නාරම් බොක්ක ආශ්‍රිතව මල්වතු ඔය මෝය අසල පිහිටා ඇත.",
-          "exam_points": "• සිල්ක් රූට් (සේද මාවත) වෙළෙඳ මධ්‍යස්ථානයක් විය.\n• රෝම, පර්සියානු හා චීන කාසි හමුවී ඇත."
+          "exam_points": "• සේද මාවතේ (Silk Route) ප්‍රධාන වෙළෙඳ මධ්‍යස්ථානයක් විය.\n• රෝම, පර්සියානු හා චීන කාසි හමුවී ඇත."
         },
         {
           "id": "sl_malwathu_oya",
@@ -60,10 +59,9 @@
           "name_en": "Malwathu Oya",
           "subject": ["geo", "history"],
           "category_si": "ගංගා පද්ධති",
-          "category_en": "Rivers",
-          "coords": { "x": 34.0, "y": 25.0 },
-          "tolerance": 5.0,
-          "description": "අනුරාධපුර ශිෂ්ටාචාරයේ මව් ගංගාවයි. අනුරාධපුර නගරය මැදින් ගලා ගොස් මන්නාරමෙන් මුහුදට වැටේ.",
+          "coords": { "lat": 8.8000, "lng": 80.1000 },
+          "tolerance_km": 25,
+          "description": "අනුරාධපුර ශිෂ්ටාචාරයේ මව් ගංගාවයි. අනුරාධපුරය මැදින් ගලා ගොස් මන්නාරමෙන් මුහුදට වැටේ.",
           "exam_points": "• පුරාණයේ 'කදම්බ නදිය' නමින් හැඳින්විණි."
         },
         {
@@ -72,11 +70,10 @@
           "name_en": "Anuradhapura",
           "subject": ["history", "bc"],
           "category_si": "රාජධානි හා නගර",
-          "category_en": "Ancient Kingdoms",
-          "coords": { "x": 42.5, "y": 30.5 },
-          "tolerance": 4.0,
-          "description": "වසර 1400කට අධික කාලයක් ලංකාවේ අගනුවරව පැවති ශ්‍රේෂ්ඨතම රාජධානියයි. මල්වතු ඔය නිම්නයේ පිහිටා ඇත.",
-          "exam_points": "• පණ්ඩුකාභය රජු විසින් සැලසුම් සහගත නගරයක් ලෙස ගොඩනැගීය.\n• රුවන්වැලිසෑය, අභයගිරිය, ජේතවනය, ශ්‍රී මහා බෝධිය ආදී අටමස්ථාන පිහිටා ඇත."
+          "coords": { "lat": 8.3114, "lng": 80.4037 },
+          "tolerance_km": 16,
+          "description": "වසර 1400කට අධික කාලයක් ලංකාවේ අගනුවරව පැවති ශ්‍රේෂ්ඨතම රාජධානියයි.",
+          "exam_points": "• පණ්ඩුකාභය රජු විසින් සැලසුම් සහගත නගරයක් ලෙස ගොඩනැගීය.\n• රුවන්වැලිසෑය, අභයගිරිය ඇතුළු අටමස්ථාන පිහිටා ඇත."
         },
         {
           "id": "sl_mihintale",
@@ -84,9 +81,8 @@
           "name_en": "Mihintale",
           "subject": ["history", "bc"],
           "category_si": "බෞද්ධ සිද්ධස්ථාන",
-          "category_en": "Buddhist Sacred Sites",
-          "coords": { "x": 45.8, "y": 31.5 },
-          "tolerance": 3.8,
+          "coords": { "lat": 8.3508, "lng": 80.5083 },
+          "tolerance_km": 15,
           "description": "මිහිඳු මහරහතන් වහන්සේ ලක්දිවට බුදුදහම හඳුන්වා දුන් පූජනීය ස්ථානයයි.",
           "exam_points": "• දේවානම්පියතිස්ස රජු හා මිහිඳු හිමියන්ගේ හමුව සිදුවූ පොසොන් උදා බිම.\n• ප්‍රථම රෝහල හා සෙල්ලිපි රැසක් පිහිටා ඇත."
         },
@@ -96,9 +92,8 @@
           "name_en": "Gokanna (Trincomalee)",
           "subject": ["history", "geo", "bc"],
           "category_si": "පුරාණ වරායවල් / ස්වභාවික වරාය",
-          "category_en": "Ancient Ports / Harbors",
-          "coords": { "x": 75.5, "y": 31.0 },
-          "tolerance": 4.5,
+          "coords": { "lat": 8.5711, "lng": 81.2335 },
+          "tolerance_km": 18,
           "description": "නැගෙනහිර වෙරළේ පිහිටි ප්‍රධාන ස්වභාවික වරායයි. මහවැලි ගඟ මුහුදට වැටෙන ප්‍රදේශය ආසන්නයේ පිහිටා ඇත.",
           "exam_points": "• භද්දකච්චායනා කුමරිය ලංකාවට පැමිණි වරාය ලෙස සැලකේ.\n• ලොව ප්‍රමුඛතම ස්වභාවික ගැඹුරු මුහුදු වරායකි."
         },
@@ -108,9 +103,8 @@
           "name_en": "Eppawala (Phosphate Deposit)",
           "subject": ["geo"],
           "category_si": "ඛනිජ සම්පත් කලාප",
-          "category_en": "Mineral Resources",
-          "coords": { "x": 40.5, "y": 37.0 },
-          "tolerance": 4.0,
+          "coords": { "lat": 8.1500, "lng": 80.4167 },
+          "tolerance_km": 16,
           "description": "අනුරාධපුර දිස්ත්‍රික්කයේ පිහිටි ලෝකයේ උසස්ම තත්ත්වයේ රොක් පොස්පේට් (ඇපටයිට්) නිධියයි.",
           "exam_points": "• පොස්පරස් පොහොර නිෂ්පාදනයට යොදා ගැනේ."
         },
@@ -120,9 +114,8 @@
           "name_en": "Somawathiya",
           "subject": ["history", "bc"],
           "category_si": "බෞද්ධ සිද්ධස්ථාන",
-          "category_en": "Buddhist Sacred Sites",
-          "coords": { "x": 67.5, "y": 37.5 },
-          "tolerance": 4.0,
+          "coords": { "lat": 8.1833, "lng": 81.1833 },
+          "tolerance_km": 16,
           "description": "මහවැලි ගං නිම්නයේ පිහිටි බුදුරදුන්ගේ දකුණු දළදා වහන්සේ තැන්පත් කර ඇති ඓතිහාසික චෛත්‍යයයි.",
           "exam_points": "• ගිරිඅභය රජු හා සෝමදේවිය විසින් කරවන ලදී."
         },
@@ -132,11 +125,10 @@
           "name_en": "Sigiriya",
           "subject": ["history"],
           "category_si": "ඓතිහාසික ස්ථාන",
-          "category_en": "Historical Sites",
-          "coords": { "x": 52.8, "y": 41.5 },
-          "tolerance": 3.8,
+          "coords": { "lat": 7.9570, "lng": 80.7603 },
+          "tolerance_km": 15,
           "description": "කාශ්‍යප රජු විසින් ඉදිකළ පර්වත මාලිගය, දිය අගල් සහ කැටපත් පවුරෙන් සමන්විත ලෝක උරුමයකි.",
-          "exam_points": "• 5 වන සියවසේ වාස්තු විද්‍යාත්මක හා චිත්‍ර කලාවේ අග්‍රගණ්‍ය නිර්මාණයකි."
+          "exam_points": "• 5 වන සියවසේ වාස්තු විද්‍යාත්මක හා බිතුසිතුවම් කලාවේ අග්‍රගණ්‍ය නිර්මාණයකි."
         },
         {
           "id": "sl_polonnaruwa",
@@ -144,11 +136,10 @@
           "name_en": "Polonnaruwa",
           "subject": ["history", "bc"],
           "category_si": "රාජධානි හා නගර",
-          "category_en": "Ancient Kingdoms",
-          "coords": { "x": 61.8, "y": 42.0 },
-          "tolerance": 4.0,
+          "coords": { "lat": 7.9403, "lng": 81.0188 },
+          "tolerance_km": 16,
           "description": "ශ්‍රී ලංකාවේ දෙවන ඓතිහාසික රාජධානියයි. මහවැලි ගඟෙන් පෝෂණය වන කෘෂිකාර්මික මධ්‍යස්ථානයකි.",
-          "exam_points": "• පළමුවන විජයබාහු, මහා පරාක්‍රමබාහු, නිශ්ශංකමල්ල රජවරුන්ගේ පාලන මධ්‍යස්ථානයයි.\n• පරාක්‍රම සමුද්‍රය හා ගල් විහාරය පිහිටා ඇත."
+          "exam_points": "• පරාක්‍රමබාහු, විජයබාහු, නිශ්ශංකමල්ල රජවරුන්ගේ පාලන මධ්‍යස්ථානයයි.\n• පරාක්‍රම සමුද්‍රය හා ගල් විහාරය පිහිටා ඇත."
         },
         {
           "id": "sl_mahaweli_river",
@@ -156,11 +147,10 @@
           "name_en": "Mahaweli River",
           "subject": ["geo", "history"],
           "category_si": "ගංගා පද්ධති",
-          "category_en": "Rivers",
-          "coords": { "x": 66.0, "y": 44.0 },
-          "tolerance": 5.5,
+          "coords": { "lat": 7.8500, "lng": 81.0500 },
+          "tolerance_km": 28,
           "description": "ශ්‍රී ලංකාවේ දිගම ගංගාව (335 km). ශ්‍රී පාද අඩවියෙන් ආරම්භ වී ත්‍රිකුණාමලයේ කොඩ්ඩියාර් බොක්කෙන් මුහුදට වැටේ.",
-          "exam_points": "• මෙරට ප්‍රධානතම ජලවිදුලි හා කෘෂිකාර්මික ජීවනාලියයි.\n• පුරාණයේ 'මහාගංගා' හෝ 'මහවැලි ගඟ' ලෙස හැඳින්විණි."
+          "exam_points": "• මෙරට ප්‍රධානතම ජලවිදුලි හා කෘෂිකාර්මික ජීවනාලියයි."
         },
         {
           "id": "sl_yapahuwa",
@@ -168,9 +158,8 @@
           "name_en": "Yapahuwa",
           "subject": ["history"],
           "category_si": "රාජධානි හා නගර",
-          "category_en": "Ancient Kingdoms",
-          "coords": { "x": 41.0, "y": 45.0 },
-          "tolerance": 4.0,
+          "coords": { "lat": 7.8167, "lng": 80.3167 },
+          "tolerance_km": 15,
           "description": "පළමුවන බුවනෙකබාහු රජු විසින් අගනුවර කරගත් බලකොටු පර්වත නගරයකි.",
           "exam_points": "• විචිත්‍ර සිංහ රූප සහිත ප්‍රකට ශෛලමය පියගැට පෙළ.\n• පාණ්ඩ්‍ය ආක්‍රමණිකයන් දළදා වහන්සේ පැහැරගෙන ගියේ මෙහිදීය."
         },
@@ -180,9 +169,8 @@
           "name_en": "Knuckles Mountain Range",
           "subject": ["geo"],
           "category_si": "උස්බිම් හා කඳු",
-          "category_en": "Mountain Peaks",
-          "coords": { "x": 55.0, "y": 55.5 },
-          "tolerance": 4.0,
+          "coords": { "lat": 7.4500, "lng": 80.7833 },
+          "tolerance_km": 18,
           "description": "මහනුවර හා මාතලේ දිස්ත්‍රික්ක අතර පිහිටි යුනෙස්කෝ ලෝක ස්වභාවික උරුම කලාපයකි.",
           "exam_points": "• මිට මොළවාගත් අතක ඇඟිලි පුරුක් හැඩැති කඳු මුදුන් පහක් සහිතය."
         },
@@ -192,9 +180,8 @@
           "name_en": "Dambadeniya",
           "subject": ["history"],
           "category_si": "රාජධානි හා නගර",
-          "category_en": "Ancient Kingdoms",
-          "coords": { "x": 36.5, "y": 57.0 },
-          "tolerance": 4.0,
+          "coords": { "lat": 7.3667, "lng": 80.1500 },
+          "tolerance_km": 15,
           "description": "කාලිංග මාඝගේ ආක්‍රමණයෙන් පසු තුන්වන විජයබාහු රජු පිහිටුවූ රාජධානියයි.",
           "exam_points": "• දෙවන පරාක්‍රමබාහු (කලිකාල සාහිත්‍ය සර්වඥ පණ්ඩිත) රජුගේ ස්වර්ණමය සාහිත්‍ය යුගය."
         },
@@ -204,9 +191,8 @@
           "name_en": "Kandy (Senkadagala)",
           "subject": ["history", "bc"],
           "category_si": "රාජධානි හා නගර",
-          "category_en": "Ancient Kingdoms",
-          "coords": { "x": 50.5, "y": 60.5 },
-          "tolerance": 4.0,
+          "coords": { "lat": 7.2906, "lng": 80.6337 },
+          "tolerance_km": 15,
           "description": "ශ්‍රී ලංකාවේ අවසාන සිංහල රාජධානියයි. ස්වභාවික කඳු වළල්ලකින් ආරක්ෂිතව පිහිටා තිබුණි.",
           "exam_points": "• ශ්‍රී දළදා මාළිගාව පිහිටා ඇත.\n• 1815 මාර්තු 2 උඩරට ගිවිසුමෙන් බ්‍රිතාන්‍යයන්ට යටත් විය."
         },
@@ -216,9 +202,8 @@
           "name_en": "Dighavapi",
           "subject": ["history", "bc"],
           "category_si": "ඓතිහාසික සිද්ධස්ථාන / ජනාවාස",
-          "category_en": "Historical Settlements",
-          "coords": { "x": 79.5, "y": 62.5 },
-          "tolerance": 4.5,
+          "coords": { "lat": 7.2167, "lng": 81.7333 },
+          "tolerance_km": 18,
           "description": "නැගෙනහිර පළාතේ අම්පාර දිස්ත්‍රික්කයේ පිහිටි සොළොස්මස්ථානයන්ගෙන් එකකි.",
           "exam_points": "• සද්ධාතිස්ස කුමරු විසින් කෘෂිකාර්මික හා ආරක්ෂක කඳවුරක් ලෙස සංවර්ධනය කළේය."
         },
@@ -228,10 +213,9 @@
           "name_en": "Pidurutalagala Mountain",
           "subject": ["geo"],
           "category_si": "උස්බිම් හා කඳු",
-          "category_en": "Mountain Peaks",
-          "coords": { "x": 54.5, "y": 65.0 },
-          "tolerance": 3.8,
-          "description": "ශ්‍රී ලංකාවේ උසම කඳු මුදුනයි (මීටර් 2524 / අඩි 8281). නුවරඑළිය දිස්ත්‍රික්කයේ මධ්‍යම කඳුකරයේ පිහිටා ඇත.",
+          "coords": { "lat": 7.0008, "lng": 80.7725 },
+          "tolerance_km": 15,
+          "description": "ශ්‍රී ලංකාවේ උසම කඳු මුදුනයි (මීටර් 2524 / අඩි 8281). නුවරඑළිය දිස්ත්‍රික්කයේ පිහිටා ඇත.",
           "exam_points": "• මධ්‍යම උස්බිම් කලාපයේ උසම ස්ථානය."
         },
         {
@@ -240,9 +224,8 @@
           "name_en": "Colombo Port",
           "subject": ["geo", "history"],
           "category_si": "ප්‍රධාන වරායවල්",
-          "category_en": "Major Ports",
-          "coords": { "x": 26.5, "y": 67.5 },
-          "tolerance": 4.0,
+          "coords": { "lat": 6.9400, "lng": 79.8450 },
+          "tolerance_km": 16,
           "description": "දකුණු ආසියාවේ ප්‍රමුඛතම බහාලුම් ප්‍රතිනැව්ගත කිරීමේ (Transshipment) කේන්ද්‍රස්ථානයයි.",
           "exam_points": "• කෝට්ටේ යුගයේ සිට ප්‍රධාන වෙළෙඳ වරාය ලෙස ප්‍රකට විය."
         },
@@ -252,9 +235,8 @@
           "name_en": "Kelani River",
           "subject": ["geo", "history"],
           "category_si": "ගංගා පද්ධති",
-          "category_en": "Rivers",
-          "coords": { "x": 32.5, "y": 67.5 },
-          "tolerance": 5.0,
+          "coords": { "lat": 6.9500, "lng": 79.9000 },
+          "tolerance_km": 20,
           "description": "ශ්‍රීපාද කඳුවැටියෙන් ඇරඹී කොළඹින් මුහුදට වැටෙන බස්නාහිර පළාතේ ප්‍රධාන ගංගාවයි.",
           "exam_points": "• කැළණි රජමහා විහාරය පිහිටා ඇත.\n• කොළඹ නගරයේ ජල අවශ්‍යතාව සපුරයි."
         },
@@ -264,9 +246,8 @@
           "name_en": "Sri Pada (Adam's Peak)",
           "subject": ["geo", "history", "bc"],
           "category_si": "උස්බිම් හා සිද්ධස්ථාන",
-          "category_en": "Mountain Peaks & Sacred Sites",
-          "coords": { "x": 46.5, "y": 70.5 },
-          "tolerance": 3.8,
+          "coords": { "lat": 6.8096, "lng": 80.4994 },
+          "tolerance_km": 15,
           "description": "උස මීටර් 2243 කි. මහවැලි, කැළණි, කළු, වලවේ යන සිව් මහා ගංගාවන්ගේ ආරම්භක ජල පෝෂක ප්‍රදේශයයි.",
           "exam_points": "• බුදුරදුන්ගේ ශ්‍රී පාද ලාංඡනය පිහිටි පුදබිමයි."
         },
@@ -276,9 +257,8 @@
           "name_en": "Hambantota Port",
           "subject": ["geo"],
           "category_si": "ප්‍රධාන වරායවල්",
-          "category_en": "Major Ports",
-          "coords": { "x": 66.5, "y": 88.5 },
-          "tolerance": 4.0,
+          "coords": { "lat": 6.1200, "lng": 81.1200 },
+          "tolerance_km": 16,
           "description": "දකුණු ලංකාවේ ප්‍රධාන ජාත්‍යන්තර නාවික මාර්ගයට (East-West Shipping Lane) ආසන්නයේ පිහිටි ගැඹුරු මුහුදු වරායයි.",
           "exam_points": "• සේවා සැපයීමේ (Bunkering) හා වාහන ප්‍රතිනැව්ගත කිරීමේ මධ්‍යස්ථානයකි."
         },
@@ -288,9 +268,8 @@
           "name_en": "Godawaya",
           "subject": ["history"],
           "category_si": "පුරාණ වරායවල්",
-          "category_en": "Ancient Ports",
-          "coords": { "x": 60.5, "y": 90.0 },
-          "tolerance": 4.5,
+          "coords": { "lat": 6.1167, "lng": 81.0500 },
+          "tolerance_km": 16,
           "description": "දකුණු ලංකාවේ වලවේ ගං මෝය අසල පිහිටි පුරාණ ජාත්‍යන්තර වරායකි.",
           "exam_points": "• ගජබාහු රජුගේ සෙල්ලිපිය හමුවී ඇත (වරාය බදු විහාරයට පූජා කිරීම).\n• ආසියාවේ පැරණිතම නෞකා සුන්බුන් (Shipwreck) හමුවූ ස්ථානයයි."
         }
@@ -299,7 +278,10 @@
     "india_bc": {
       "name_si": "දඹදිව සිතියම (ඉන්දියාව)",
       "name_en": "Ancient India / Buddhist Civilization Map",
-      "svg_viewBox": "0 0 1024 1024",
+      "center": [25.5, 82.5],
+      "zoom": 6,
+      "minZoom": 4,
+      "maxZoom": 12,
       "locations": [
         {
           "id": "in_lumbini",
@@ -307,10 +289,9 @@
           "name_en": "Lumbini",
           "subject": ["bc", "history"],
           "category_si": "සතර මහා පූජනීය ස්ථාන",
-          "category_en": "Four Sacred Sites",
-          "coords": { "x": 57.5, "y": 32.5 },
-          "tolerance": 4.5,
-          "description": "සිද්ධාර්ථ කුමාරෝත්පත්තිය සිදුවූ පූජනීය ස්ථානයයි (වර්තමාන නේපාලයේ පිහිටා ඇත).",
+          "coords": { "lat": 27.4833, "lng": 83.2750 },
+          "tolerance_km": 35,
+          "description": "සිද්ධාර්ථ කුමාරෝත්පත්තිය සිදුවූ පූජනීය ස්ථානයයි (නේපාලයේ පිහිටා ඇත).",
           "exam_points": "• අශෝක රජුගේ ලුම්බිණි ටැම් ලිපිය පිහිටා ඇත."
         },
         {
@@ -319,9 +300,8 @@
           "name_en": "Bodh Gaya (Uruwela)",
           "subject": ["bc", "history"],
           "category_si": "සතර මහා පූජනීය ස්ථාන",
-          "category_en": "Four Sacred Sites",
-          "coords": { "x": 64.0, "y": 42.0 },
-          "tolerance": 4.5,
+          "coords": { "lat": 24.6951, "lng": 84.9913 },
+          "tolerance_km": 35,
           "description": "සිද්ධාර්ථ තවුසාණන් සම්මා සම්බුද්ධත්වයට පත්වූ ශ්‍රී මහා බෝධි මූලය පිහිටි උතුම් පුදබිමයි.",
           "exam_points": "• මහාබෝධි විහාරය හා වජ්‍රාසනය පිහිටා ඇත."
         },
@@ -331,9 +311,8 @@
           "name_en": "Sarnath (Isipatana)",
           "subject": ["bc", "history"],
           "category_si": "සතර මහා පූජනීය ස්ථාන",
-          "category_en": "Four Sacred Sites",
-          "coords": { "x": 58.8, "y": 41.0 },
-          "tolerance": 4.5,
+          "coords": { "lat": 25.3811, "lng": 83.0214 },
+          "tolerance_km": 35,
           "description": "බුදුරජාණන් වහන්සේ පස්වග මහණුන්ට ප්‍රථම ධර්ම දේශනාව (දම්සක් පැවතුම් සූත්‍රය) දේශනා කළ ස්ථානයයි.",
           "exam_points": "• ධම්මේඛ ස්තූපය හා අශෝක සිංහ හිස ටැඹ පිහිටා ඇත."
         },
@@ -343,9 +322,8 @@
           "name_en": "Kusinara (Kushinagar)",
           "subject": ["bc", "history"],
           "category_si": "සතර මහා පූජනීය ස්ථාන",
-          "category_en": "Four Sacred Sites",
-          "coords": { "x": 60.5, "y": 35.8 },
-          "tolerance": 4.5,
+          "coords": { "lat": 26.7408, "lng": 83.8892 },
+          "tolerance_km": 35,
           "description": "බුදුරජාණන් වහන්සේ උපවත්තන සල් උයනේදී පිරිනිවන් පෑ උතුම් පුණ්‍ය භූමියයි.",
           "exam_points": "• මල්ල රජවරුන්ගේ උපවත්තන සල් උයන."
         },
@@ -355,9 +333,8 @@
           "name_en": "Rajagaha (Magadha)",
           "subject": ["bc", "history"],
           "category_si": "පුරාණ නගර හා රාජධානි",
-          "category_en": "Ancient Cities",
-          "coords": { "x": 65.5, "y": 42.8 },
-          "tolerance": 4.5,
+          "coords": { "lat": 25.0167, "lng": 85.4167 },
+          "tolerance_km": 35,
           "description": "බිම්බිසාර හා අජාසත්ත රජවරුන්ගේ මගධ අගනුවරයි. වේළුවනාරාමය හා ගිජ්ඣකූට පර්වතය පිහිටා ඇත.",
           "exam_points": "• ප්‍රථම ධර්ම සංගායනාව සප්තපර්ණී ගුහාවේදී පැවැත්වුණි."
         },
@@ -367,9 +344,8 @@
           "name_en": "Savatthi (Kosala)",
           "subject": ["bc", "history"],
           "category_si": "පුරාණ නගර හා රාජධානි",
-          "category_en": "Ancient Cities",
-          "coords": { "x": 52.5, "y": 34.0 },
-          "tolerance": 4.5,
+          "coords": { "lat": 27.5167, "lng": 82.0333 },
+          "tolerance_km": 35,
           "description": "පසේනදී කොසොල් රජුගේ අගනුවරයි. බුදුරදුන් වැඩිම වස් කාලයක් (වස් 25ක්) වැඩ විසූ ජේතවනාරාමය පිහිටි නගරයයි.",
           "exam_points": "• අනේපිඬු සිටුතුමා විසින් ජේතවනාරාමය ඉදිකරවන ලදී."
         },
@@ -379,9 +355,8 @@
           "name_en": "Nalanda",
           "subject": ["bc", "history"],
           "category_si": "පුරාණ විශ්වවිද්‍යාල",
-          "category_en": "Ancient Universities",
-          "coords": { "x": 64.8, "y": 41.5 },
-          "tolerance": 4.0,
+          "coords": { "lat": 25.1367, "lng": 85.4439 },
+          "tolerance_km": 30,
           "description": "ගුප්ත යුගයේදී ආරම්භ වූ ලොව සුප්‍රකට බෞද්ධ විශ්වවිද්‍යාලයයි.",
           "exam_points": "• ශිෂ්‍යයන් හා ආචාර්යවරුන් දසදහස් ගණනක් අධ්‍යාපනය ලැබූ මධ්‍යස්ථානයකි."
         },
@@ -391,9 +366,8 @@
           "name_en": "Sanchi",
           "subject": ["bc", "history"],
           "category_si": "බෞද්ධ කලා මධ්‍යස්ථාන",
-          "category_en": "Buddhist Art Centers",
-          "coords": { "x": 41.2, "y": 49.5 },
-          "tolerance": 4.5,
+          "coords": { "lat": 23.4794, "lng": 77.7397 },
+          "tolerance_km": 35,
           "description": "අශෝක රජු විසින් ඉදිකළ මහා ස්තූපය හා විසිතුරු තොරණ 4 (තෝරණ) පිහිටි ලෝක උරුමයකි.",
           "exam_points": "• මිහිඳු මහරහතන් වහන්සේ ලංකාවට වැඩම කිරීමට පෙර වැඩසිටි විහාරයයි."
         }
