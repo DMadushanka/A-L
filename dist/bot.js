@@ -6102,6 +6102,44 @@ bot.onText(/\/(help|guide|instructions|bot_help)(?:_([a-z0-9_]+))?(?:@\w+)?\s*(.
   }).catch(() => { });
 });
 
+// Command: /map or /maps or /sithiyam or /map_quiz (A/L Interactive Map Marking & Quiz Hub)
+bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, async (msg, match) => {
+  if (!await enforceDirectAccessControl(msg)) return;
+  const chatId = msg.chat.id;
+  const { threadId } = getThreadContext(msg);
+  const replyOpts = {
+    reply_to_message_id: msg.message_id,
+    ...(threadId ? { message_thread_id: threadId } : {})
+  };
+
+  const { text, keyboard } = buildMapHubMessage(BASE_URL);
+  return bot.sendMessage(chatId, text, {
+    parse_mode: 'Markdown',
+    reply_markup: keyboard,
+    ...replyOpts
+  }).catch(e => console.error('Error sending map hub message:', e.message));
+});
+
+// Listener for Web App Data Submission (e.g. Map Exam Results from Mini App)
+bot.on('message', async (msg) => {
+  if (msg.web_app_data && msg.web_app_data.data) {
+    try {
+      const data = JSON.parse(msg.web_app_data.data);
+      if (data.type === 'map_exam_result') {
+        const formatted = formatMiniAppResult(msg.from, data);
+        recordScore(msg.from.id, msg.from.first_name || 'Student', 'map', data.score || 0);
+        return bot.sendMessage(msg.chat.id, formatted, {
+          parse_mode: 'Markdown',
+          reply_to_message_id: msg.message_id,
+          ...(msg.message_thread_id ? { message_thread_id: msg.message_thread_id } : {})
+        });
+      }
+    } catch (e) {
+      console.error('Error handling web_app_data:', e.message);
+    }
+  }
+});
+
 // Callback Query Handler
 bot.on('callback_query', async (query) => {
   const chatId = query.message ? query.message.chat.id : null;
