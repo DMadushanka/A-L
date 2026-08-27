@@ -6107,12 +6107,13 @@ bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, asy
   if (!await enforceDirectAccessControl(msg)) return;
   const chatId = msg.chat.id;
   const { threadId } = getThreadContext(msg);
+  const isGroup = msg.chat && (msg.chat.type === 'group' || msg.chat.type === 'supergroup');
   const replyOpts = {
     reply_to_message_id: msg.message_id,
     ...(threadId ? { message_thread_id: threadId } : {})
   };
 
-  const { text, keyboard } = buildMapHubMessage(BASE_URL);
+  const { text, keyboard } = buildMapHubMessage(BASE_URL, isGroup);
   return bot.sendMessage(chatId, text, {
     parse_mode: 'Markdown',
     reply_markup: keyboard,
@@ -6160,7 +6161,7 @@ bot.on('callback_query', async (query) => {
     // Map Marking Hub & Quizzes
     if (data === 'open_map_hub') {
       await safeAnswerCallback(query.id);
-      const { text, keyboard } = buildMapHubMessage(BASE_URL);
+      const { text, keyboard } = buildMapHubMessage(BASE_URL, isGroup);
       return bot.editMessageText(text, {
         chat_id: chatId,
         message_id: messageId,

@@ -27,7 +27,7 @@ export function loadMapLocations() {
  * Build the Main Map Marking Menu message and Inline Keyboard
  * Supports Telegram Mini App (TWA) + In-Chat Fast Drills
  */
-export function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L') {
+export function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L', isGroup = false) {
   // Ensure HTTPS and append dynamic version to bust Telegram WebView cache
   const cacheBuster = Date.now();
   let webAppUrl = `${baseUrl.replace(/\/$/, '')}/map_app.html?v=${cacheBuster}`;
@@ -52,13 +52,15 @@ export function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L'
 2️⃣ **⚡ ක්ෂණික ප්‍රශ්නාවලිය (In-Chat Quiz):**
    _Chat එක තුළදීම සිතියම් ප්‍රශ්න වලට පිළිතුරු සපයන්න._`;
 
+  // In Group Chats, Telegram Bot API requires url buttons (web_app is restricted to private chats)
+  const appButton = isGroup
+    ? { text: '📱 අන්තර්ක්‍රියාකාරී සිතියම (Open Map App) 🗺️', url: webAppUrl }
+    : { text: '📱 අන්තර්ක්‍රියාකාරී සිතියම (Open Mini App) 🗺️', web_app: { url: webAppUrl } };
+
   const keyboard = {
     inline_keyboard: [
       [
-        {
-          text: '📱 අන්තර්ක්‍රියාකාරී සිතියම (Open Mini App) 🗺️',
-          web_app: { url: webAppUrl }
-        }
+        appButton
       ],
       [
         { text: '📜 ඉතිහාසය සිතියම් Quiz', callback_data: 'map_quiz:history:sri_lanka' },
@@ -69,7 +71,7 @@ export function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L'
         { text: '🎲 මිශ්‍ර සිතියම් පුහුණුව', callback_data: 'map_quiz:all:sri_lanka' }
       ],
       [
-        { text: '🔙 ප්‍රධාන මෙනුවට (Main Menu)', callback_data: 'main_menu' }
+        { text: '🔙 ප්‍රධාන මෙනුවට (Main Menu)', callback_data: 'nav_subjects' }
       ]
     ]
   };
