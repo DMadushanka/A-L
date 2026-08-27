@@ -97,7 +97,7 @@
 
     .tab-btn {
       flex: 1;
-      padding: 7px 4px;
+      padding: 8px 4px;
       background: rgba(30, 41, 59, 0.75);
       border: 1px solid var(--card-border);
       border-radius: 12px;
@@ -138,7 +138,7 @@
       outline: none;
     }
 
-    /* Target Question Card */
+    /* Target Question / Study Banner Card */
     .prompt-card {
       width: calc(100% - 32px);
       max-width: 618px;
@@ -160,7 +160,7 @@
     }
 
     .prompt-target-name {
-      font-size: 1.2rem;
+      font-size: 1.18rem;
       font-weight: 800;
       color: #fff;
       margin: 2px 0;
@@ -169,6 +169,19 @@
     .prompt-hint {
       font-size: 0.78rem;
       color: var(--text-secondary);
+    }
+
+    /* Quick Study Location Jumper */
+    .explore-jumper {
+      width: 100%;
+      margin-top: 6px;
+      padding: 6px 10px;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--accent-cyan);
+      border-radius: 8px;
+      color: #fff;
+      font-size: 0.82rem;
+      outline: none;
     }
 
     /* Map Real Container (Leaflet Map Viewport) */
@@ -204,6 +217,24 @@
       filter: grayscale(100%) contrast(140%) brightness(102%) !important;
     }
 
+    /* Explore Mode Permanent Map Labels */
+    .explore-label {
+      background: rgba(15, 23, 42, 0.92) !important;
+      border: 1px solid #38bdf8 !important;
+      color: #f8fafc !important;
+      font-size: 11px !important;
+      font-weight: 700 !important;
+      border-radius: 6px !important;
+      padding: 2px 6px !important;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+      white-space: nowrap !important;
+      pointer-events: none;
+    }
+
+    .explore-label::before {
+      border-top-color: #38bdf8 !important;
+    }
+
     /* Reset Center Floating Button */
     .recenter-btn {
       position: absolute;
@@ -231,14 +262,31 @@
       align-items: center;
       justify-content: center;
       transform: translate(-50%, -100%);
-      font-size: 28px;
+      font-size: 26px;
       filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.7));
-      animation: pinDrop 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+      cursor: pointer;
     }
 
-    @keyframes pinDrop {
-      0% { transform: translate(-50%, -200%) scale(0.3); opacity: 0; }
-      100% { transform: translate(-50%, -100%) scale(1); opacity: 1; }
+    .explore-pin {
+      background: #0284c7;
+      color: #fff;
+      border: 2px solid #fff;
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 800;
+      box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .explore-pin:hover, .explore-pin:active {
+      transform: scale(1.25);
+      background: #f59e0b;
     }
 
     /* Feedback Drawer */
@@ -249,24 +297,24 @@
       background: var(--card-bg);
       border: 1px solid var(--card-border);
       border-radius: 16px;
-      padding: 12px 16px;
+      padding: 14px 16px;
       display: none;
       animation: fadeIn 0.3s ease;
     }
 
     .feedback-title {
-      font-size: 0.95rem;
+      font-size: 0.98rem;
       font-weight: 700;
       display: flex;
       align-items: center;
       gap: 6px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
     .feedback-desc {
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       color: #cbd5e1;
-      line-height: 1.4;
+      line-height: 1.45;
       margin-bottom: 8px;
       white-space: pre-line;
     }
@@ -351,7 +399,7 @@
   <div class="nav-tabs">
     <button class="tab-btn active" id="tabExam" onclick="switchMode('exam')">🎯 විභාග මාදිලිය</button>
     <button class="tab-btn" id="tabPractice" onclick="switchMode('practice')">💡 පුහුණු මාදිලිය</button>
-    <button class="tab-btn" id="tabExplore" onclick="switchMode('explore')">📖 අධ්‍යයනය</button>
+    <button class="tab-btn" id="tabExplore" onclick="switchMode('explore')">📖 අධ්‍යයනය (Study All)</button>
   </div>
 
   <!-- Controls Bar -->
@@ -373,11 +421,16 @@
     </select>
   </div>
 
-  <!-- Prompt Box -->
+  <!-- Prompt / Study Box -->
   <div class="prompt-card" id="promptCard">
     <div class="prompt-subtitle" id="promptSub">ප්‍රශ්නය 1 / 10 • ලකුණු 10</div>
     <div class="prompt-target-name" id="promptTarget">මාන්තොට (මහාතිත්ථ)</div>
     <div class="prompt-hint" id="promptHint">ස්ථානය සලකුණු කිරීමට සිතියම මත ස්පර්ශ (Tap) කරන්න.</div>
+    <div id="exploreJumperContainer" style="display: none;">
+      <select class="explore-jumper" id="exploreJumper" onchange="jumpToExploreLocation()">
+        <option value="">🔍 ස්ථානයක් තෝරා සිතියමේ බලන්න (Select Location)...</option>
+      </select>
+    </div>
   </div>
 
   <!-- Real Leaflet Map Viewport Container -->
@@ -422,74 +475,7 @@
       tg.expand();
     }
 
-    // High-Precision Real Syllabus Locations (Geographic Coordinates)
-    const EMBEDDED_LOCATIONS = {
-      sri_lanka: {
-        name_si: "ශ්‍රී ලංකා සිතියම",
-        bounds: [[5.8, 79.4], [9.9, 81.95]],
-        center: [7.8731, 80.7718],
-        defaultZoom: 7.4,
-        locations: [
-          { id: "sl_jambukola", name_si: "ජම්බුකෝලපට්ටන (දඹකොළපටුන)", subject: ["history", "bc"], category_si: "පුරාණ වරායවල්", coords: { lat: 9.8183, lng: 80.0244 }, tolerance_km: 18, description: "යාපන අර්ධද්වීපයේ උතුරු වෙරළේ (කන්කසන්තුරේ අසල) පිහිටි ඓතිහාසික වරායයි.", exam_points: "• සංඝමිත්තා තෙරණිය ශ්‍රී මහා බෝධි දක්ෂිණ ශාඛාව වැඩමවාගෙන ගොඩබට ස්ථානයයි.\n• දේවානම්පියතිස්ස රජු විසින් සම්බුද්ධ ජයන්ති විහාරය කරවන ලදී." },
-          { id: "sl_urathota", name_si: "ඌරාතොට (කයිට්ස්)", subject: ["history"], category_si: "පුරාණ වරායවල්", coords: { lat: 9.6833, lng: 79.8667 }, tolerance_km: 15, description: "යාපනය කයිට්ස් දූපතේ පිහිටි පුරාණ නාවික කඳවුරක් සහ වරායකි.", exam_points: "• I වන පරාක්‍රමබාහු රජුගේ නාවික හමුදාව බුරුමය ආක්‍රමණයට නැව් නැංවූ ස්ථානයයි." },
-          { id: "sl_pulmoddai", name_si: "පුල්මුඩේ (ඛනිජ වැලි)", subject: ["geo"], category_si: "ඛනිජ සම්පත් කලාප", coords: { lat: 8.9500, lng: 80.9833 }, tolerance_km: 18, description: "නැගෙනහිර වෙරළේ පිහිටි ඉල්මනයිට්, රූටයිල් බහුල ආසියාවේ විශාලතම ඛනිජ වැලි නිධියයි.", exam_points: "• ටයිටේනියම් නිස්සාරණය සඳහා අපනයනය කෙරේ." },
-          { id: "sl_manthai", name_si: "මාන්තොට (මහාතිත්ථ)", subject: ["history", "bc"], category_si: "පුරාණ වරායවල්", coords: { lat: 8.9667, lng: 79.9167 }, tolerance_km: 18, description: "අනුරාධපුර යුගයේ ප්‍රධානතම ජාත්‍යන්තර වෙළෙඳ වරායයි. මන්නාරම් බොක්ක අසල මල්වතු ඔය මෝයේ පිහිටා ඇත.", exam_points: "• සේද මාවතේ (Silk Route) ප්‍රධාන මධ්‍යස්ථානයක් විය." },
-          { id: "sl_malwathu_oya", name_si: "මල්වතු ඔය (කදම්බ නදිය)", subject: ["geo", "history"], category_si: "ගංගා පද්ධති", coords: { lat: 8.8000, lng: 80.1000 }, tolerance_km: 25, description: "අනුරාධපුර ශිෂ්ටාචාරයේ මව් ගංගාවයි.", exam_points: "• අනුරාධපුරය හරහා ගලා ගොස් මන්නාරමෙන් මුහුදට වැටේ." },
-          { id: "sl_anuradhapura", name_si: "අනුරාධපුරය", subject: ["history", "bc"], category_si: "රාජධානි හා නගර", coords: { lat: 8.3114, lng: 80.4037 }, tolerance_km: 16, description: "වසර 1400කට අධික කාලයක් ලංකාවේ අගනුවරව පැවති ශ්‍රේෂ්ඨතම රාජධානියයි.", exam_points: "• පණ්ඩුකාභය රජු විසින් සැලසුම් සහගත නගරයක් ලෙස ගොඩනැගීය.\n• රුවන්වැලිසෑය, අභයගිරිය ඇතුළු අටමස්ථාන පිහිටා ඇත." },
-          { id: "sl_mihintale", name_si: "මිහින්තලය (චේතියගිරිය)", subject: ["history", "bc"], category_si: "බෞද්ධ සිද්ධස්ථාන", coords: { lat: 8.3508, lng: 80.5083 }, tolerance_km: 15, description: "මිහිඳු හිමියන් ලක්දිවට බුදුදහම හඳුන්වා දුන් පූජනීය පොසොන් උදා බිමයි.", exam_points: "• දේවානම්පියතිස්ස රජු හා මිහිඳු හිමියන්ගේ හමුව සිදුවූ ස්ථානයයි." },
-          { id: "sl_gokanna", name_si: "ගෝකණ්ණ (ත්‍රිකුණාමලය)", subject: ["history", "geo", "bc"], category_si: "පුරාණ වරායවල් / ස්වභාවික වරාය", coords: { lat: 8.5711, lng: 81.2335 }, tolerance_km: 18, description: "නැගෙනහිර වෙරළේ පිහිටි ප්‍රධාන ස්වභාවික වරායයි. කොඩ්ඩියාර් බොක්ක ආශ්‍රිතව පිහිටා ඇත.", exam_points: "• භද්දකච්චායනා කුමරිය ලංකාවට පැමිණි වරායයි." },
-          { id: "sl_eppawala", name_si: "එප්පාවල (ඇපටයිට් තැන්පතුව)", subject: ["geo"], category_si: "ඛනිජ සම්පත් කලාප", coords: { lat: 8.1500, lng: 80.4167 }, tolerance_km: 16, description: "ලෝකයේ උසස්ම තත්ත්වයේ රොක් පොස්පේට් (ඇපටයිට්) නිධියයි.", exam_points: "• පොස්පරස් පොහොර නිෂ්පාදනයට යොදා ගැනේ." },
-          { id: "sl_somawathiya", name_si: "සෝමාවතිය", subject: ["history", "bc"], category_si: "බෞද්ධ සිද්ධස්ථාන", coords: { lat: 8.1833, lng: 81.1833 }, tolerance_km: 16, description: "මහවැලි නිම්නයේ පිහිටි දකුණු දළදා වහන්සේ තැන්පත් කර ඇති චෛත්‍යයයි.", exam_points: "• ගිරිඅභය රජු හා සෝමදේවිය විසින් කරවන ලදී." },
-          { id: "sl_sigiriya", name_si: "සීගිරිය", subject: ["history"], category_si: "ඓතිහාසික ස්ථාන", coords: { lat: 7.9570, lng: 80.7603 }, tolerance_km: 15, description: "කාශ්‍යප රජු විසින් ඉදිකළ පර්වත මාලිගය හා ලෝක උරුමයකි.", exam_points: "• 5 වන සියවසේ වාස්තු විද්‍යාත්මක හා බිතුසිතුවම් නිර්මාණයකි." },
-          { id: "sl_polonnaruwa", name_si: "පොළොන්නරුව (පුලත්ථිපුර)", subject: ["history", "bc"], category_si: "රාජධානි හා නගර", coords: { lat: 7.9403, lng: 81.0188 }, tolerance_km: 16, description: "ශ්‍රී ලංකාවේ දෙවන ඓතිහාසික රාජධානියයි.", exam_points: "• පරාක්‍රම සමුද්‍රය හා ගල් විහාරය පිහිටා ඇත." },
-          { id: "sl_mahaweli_river", name_si: "මහවැලි ගඟ", subject: ["geo", "history"], category_si: "ගංගා පද්ධති", coords: { lat: 7.8500, lng: 81.0500 }, tolerance_km: 28, description: "ශ්‍රී ලංකාවේ දිගම ගංගාව (335 km).", exam_points: "• ශ්‍රී පාද අඩවියෙන් ඇරඹී ත්‍රිකුණාමලයේ කොඩ්ඩියාර් බොක්කෙන් මුහුදට වැටේ." },
-          { id: "sl_yapahuwa", name_si: "යාපහුව (සුභපබ්බත)", subject: ["history"], category_si: "රාජධානි හා නගර", coords: { lat: 7.8167, lng: 80.3167 }, tolerance_km: 15, description: "පළමුවන බුවනෙකබාහු රජුගේ බලකොටු පර්වත නගරයයි.", exam_points: "• විචිත්‍ර සිංහ රූප සහිත ප්‍රකට ශෛලමය පියගැට පෙළ." },
-          { id: "sl_knuckles", name_si: "නකල්ස් කඳුවැටිය (දුම්බර)", subject: ["geo"], category_si: "උස්බිම් හා කඳු", coords: { lat: 7.4500, lng: 80.7833 }, tolerance_km: 18, description: "යුනෙස්කෝ ලෝක ස්වභාවික උරුම කඳුවැටියකි.", exam_points: "• මිට මොළවාගත් අතක ඇඟිලි පුරුක් හැඩැති කඳු මුදුන් පහක් සහිතය." },
-          { id: "sl_dambadeniya", name_si: "දඹදෙණිය", subject: ["history"], category_si: "රාජධානි හා නගර", coords: { lat: 7.3667, lng: 80.1500 }, tolerance_km: 15, description: "තුන්වන විජයබාහු රජු පිහිටුවූ රාජධානියයි.", exam_points: "• දෙවන පරාක්‍රමබාහු රජුගේ ස්වර්ණමය සාහිත්‍ය යුගය." },
-          { id: "sl_kandy", name_si: "සෙංකඩගල (මහනුවර)", subject: ["history", "bc"], category_si: "රාජධානි හා නගර", coords: { lat: 7.2906, lng: 80.6337 }, tolerance_km: 15, description: "ශ්‍රී ලංකාවේ අවසාන සිංහල රාජධානියයි.", exam_points: "• ශ්‍රී දළදා මාළිගාව පිහිටා ඇත.\n• 1815 දී බ්‍රිතාන්‍යයන්ට යටත් විය." },
-          { id: "sl_dighavapi", name_si: "දීඝවාපිය", subject: ["history", "bc"], category_si: "ඓතිහාසික සිද්ධස්ථාන", coords: { lat: 7.2167, lng: 81.7333 }, tolerance_km: 18, description: "නැගෙනහිර පළාතේ අම්පාර දිස්ත්‍රික්කයේ පිහිටි සොළොස්මස්ථානයන්ගෙන් එකකි.", exam_points: "• සද්ධාතිස්ස කුමරු විසින් කෘෂිකාර්මිකව සංවර්ධනය කළේය." },
-          { id: "sl_pidurutalagala", name_si: "පිදුරුතලාගල කන්ද", subject: ["geo"], category_si: "උස්බිම් හා කඳු", coords: { lat: 7.0008, lng: 80.7725 }, tolerance_km: 15, description: "ශ්‍රී ලංකාවේ උසම කඳු මුදුනයි (මීටර් 2524 / අඩි 8281).", exam_points: "• නුවරඑළිය මධ්‍යම උස්බිම් කලාපයේ පිහිටා ඇත." },
-          { id: "sl_colombo_port", name_si: "කොළඹ වරාය", subject: ["geo", "history"], category_si: "ප්‍රධාන වරායවල්", coords: { lat: 6.9400, lng: 79.8450 }, tolerance_km: 16, description: "දකුණු ආසියාවේ ප්‍රමුඛතම බහාලුම් ප්‍රතිනැව්ගත කිරීමේ වරායයි.", exam_points: "• කෝට්ටේ යුගයේ සිට ප්‍රධාන වෙළෙඳ වරාය විය." },
-          { id: "sl_kelani_river", name_si: "කැළණි ගඟ", subject: ["geo", "history"], category_si: "ගංගා පද්ධති", coords: { lat: 6.9500, lng: 79.9000 }, tolerance_km: 20, description: "බස්නාහිර පළාතේ ප්‍රධාන ගංගාවයි.", exam_points: "• කැළණි රජමහා විහාරය පිහිටා ඇත." },
-          { id: "sl_adams_peak", name_si: "ශ්‍රී පාදය (සමනල කන්ද)", subject: ["geo", "history", "bc"], category_si: "උස්බිම් හා සිද්ධස්ථාන", coords: { lat: 6.8096, lng: 80.4994 }, tolerance_km: 15, description: "උස මීටර් 2243 කි. සිව් මහා ගංගාවන්ගේ ජල පෝෂක ප්‍රදේශයයි.", exam_points: "• බුදුරදුන්ගේ ශ්‍රී පාද ලාංඡනය පිහිටි පුදබිමයි." },
-          { id: "sl_hambantota_port", name_si: "හම්බන්තොට වරාය (මාගම්පුර)", subject: ["geo"], category_si: "ප්‍රධාන වරායවල්", coords: { lat: 6.1200, lng: 81.1200 }, tolerance_km: 16, description: "ජාත්‍යන්තර නාවික මාර්ගයට ආසන්න ගැඹුරු මුහුදු වරායකි.", exam_points: "• වාහන ප්‍රතිනැව්ගත කිරීමේ මධ්‍යස්ථානයකි." },
-          { id: "sl_godawaya", name_si: "ගෝදාවාය (ගෝඨපබ්බත)", subject: ["history"], category_si: "පුරාණ වරායවල්", coords: { lat: 6.1167, lng: 81.0500 }, tolerance_km: 16, description: "දකුණු ලංකාවේ වලවේ ගං මෝය අසල පිහිටි පුරාණ ජාත්‍යන්තර වරායකි.", exam_points: "• ගජබාහු රජුගේ සෙල්ලිපිය හා පැරණිතම නෞකා සුන්බුන් හමුවිය." }
-        ]
-      },
-      india_bc: {
-        name_si: "දඹදිව සිතියම",
-        bounds: [[21.0, 76.0], [28.8, 88.0]],
-        center: [25.5, 82.5],
-        defaultZoom: 5.5,
-        locations: [
-          { id: "in_lumbini", name_si: "ලුම්බිණිය", subject: ["bc", "history"], category_si: "සතර මහා පූජනීය ස්ථාන", coords: { lat: 27.4833, lng: 83.2750 }, tolerance_km: 35, description: "සිද්ධාර්ථ කුමාරෝත්පත්තිය සිදුවූ පූජනීය ස්ථානයයි.", exam_points: "• අශෝක රජුගේ ලුම්බිණි ටැම් ලිපිය පිහිටා ඇත." },
-          { id: "in_bodhgaya", name_si: "බුද්ධගයාව (උරුවේලාව)", subject: ["bc", "history"], category_si: "සතර මහා පූජනීය ස්ථාන", coords: { lat: 24.6951, lng: 84.9913 }, tolerance_km: 35, description: "සිද්ධාර්ථ තවුසාණන් සම්මා සම්බුද්ධත්වයට පත්වූ ස්ථානයයි.", exam_points: "• මහාබෝධි විහාරය හා වජ්‍රාසනය පිහිටා ඇත." },
-          { id: "in_sarnath", name_si: "බරණැස ඉසිපතනය (සාරානාත්)", subject: ["bc", "history"], category_si: "සතර මහා පූජනීය ස්ථාන", coords: { lat: 25.3811, lng: 83.0214 }, tolerance_km: 35, description: "ප්‍රථම ධර්ම දේශනාව (දම්සක් පැවතුම් සූත්‍රය) දේශනා කළ ස්ථානයයි.", exam_points: "• ධම්මේඛ ස්තූපය හා අශෝක සිංහ හිස ටැඹ පිහිටා ඇත." },
-          { id: "in_kusinara", name_si: "කුසිනාරාව", subject: ["bc", "history"], category_si: "සතර මහා පූජනීය ස්ථාන", coords: { lat: 26.7408, lng: 83.8892 }, tolerance_km: 35, description: "බුදුරජාණන් වහන්සේ පිරිනිවන් පෑ උතුම් පුණ්‍ය භූමියයි.", exam_points: "• මල්ල රජවරුන්ගේ උපවත්තන සල් උයන." },
-          { id: "in_rajagaha", name_si: "රජගහනුවර (මගධය)", subject: ["bc", "history"], category_si: "පුරාණ නගර", coords: { lat: 25.0167, lng: 85.4167 }, tolerance_km: 35, description: "මගධ අගනුවරයි. වේළුවනාරාමය හා ගිජ්ඣකූටය පිහිටා ඇත.", exam_points: "• ප්‍රථම ධර්ම සංගායනාව පැවැත්වුණි." },
-          { id: "in_savatthi", name_si: "සැවැත්නුවර (කොසොල්)", subject: ["bc", "history"], category_si: "පුරාණ නගර", coords: { lat: 27.5167, lng: 82.0333 }, tolerance_km: 35, description: "බුදුරදුන් වස් 25ක් වැඩ විසූ ජේතවනාරාමය පිහිටි නගරයයි.", exam_points: "• අනේපිඬු සිටුතුමා විසින් ඉදිකරවන ලදී." },
-          { id: "in_nalanda", name_si: "නාලන්දාව", subject: ["bc", "history"], category_si: "පුරාණ විශ්වවිද්‍යාල", coords: { lat: 25.1367, lng: 85.4439 }, tolerance_km: 30, description: "ලොව සුප්‍රකට පුරාණ බෞද්ධ විශ්වවිද්‍යාලයයි.", exam_points: "• දසදහස් ගණනක් භික්ෂූන් අධ්‍යාපනය ලැබූ මධ්‍යස්ථානයකි." },
-          { id: "in_sanchi", name_si: "සාංචිය", subject: ["bc", "history"], category_si: "බෞද්ධ කලා මධ්‍යස්ථාන", coords: { lat: 23.4794, lng: 77.7397 }, tolerance_km: 35, description: "අශෝක රජු විසින් ඉදිකළ මහා ස්තූපය හා තොරණ 4 පිහිටි ලෝක උරුමයකි.", exam_points: "• මිහිඳු හිමියන් ලංකාවට වැඩම කිරීමට පෙර වැඩසිටි විහාරයයි." }
-        ]
-      },
-      world_geo: {
-        name_si: "ලෝක සිතියම",
-        bounds: [[-40, -110], [60, 140]],
-        center: [20.0, 30.0],
-        defaultZoom: 2.2,
-        locations: [
-          { id: "w_suez", name_si: "සූවස් ඇළ (Suez Canal)", subject: ["geo"], category_si: "ජාත්‍යන්තර නාවික මාර්ග", coords: { lat: 30.6000, lng: 32.3000 }, tolerance_km: 80, description: "මධ්‍යධරණී මුහුද සහ රතු මුහුද යා කරන ලොව කාර්යබහුලම නාවික ඇළ මාර්ගයයි.", exam_points: "• යුරෝපය සහ ආසියාව අතර නාවික ගමන් දුර විශාල ලෙස කෙටි කරයි." },
-          { id: "w_panama", name_si: "පැනමා ඇළ (Panama Canal)", subject: ["geo"], category_si: "ජාත්‍යන්තර නාවික මාර්ග", coords: { lat: 9.1000, lng: -79.7000 }, tolerance_km: 80, description: "අත්ලාන්තික් හා ශාන්තිකර සාගර යා කරන මධ්‍යම ඇමරිකානු ජල මාර්ගයයි.", exam_points: "• ලොක් (Lock) දොරටු ක්‍රමවේදය සහිතව ක්‍රියාත්මක වේ." },
-          { id: "w_malacca", name_si: "මලක්කා සමුද්‍ර සන්ධිය (Strait of Malacca)", subject: ["geo"], category_si: "ජාත්‍යන්තර සමුද්‍ර සන්ධි", coords: { lat: 4.1000, lng: 99.5000 }, tolerance_km: 80, description: "මැලේසියාව සහ ඉන්දුනීසියාව අතර පිහිටි ප්‍රධානතම තෙල් හා බහාලුම් නාවික මාර්ගයයි.", exam_points: "• ඉන්දියන් සාගරය හා දකුණු චීන මුහුද යා කරයි." },
-          { id: "w_hormuz", name_si: "හෝමූස් සමුද්‍ර සන්ධිය (Strait of Hormuz)", subject: ["geo"], category_si: "ජාත්‍යන්තර සමුද්‍ර සන්ධි", coords: { lat: 26.5000, lng: 56.5000 }, tolerance_km: 80, description: "පර්සියානු බොක්කෙන් පිටවන ලෝක බොරතෙල් සැපයුමේ ප්‍රධානතම උපායමාර්ගික ද්වාරයයි.", exam_points: "• ලොව තෙල් ප්‍රවාහනයෙන් 20% කට වැඩි ප්‍රමාණයක් ගමන් කරයි." },
-          { id: "w_amazon", name_si: "ඇමසන් නිම්නය / ගංගාව (Amazon Basin)", subject: ["geo"], category_si: "වැසි වනාන්තර හා ගංගා", coords: { lat: -3.4000, lng: -62.2000 }, tolerance_km: 120, description: "දකුණු ඇමරිකාවේ පිහිටි ලොව විශාලතම වැසි වනාන්තරය හා ගංගා නිම්නයයි.", exam_points: "• 'මිහිතලයේ පෙනහළු' ලෙස හැඳින්වේ." },
-          { id: "w_sahara", name_si: "සහරා කාන්තාරය (Sahara Desert)", subject: ["geo"], category_si: "කාන්තාර කලාප", coords: { lat: 23.4000, lng: 12.6000 }, tolerance_km: 140, description: "උතුරු අප්‍රිකාවේ පිහිටි ලොව විශාලතම නිවර්තන උණුසුම් කාන්තාරයයි.", exam_points: "• අප්‍රිකා මහද්වීපයේ වර්ගඵලයෙන් 31% ක් ආවරණය කරයි." },
-          { id: "w_everest", name_si: "හිමාල කඳුකරය / එවරස්ට් (Mt. Everest)", subject: ["geo"], category_si: "ලෝකයේ උසම කඳු", coords: { lat: 27.9881, lng: 86.9250 }, tolerance_km: 60, description: "ලෝකයේ උසම කඳු මුදුනයි (මීටර් 8848.86). නේපාල-ටිබෙට් දේශසීමාවේ පිහිටා ඇත.", exam_points: "• ඉන්දු-ඕස්ට්‍රේලියානු හා යුරේසියානු තල ගැටුමෙන් නිර්මාණය විය." }
-        ]
-      }
-    };
-
-    let locationsDataset = EMBEDDED_LOCATIONS;
+    let locationsDataset = null;
     let currentMapKey = "sri_lanka";
     let currentMode = "exam"; // 'exam', 'practice', 'explore'
     let currentSubject = "all";
@@ -510,7 +496,7 @@
 
     // Initialize Real Leaflet Map
     function initMap() {
-      const cfg = locationsDataset[currentMapKey] || EMBEDDED_LOCATIONS.sri_lanka;
+      const cfg = locationsDataset[currentMapKey];
 
       if (map) {
         map.remove();
@@ -526,7 +512,7 @@
         attributionControl: false
       });
 
-      // Rock-solid OSM Tile Layer with multi-server subdomains & crossOrigin
+      // Standard OSM Tile Layer with multi-server subdomains & crossOrigin
       tileLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         subdomains: ['a', 'b', 'c'],
         maxZoom: 19,
@@ -534,12 +520,6 @@
         attribution: '© OpenStreetMap contributors'
       }).addTo(map);
 
-      // Fallback to Esri Topo if OSM fails
-      tileLayer.on('tileerror', function() {
-        console.warn("Tile error, applying fallback...");
-      });
-
-      // Essential for Telegram WebView layout rendering
       setTimeout(() => {
         if (map) {
           map.invalidateSize(true);
@@ -565,7 +545,7 @@
     function fitCurrentMapBounds() {
       if (!map) return;
       map.invalidateSize(true);
-      const cfg = locationsDataset[currentMapKey] || EMBEDDED_LOCATIONS[currentMapKey];
+      const cfg = locationsDataset[currentMapKey];
       if (cfg && cfg.bounds) {
         map.fitBounds(cfg.bounds, { padding: [15, 15], maxZoom: cfg.defaultZoom || 8.5 });
       } else if (cfg && cfg.center) {
@@ -583,8 +563,14 @@
           }
         }
       } catch (e) {
-        console.log("Using embedded dataset.");
+        console.log("Error loading JSON, trying fallback...");
       }
+
+      if (!locationsDataset) {
+        alert("සිතියම් දත්ත ලබාගැනීමට නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.");
+        return;
+      }
+
       initMap();
     }
 
@@ -624,7 +610,6 @@
       document.getElementById('promptTarget').innerText = `📍 ${item.name_si}`;
       document.getElementById('promptHint').innerText = "ස්ථානය සලකුණු කිරීමට සිතියම මත ස්පර්ශ (Tap) කරන්න.";
 
-      // Re-fit full country map on every question
       fitCurrentMapBounds();
     }
 
@@ -702,6 +687,7 @@
       document.getElementById('feedbackResult').innerHTML = title;
       document.getElementById('feedbackResult').style.color = isSuccess ? '#22c55e' : (gained > 0 ? '#fbbf24' : '#ef4444');
       document.getElementById('feedbackNotes').innerHTML = `<b>${currentItem.name_si}:</b>\n${currentItem.description || ''}\n${currentItem.exam_points ? '<br>' + currentItem.exam_points : ''}`;
+      document.getElementById('nextBtn').style.display = 'block';
       drawer.style.display = 'block';
 
       if (tg?.HapticFeedback) {
@@ -724,6 +710,11 @@
     }
 
     function updateScoreBadge() {
+      if (currentMode === 'explore') {
+        const count = locationsDataset[currentMapKey]?.locations?.length || 0;
+        document.getElementById('scoreDisplay').innerText = `ස්ථාන: ${count} ක්`;
+        return;
+      }
       const maxPossible = (quizQueue.length || 10) * 10;
       document.getElementById('scoreDisplay').innerText = `ලකුණු: ${currentScore} / ${maxPossible}`;
     }
@@ -776,39 +767,84 @@
       document.getElementById('tabExplore').classList.toggle('active', mode === 'explore');
 
       if (mode === 'explore') {
-        document.getElementById('promptCard').style.display = 'none';
-        document.getElementById('feedbackDrawer').style.display = 'none';
+        document.getElementById('promptSub').innerText = `📖 අධ්‍යයන මාදිලිය (All Locations Study)`;
+        document.getElementById('promptTarget').innerText = `සිතියමේ සියලුම ස්ථාන ලකුණු කර ඇත`;
+        document.getElementById('promptHint').innerText = "විභාග කරුණු කියවීමට ඕනෑම ස්ථානයක Pin එකක් හෝ ලේබලයක් ඔබන්න.";
+        document.getElementById('exploreJumperContainer').style.display = 'block';
+        updateScoreBadge();
         renderExploreMarkers();
       } else {
-        document.getElementById('promptCard').style.display = 'block';
+        document.getElementById('exploreJumperContainer').style.display = 'none';
         startQuizSession();
       }
     }
 
-    // Explore Mode: Markers with clickable popups
+    // Explore Mode: Mark ALL locations with permanent Sinhala labels & interactive pin badges
     function renderExploreMarkers() {
       clearMapLayers();
       const locs = locationsDataset[currentMapKey]?.locations || [];
-      locs.forEach(loc => {
+      let filtered = locs;
+      if (currentSubject !== 'all') {
+        filtered = locs.filter(l => l.subject?.includes(currentSubject));
+      }
+
+      // Populate Quick Jump Dropdown
+      const jumper = document.getElementById('exploreJumper');
+      jumper.innerHTML = `<option value="">🔍 ස්ථානයක් තෝරා සිතියමේ බලන්න (${filtered.length} Locations)...</option>`;
+      filtered.forEach((loc, i) => {
+        const opt = document.createElement('option');
+        opt.value = loc.id;
+        opt.innerText = `${i + 1}. ${loc.name_si} (${loc.category_si || ''})`;
+        jumper.appendChild(opt);
+      });
+
+      // Pin every location on the map with crisp permanent Sinhala text label
+      filtered.forEach((loc, idx) => {
         const icon = L.divIcon({
           className: 'custom-map-pin',
-          html: '<span style="font-size:24px;">📍</span>',
+          html: `<div class="explore-pin">${idx + 1}</div>`,
           iconSize: [28, 28],
           iconAnchor: [14, 28]
         });
+
         const marker = L.marker([loc.coords.lat, loc.coords.lng], { icon: icon }).addTo(map);
-        marker.on('click', () => {
-          const drawer = document.getElementById('feedbackDrawer');
-          document.getElementById('feedbackResult').innerHTML = `📍 ${loc.name_si}`;
-          document.getElementById('feedbackResult').style.color = '#38bdf8';
-          document.getElementById('feedbackNotes').innerHTML = `<b>${loc.category_si || ''}</b><br>${loc.description}<br><br>${loc.exam_points || ''}`;
-          document.getElementById('nextBtn').style.display = 'none';
-          drawer.style.display = 'block';
-          map.setView([loc.coords.lat, loc.coords.lng], 9, { animate: true });
+
+        // Bind Permanent Tooltip so the name is always visible directly above the pin!
+        marker.bindTooltip(loc.name_si, {
+          permanent: true,
+          direction: 'top',
+          offset: [0, -26],
+          className: 'explore-label'
         });
+
+        marker.on('click', () => {
+          showLocationDetails(loc);
+        });
+
         exploreMarkers.push(marker);
       });
+
       fitCurrentMapBounds();
+    }
+
+    function showLocationDetails(loc) {
+      const drawer = document.getElementById('feedbackDrawer');
+      document.getElementById('feedbackResult').innerHTML = `📍 ${loc.name_si}`;
+      document.getElementById('feedbackResult').style.color = '#38bdf8';
+      document.getElementById('feedbackNotes').innerHTML = `<b style="color:#fbbf24;">${loc.category_si || ''}</b><br><br>${loc.description}<br><br>${loc.exam_points ? '<span style="color:#67e8f9;">' + loc.exam_points + '</span>' : ''}`;
+      document.getElementById('nextBtn').style.display = 'none';
+      drawer.style.display = 'block';
+      map.setView([loc.coords.lat, loc.coords.lng], Math.max(map.getZoom(), 9), { animate: true });
+    }
+
+    function jumpToExploreLocation() {
+      const selectedId = document.getElementById('exploreJumper').value;
+      if (!selectedId) return;
+      const locs = locationsDataset[currentMapKey]?.locations || [];
+      const target = locs.find(l => l.id === selectedId);
+      if (target) {
+        showLocationDetails(target);
+      }
     }
 
     function onSubjectChange() {
