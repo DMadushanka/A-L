@@ -2290,10 +2290,11 @@ bot.on('message', async (msg) => {
   if (msg.text) {
     console.log(`📩 Incoming message in [${msg.chat.type}] (Chat ID: ${msg.chat.id}) from ${msg.from?.first_name || 'User'}: "${msg.text}"`);
 
-    // Direct /map or /sithiyam command handler
-    if (msg.text.startsWith('/map') || msg.text.startsWith('/sithiyam') || msg.text.includes('🗺️ සිතියම්')) {
+    // Handle Custom Reply Keyboard for Maps (non-command text)
+    if (msg.text.includes('🗺️ සිතියම්') && !msg.text.startsWith('/')) {
       if (!await enforceDirectAccessControl(msg)) return;
-      const { text, keyboard } = buildMapHubMessage(BASE_URL);
+      const isGroup = msg.chat && (msg.chat.type === 'group' || msg.chat.type === 'supergroup');
+      const { text, keyboard } = buildMapHubMessage(BASE_URL, isGroup);
       return bot.sendMessage(msg.chat.id, text, {
         parse_mode: 'Markdown',
         reply_markup: keyboard,
@@ -6119,26 +6120,6 @@ bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, asy
     reply_markup: keyboard,
     ...replyOpts
   }).catch(e => console.error('Error sending map hub message:', e.message));
-});
-
-// Listener for Web App Data Submission (e.g. Map Exam Results from Mini App)
-bot.on('message', async (msg) => {
-  if (msg.web_app_data && msg.web_app_data.data) {
-    try {
-      const data = JSON.parse(msg.web_app_data.data);
-      if (data.type === 'map_exam_result') {
-        const formatted = formatMiniAppResult(msg.from, data);
-        recordScore(msg.from.id, msg.from.first_name || 'Student', 'map', data.score || 0);
-        return bot.sendMessage(msg.chat.id, formatted, {
-          parse_mode: 'Markdown',
-          reply_to_message_id: msg.message_id,
-          ...(msg.message_thread_id ? { message_thread_id: msg.message_thread_id } : {})
-        });
-      }
-    } catch (e) {
-      console.error('Error handling web_app_data:', e.message);
-    }
-  }
 });
 
 // Callback Query Handler
