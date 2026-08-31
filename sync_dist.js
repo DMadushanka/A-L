@@ -14,6 +14,8 @@ const coreFiles = [
   'bot.cjs',
   'normal_quiz_manager.js',
   'map_quiz_manager.js',
+  'marking_manager.js',
+  'markings_archive_db.json',
   'map_app.html',
   'db.js',
   'mermaid_utils.js',

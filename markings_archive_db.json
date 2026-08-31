@@ -1,0 +1,1039 @@
+{
+  "group_id": -1004322002704,
+  "clean_group_id": "4322002704",
+  "subjects": {
+    "si": {
+      "code": "si",
+      "name": "සිංහල භාෂාව හා සාහිත්‍යය (Sinhala)",
+      "topic_thread_id": 4210,
+      "topic_name": "සිංහල (Sinhala Language & Literature)",
+      "files": {
+        "si_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5101,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5101"
+        },
+        "si_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5102,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5102"
+        },
+        "si_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5103,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5103"
+        },
+        "si_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5104,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5104"
+        },
+        "si_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5105,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5105"
+        },
+        "si_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5106,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5106"
+        },
+        "si_2019_sinhala": {
+          "year": "2019",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2019 G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5107,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5107"
+        },
+        "si_2018_sinhala": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2018 G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5108,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5108"
+        },
+        "si_2017_sinhala": {
+          "year": "2017",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2017 G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5109,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5109"
+        },
+        "si_2016_sinhala": {
+          "year": "2016",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2016 G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5110,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5110"
+        },
+        "si_2015_sinhala": {
+          "year": "2015",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2015 G.C.E. A/L Sinhala Language & Literature Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5111,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5111"
+        }
+      }
+    },
+    "bc": {
+      "code": "bc",
+      "name": "බෞද්ධ ශිෂ්ටාචාරය (Buddhist Civilization)",
+      "topic_thread_id": 4215,
+      "topic_name": "බෞද්ධ ශිෂ්ටාචාරය (Buddhist Civ)",
+      "files": {
+        "bc_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L Buddhist Civilization Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5120,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5120"
+        },
+        "bc_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L Buddhist Civilization Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5121,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5121"
+        },
+        "bc_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L Buddhist Civilization Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5122,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5122"
+        },
+        "bc_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L Buddhist Civilization Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5123,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5123"
+        },
+        "bc_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L Buddhist Civilization Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5124,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5124"
+        },
+        "bc_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L Buddhist Civilization Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5125,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5125"
+        },
+        "bc_2019_sinhala": {
+          "year": "2019",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2019 G.C.E. A/L Buddhist Civilization Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5126,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5126"
+        },
+        "bc_2018_sinhala": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2018 G.C.E. A/L Buddhist Civilization Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5127,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5127"
+        },
+        "bc_2024_english": {
+          "year": "2024",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2024 G.C.E. A/L Buddhist Civilization Marking Scheme English Medium.pdf",
+          "message_id": 5128,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5128"
+        },
+        "bc_2023_english": {
+          "year": "2023",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2023 G.C.E. A/L Buddhist Civilization Marking Scheme English Medium.pdf",
+          "message_id": 5129,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5129"
+        },
+        "bc_2022_english": {
+          "year": "2022",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2022 G.C.E. A/L Buddhist Civilization Marking Scheme English Medium.pdf",
+          "message_id": 5130,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5130"
+        }
+      }
+    },
+    "geo": {
+      "code": "geo",
+      "name": "භූගෝල විද්‍යාව (Geography)",
+      "topic_thread_id": 4216,
+      "topic_name": "භූගෝල විද්‍යාව (Geography)",
+      "files": {
+        "geo_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L Geography Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5140,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5140"
+        },
+        "geo_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L Geography Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5141,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5141"
+        },
+        "geo_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L Geography Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5142,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5142"
+        },
+        "geo_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L Geography Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5143,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5143"
+        },
+        "geo_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L Geography Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5144,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5144"
+        },
+        "geo_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L Geography Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5145,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5145"
+        },
+        "geo_2024_english": {
+          "year": "2024",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2024 G.C.E. A/L Geography Marking Scheme English Medium.pdf",
+          "message_id": 5146,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5146"
+        },
+        "geo_2023_english": {
+          "year": "2023",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2023 G.C.E. A/L Geography Marking Scheme English Medium.pdf",
+          "message_id": 5147,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5147"
+        },
+        "geo_2024_tamil": {
+          "year": "2024",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2024 G.C.E. A/L Geography Marking Scheme Tamil Medium.pdf",
+          "message_id": 5148,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5148"
+        },
+        "geo_2023_tamil": {
+          "year": "2023",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2023 G.C.E. A/L Geography Marking Scheme Tamil Medium.pdf",
+          "message_id": 5149,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5149"
+        }
+      }
+    },
+    "pl": {
+      "code": "pl",
+      "name": "දේශපාලන විද්‍යාව (Political Science)",
+      "topic_thread_id": 4217,
+      "topic_name": "දේශපාලන විද්‍යාව",
+      "files": {
+        "pl_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L Political Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5160,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5160"
+        },
+        "pl_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L Political Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5161,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5161"
+        },
+        "pl_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L Political Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5162,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5162"
+        },
+        "pl_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L Political Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5163,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5163"
+        },
+        "pl_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L Political Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5164,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5164"
+        },
+        "pl_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L Political Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5165,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5165"
+        },
+        "pl_2024_tamil": {
+          "year": "2024",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2024 G.C.E. A/L Political Science Marking Scheme Tamil Medium.pdf",
+          "message_id": 5166,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5166"
+        },
+        "pl_2023_tamil": {
+          "year": "2023",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2023 G.C.E. A/L Political Science Marking Scheme Tamil Medium.pdf",
+          "message_id": 5167,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5167"
+        },
+        "pl_2024_english": {
+          "year": "2024",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2024 G.C.E. A/L Political Science Marking Scheme English Medium.pdf",
+          "message_id": 5168,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5168"
+        }
+      }
+    },
+    "hist": {
+      "code": "hist",
+      "name": "ඉතිහාසය (History)",
+      "topic_thread_id": 4220,
+      "topic_name": "ඉතිහාසය",
+      "files": {
+        "hist_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L History Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5180,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5180"
+        },
+        "hist_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L History Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5181,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5181"
+        },
+        "hist_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L History Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5182,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5182"
+        },
+        "hist_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L History Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5183,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5183"
+        },
+        "hist_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L History Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5184,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5184"
+        },
+        "hist_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L History Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5185,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5185"
+        },
+        "hist_2024_tamil": {
+          "year": "2024",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2024 G.C.E. A/L History Marking Scheme Tamil Medium.pdf",
+          "message_id": 5186,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5186"
+        },
+        "hist_2023_tamil": {
+          "year": "2023",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2023 G.C.E. A/L History Marking Scheme Tamil Medium.pdf",
+          "message_id": 5187,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5187"
+        },
+        "hist_2024_english": {
+          "year": "2024",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2024 G.C.E. A/L History Marking Scheme English Medium.pdf",
+          "message_id": 5188,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5188"
+        }
+      }
+    },
+    "bs": {
+      "code": "bs",
+      "name": "ව්‍යාපාර අධ්‍යයනය (Business Studies)",
+      "topic_thread_id": 4221,
+      "topic_name": "ව්‍යාපාර අධ්‍යයනය",
+      "files": {
+        "bs_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L Business Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5200,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5200"
+        },
+        "bs_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L Business Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5201,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5201"
+        },
+        "bs_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L Business Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5202,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5202"
+        },
+        "bs_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L Business Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5203,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5203"
+        },
+        "bs_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L Business Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5204,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5204"
+        },
+        "bs_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L Business Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5205,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5205"
+        },
+        "bs_2024_english": {
+          "year": "2024",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2024 G.C.E. A/L Business Studies Marking Scheme English Medium.pdf",
+          "message_id": 5206,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5206"
+        },
+        "bs_2023_english": {
+          "year": "2023",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2023 G.C.E. A/L Business Studies Marking Scheme English Medium.pdf",
+          "message_id": 5207,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5207"
+        },
+        "bs_2024_tamil": {
+          "year": "2024",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2024 G.C.E. A/L Business Studies Marking Scheme Tamil Medium.pdf",
+          "message_id": 5208,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5208"
+        },
+        "bs_2023_tamil": {
+          "year": "2023",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2023 G.C.E. A/L Business Studies Marking Scheme Tamil Medium.pdf",
+          "message_id": 5209,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5209"
+        }
+      }
+    },
+    "dr": {
+      "code": "dr",
+      "name": "නාට්‍ය හා රංග කලාව (Drama & Theatre)",
+      "topic_thread_id": 4222,
+      "topic_name": "නාට්‍ය හා රංග කලාව",
+      "files": {
+        "dr_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L Drama & Theatre Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5220,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5220"
+        },
+        "dr_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L Drama & Theatre Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5221,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5221"
+        },
+        "dr_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L Drama & Theatre Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5222,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5222"
+        },
+        "dr_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L Drama & Theatre Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5223,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5223"
+        },
+        "dr_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L Drama & Theatre Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5224,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5224"
+        },
+        "dr_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L Drama & Theatre Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5225,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5225"
+        },
+        "dr_2024_tamil": {
+          "year": "2024",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2024 G.C.E. A/L Drama & Theatre Marking Scheme Tamil Medium.pdf",
+          "message_id": 5226,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5226"
+        },
+        "dr_2023_tamil": {
+          "year": "2023",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2023 G.C.E. A/L Drama & Theatre Marking Scheme Tamil Medium.pdf",
+          "message_id": 5227,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5227"
+        },
+        "dr_2024_english": {
+          "year": "2024",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2024 G.C.E. A/L Drama & Theatre Marking Scheme English Medium.pdf",
+          "message_id": 5228,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5228"
+        }
+      }
+    },
+    "mu": {
+      "code": "mu",
+      "name": "සංගීතය (Music)",
+      "topic_thread_id": 4223,
+      "topic_name": "සංගීතය",
+      "files": {
+        "mu_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L Oriental Music Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5240,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5240"
+        },
+        "mu_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L Oriental Music Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5241,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5241"
+        },
+        "mu_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L Oriental Music Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5242,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5242"
+        },
+        "mu_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L Oriental Music Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5243,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5243"
+        },
+        "mu_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L Oriental Music Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5244,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5244"
+        },
+        "mu_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L Oriental Music Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5245,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5245"
+        },
+        "mu_2024_tamil": {
+          "year": "2024",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி (Carnatic Music)",
+          "filename": "2024 G.C.E. A/L Carnatic Music Marking Scheme Tamil Medium.pdf",
+          "message_id": 5246,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5246"
+        },
+        "mu_2023_tamil": {
+          "year": "2023",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி (Carnatic Music)",
+          "filename": "2023 G.C.E. A/L Carnatic Music Marking Scheme Tamil Medium.pdf",
+          "message_id": 5247,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5247"
+        },
+        "mu_2024_english": {
+          "year": "2024",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium (Western Music)",
+          "filename": "2024 G.C.E. A/L Western Music Marking Scheme English Medium.pdf",
+          "message_id": 5248,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5248"
+        }
+      }
+    },
+    "dn": {
+      "code": "dn",
+      "name": "නර්තනය (Dancing)",
+      "topic_thread_id": 4224,
+      "topic_name": "නැටුම් (Dancing)",
+      "files": {
+        "dn_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය (දේශීය නර්තනය)",
+          "filename": "2025 G.C.E. A/L Indigenous Dancing Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5260,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5260"
+        },
+        "dn_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය (දේශීය නර්තනය)",
+          "filename": "2024 G.C.E. A/L Indigenous Dancing Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5261,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5261"
+        },
+        "dn_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය (දේශීය නර්තනය)",
+          "filename": "2023 (2024) G.C.E. A/L Indigenous Dancing Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5262,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5262"
+        },
+        "dn_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය (දේශීය නර්තනය)",
+          "filename": "2022 (2023) G.C.E. A/L Indigenous Dancing Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5263,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5263"
+        },
+        "dn_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය (දේශීය නර්තනය)",
+          "filename": "2021 G.C.E. A/L Indigenous Dancing Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5264,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5264"
+        },
+        "dn_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය (දේශීය නර්තනය)",
+          "filename": "2020 G.C.E. A/L Indigenous Dancing Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5265,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5265"
+        },
+        "dn_2024_tamil": {
+          "year": "2024",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி (Bharatha Natyam)",
+          "filename": "2024 G.C.E. A/L Bharatha Natyam Marking Scheme Tamil Medium.pdf",
+          "message_id": 5266,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5266"
+        },
+        "dn_2023_tamil": {
+          "year": "2023",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி (Bharatha Natyam)",
+          "filename": "2023 G.C.E. A/L Bharatha Natyam Marking Scheme Tamil Medium.pdf",
+          "message_id": 5267,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5267"
+        }
+      }
+    },
+    "md": {
+      "code": "md",
+      "name": "සන්නිවේදනය හා මාධ්‍ය අධ්‍යයනය (Media Studies)",
+      "topic_thread_id": 4225,
+      "topic_name": "මාධ්‍ය අධ්‍යයනය",
+      "files": {
+        "md_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L Communication and Media Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5280,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5280"
+        },
+        "md_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L Communication and Media Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5281,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5281"
+        },
+        "md_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L Communication and Media Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5282,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5282"
+        },
+        "md_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L Communication and Media Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5283,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5283"
+        },
+        "md_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L Communication and Media Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5284,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5284"
+        },
+        "md_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L Communication and Media Studies Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5285,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5285"
+        },
+        "md_2024_tamil": {
+          "year": "2024",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2024 G.C.E. A/L Communication and Media Studies Marking Scheme Tamil Medium.pdf",
+          "message_id": 5286,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5286"
+        },
+        "md_2023_tamil": {
+          "year": "2023",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2023 G.C.E. A/L Communication and Media Studies Marking Scheme Tamil Medium.pdf",
+          "message_id": 5287,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5287"
+        },
+        "md_2024_english": {
+          "year": "2024",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2024 G.C.E. A/L Communication and Media Studies Marking Scheme English Medium.pdf",
+          "message_id": 5288,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5288"
+        }
+      }
+    },
+    "agri": {
+      "code": "agri",
+      "name": "කෘෂි විද්‍යාව (Agricultural Science)",
+      "topic_thread_id": 5490,
+      "topic_name": "කෘෂි විද්‍යාව",
+      "files": {
+        "agri_2025_sinhala": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2025 G.C.E. A/L Agricultural Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5300,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5300"
+        },
+        "agri_2024_sinhala": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2024 G.C.E. A/L Agricultural Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5301,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5301"
+        },
+        "agri_2023_sinhala": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2023 (2024) G.C.E. A/L Agricultural Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5302,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5302"
+        },
+        "agri_2022_sinhala": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2022 (2023) G.C.E. A/L Agricultural Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5303,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5303"
+        },
+        "agri_2021_sinhala": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2021 G.C.E. A/L Agricultural Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5304,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5304"
+        },
+        "agri_2020_sinhala": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2020 G.C.E. A/L Agricultural Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5305,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5305"
+        },
+        "agri_2018_sinhala": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "medium_label": "🇱🇰 සිංහල මාධ්‍යය",
+          "filename": "2018 G.C.E. A/L Agricultural Science Marking Scheme Sinhala Medium.pdf",
+          "message_id": 5306,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5306"
+        },
+        "agri_2024_tamil": {
+          "year": "2024",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2024 G.C.E. A/L Agricultural Science Marking Scheme Tamil Medium.pdf",
+          "message_id": 5307,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5307"
+        },
+        "agri_2023_tamil": {
+          "year": "2023",
+          "medium": "Tamil_Medium",
+          "medium_label": "🇮🇳 தமிழ் மொழி",
+          "filename": "2023 G.C.E. A/L Agricultural Science Marking Scheme Tamil Medium.pdf",
+          "message_id": 5308,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5308"
+        },
+        "agri_2024_english": {
+          "year": "2024",
+          "medium": "English_Medium",
+          "medium_label": "🇬🇧 English Medium",
+          "filename": "2024 G.C.E. A/L Agricultural Science Marking Scheme English Medium.pdf",
+          "message_id": 5309,
+          "file_id": "",
+          "message_link": "https://t.me/c/4322002704/5309"
+        }
+      }
+    }
+  }
+}

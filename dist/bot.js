@@ -61,6 +61,15 @@ import {
   evaluateInChatMapAnswer,
   formatMiniAppResult
 } from './map_quiz_manager.js';
+import {
+  loadMarkingsDb,
+  normalizeMarkingSubject,
+  getSubjectByThreadId,
+  buildMarkingSubjectsMenu,
+  buildMarkingMediumMenu,
+  buildMarkingYearsMenu,
+  buildMarkingDirectYearMessage
+} from './marking_manager.js';
 
 // Load environment variables
 dotenv.config();
@@ -6122,6 +6131,67 @@ bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, asy
   }).catch(e => console.error('Error sending map hub message:', e.message));
 });
 
+// Command: /marking or /markings or /marking_scheme (Interactive Marking Schemes Navigation)
+bot.onText(/^\/(marking|markings|marking_scheme|markingscheme)(?:_([a-z0-9_]+))?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?(@\w+)?/i, async (msg, match) => {
+  if (!await enforceDirectAccessControl(msg)) return;
+  const chatId = msg.chat.id;
+  const { threadId, topicSubject } = getThreadContext(msg);
+  const replyOpts = {
+    reply_to_message_id: msg.message_id,
+    ...(threadId ? { message_thread_id: threadId } : {})
+  };
+
+  const rawArg1 = (match[2] || match[3] || '').trim();
+  const rawArg2 = (match[4] || '').trim();
+
+  let subCode = null;
+  let year = null;
+
+  // Case A: User typed "/marking 2025" or "/marking 2024" directly
+  if (/^\d{4}$/.test(rawArg1)) {
+    year = rawArg1;
+    subCode = normalizeMarkingSubject(topicSubject) || getSubjectByThreadId(threadId);
+  } else if (rawArg1) {
+    subCode = normalizeMarkingSubject(rawArg1);
+    if (/^\d{4}$/.test(rawArg2)) {
+      year = rawArg2;
+    }
+  }
+
+  // Case B: If inside a specific forum topic thread and no subject explicitly given -> auto-detect
+  if (!subCode && threadId) {
+    subCode = normalizeMarkingSubject(topicSubject) || getSubjectByThreadId(threadId);
+  }
+
+  // 1. Direct Year query: /marking <subject> <year>
+  if (subCode && year) {
+    const res = buildMarkingDirectYearMessage(subCode, year);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending direct year marking:', e.message));
+  }
+
+  // 2. Subject specified: /marking <subject> -> Show Language Selection Menu (Step A)
+  if (subCode) {
+    const res = buildMarkingMediumMenu(subCode);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending subject marking medium menu:', e.message));
+  }
+
+  // 3. No arguments: /marking -> Show 11-Subject Picker Menu
+  const res = buildMarkingSubjectsMenu();
+  return bot.sendMessage(chatId, res.text, {
+    parse_mode: 'Markdown',
+    reply_markup: res.keyboard,
+    ...replyOpts
+  }).catch(e => console.error('Error sending marking subjects menu:', e.message));
+});
+
 // Callback Query Handler
 bot.on('callback_query', async (query) => {
   const chatId = query.message ? query.message.chat.id : null;
@@ -6139,6 +6209,50 @@ bot.on('callback_query', async (query) => {
   }
 
   try {
+    // Marking Schemes Navigation Callback Queries
+    if (data === 'mark_subjects') {
+      await safeAnswerCallback(query.id);
+      const res = buildMarkingSubjectsMenu();
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('mark_sub:')) {
+      const subCode = data.replace('mark_sub:', '');
+      await safeAnswerCallback(query.id);
+      const res = buildMarkingMediumMenu(subCode);
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('mark_med:')) {
+      const parts = data.split(':');
+      const subCode = parts[1];
+      const medium = parts[2] || 'Sinhala_Medium';
+      await safeAnswerCallback(query.id);
+      const res = buildMarkingYearsMenu(subCode, medium);
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
     // Map Marking Hub & Quizzes
     if (data === 'open_map_hub') {
       await safeAnswerCallback(query.id);
