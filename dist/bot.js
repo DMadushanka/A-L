@@ -6132,7 +6132,7 @@ bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, asy
 });
 
 // Command: /marking or /markings or /marking_scheme (Interactive Marking Schemes Navigation)
-bot.onText(/^\/(marking|markings|marking_scheme|markingscheme)(?:_([a-z0-9_]+))?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?(@\w+)?/i, async (msg, match) => {
+bot.onText(/^\/(marking_scheme|markingscheme|markings|marking)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
   if (!await enforceDirectAccessControl(msg)) return;
   const chatId = msg.chat.id;
   const { threadId, topicSubject } = getThreadContext(msg);

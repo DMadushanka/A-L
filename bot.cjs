@@ -70193,16 +70193,55 @@ function parseScheduleDateTime(value) {
 
 const execFileAsync = require$$1.promisify(child_process.execFile);
 
+/**
+ * Sanitize Mermaid code to avoid syntax errors and "Unsupported markdown: list" issues:
+ * 1. Convert ordered list prefixes (e.g. `1. `, `2. `, `10. `) inside node labels to `1) `, `2) `, `10) `
+ * 2. Convert unordered bullet prefixes (e.g. `- `, `* `, `+ `) inside node labels to `• `
+ * 3. Fix list numbering in mindmaps
+ * 4. Clean stray backticks or malformed markdown inside labels
+ */
+function sanitizeMermaidCode(mermaidCode) {
+  if (!mermaidCode || !mermaidCode.trim()) return '';
+  let code = mermaidCode.trim();
+
+  // Strip markdown code fences if accidentally included inside
+  code = code.replace(/^```(?:mermaid)?/i, '').replace(/```$/i, '').trim();
+
+  // Fix numbered list markers inside flowchart / graph node brackets:
+  // e.g. ["1. Text"], ('2. Text'), {"3. Text"}, (("4. Text")), [/"5. Text"/], [\ "6. Text" \]
+  code = code.replace(/(\[\s*["']?\s*)(\d+)[\.\:]\s+/g, '$1$2) ');
+  code = code.replace(/(\(\s*["']?\s*)(\d+)[\.\:]\s+/g, '$1$2) ');
+  code = code.replace(/(\{\s*["']?\s*)(\d+)[\.\:]\s+/g, '$1$2) ');
+  code = code.replace(/(\(\(\s*["']?\s*)(\d+)[\.\:]\s+/g, '$1$2) ');
+  code = code.replace(/(\[\/\s*["']?\s*)(\d+)[\.\:]\s+/g, '$1$2) ');
+  code = code.replace(/(\[\\[\s*["']?\s*)(\d+)[\.\:]\s+/g, '$1$2) ');
+
+  // Fix bullet point markers inside node brackets
+  code = code.replace(/(\[\s*["']?\s*)[-\*\+]\s+/g, '$1• ');
+  code = code.replace(/(\(\s*["']?\s*)[-\*\+]\s+/g, '$1• ');
+  code = code.replace(/(\{\s*["']?\s*)[-\*\+]\s+/g, '$1• ');
+  code = code.replace(/(\(\(\s*["']?\s*)[-\*\+]\s+/g, '$1• ');
+
+  // In mindmaps, clean leading numbers or bullets on leaf nodes
+  if (code.startsWith('mindmap')) {
+    code = code.replace(/^(\s+)(\d+)[\.\:]\s+/gm, '$1$2) ');
+    code = code.replace(/^(\s+)[-\*\+]\s+/gm, '$1• ');
+  }
+
+  return code;
+}
+
 function generateMermaidPakoUrl(mermaidCode, outputFormat = 'img', bgColor = 'white', subjectTheme = null) {
   if (!mermaidCode || !mermaidCode.trim()) return null;
 
+  const sanitizedCode = sanitizeMermaidCode(mermaidCode);
   const theme = subjectTheme || {};
   const primaryColor = theme.section_bg || '#EFF6FF';
   const borderColor = theme.section_border || '#2563EB';
   const textColor = '#0F172A';
 
   const state = {
-    code: mermaidCode.trim(),
+    code: sanitizedCode,
     mermaid: {
       theme: 'base',
       themeVariables: {
@@ -70221,6 +70260,9 @@ function generateMermaidPakoUrl(mermaidCode, outputFormat = 'img', bgColor = 'wh
         defaultLinkColor: borderColor,
         edgeLabelBackground: '#FFFFFF',
         nodePadding: '36px'
+      },
+      flowchart: {
+        htmlLabels: true
       }
     },
     autoSync: true,
@@ -70241,11 +70283,12 @@ function generateMermaidPakoUrl(mermaidCode, outputFormat = 'img', bgColor = 'wh
 async function renderHighResDiagramPng(mermaidCode, subjectCode = 'auto') {
   if (!mermaidCode || !mermaidCode.trim()) return null;
 
+  const sanitizedCode = sanitizeMermaidCode(mermaidCode);
   const cleanSubject = (subjectCode || 'auto').toLowerCase();
   const cacheDir = path.resolve(process.cwd(), 'diagram_cache');
   if (!fs.existsSync(cacheDir)) fs.mkdirSync(cacheDir, { recursive: true });
 
-  const hash = require$$2$2.createHash('md5').update(`${mermaidCode.trim()}_${cleanSubject}`).digest('hex');
+  const hash = require$$2$2.createHash('md5').update(`${sanitizedCode}_${cleanSubject}`).digest('hex');
   const outPng = path.join(cacheDir, `tg_diag_hd_${hash}.png`);
 
   if (fs.existsSync(outPng) && fs.statSync(outPng).size > 1000) {
@@ -70254,7 +70297,7 @@ async function renderHighResDiagramPng(mermaidCode, subjectCode = 'auto') {
 
   const tempTxt = path.join(cacheDir, `temp_diag_${hash}.txt`);
   try {
-    fs.writeFileSync(tempTxt, mermaidCode.trim(), 'utf8');
+    fs.writeFileSync(tempTxt, sanitizedCode, 'utf8');
     const pythonScript = path.resolve(process.cwd(), 'generate_pdf_note.py');
     await execFileAsync('python', [pythonScript, 'render_diagram', tempTxt, outPng, cleanSubject], { timeout: 35000 });
     if (fs.existsSync(outPng) && fs.statSync(outPng).size > 500) {
@@ -70269,7 +70312,7 @@ async function renderHighResDiagramPng(mermaidCode, subjectCode = 'auto') {
   }
 
   // Fallback to high-resolution ink URL
-  return generateMermaidPakoUrl(mermaidCode, 'img', 'white');
+  return generateMermaidPakoUrl(sanitizedCode, 'img', 'white');
 }
 
 function extractMermaidDiagrams(rawText, subjectCode = 'auto') {
@@ -70283,10 +70326,11 @@ function extractMermaidDiagrams(rawText, subjectCode = 'auto') {
     const code = match[1].trim();
     // Verify if it looks like mermaid syntax
     if (code.match(/^(?:graph|flowchart|sequenceDiagram|classDiagram|stateDiagram|stateDiagram-v2|erDiagram|journey|gantt|pie|gitGraph|mindmap|timeline|quadrantChart)\b/i) || code.includes('-->') || code.includes('---')) {
-      const pakoUrl = generateMermaidPakoUrl(code, 'img', 'white');
+      const sanitized = sanitizeMermaidCode(code);
+      const pakoUrl = generateMermaidPakoUrl(sanitized, 'img', 'white');
       diagrams.push({
         fullMatch: match[0],
-        code: code,
+        code: sanitized,
         url: pakoUrl,
         subjectCode: subjectCode
       });
@@ -70296,8 +70340,8 @@ function extractMermaidDiagrams(rawText, subjectCode = 'auto') {
   return { diagrams };
 }
 
-const _scriptDir$2 = (typeof __dirname !== 'undefined' && __dirname) ? __dirname : process.cwd();
-const NORMAL_QUIZ_DIR = path.resolve(_scriptDir$2, 'normal_quiz');
+const _scriptDir$3 = (typeof __dirname !== 'undefined' && __dirname) ? __dirname : process.cwd();
+const NORMAL_QUIZ_DIR = path.resolve(_scriptDir$3, 'normal_quiz');
 
 const SUBJECTS_CONFIG = {
   bc: {
@@ -70306,7 +70350,7 @@ const SUBJECTS_CONFIG = {
     shortName: 'බෞද්ධ ශිෂ්ටාචාරය',
     englishName: 'Buddhist Civilization',
     icon: '☸️',
-    rawFile: 'bc_mcq.json',
+    rawFiles: ['bc_mcq.json'],
     description: 'ථෙරවාද බුදුදහම, ඉන්දියානු හා ශ්‍රී ලාංකේය බෞද්ධ සංස්කෘතිය හා ඉතිහාසය'
   },
   geo: {
@@ -70315,7 +70359,7 @@ const SUBJECTS_CONFIG = {
     shortName: 'භූගෝල විද්‍යාව',
     englishName: 'Geography',
     icon: '🌍',
-    rawFile: 'geo_mcq.json',
+    rawFiles: ['geography_mcq.json', 'geo_mcq.json'],
     description: 'භෞතික භූගෝල විද්‍යාව, මානව හා ප්‍රායෝගික භූගෝල විද්‍යාව'
   },
   md: {
@@ -70324,7 +70368,7 @@ const SUBJECTS_CONFIG = {
     shortName: 'මාධ්‍ය අධ්‍යයනය',
     englishName: 'Media Studies',
     icon: '📡',
-    rawFile: 'md_mcq.json',
+    rawFiles: ['md_mcq.json'],
     description: 'සන්නිවේදන න්‍යාය, ජනමාධ්‍ය, පුවත්පත් කලාව හා මාධ්‍ය නීතිය'
   },
   si: {
@@ -70333,7 +70377,7 @@ const SUBJECTS_CONFIG = {
     shortName: 'සිංහල',
     englishName: 'Sinhala Language',
     icon: '✍️',
-    rawFile: 'si_mcq.json',
+    rawFiles: ['sinhala_mcq.json', 'si_mcq.json'],
     description: 'සිංහල ව්‍යාකරණය, භාෂා රීති, සාහිත්‍යය හා විචාර'
   }
 };
@@ -70345,12 +70389,15 @@ const MCQS_PER_QUIZ = 50;
 let cachedSubjectQuizzes = null;
 
 /**
- * Clean question text by stripping leading numbers e.g. "(01) ", "1. ", "01 - "
+ * Clean question text by stripping leading numbers e.g. "[18/28] ", "(01) ", "1. ", "353. "
  */
 function cleanQuestionText(qText) {
   if (!qText) return '';
   return qText
-    .replace(/^[\(\[\{]?\s*\d+\s*[\)\]\}]?[\.\:\-\s]*/, '')
+    .replace(/^\[\s*\d+\s*\/\s*\d+\s*\]\s*/, '')
+    .replace(/^[\(\[\{]?\s*\d+\s*[\)\]\}]?[\.\:\-\s]+/, '')
+    .replace(/^Q\d+[\.\:\-\s]*/i, '')
+    .replace(/[,،\s]+$/, '')
     .trim();
 }
 
@@ -70385,6 +70432,14 @@ function extractRawQuestions(filePath) {
       const q = cleanQuestionText(item.question || item.q || '');
       const o = cleanOptionsList(item.options || item.o || []);
       let c = item.correct_option_id !== undefined ? Number(item.correct_option_id) : (item.c !== undefined ? Number(item.c) : 0);
+
+      // If correct_answer is given and does not match options[c], check if options has correct_answer
+      if (item.correct_answer && typeof item.correct_answer === 'string' && item.correct_answer.trim()) {
+        const matchIdx = o.findIndex(opt => opt === item.correct_answer.trim());
+        if (matchIdx !== -1) {
+          c = matchIdx;
+        }
+      }
 
       // Verify correct option bounds
       if (isNaN(c) || c < 0 || c >= o.length) {
@@ -70422,8 +70477,16 @@ function initializeNormalQuizzes(forceReload = false) {
   const result = {};
 
   for (const [subCode, cfg] of Object.entries(SUBJECTS_CONFIG)) {
-    const filePath = path.join(NORMAL_QUIZ_DIR, cfg.rawFile);
-    const questions = extractRawQuestions(filePath);
+    let filePath = null;
+    for (const f of cfg.rawFiles) {
+      const candidate = path.join(NORMAL_QUIZ_DIR, f);
+      if (fs.existsSync(candidate)) {
+        filePath = candidate;
+        break;
+      }
+    }
+
+    const questions = filePath ? extractRawQuestions(filePath) : [];
     const totalQuestions = questions.length;
     const totalQuizzes = Math.ceil(totalQuestions / MCQS_PER_QUIZ);
 
@@ -70612,8 +70675,8 @@ function buildSubjectQuizzesMessage(subCode, page = 1) {
   };
 }
 
-const _scriptDir$1 = (typeof __dirname !== 'undefined' && __dirname) ? __dirname : process.cwd();
-const MAP_LOCATIONS_FILE = path.resolve(_scriptDir$1, 'normal_quiz', 'map_locations.json');
+const _scriptDir$2 = (typeof __dirname !== 'undefined' && __dirname) ? __dirname : process.cwd();
+const MAP_LOCATIONS_FILE = path.resolve(_scriptDir$2, 'normal_quiz', 'map_locations.json');
 
 let cachedMapData = null;
 
@@ -70638,9 +70701,10 @@ function loadMapLocations() {
  * Build the Main Map Marking Menu message and Inline Keyboard
  * Supports Telegram Mini App (TWA) + In-Chat Fast Drills
  */
-function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L') {
-  // Ensure HTTPS for Telegram Mini App
-  let webAppUrl = `${baseUrl.replace(/\/$/, '')}/map_app.html`;
+function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L', isGroup = false) {
+  // Ensure HTTPS and append dynamic version to bust Telegram WebView cache
+  const cacheBuster = Date.now();
+  let webAppUrl = `${baseUrl.replace(/\/$/, '')}/map_app.html?v=${cacheBuster}`;
   if (!webAppUrl.startsWith('https://') && !webAppUrl.startsWith('http://localhost')) {
     webAppUrl = `https://${webAppUrl.replace(/^http:\/\//, '')}`;
   }
@@ -70653,7 +70717,6 @@ function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L') {
 📌 *විෂයයන්:*
 • 📜 **ඉතිහාසය (History):** පුරාණ වරාය, රාජධානි, සිද්ධස්ථාන, සටන්බිම්
 • 🌍 **භූගෝල විද්‍යාව (Geography):** ගංගා, උස්බිම්, ඛනිජ කලාප, වරායවල්
-• ☸️ **බෞද්ධ ශිෂ්ටාචාරය (BC):** දඹදිව සොළොස් මහා ජනපද, පූජනීය ස්ථාන
 
 ✨ **ඔබට අවශ්‍ය ක්‍රමය තෝරන්න:**
 1️⃣ **📱 අන්තර්ක්‍රියාකාරී සිතියම (Interactive Mini App):**
@@ -70662,24 +70725,32 @@ function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L') {
 2️⃣ **⚡ ක්ෂණික ප්‍රශ්නාවලිය (In-Chat Quiz):**
    _Chat එක තුළදීම සිතියම් ප්‍රශ්න වලට පිළිතුරු සපයන්න._`;
 
+  const slAppButton = isGroup
+    ? { text: '🇱🇰 ශ්‍රී ලංකා සිතියම් App 🗺️', url: `${webAppUrl}?map=sri_lanka` }
+    : { text: '🇱🇰 ශ්‍රී ලංකා සිතියම් App 🗺️', web_app: { url: `${webAppUrl}?map=sri_lanka` } };
+
+  const worldAppButton = isGroup
+    ? { text: '🌍 ලෝක සිතියම් App (Geography) 🌐', url: `${webAppUrl}?map=world_geo` }
+    : { text: '🌍 ලෝක සිතියම් App (Geography) 🌐', web_app: { url: `${webAppUrl}?map=world_geo` } };
+
   const keyboard = {
     inline_keyboard: [
       [
-        {
-          text: '📱 අන්තර්ක්‍රියාකාරී සිතියම (Open Mini App) 🗺️',
-          web_app: { url: webAppUrl }
-        }
+        slAppButton
       ],
       [
-        { text: '📜 ඉතිහාසය සිතියම් Quiz', callback_data: 'map_quiz:history:sri_lanka' },
-        { text: '🌍 භූගෝල විද්‍යාව Quiz', callback_data: 'map_quiz:geo:sri_lanka' }
+        worldAppButton
       ],
       [
-        { text: '☸️ බෞද්ධ ශිෂ්ටාචාරය (දඹදිව)', callback_data: 'map_quiz:bc:india_bc' },
+        { text: '📜 ඉතිහාසය (ශ්‍රී ලංකා සිතියම)', callback_data: 'map_quiz:history:sri_lanka' },
+        { text: '🌍 භූගෝල (ලෝක සිතියම)', callback_data: 'map_quiz:geo:world_geo' }
+      ],
+      [
+        { text: '🇱🇰 භූගෝල (ශ්‍රී ලංකා සිතියම)', callback_data: 'map_quiz:geo:sri_lanka' },
         { text: '🎲 මිශ්‍ර සිතියම් පුහුණුව', callback_data: 'map_quiz:all:sri_lanka' }
       ],
       [
-        { text: '🔙 ප්‍රධාන මෙනුවට (Main Menu)', callback_data: 'main_menu' }
+        { text: '🔙 ප්‍රධාන මෙනුවට (Main Menu)', callback_data: 'nav_subjects' }
       ]
     ]
   };
@@ -70721,9 +70792,17 @@ function generateInChatMapQuestion(subject = 'all', mapKey = 'sri_lanka') {
     return `${letters[i]}) ${opt.name_si}`;
   }).join('\n');
 
-  // Relative coordinate description for student orientation
-  const xDir = target.coords.x < 35 ? 'බටහිර' : (target.coords.x > 65 ? 'නැගෙනහිර' : 'මධ්‍යම');
-  const yDir = target.coords.y < 35 ? 'උතුරු' : (target.coords.y > 65 ? 'දකුණු' : 'මධ්‍යම');
+  // Relative location hint
+  let locHint = '';
+  if (mapKey === 'world_geo') {
+    locHint = `🌐 **වර්ගීකරණය:** ${target.category_si || 'ලෝක භූගෝල විද්‍යා ස්ථානයක්'}`;
+  } else {
+    const lat = target.coords.lat;
+    const lng = target.coords.lng;
+    const xDir = lng < 80.2 ? 'බටහිර' : (lng > 81.2 ? 'නැගෙනහිර' : 'මධ්‍යම');
+    const yDir = lat < 6.8 ? 'දකුණු' : (lat > 8.5 ? 'උතුරු' : 'මධ්‍යම');
+    locHint = `🧭 **පිහිටීම ඉඟිය:** ශ්‍රී ලංකාවේ **${yDir}-${xDir}** ප්‍රදේශය ආශ්‍රිතව පිහිටා ඇත.`;
+  }
 
   const questionText = 
 `🗺️ *සිතියම් ප්‍රශ්නාවලිය — ${mapMeta.name_si}*
@@ -70731,7 +70810,7 @@ function generateInChatMapQuestion(subject = 'all', mapKey = 'sri_lanka') {
 📍 **ස්ථාන විස්තරය:**
 _${target.description}_
 
-🧭 **පිහිටීම ඉඟිය:** ශ්‍රී ලංකාවේ **${yDir}-${xDir}** ප්‍රදේශය ආශ්‍රිතව පිහිටා ඇත.
+${locHint}
 
 ❓ **මෙම විස්තරයට අදාළ නිවැරදි ස්ථානය කුමක්ද?**
 
@@ -70852,6 +70931,404 @@ ${badge} **ලකුණු:** \`${score} / ${maxScore}\` (*${percentage}%*)
   };
 
   return { text, keyboard, percentage };
+}
+
+const _scriptDir$1 = (typeof __dirname !== 'undefined' && __dirname) ? __dirname : process.cwd();
+const DB_PATH = path.resolve(_scriptDir$1, 'markings_archive_db.json');
+
+/**
+ * Load the Markings Archive Database from disk
+ */
+function loadMarkingsDb() {
+  try {
+    if (fs.existsSync(DB_PATH)) {
+      const content = fs.readFileSync(DB_PATH, 'utf-8');
+      return JSON.parse(content);
+    }
+  } catch (err) {
+    console.error('⚠️ [MarkingManager] Error reading markings_archive_db.json:', err.message);
+  }
+  return { group_id: -1004322002704, clean_group_id: '4322002704', subjects: {} };
+}
+
+/**
+ * Normalize subject code and aliases for marking schemes
+ */
+function normalizeMarkingSubject(raw) {
+  if (!raw) return null;
+  const s = String(raw).toLowerCase().trim().replace(/^[\/_]/, '');
+
+  const map = {
+    'si': 'si',
+    'sinhala': 'si',
+    'sinhala_language': 'si',
+    'sin': 'si',
+
+    'bc': 'bc',
+    'buddhist': 'bc',
+    'buddhist_civ': 'bc',
+    'buddhist_civilization': 'bc',
+    'buddhism': 'bc',
+
+    'geo': 'geo',
+    'geography': 'geo',
+    'geog': 'geo',
+
+    'pl': 'pl',
+    'political': 'pl',
+    'pol': 'pl',
+    'political_science': 'pl',
+    'politics': 'pl',
+
+    'hist': 'hist',
+    'history': 'hist',
+    'hi': 'hist',
+
+    'bs': 'bs',
+    'business': 'bs',
+    'business_studies': 'bs',
+    'bus': 'bs',
+
+    'dr': 'dr',
+    'drama': 'dr',
+    'theatre': 'dr',
+    'drama_theatre': 'dr',
+
+    'mu': 'mu',
+    'music': 'mu',
+    'oriental_music': 'mu',
+    'western_music': 'mu',
+    'carnatic_music': 'mu',
+
+    'dn': 'dn',
+    'dancing': 'dn',
+    'dance': 'dn',
+    'natum': 'dn',
+
+    'md': 'md',
+    'media': 'md',
+    'communication': 'md',
+    'media_studies': 'md',
+
+    'agri': 'agri',
+    'agriculture': 'agri',
+    'agricultural_science': 'agri',
+    'ag': 'agri'
+  };
+
+  return map[s] || null;
+}
+
+/**
+ * Match subject code by Forum Topic Thread ID
+ */
+function getSubjectByThreadId(threadId) {
+  if (!threadId) return null;
+  const tid = parseInt(threadId, 10);
+  const threadMap = {
+    4210: 'si',
+    4215: 'bc',
+    4216: 'geo',
+    4217: 'pl',
+    4220: 'hist',
+    4221: 'bs',
+    4222: 'dr',
+    4223: 'mu',
+    4224: 'dn',
+    4225: 'md',
+    5490: 'agri'
+  };
+  return threadMap[tid] || null;
+}
+
+/**
+ * Build 11-Subject Picker Menu for /marking
+ */
+function buildMarkingSubjectsMenu() {
+  const text =
+`📑 *A/L Marking Schemes — ලකුණු දීමේ පටිපාටි මධ්‍යස්ථානය*
+━━━━━━━━━━━━━━━━━━━━━
+🎓 උසස් පෙළ විභාගයේ සියලුම ප්‍රධාන විෂයයන් සඳහා වන **නිල විභාග ලකුණු දීමේ පටිපාටි (Marking Schemes)** අපගේ Telegram Group Topic තුළ අන්තර්ගත කර ඇත.
+
+👇 **ඔබට අවශ්‍ය විෂය පහතින් තෝරන්න:**`;
+
+  const keyboard = {
+    inline_keyboard: [
+      [
+        { text: '📜 සිංහල (Sinhala)', callback_data: 'mark_sub:si' },
+        { text: '☸️ බෞද්ධ ශිෂ්ටාචාරය (BC)', callback_data: 'mark_sub:bc' }
+      ],
+      [
+        { text: '🌍 භූගෝල විද්‍යාව (Geography)', callback_data: 'mark_sub:geo' },
+        { text: '⚖️ දේශපාලන විද්‍යාව (Pol Sci)', callback_data: 'mark_sub:pl' }
+      ],
+      [
+        { text: '🏛️ ඉතිහාසය (History)', callback_data: 'mark_sub:hist' },
+        { text: '💼 ව්‍යාපාර අධ්‍යයනය (BS)', callback_data: 'mark_sub:bs' }
+      ],
+      [
+        { text: '🎭 නාට්‍ය හා රංග කලාව (Drama)', callback_data: 'mark_sub:dr' },
+        { text: '🎵 සංගීතය (Music)', callback_data: 'mark_sub:mu' }
+      ],
+      [
+        { text: '💃 නර්තනය (Dancing)', callback_data: 'mark_sub:dn' },
+        { text: '📺 මාධ්‍ය අධ්‍යයනය (Media)', callback_data: 'mark_sub:md' }
+      ],
+      [
+        { text: '🌾 කෘෂි විද්‍යාව (Agriculture)', callback_data: 'mark_sub:agri' }
+      ],
+      [
+        { text: '🔙 ප්‍රධාන මෙනුවට (Main Menu)', callback_data: 'nav_subjects' }
+      ]
+    ]
+  };
+
+  return { text, keyboard };
+}
+
+/**
+ * Step A: Build Language Medium Selection Menu for a specific subject
+ */
+function buildMarkingMediumMenu(subCode) {
+  const db = loadMarkingsDb();
+  const sub = db.subjects?.[subCode];
+
+  if (!sub) {
+    return buildMarkingSubjectsMenu();
+  }
+
+  const files = Object.values(sub.files || {});
+  const totalCount = files.length;
+
+  const sinhalaFiles = files.filter(f => f.medium === 'Sinhala_Medium' || !f.medium);
+  const englishFiles = files.filter(f => f.medium === 'English_Medium');
+  const tamilFiles = files.filter(f => f.medium === 'Tamil_Medium');
+
+  const text =
+`📑 *${sub.name}*
+*ලකුණු දීමේ පටිපාටි (Marking Schemes)*
+━━━━━━━━━━━━━━━━━━━━━
+📌 **අදාළ Forum Topic එක:** \`${sub.topic_name || sub.name}\` (Thread: \`#${sub.topic_thread_id}\`)
+📁 **ලබාගත හැකි සම්පූර්ණ ලකුණු සම්මුති ගණන:** \`${totalCount}\` ක්
+
+👇 **කරුණාකර ඔබට අවශ්‍ය භාෂා මාධ්‍යය (Language Medium) තෝරන්න:**`;
+
+  const inlineKeyboard = [];
+
+  if (sinhalaFiles.length > 0) {
+    inlineKeyboard.push([
+      { text: `🇱🇰 සිංහල මාධ්‍යය (Sinhala Medium) [${sinhalaFiles.length}]`, callback_data: `mark_med:${subCode}:Sinhala_Medium` }
+    ]);
+  }
+  if (englishFiles.length > 0) {
+    inlineKeyboard.push([
+      { text: `🇬🇧 English Medium [${englishFiles.length}]`, callback_data: `mark_med:${subCode}:English_Medium` }
+    ]);
+  }
+  if (tamilFiles.length > 0) {
+    inlineKeyboard.push([
+      { text: `🇮🇳 தமிழ் மொழி (Tamil Medium) [${tamilFiles.length}]`, callback_data: `mark_med:${subCode}:Tamil_Medium` }
+    ]);
+  }
+
+  inlineKeyboard.push([
+    { text: '🔙 සියලුම විෂයයන් (All Subjects)', callback_data: 'mark_subjects' }
+  ]);
+
+  return {
+    text,
+    keyboard: { inline_keyboard: inlineKeyboard }
+  };
+}
+
+/**
+ * Helper to construct direct Telegram forum topic message link
+ * Format: https://t.me/c/<clean_group_id>/<thread_id>/<message_id>
+ */
+function getDirectMessageLink(file, sub, cleanGroupId = '4322002704') {
+  if (!file) return `https://t.me/c/${cleanGroupId}`;
+  const threadId = file.thread_id || sub?.topic_thread_id;
+  const msgId = file.message_id;
+  if (threadId && msgId) {
+    return `https://t.me/c/${cleanGroupId}/${threadId}/${msgId}`;
+  }
+  if (msgId) {
+    return `https://t.me/c/${cleanGroupId}/${msgId}`;
+  }
+  if (threadId) {
+    return `https://t.me/c/${cleanGroupId}/${threadId}`;
+  }
+  return file.message_link || `https://t.me/c/${cleanGroupId}`;
+}
+
+/**
+ * Step B: Build Year Navigation Buttons for a subject & medium
+ * Each Year Button is a Direct Navigation Link URL Button!
+ */
+function buildMarkingYearsMenu(subCode, medium = 'Sinhala_Medium') {
+  const db = loadMarkingsDb();
+  const sub = db.subjects?.[subCode];
+
+  if (!sub) {
+    return buildMarkingSubjectsMenu();
+  }
+
+  const cleanGroupId = db.clean_group_id || '4322002704';
+  const allFiles = Object.values(sub.files || {});
+  const filtered = allFiles
+    .filter(f => (f.medium || 'Sinhala_Medium') === medium)
+    .sort((a, b) => {
+      const ya = parseInt(a.year || '0', 10);
+      const yb = parseInt(b.year || '0', 10);
+      if (isNaN(ya) && isNaN(yb)) return 0;
+      if (isNaN(ya)) return 1;
+      if (isNaN(yb)) return -1;
+      return yb - ya;
+    });
+
+  const mediumLabelMap = {
+    'Sinhala_Medium': '🇱🇰 සිංහල මාධ්‍යය (Sinhala Medium)',
+    'English_Medium': '🇬🇧 English Medium',
+    'Tamil_Medium': '🇮🇳 தமிழ் மொழி (Tamil Medium)'
+  };
+  const mediumName = mediumLabelMap[medium] || medium;
+
+  const text =
+`📑 *${sub.name}*
+🌐 **${mediumName}**
+━━━━━━━━━━━━━━━━━━━━━
+📂 **ලකුණු දීමේ පටිපාටි (Marking Schemes) ලැයිස්තුව:**
+_පහතින් ඔබට අවශ්‍ය වර්ෂය මත Click කළ විට Group Forum Topic එක තුළ ඇති නිවැරදි File එක වෙත සෘජුවම Navigation Jump වේ._`;
+
+  const inlineKeyboard = [];
+
+  // Group years in 2-column or 1-column layout
+  for (let i = 0; i < filtered.length; i += 2) {
+    const row = [];
+    const f1 = filtered[i];
+    const link1 = getDirectMessageLink(f1, sub, cleanGroupId);
+    row.push({
+      text: `📄 ${f1.year || 'Marking'} Scheme ↗️`,
+      url: link1
+    });
+
+    if (i + 1 < filtered.length) {
+      const f2 = filtered[i + 1];
+      const link2 = getDirectMessageLink(f2, sub, cleanGroupId);
+      row.push({
+        text: `📄 ${f2.year || 'Marking'} Scheme ↗️`,
+        url: link2
+      });
+    }
+    inlineKeyboard.push(row);
+  }
+
+  if (filtered.length === 0) {
+    const fallbackLink = `https://t.me/c/${cleanGroupId}/${sub.topic_thread_id}`;
+    inlineKeyboard.push([
+      { text: `💬 Topic Thread එක වෙත යන්න (#${sub.topic_thread_id}) ↗️`, url: fallbackLink }
+    ]);
+  }
+
+  // Navigation Back Buttons
+  inlineKeyboard.push([
+    { text: '🔙 මාධ්‍යය තෝරන්න (Change Medium)', callback_data: `mark_sub:${subCode}` },
+    { text: '🔙 සියලුම විෂයයන් (All Subjects)', callback_data: 'mark_subjects' }
+  ]);
+
+  return {
+    text,
+    keyboard: { inline_keyboard: inlineKeyboard }
+  };
+}
+
+/**
+ * Handle direct `/marking <sub_code> <year>` command
+ */
+function buildMarkingDirectYearMessage(subCode, year) {
+  const db = loadMarkingsDb();
+  const sub = db.subjects?.[subCode];
+
+  if (!sub) {
+    return buildMarkingSubjectsMenu();
+  }
+
+  const cleanGroupId = db.clean_group_id || '4322002704';
+  const allFiles = Object.values(sub.files || {});
+  const matchingFiles = allFiles.filter(f => String(f.year) === String(year));
+
+  if (matchingFiles.length === 0) {
+    // If exact year not in DB, link to the topic thread directly!
+    const topicLink = `https://t.me/c/${cleanGroupId}/${sub.topic_thread_id}`;
+    const text =
+`📑 *${sub.name} — ${year} Marking Scheme*
+━━━━━━━━━━━━━━━━━━━━━
+ℹ️ ${year} වර්ෂයට අදාළ ලකුණු දීමේ පටිපාටිය සෘජුවම සොයා ගැනීමට අදාළ Group Forum Topic එක වෙත පිවිසෙන්න.
+
+📌 **Topic Thread:** \`${sub.name}\` (Thread: \`#${sub.topic_thread_id}\`)`;
+
+    const keyboard = {
+      inline_keyboard: [
+        [
+          { text: `🚀 Open ${sub.name} Topic ↗️`, url: topicLink }
+        ],
+        [
+          { text: `🔙 ${sub.name} සියලුම වර්ෂ (All Years)`, callback_data: `mark_sub:${subCode}` },
+          { text: '🔙 විෂයයන් (Subjects)', callback_data: 'mark_subjects' }
+        ]
+      ]
+    };
+    return { text, keyboard };
+  }
+
+  // Primary file (prefer Sinhala Medium)
+  const primary = matchingFiles.find(f => f.medium === 'Sinhala_Medium') || matchingFiles[0];
+  const primaryLink = getDirectMessageLink(primary, sub, cleanGroupId);
+
+  const mediumLabelMap = {
+    'Sinhala_Medium': '🇱🇰 සිංහල මාධ්‍යය',
+    'English_Medium': '🇬🇧 English Medium',
+    'Tamil_Medium': '🇮🇳 தமிழ் மொழி'
+  };
+  const primaryLabel = mediumLabelMap[primary.medium] || primary.medium || 'සිංහල මාධ්‍යය';
+
+  const text =
+`📑 *${sub.name} — ${year} Marking Scheme*
+━━━━━━━━━━━━━━━━━━━━━
+📄 **ගොනු නාමය:** \`${primary.filename || `${year} Marking Scheme.pdf`}\`
+🌐 **භාෂා මාධ්‍යය:** \`${primaryLabel}\`
+📌 **Group Forum Topic:** \`${sub.name}\` (Thread: \`#${sub.topic_thread_id}\`)
+
+👇 **පහත බොත්තම ඔබා Topic එක තුළ ඇති File එක වෙත සෘජුවම පිවිසෙන්න:**`;
+
+  const inlineKeyboard = [
+    [
+      { text: `🚀 View ${year} Marking Scheme in Topic ↗️`, url: primaryLink }
+    ]
+  ];
+
+  // If additional language mediums exist for this year
+  const otherMediums = matchingFiles.filter(f => f !== primary);
+  if (otherMediums.length > 0) {
+    const medRow = otherMediums.map(f => {
+      const label = mediumLabelMap[f.medium] || f.medium;
+      return {
+        text: `${label} ↗️`,
+        url: getDirectMessageLink(f, sub, cleanGroupId)
+      };
+    });
+    inlineKeyboard.push(medRow);
+  }
+
+  inlineKeyboard.push([
+    { text: `🔙 ${sub.name} සියලුම වර්ෂ (All Years)`, callback_data: `mark_sub:${subCode}` },
+    { text: '🔙 සියලුම විෂයයන් (All Subjects)', callback_data: 'mark_subjects' }
+  ]);
+
+  return {
+    text,
+    keyboard: { inline_keyboard: inlineKeyboard }
+  };
 }
 
 // Polyfill global crypto.getRandomValues for pkg / packaged Node environments
@@ -71893,11 +72370,11 @@ function normalizeSubjectCode(input) {
 // Distinctive subject keyword dictionaries to detect cross-subject conflicts accurately
 const SUBJECT_KEYWORDS_MAP = {
   si: [
-    'සන්ධි', 'සමාස', 'කර්මධාරය', 'ද්වන්ද', 'තත්පුරුෂ', 'බහුව්‍රීහි', 'අව්‍යයීභාව', 'ප්‍රකෘති ස්වර',
+    'සන්ධි', 'සමාස', 'කර්මධාරය', 'ද්වන්ද', 'තත්පුරුෂ', 'බහුව්‍රීහි', 'අව්‍යයීභාව',
     'ව්‍යංජන', 'විභක්ති', 'ආඛ්‍යාත', 'කර්මකාරක', 'කර්තෘකාරක', 'තත්සම', 'තද්භව', 'නිපාත', 'උපසර්ග',
     'සිදත් සඟරා', 'ගුරුළුගෝමී', 'අමාවතුර', 'බුත්සරණ', 'ධර්මසේන', 'සද්ධර්මරත්නාවලිය', 'කාව්‍යශේඛර',
     'සැළලිහිණි', 'ගුත්තිල', 'මුනිදාස කුමාරතුංග', 'මාටින් වික්‍රමසිංහ', 'සිංහල භාෂාව', 'සිංහල සාහිත්‍ය',
-    'පද බෙදීම', 'අක්ෂර වින්‍යාසය', 'ව්‍යාකරණ', 'ප්‍රකෘති'
+    'පද බෙදීම', 'අක්ෂර වින්‍යාසය', 'ව්‍යාකරණ',
   ],
   bc: [
     'බෞද්ධ ශිෂ්ටාචාරය', 'ථෙරවාද', 'මහායාන', 'සංගායනා', 'සංඟායනා', 'අභයගිරි', 'ජේතවන', 'මහාවිහාර',
@@ -72764,10 +73241,11 @@ bot.on('message', async (msg) => {
   if (msg.text) {
     console.log(`📩 Incoming message in [${msg.chat.type}] (Chat ID: ${msg.chat.id}) from ${msg.from?.first_name || 'User'}: "${msg.text}"`);
 
-    // Direct /map or /sithiyam command handler
-    if (msg.text.startsWith('/map') || msg.text.startsWith('/sithiyam') || msg.text.includes('🗺️ සිතියම්')) {
+    // Handle Custom Reply Keyboard for Maps (non-command text)
+    if (msg.text.includes('🗺️ සිතියම්') && !msg.text.startsWith('/')) {
       if (!await enforceDirectAccessControl(msg)) return;
-      const { text, keyboard } = buildMapHubMessage(BASE_URL);
+      const isGroup = msg.chat && (msg.chat.type === 'group' || msg.chat.type === 'supergroup');
+      const { text, keyboard } = buildMapHubMessage(BASE_URL, isGroup);
       return bot.sendMessage(msg.chat.id, text, {
         parse_mode: 'Markdown',
         reply_markup: keyboard,
@@ -73801,7 +74279,7 @@ async function generateAndSendDailyMorningWish(targetChatId = null, threadId = n
 
     // Generate Animated SVG Document (1400x1000 resolution with embedded clean background image)
     const svgPath = createMorningWishFile(phrase, null, base64Bg || bgImageUrl);
-    
+
     // Render animated GIF from SVG for native in-chat animation playback in Telegram
     const gifPath = await renderSvgToGif(svgPath);
     const dateFormatted = formatMorningDate();
@@ -74053,7 +74531,7 @@ async function runMegaScheduledQuizSession(subCode, slotType = 'morning', target
     if (stickerPath && fs.existsSync(stickerPath)) {
       try {
         await bot.sendSticker(chatId, stickerPath, threadOpts).catch(async () => {
-          await bot.sendPhoto(chatId, stickerPath, threadOpts).catch(() => {});
+          await bot.sendPhoto(chatId, stickerPath, threadOpts).catch(() => { });
         });
       } catch (stkErr) {
         console.warn(`[MegaQuizScheduler] sendSticker warning:`, stkErr.message);
@@ -74182,7 +74660,7 @@ async function runMegaScheduledQuizSession(subCode, slotType = 'morning', target
                 open_period: 20,
                 ...threadOpts
               });
-            } catch (e3) {}
+            } catch (e3) { }
           }
         }
 
@@ -75022,11 +75500,11 @@ bot.onText(/^\/(quiz_schedule|schedule_quiz)(?:@\w+)?(?:\s|$)/i, async (msg) => 
     await bot.sendSticker(chatId, stickerPath, replyOpts).catch(async (err) => {
       console.warn('⚠️ Could not send timetable sticker, falling back to PNG photo:', err.message);
       if (fs.existsSync(pngPath)) {
-        await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => {});
+        await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => { });
       }
     });
   } else if (fs.existsSync(pngPath)) {
-    await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => {});
+    await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => { });
   }
 
   const msgText =
@@ -75556,7 +76034,7 @@ function parseQuizTextToJSON(text) {
     if (corrMatch || expMatch) {
       isQHeader = false;
     } else if (/^(?:#{1,4}\s*)?(?:\*{1,2})?(?:ප්‍රශ්නය\s*\d+|\bQ\d+[\.:\-]?)(?:\*{1,2})?[\s\.\:\-]/i.test(rawLine) ||
-               /^(?:###\s*)?ප්‍රශ්නය\s*\d+/i.test(rawLine)) {
+      /^(?:###\s*)?ප්‍රශ්නය\s*\d+/i.test(rawLine)) {
       isQHeader = true;
     } else if (/^(?:\*{1,2})?\d{1,2}[\.\)](?:\*{1,2})?\s+/i.test(rawLine)) {
       if (!curQ || curQ.hasAnswer || (curQ.options.length >= 2 && optMatch && (optMatch[1] === '1' || !optMatch))) {
@@ -76575,6 +77053,86 @@ bot.onText(/\/(help|guide|instructions|bot_help)(?:_([a-z0-9_]+))?(?:@\w+)?\s*(.
   }).catch(() => { });
 });
 
+// Command: /map or /maps or /sithiyam or /map_quiz (A/L Interactive Map Marking & Quiz Hub)
+bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, async (msg, match) => {
+  if (!await enforceDirectAccessControl(msg)) return;
+  const chatId = msg.chat.id;
+  const { threadId } = getThreadContext(msg);
+  const isGroup = msg.chat && (msg.chat.type === 'group' || msg.chat.type === 'supergroup');
+  const replyOpts = {
+    reply_to_message_id: msg.message_id,
+    ...(threadId ? { message_thread_id: threadId } : {})
+  };
+
+  const { text, keyboard } = buildMapHubMessage(BASE_URL, isGroup);
+  return bot.sendMessage(chatId, text, {
+    parse_mode: 'Markdown',
+    reply_markup: keyboard,
+    ...replyOpts
+  }).catch(e => console.error('Error sending map hub message:', e.message));
+});
+
+// Command: /marking or /markings or /marking_scheme (Interactive Marking Schemes Navigation)
+bot.onText(/^\/(marking_scheme|markingscheme|markings|marking)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
+  if (!await enforceDirectAccessControl(msg)) return;
+  const chatId = msg.chat.id;
+  const { threadId, topicSubject } = getThreadContext(msg);
+  const replyOpts = {
+    reply_to_message_id: msg.message_id,
+    ...(threadId ? { message_thread_id: threadId } : {})
+  };
+
+  const rawArg1 = (match[2] || match[3] || '').trim();
+  const rawArg2 = (match[4] || '').trim();
+
+  let subCode = null;
+  let year = null;
+
+  // Case A: User typed "/marking 2025" or "/marking 2024" directly
+  if (/^\d{4}$/.test(rawArg1)) {
+    year = rawArg1;
+    subCode = normalizeMarkingSubject(topicSubject) || getSubjectByThreadId(threadId);
+  } else if (rawArg1) {
+    subCode = normalizeMarkingSubject(rawArg1);
+    if (/^\d{4}$/.test(rawArg2)) {
+      year = rawArg2;
+    }
+  }
+
+  // Case B: If inside a specific forum topic thread and no subject explicitly given -> auto-detect
+  if (!subCode && threadId) {
+    subCode = normalizeMarkingSubject(topicSubject) || getSubjectByThreadId(threadId);
+  }
+
+  // 1. Direct Year query: /marking <subject> <year>
+  if (subCode && year) {
+    const res = buildMarkingDirectYearMessage(subCode, year);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending direct year marking:', e.message));
+  }
+
+  // 2. Subject specified: /marking <subject> -> Show Language Selection Menu (Step A)
+  if (subCode) {
+    const res = buildMarkingMediumMenu(subCode);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending subject marking medium menu:', e.message));
+  }
+
+  // 3. No arguments: /marking -> Show 11-Subject Picker Menu
+  const res = buildMarkingSubjectsMenu();
+  return bot.sendMessage(chatId, res.text, {
+    parse_mode: 'Markdown',
+    reply_markup: res.keyboard,
+    ...replyOpts
+  }).catch(e => console.error('Error sending marking subjects menu:', e.message));
+});
+
 // Callback Query Handler
 bot.on('callback_query', async (query) => {
   const chatId = query.message ? query.message.chat.id : null;
@@ -76592,10 +77150,54 @@ bot.on('callback_query', async (query) => {
   }
 
   try {
+    // Marking Schemes Navigation Callback Queries
+    if (data === 'mark_subjects') {
+      await safeAnswerCallback(query.id);
+      const res = buildMarkingSubjectsMenu();
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('mark_sub:')) {
+      const subCode = data.replace('mark_sub:', '');
+      await safeAnswerCallback(query.id);
+      const res = buildMarkingMediumMenu(subCode);
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('mark_med:')) {
+      const parts = data.split(':');
+      const subCode = parts[1];
+      const medium = parts[2] || 'Sinhala_Medium';
+      await safeAnswerCallback(query.id);
+      const res = buildMarkingYearsMenu(subCode, medium);
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
     // Map Marking Hub & Quizzes
     if (data === 'open_map_hub') {
       await safeAnswerCallback(query.id);
-      const { text, keyboard } = buildMapHubMessage(BASE_URL);
+      const { text, keyboard } = buildMapHubMessage(BASE_URL, isGroup);
       return bot.editMessageText(text, {
         chat_id: chatId,
         message_id: messageId,

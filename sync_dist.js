@@ -1,11 +1,21 @@
 import fs from 'fs';
 import path from 'path';
+import { execSync } from 'child_process';
 
 const rootDir = process.cwd();
 const distDir = path.join(rootDir, 'dist');
 
 if (!fs.existsSync(distDir)) {
   fs.mkdirSync(distDir, { recursive: true });
+}
+
+// 0. Automatically build bundled CommonJS bot.cjs using Rollup
+console.log('📦 Bundling bot.js -> bot.cjs via Rollup...');
+try {
+  execSync('npx rollup -c rollup.config.mjs', { stdio: 'inherit' });
+  console.log('✅ Rollup bundle complete!');
+} catch (err) {
+  console.error('⚠️ Rollup bundle notice:', err.message);
 }
 
 // 1. Specific critical script and config files
