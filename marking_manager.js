@@ -210,6 +210,26 @@ export function buildMarkingMediumMenu(subCode) {
 }
 
 /**
+ * Helper to construct direct Telegram forum topic message link
+ * Format: https://t.me/c/<clean_group_id>/<thread_id>/<message_id>
+ */
+export function getDirectMessageLink(file, sub, cleanGroupId = '4322002704') {
+  if (!file) return `https://t.me/c/${cleanGroupId}`;
+  const threadId = file.thread_id || sub?.topic_thread_id;
+  const msgId = file.message_id;
+  if (threadId && msgId) {
+    return `https://t.me/c/${cleanGroupId}/${threadId}/${msgId}`;
+  }
+  if (msgId) {
+    return `https://t.me/c/${cleanGroupId}/${msgId}`;
+  }
+  if (threadId) {
+    return `https://t.me/c/${cleanGroupId}/${threadId}`;
+  }
+  return file.message_link || `https://t.me/c/${cleanGroupId}`;
+}
+
+/**
  * Step B: Build Year Navigation Buttons for a subject & medium
  * Each Year Button is a Direct Navigation Link URL Button!
  */
@@ -225,7 +245,14 @@ export function buildMarkingYearsMenu(subCode, medium = 'Sinhala_Medium') {
   const allFiles = Object.values(sub.files || {});
   const filtered = allFiles
     .filter(f => (f.medium || 'Sinhala_Medium') === medium)
-    .sort((a, b) => parseInt(b.year || '0', 10) - parseInt(a.year || '0', 10));
+    .sort((a, b) => {
+      const ya = parseInt(a.year || '0', 10);
+      const yb = parseInt(b.year || '0', 10);
+      if (isNaN(ya) && isNaN(yb)) return 0;
+      if (isNaN(ya)) return 1;
+      if (isNaN(yb)) return -1;
+      return yb - ya;
+    });
 
   const mediumLabelMap = {
     'Sinhala_Medium': '🇱🇰 සිංහල මාධ්‍යය (Sinhala Medium)',
@@ -247,17 +274,17 @@ _පහතින් ඔබට අවශ්‍ය වර්ෂය මත Click �
   for (let i = 0; i < filtered.length; i += 2) {
     const row = [];
     const f1 = filtered[i];
-    const link1 = f1.message_link || `https://t.me/c/${cleanGroupId}/${f1.message_id || sub.topic_thread_id}`;
+    const link1 = getDirectMessageLink(f1, sub, cleanGroupId);
     row.push({
-      text: `📄 ${f1.year} Marking ↗️`,
+      text: `📄 ${f1.year || 'Marking'} Scheme ↗️`,
       url: link1
     });
 
     if (i + 1 < filtered.length) {
       const f2 = filtered[i + 1];
-      const link2 = f2.message_link || `https://t.me/c/${cleanGroupId}/${f2.message_id || sub.topic_thread_id}`;
+      const link2 = getDirectMessageLink(f2, sub, cleanGroupId);
       row.push({
-        text: `📄 ${f2.year} Marking ↗️`,
+        text: `📄 ${f2.year || 'Marking'} Scheme ↗️`,
         url: link2
       });
     }
@@ -265,8 +292,9 @@ _පහතින් ඔබට අවශ්‍ය වර්ෂය මත Click �
   }
 
   if (filtered.length === 0) {
+    const fallbackLink = `https://t.me/c/${cleanGroupId}/${sub.topic_thread_id}`;
     inlineKeyboard.push([
-      { text: `💬 Topic Thread එක වෙත යන්න (#${sub.topic_thread_id}) ↗️`, url: `https://t.me/c/${cleanGroupId}/${sub.topic_thread_id}` }
+      { text: `💬 Topic Thread එක වෙත යන්න (#${sub.topic_thread_id}) ↗️`, url: fallbackLink }
     ]);
   }
 
@@ -305,7 +333,7 @@ export function buildMarkingDirectYearMessage(subCode, year) {
 ━━━━━━━━━━━━━━━━━━━━━
 ℹ️ ${year} වර්ෂයට අදාළ ලකුණු දීමේ පටිපාටිය සෘජුවම සොයා ගැනීමට අදාළ Group Forum Topic එක වෙත පිවිසෙන්න.
 
-📌 **Topic Thread:** \`${sub.topic_name || sub.name}\` (Thread: \`#${sub.topic_thread_id}\`)`;
+📌 **Topic Thread:** \`${sub.name}\` (Thread: \`#${sub.topic_thread_id}\`)`;
 
     const keyboard = {
       inline_keyboard: [
@@ -323,14 +351,21 @@ export function buildMarkingDirectYearMessage(subCode, year) {
 
   // Primary file (prefer Sinhala Medium)
   const primary = matchingFiles.find(f => f.medium === 'Sinhala_Medium') || matchingFiles[0];
-  const primaryLink = primary.message_link || `https://t.me/c/${cleanGroupId}/${primary.message_id || sub.topic_thread_id}`;
+  const primaryLink = getDirectMessageLink(primary, sub, cleanGroupId);
+
+  const mediumLabelMap = {
+    'Sinhala_Medium': '🇱🇰 සිංහල මාධ්‍යය',
+    'English_Medium': '🇬🇧 English Medium',
+    'Tamil_Medium': '🇮🇳 தமிழ் மொழி'
+  };
+  const primaryLabel = mediumLabelMap[primary.medium] || primary.medium || 'සිංහල මාධ්‍යය';
 
   const text =
 `📑 *${sub.name} — ${year} Marking Scheme*
 ━━━━━━━━━━━━━━━━━━━━━
 📄 **ගොනු නාමය:** \`${primary.filename || `${year} Marking Scheme.pdf`}\`
-🌐 **භාෂා මාධ්‍යය:** \`${primary.medium_label || primary.medium || 'සිංහල මාධ්‍යය'}\`
-📌 **Group Forum Topic:** \`${sub.topic_name || sub.name}\` (Thread: \`#${sub.topic_thread_id}\`)
+🌐 **භාෂා මාධ්‍යය:** \`${primaryLabel}\`
+📌 **Group Forum Topic:** \`${sub.name}\` (Thread: \`#${sub.topic_thread_id}\`)
 
 👇 **පහත බොත්තම ඔබා Topic එක තුළ ඇති File එක වෙත සෘජුවම පිවිසෙන්න:**`;
 
@@ -343,10 +378,13 @@ export function buildMarkingDirectYearMessage(subCode, year) {
   // If additional language mediums exist for this year
   const otherMediums = matchingFiles.filter(f => f !== primary);
   if (otherMediums.length > 0) {
-    const medRow = otherMediums.map(f => ({
-      text: `${f.medium_label || f.medium} ↗️`,
-      url: f.message_link || `https://t.me/c/${cleanGroupId}/${f.message_id || sub.topic_thread_id}`
-    }));
+    const medRow = otherMediums.map(f => {
+      const label = mediumLabelMap[f.medium] || f.medium;
+      return {
+        text: `${label} ↗️`,
+        url: getDirectMessageLink(f, sub, cleanGroupId)
+      };
+    });
     inlineKeyboard.push(medRow);
   }
 
