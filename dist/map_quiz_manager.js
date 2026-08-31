@@ -43,7 +43,6 @@ export function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L'
 📌 *විෂයයන්:*
 • 📜 **ඉතිහාසය (History):** පුරාණ වරාය, රාජධානි, සිද්ධස්ථාන, සටන්බිම්
 • 🌍 **භූගෝල විද්‍යාව (Geography):** ගංගා, උස්බිම්, ඛනිජ කලාප, වරායවල්
-• ☸️ **බෞද්ධ ශිෂ්ටාචාරය (BC):** දඹදිව සොළොස් මහා ජනපද, පූජනීය ස්ථාන
 
 ✨ **ඔබට අවශ්‍ය ක්‍රමය තෝරන්න:**
 1️⃣ **📱 අන්තර්ක්‍රියාකාරී සිතියම (Interactive Mini App):**
@@ -52,22 +51,28 @@ export function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L'
 2️⃣ **⚡ ක්ෂණික ප්‍රශ්නාවලිය (In-Chat Quiz):**
    _Chat එක තුළදීම සිතියම් ප්‍රශ්න වලට පිළිතුරු සපයන්න._`;
 
-  // In Group Chats, Telegram Bot API requires url buttons (web_app is restricted to private chats)
-  const appButton = isGroup
-    ? { text: '📱 අන්තර්ක්‍රියාකාරී සිතියම (Open Map App) 🗺️', url: webAppUrl }
-    : { text: '📱 අන්තර්ක්‍රියාකාරී සිතියම (Open Mini App) 🗺️', web_app: { url: webAppUrl } };
+  const slAppButton = isGroup
+    ? { text: '🇱🇰 ශ්‍රී ලංකා සිතියම් App 🗺️', url: `${webAppUrl}?map=sri_lanka` }
+    : { text: '🇱🇰 ශ්‍රී ලංකා සිතියම් App 🗺️', web_app: { url: `${webAppUrl}?map=sri_lanka` } };
+
+  const worldAppButton = isGroup
+    ? { text: '🌍 ලෝක සිතියම් App (Geography) 🌐', url: `${webAppUrl}?map=world_geo` }
+    : { text: '🌍 ලෝක සිතියම් App (Geography) 🌐', web_app: { url: `${webAppUrl}?map=world_geo` } };
 
   const keyboard = {
     inline_keyboard: [
       [
-        appButton
+        slAppButton
       ],
       [
-        { text: '📜 ඉතිහාසය සිතියම් Quiz', callback_data: 'map_quiz:history:sri_lanka' },
-        { text: '🌍 භූගෝල විද්‍යාව Quiz', callback_data: 'map_quiz:geo:sri_lanka' }
+        worldAppButton
       ],
       [
-        { text: '☸️ බෞද්ධ ශිෂ්ටාචාරය (දඹදිව)', callback_data: 'map_quiz:bc:india_bc' },
+        { text: '📜 ඉතිහාසය (ශ්‍රී ලංකා සිතියම)', callback_data: 'map_quiz:history:sri_lanka' },
+        { text: '🌍 භූගෝල (ලෝක සිතියම)', callback_data: 'map_quiz:geo:world_geo' }
+      ],
+      [
+        { text: '🇱🇰 භූගෝල (ශ්‍රී ලංකා සිතියම)', callback_data: 'map_quiz:geo:sri_lanka' },
         { text: '🎲 මිශ්‍ර සිතියම් පුහුණුව', callback_data: 'map_quiz:all:sri_lanka' }
       ],
       [
@@ -113,9 +118,17 @@ export function generateInChatMapQuestion(subject = 'all', mapKey = 'sri_lanka')
     return `${letters[i]}) ${opt.name_si}`;
   }).join('\n');
 
-  // Relative coordinate description for student orientation
-  const xDir = target.coords.x < 35 ? 'බටහිර' : (target.coords.x > 65 ? 'නැගෙනහිර' : 'මධ්‍යම');
-  const yDir = target.coords.y < 35 ? 'උතුරු' : (target.coords.y > 65 ? 'දකුණු' : 'මධ්‍යම');
+  // Relative location hint
+  let locHint = '';
+  if (mapKey === 'world_geo') {
+    locHint = `🌐 **වර්ගීකරණය:** ${target.category_si || 'ලෝක භූගෝල විද්‍යා ස්ථානයක්'}`;
+  } else {
+    const lat = target.coords.lat;
+    const lng = target.coords.lng;
+    const xDir = lng < 80.2 ? 'බටහිර' : (lng > 81.2 ? 'නැගෙනහිර' : 'මධ්‍යම');
+    const yDir = lat < 6.8 ? 'දකුණු' : (lat > 8.5 ? 'උතුරු' : 'මධ්‍යම');
+    locHint = `🧭 **පිහිටීම ඉඟිය:** ශ්‍රී ලංකාවේ **${yDir}-${xDir}** ප්‍රදේශය ආශ්‍රිතව පිහිටා ඇත.`;
+  }
 
   const questionText = 
 `🗺️ *සිතියම් ප්‍රශ්නාවලිය — ${mapMeta.name_si}*
@@ -123,7 +136,7 @@ export function generateInChatMapQuestion(subject = 'all', mapKey = 'sri_lanka')
 📍 **ස්ථාන විස්තරය:**
 _${target.description}_
 
-🧭 **පිහිටීම ඉඟිය:** ශ්‍රී ලංකාවේ **${yDir}-${xDir}** ප්‍රදේශය ආශ්‍රිතව පිහිටා ඇත.
+${locHint}
 
 ❓ **මෙම විස්තරයට අදාළ නිවැරදි ස්ථානය කුමක්ද?**
 

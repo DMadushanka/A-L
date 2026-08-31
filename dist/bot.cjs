@@ -70306,7 +70306,7 @@ const SUBJECTS_CONFIG = {
     shortName: 'බෞද්ධ ශිෂ්ටාචාරය',
     englishName: 'Buddhist Civilization',
     icon: '☸️',
-    rawFile: 'bc_mcq.json',
+    rawFiles: ['bc_mcq.json'],
     description: 'ථෙරවාද බුදුදහම, ඉන්දියානු හා ශ්‍රී ලාංකේය බෞද්ධ සංස්කෘතිය හා ඉතිහාසය'
   },
   geo: {
@@ -70315,7 +70315,7 @@ const SUBJECTS_CONFIG = {
     shortName: 'භූගෝල විද්‍යාව',
     englishName: 'Geography',
     icon: '🌍',
-    rawFile: 'geo_mcq.json',
+    rawFiles: ['geography_mcq.json', 'geo_mcq.json'],
     description: 'භෞතික භූගෝල විද්‍යාව, මානව හා ප්‍රායෝගික භූගෝල විද්‍යාව'
   },
   md: {
@@ -70324,7 +70324,7 @@ const SUBJECTS_CONFIG = {
     shortName: 'මාධ්‍ය අධ්‍යයනය',
     englishName: 'Media Studies',
     icon: '📡',
-    rawFile: 'md_mcq.json',
+    rawFiles: ['md_mcq.json'],
     description: 'සන්නිවේදන න්‍යාය, ජනමාධ්‍ය, පුවත්පත් කලාව හා මාධ්‍ය නීතිය'
   },
   si: {
@@ -70333,7 +70333,7 @@ const SUBJECTS_CONFIG = {
     shortName: 'සිංහල',
     englishName: 'Sinhala Language',
     icon: '✍️',
-    rawFile: 'si_mcq.json',
+    rawFiles: ['sinhala_mcq.json', 'si_mcq.json'],
     description: 'සිංහල ව්‍යාකරණය, භාෂා රීති, සාහිත්‍යය හා විචාර'
   }
 };
@@ -70345,12 +70345,15 @@ const MCQS_PER_QUIZ = 50;
 let cachedSubjectQuizzes = null;
 
 /**
- * Clean question text by stripping leading numbers e.g. "(01) ", "1. ", "01 - "
+ * Clean question text by stripping leading numbers e.g. "[18/28] ", "(01) ", "1. ", "353. "
  */
 function cleanQuestionText(qText) {
   if (!qText) return '';
   return qText
-    .replace(/^[\(\[\{]?\s*\d+\s*[\)\]\}]?[\.\:\-\s]*/, '')
+    .replace(/^\[\s*\d+\s*\/\s*\d+\s*\]\s*/, '')
+    .replace(/^[\(\[\{]?\s*\d+\s*[\)\]\}]?[\.\:\-\s]+/, '')
+    .replace(/^Q\d+[\.\:\-\s]*/i, '')
+    .replace(/[,،\s]+$/, '')
     .trim();
 }
 
@@ -70385,6 +70388,14 @@ function extractRawQuestions(filePath) {
       const q = cleanQuestionText(item.question || item.q || '');
       const o = cleanOptionsList(item.options || item.o || []);
       let c = item.correct_option_id !== undefined ? Number(item.correct_option_id) : (item.c !== undefined ? Number(item.c) : 0);
+
+      // If correct_answer is given and does not match options[c], check if options has correct_answer
+      if (item.correct_answer && typeof item.correct_answer === 'string' && item.correct_answer.trim()) {
+        const matchIdx = o.findIndex(opt => opt === item.correct_answer.trim());
+        if (matchIdx !== -1) {
+          c = matchIdx;
+        }
+      }
 
       // Verify correct option bounds
       if (isNaN(c) || c < 0 || c >= o.length) {
@@ -70422,8 +70433,16 @@ function initializeNormalQuizzes(forceReload = false) {
   const result = {};
 
   for (const [subCode, cfg] of Object.entries(SUBJECTS_CONFIG)) {
-    const filePath = path.join(NORMAL_QUIZ_DIR, cfg.rawFile);
-    const questions = extractRawQuestions(filePath);
+    let filePath = null;
+    for (const f of cfg.rawFiles) {
+      const candidate = path.join(NORMAL_QUIZ_DIR, f);
+      if (fs.existsSync(candidate)) {
+        filePath = candidate;
+        break;
+      }
+    }
+
+    const questions = filePath ? extractRawQuestions(filePath) : [];
     const totalQuestions = questions.length;
     const totalQuizzes = Math.ceil(totalQuestions / MCQS_PER_QUIZ);
 
@@ -70638,9 +70657,10 @@ function loadMapLocations() {
  * Build the Main Map Marking Menu message and Inline Keyboard
  * Supports Telegram Mini App (TWA) + In-Chat Fast Drills
  */
-function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L') {
-  // Ensure HTTPS for Telegram Mini App
-  let webAppUrl = `${baseUrl.replace(/\/$/, '')}/map_app.html`;
+function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L', isGroup = false) {
+  // Ensure HTTPS and append dynamic version to bust Telegram WebView cache
+  const cacheBuster = Date.now();
+  let webAppUrl = `${baseUrl.replace(/\/$/, '')}/map_app.html?v=${cacheBuster}`;
   if (!webAppUrl.startsWith('https://') && !webAppUrl.startsWith('http://localhost')) {
     webAppUrl = `https://${webAppUrl.replace(/^http:\/\//, '')}`;
   }
@@ -70662,13 +70682,15 @@ function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L') {
 2️⃣ **⚡ ක්ෂණික ප්‍රශ්නාවලිය (In-Chat Quiz):**
    _Chat එක තුළදීම සිතියම් ප්‍රශ්න වලට පිළිතුරු සපයන්න._`;
 
+  // In Group Chats, Telegram Bot API requires url buttons (web_app is restricted to private chats)
+  const appButton = isGroup
+    ? { text: '📱 අන්තර්ක්‍රියාකාරී සිතියම (Open Map App) 🗺️', url: webAppUrl }
+    : { text: '📱 අන්තර්ක්‍රියාකාරී සිතියම (Open Mini App) 🗺️', web_app: { url: webAppUrl } };
+
   const keyboard = {
     inline_keyboard: [
       [
-        {
-          text: '📱 අන්තර්ක්‍රියාකාරී සිතියම (Open Mini App) 🗺️',
-          web_app: { url: webAppUrl }
-        }
+        appButton
       ],
       [
         { text: '📜 ඉතිහාසය සිතියම් Quiz', callback_data: 'map_quiz:history:sri_lanka' },
@@ -70679,7 +70701,7 @@ function buildMapHubMessage(baseUrl = 'https://dmadushanka.github.io/A-L') {
         { text: '🎲 මිශ්‍ර සිතියම් පුහුණුව', callback_data: 'map_quiz:all:sri_lanka' }
       ],
       [
-        { text: '🔙 ප්‍රධාන මෙනුවට (Main Menu)', callback_data: 'main_menu' }
+        { text: '🔙 ප්‍රධාන මෙනුවට (Main Menu)', callback_data: 'nav_subjects' }
       ]
     ]
   };
@@ -71893,11 +71915,11 @@ function normalizeSubjectCode(input) {
 // Distinctive subject keyword dictionaries to detect cross-subject conflicts accurately
 const SUBJECT_KEYWORDS_MAP = {
   si: [
-    'සන්ධි', 'සමාස', 'කර්මධාරය', 'ද්වන්ද', 'තත්පුරුෂ', 'බහුව්‍රීහි', 'අව්‍යයීභාව', 'ප්‍රකෘති ස්වර',
+    'සන්ධි', 'සමාස', 'කර්මධාරය', 'ද්වන්ද', 'තත්පුරුෂ', 'බහුව්‍රීහි', 'අව්‍යයීභාව',
     'ව්‍යංජන', 'විභක්ති', 'ආඛ්‍යාත', 'කර්මකාරක', 'කර්තෘකාරක', 'තත්සම', 'තද්භව', 'නිපාත', 'උපසර්ග',
     'සිදත් සඟරා', 'ගුරුළුගෝමී', 'අමාවතුර', 'බුත්සරණ', 'ධර්මසේන', 'සද්ධර්මරත්නාවලිය', 'කාව්‍යශේඛර',
     'සැළලිහිණි', 'ගුත්තිල', 'මුනිදාස කුමාරතුංග', 'මාටින් වික්‍රමසිංහ', 'සිංහල භාෂාව', 'සිංහල සාහිත්‍ය',
-    'පද බෙදීම', 'අක්ෂර වින්‍යාසය', 'ව්‍යාකරණ', 'ප්‍රකෘති'
+    'පද බෙදීම', 'අක්ෂර වින්‍යාසය', 'ව්‍යාකරණ',
   ],
   bc: [
     'බෞද්ධ ශිෂ්ටාචාරය', 'ථෙරවාද', 'මහායාන', 'සංගායනා', 'සංඟායනා', 'අභයගිරි', 'ජේතවන', 'මහාවිහාර',
@@ -73801,7 +73823,7 @@ async function generateAndSendDailyMorningWish(targetChatId = null, threadId = n
 
     // Generate Animated SVG Document (1400x1000 resolution with embedded clean background image)
     const svgPath = createMorningWishFile(phrase, null, base64Bg || bgImageUrl);
-    
+
     // Render animated GIF from SVG for native in-chat animation playback in Telegram
     const gifPath = await renderSvgToGif(svgPath);
     const dateFormatted = formatMorningDate();
@@ -74053,7 +74075,7 @@ async function runMegaScheduledQuizSession(subCode, slotType = 'morning', target
     if (stickerPath && fs.existsSync(stickerPath)) {
       try {
         await bot.sendSticker(chatId, stickerPath, threadOpts).catch(async () => {
-          await bot.sendPhoto(chatId, stickerPath, threadOpts).catch(() => {});
+          await bot.sendPhoto(chatId, stickerPath, threadOpts).catch(() => { });
         });
       } catch (stkErr) {
         console.warn(`[MegaQuizScheduler] sendSticker warning:`, stkErr.message);
@@ -74182,7 +74204,7 @@ async function runMegaScheduledQuizSession(subCode, slotType = 'morning', target
                 open_period: 20,
                 ...threadOpts
               });
-            } catch (e3) {}
+            } catch (e3) { }
           }
         }
 
@@ -75022,11 +75044,11 @@ bot.onText(/^\/(quiz_schedule|schedule_quiz)(?:@\w+)?(?:\s|$)/i, async (msg) => 
     await bot.sendSticker(chatId, stickerPath, replyOpts).catch(async (err) => {
       console.warn('⚠️ Could not send timetable sticker, falling back to PNG photo:', err.message);
       if (fs.existsSync(pngPath)) {
-        await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => {});
+        await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => { });
       }
     });
   } else if (fs.existsSync(pngPath)) {
-    await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => {});
+    await bot.sendPhoto(chatId, pngPath, replyOpts).catch(() => { });
   }
 
   const msgText =
@@ -75556,7 +75578,7 @@ function parseQuizTextToJSON(text) {
     if (corrMatch || expMatch) {
       isQHeader = false;
     } else if (/^(?:#{1,4}\s*)?(?:\*{1,2})?(?:ප්‍රශ්නය\s*\d+|\bQ\d+[\.:\-]?)(?:\*{1,2})?[\s\.\:\-]/i.test(rawLine) ||
-               /^(?:###\s*)?ප්‍රශ්නය\s*\d+/i.test(rawLine)) {
+      /^(?:###\s*)?ප්‍රශ්නය\s*\d+/i.test(rawLine)) {
       isQHeader = true;
     } else if (/^(?:\*{1,2})?\d{1,2}[\.\)](?:\*{1,2})?\s+/i.test(rawLine)) {
       if (!curQ || curQ.hasAnswer || (curQ.options.length >= 2 && optMatch && (optMatch[1] === '1' || !optMatch))) {
@@ -76575,6 +76597,45 @@ bot.onText(/\/(help|guide|instructions|bot_help)(?:_([a-z0-9_]+))?(?:@\w+)?\s*(.
   }).catch(() => { });
 });
 
+// Command: /map or /maps or /sithiyam or /map_quiz (A/L Interactive Map Marking & Quiz Hub)
+bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, async (msg, match) => {
+  if (!await enforceDirectAccessControl(msg)) return;
+  const chatId = msg.chat.id;
+  const { threadId } = getThreadContext(msg);
+  const isGroup = msg.chat && (msg.chat.type === 'group' || msg.chat.type === 'supergroup');
+  const replyOpts = {
+    reply_to_message_id: msg.message_id,
+    ...(threadId ? { message_thread_id: threadId } : {})
+  };
+
+  const { text, keyboard } = buildMapHubMessage(BASE_URL, isGroup);
+  return bot.sendMessage(chatId, text, {
+    parse_mode: 'Markdown',
+    reply_markup: keyboard,
+    ...replyOpts
+  }).catch(e => console.error('Error sending map hub message:', e.message));
+});
+
+// Listener for Web App Data Submission (e.g. Map Exam Results from Mini App)
+bot.on('message', async (msg) => {
+  if (msg.web_app_data && msg.web_app_data.data) {
+    try {
+      const data = JSON.parse(msg.web_app_data.data);
+      if (data.type === 'map_exam_result') {
+        const formatted = formatMiniAppResult(msg.from, data);
+        recordScore(msg.from.id, msg.from.first_name || 'Student', 'map', data.score || 0);
+        return bot.sendMessage(msg.chat.id, formatted, {
+          parse_mode: 'Markdown',
+          reply_to_message_id: msg.message_id,
+          ...(msg.message_thread_id ? { message_thread_id: msg.message_thread_id } : {})
+        });
+      }
+    } catch (e) {
+      console.error('Error handling web_app_data:', e.message);
+    }
+  }
+});
+
 // Callback Query Handler
 bot.on('callback_query', async (query) => {
   const chatId = query.message ? query.message.chat.id : null;
@@ -76595,7 +76656,7 @@ bot.on('callback_query', async (query) => {
     // Map Marking Hub & Quizzes
     if (data === 'open_map_hub') {
       await safeAnswerCallback(query.id);
-      const { text, keyboard } = buildMapHubMessage(BASE_URL);
+      const { text, keyboard } = buildMapHubMessage(BASE_URL, isGroup);
       return bot.editMessageText(text, {
         chat_id: chatId,
         message_id: messageId,

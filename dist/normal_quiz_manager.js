@@ -11,7 +11,7 @@ export const SUBJECTS_CONFIG = {
     shortName: 'බෞද්ධ ශිෂ්ටාචාරය',
     englishName: 'Buddhist Civilization',
     icon: '☸️',
-    rawFile: 'bc_mcq.json',
+    rawFiles: ['bc_mcq.json'],
     description: 'ථෙරවාද බුදුදහම, ඉන්දියානු හා ශ්‍රී ලාංකේය බෞද්ධ සංස්කෘතිය හා ඉතිහාසය'
   },
   geo: {
@@ -20,7 +20,7 @@ export const SUBJECTS_CONFIG = {
     shortName: 'භූගෝල විද්‍යාව',
     englishName: 'Geography',
     icon: '🌍',
-    rawFile: 'geo_mcq.json',
+    rawFiles: ['geography_mcq.json', 'geo_mcq.json'],
     description: 'භෞතික භූගෝල විද්‍යාව, මානව හා ප්‍රායෝගික භූගෝල විද්‍යාව'
   },
   md: {
@@ -29,7 +29,7 @@ export const SUBJECTS_CONFIG = {
     shortName: 'මාධ්‍ය අධ්‍යයනය',
     englishName: 'Media Studies',
     icon: '📡',
-    rawFile: 'md_mcq.json',
+    rawFiles: ['md_mcq.json'],
     description: 'සන්නිවේදන න්‍යාය, ජනමාධ්‍ය, පුවත්පත් කලාව හා මාධ්‍ය නීතිය'
   },
   si: {
@@ -38,7 +38,7 @@ export const SUBJECTS_CONFIG = {
     shortName: 'සිංහල',
     englishName: 'Sinhala Language',
     icon: '✍️',
-    rawFile: 'si_mcq.json',
+    rawFiles: ['sinhala_mcq.json', 'si_mcq.json'],
     description: 'සිංහල ව්‍යාකරණය, භාෂා රීති, සාහිත්‍යය හා විචාර'
   }
 };
@@ -50,12 +50,15 @@ const MCQS_PER_QUIZ = 50;
 let cachedSubjectQuizzes = null;
 
 /**
- * Clean question text by stripping leading numbers e.g. "(01) ", "1. ", "01 - "
+ * Clean question text by stripping leading numbers e.g. "[18/28] ", "(01) ", "1. ", "353. "
  */
 function cleanQuestionText(qText) {
   if (!qText) return '';
   return qText
-    .replace(/^[\(\[\{]?\s*\d+\s*[\)\]\}]?[\.\:\-\s]*/, '')
+    .replace(/^\[\s*\d+\s*\/\s*\d+\s*\]\s*/, '')
+    .replace(/^[\(\[\{]?\s*\d+\s*[\)\]\}]?[\.\:\-\s]+/, '')
+    .replace(/^Q\d+[\.\:\-\s]*/i, '')
+    .replace(/[,،\s]+$/, '')
     .trim();
 }
 
@@ -90,6 +93,14 @@ function extractRawQuestions(filePath) {
       const q = cleanQuestionText(item.question || item.q || '');
       const o = cleanOptionsList(item.options || item.o || []);
       let c = item.correct_option_id !== undefined ? Number(item.correct_option_id) : (item.c !== undefined ? Number(item.c) : 0);
+
+      // If correct_answer is given and does not match options[c], check if options has correct_answer
+      if (item.correct_answer && typeof item.correct_answer === 'string' && item.correct_answer.trim()) {
+        const matchIdx = o.findIndex(opt => opt === item.correct_answer.trim());
+        if (matchIdx !== -1) {
+          c = matchIdx;
+        }
+      }
 
       // Verify correct option bounds
       if (isNaN(c) || c < 0 || c >= o.length) {
@@ -127,8 +138,16 @@ export function initializeNormalQuizzes(forceReload = false) {
   const result = {};
 
   for (const [subCode, cfg] of Object.entries(SUBJECTS_CONFIG)) {
-    const filePath = path.join(NORMAL_QUIZ_DIR, cfg.rawFile);
-    const questions = extractRawQuestions(filePath);
+    let filePath = null;
+    for (const f of cfg.rawFiles) {
+      const candidate = path.join(NORMAL_QUIZ_DIR, f);
+      if (fs.existsSync(candidate)) {
+        filePath = candidate;
+        break;
+      }
+    }
+
+    const questions = filePath ? extractRawQuestions(filePath) : [];
     const totalQuestions = questions.length;
     const totalQuizzes = Math.ceil(totalQuestions / MCQS_PER_QUIZ);
 

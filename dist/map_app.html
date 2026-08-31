@@ -138,6 +138,52 @@
       outline: none;
     }
 
+    /* Category Filter Chips Bar */
+    .category-chips-container {
+      width: 100%;
+      max-width: 650px;
+      padding: 0 16px 8px;
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .category-chips-container::-webkit-scrollbar {
+      display: none;
+    }
+
+    .chip-btn {
+      white-space: nowrap;
+      padding: 6px 12px;
+      background: rgba(30, 41, 59, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .chip-btn:hover {
+      background: rgba(51, 65, 85, 0.95);
+      color: #fff;
+      border-color: var(--accent-cyan);
+    }
+
+    .chip-btn.active {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      border-color: #38bdf8;
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.45);
+    }
+
     /* Target Question / Study Banner Card */
     .prompt-card {
       width: calc(100% - 32px);
@@ -406,20 +452,24 @@
   <div class="controls-bar">
     <select class="select-input" id="mapSelect" onchange="onMapChange()">
       <option value="sri_lanka">🇱🇰 ශ්‍රී ලංකා සිතියම (Sri Lanka Full Map)</option>
-      <option value="india_bc">🇮🇳 දඹදිව සිතියම (Ancient India / BC)</option>
       <option value="world_geo">🌍 ලෝක සිතියම (World Geography)</option>
+    </select>
+    <select class="select-input" id="categoryFilter" onchange="onCategoryChange()" style="flex: 2; min-width: 170px;">
+      <option value="all">🌐 සියලුම වර්ගීකරණ (All Categories)</option>
     </select>
     <select class="select-input" id="subjectFilter" onchange="onSubjectChange()">
       <option value="all">📚 සියලුම විෂයයන් (All)</option>
       <option value="history">📜 ඉතිහාසය (History)</option>
       <option value="geo">🌍 භූගෝල විද්‍යාව (Geography)</option>
-      <option value="bc">☸️ බෞද්ධ ශිෂ්ටාචාරය (BC)</option>
     </select>
-    <select class="select-input" id="themeSelect" onchange="onThemeChange()" style="max-width: 140px;">
+    <select class="select-input" id="themeSelect" onchange="onThemeChange()" style="max-width: 130px;">
       <option value="vivid">🗺️ ස්වාභාවික සිතියම</option>
       <option value="bw">📄 කළු-සුදු විභාග සිතියම</option>
     </select>
   </div>
+
+  <!-- Quick Category Filter Chips Bar -->
+  <div class="category-chips-container" id="categoryChips"></div>
 
   <!-- Prompt / Study Box -->
   <div class="prompt-card" id="promptCard">
@@ -479,6 +529,7 @@
     let currentMapKey = "sri_lanka";
     let currentMode = "exam"; // 'exam', 'practice', 'explore'
     let currentSubject = "all";
+    let currentCategory = "all";
 
     // Quiz State
     let quizQueue = [];
@@ -537,8 +588,74 @@
       // Map Click / Tap Handler
       map.on('click', handleMapClick);
 
-      // Start Quiz Session
-      startQuizSession();
+      // Populate Category Dropdown for active map
+      updateCategoryDropdown();
+
+      // Start Quiz Session or Explore mode
+      if (currentMode === 'explore') {
+        renderExploreMarkers();
+      } else {
+        startQuizSession();
+      }
+    }
+
+    function updateCategoryDropdown() {
+      const catSelect = document.getElementById('categoryFilter');
+      const chipsContainer = document.getElementById('categoryChips');
+      const mapCfg = locationsDataset[currentMapKey];
+      const categories = mapCfg?.categories || [];
+
+      if (catSelect) {
+        catSelect.innerHTML = '';
+        if (categories.length > 0) {
+          categories.forEach(cat => {
+            const opt = document.createElement('option');
+            opt.value = cat.id;
+            opt.innerText = cat.name_si;
+            catSelect.appendChild(opt);
+          });
+        } else {
+          const opt = document.createElement('option');
+          opt.value = 'all';
+          opt.innerText = '🌐 සියලුම ස්ථාන (All Locations)';
+          catSelect.appendChild(opt);
+        }
+        catSelect.value = currentCategory || 'all';
+      }
+
+      if (chipsContainer) {
+        chipsContainer.innerHTML = '';
+        if (categories.length > 0) {
+          categories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = `chip-btn ${cat.id === currentCategory ? 'active' : ''}`;
+            btn.innerHTML = cat.name_si;
+            btn.onclick = () => {
+              selectCategory(cat.id);
+            };
+            chipsContainer.appendChild(btn);
+          });
+        }
+      }
+    }
+
+    function selectCategory(catId) {
+      currentCategory = catId;
+      const catSelect = document.getElementById('categoryFilter');
+      if (catSelect) catSelect.value = catId;
+
+      // Update active state on chips
+      const chips = document.querySelectorAll('#categoryChips .chip-btn');
+      const mapCfg = locationsDataset[currentMapKey];
+      const categories = mapCfg?.categories || [];
+      chips.forEach((chip, i) => {
+        if (categories[i]) {
+          chip.classList.toggle('active', categories[i].id === catId);
+        }
+      });
+
+      if (currentMode !== 'explore') startQuizSession();
+      else renderExploreMarkers();
     }
 
     // Auto Focus Complete Map in Viewport
@@ -551,6 +668,18 @@
       } else if (cfg && cfg.center) {
         map.setView(cfg.center, cfg.defaultZoom || 7);
       }
+    }
+
+    function getFilteredLocations() {
+      const allLocs = locationsDataset[currentMapKey]?.locations || [];
+      let filtered = allLocs;
+      if (currentSubject !== 'all') {
+        filtered = filtered.filter(l => l.subject?.includes(currentSubject));
+      }
+      if (currentCategory !== 'all') {
+        filtered = filtered.filter(l => l.category_id === currentCategory || (l.category_si && l.category_si.includes(currentCategory)));
+      }
+      return filtered;
     }
 
     async function initApp() {
@@ -571,23 +700,35 @@
         return;
       }
 
+      // Check URL Query Parameters
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.has('map') && locationsDataset[urlParams.get('map')]) {
+        currentMapKey = urlParams.get('map');
+        const mapSelect = document.getElementById('mapSelect');
+        if (mapSelect) mapSelect.value = currentMapKey;
+      }
+      if (urlParams.has('cat')) {
+        currentCategory = urlParams.get('cat');
+      }
+      if (urlParams.has('mode')) {
+        currentMode = urlParams.get('mode');
+      }
+
       initMap();
     }
 
     // Start a new Exam or Practice Queue
     function startQuizSession() {
       clearMapLayers();
-      const allLocs = locationsDataset[currentMapKey]?.locations || [];
-      let filtered = allLocs;
-      if (currentSubject !== 'all') {
-        filtered = allLocs.filter(l => l.subject?.includes(currentSubject));
+      let filtered = getFilteredLocations();
+      if (filtered.length === 0) {
+        filtered = locationsDataset[currentMapKey]?.locations || [];
       }
-      if (filtered.length === 0) filtered = allLocs;
 
       // Shuffle array
       quizQueue = [...filtered].sort(() => 0.5 - Math.random());
       if (currentMode === 'exam') {
-        quizQueue = quizQueue.slice(0, 10);
+        quizQueue = quizQueue.slice(0, Math.min(10, quizQueue.length));
       }
       currentIndex = 0;
       currentScore = 0;
@@ -606,7 +747,8 @@
       }
 
       const item = quizQueue[currentIndex];
-      document.getElementById('promptSub').innerText = `ප්‍රශ්නය ${currentIndex + 1} / ${quizQueue.length} • ලකුණු 10`;
+      const catName = item.category_si ? ` [${item.category_si.split(' ')[0]}]` : '';
+      document.getElementById('promptSub').innerText = `ප්‍රශ්නය ${currentIndex + 1} / ${quizQueue.length} • ලකුණු 10${catName}`;
       document.getElementById('promptTarget').innerText = `📍 ${item.name_si}`;
       document.getElementById('promptHint').innerText = "ස්ථානය සලකුණු කිරීමට සිතියම මත ස්පර්ශ (Tap) කරන්න.";
 
@@ -627,7 +769,7 @@
 
       // Calculate Real Ground Distance in Kilometers using Haversine
       const distanceKm = map.distance([clickLat, clickLng], [targetLat, targetLng]) / 1000;
-      const tolerance = currentItem.tolerance_km || 18;
+      const tolerance = currentItem.tolerance_km || 25;
 
       answeredCurrent = true;
 
@@ -711,8 +853,8 @@
 
     function updateScoreBadge() {
       if (currentMode === 'explore') {
-        const count = locationsDataset[currentMapKey]?.locations?.length || 0;
-        document.getElementById('scoreDisplay').innerText = `ස්ථාන: ${count} ක්`;
+        const filtered = getFilteredLocations();
+        document.getElementById('scoreDisplay').innerText = `ස්ථාන: ${filtered.length} ක්`;
         return;
       }
       const maxPossible = (quizQueue.length || 10) * 10;
@@ -742,6 +884,7 @@
         maxScore: quizQueue.length * 10,
         percentage: percentage,
         subject: currentSubject,
+        category: currentCategory,
         mapKey: currentMapKey
       };
 
@@ -767,8 +910,10 @@
       document.getElementById('tabExplore').classList.toggle('active', mode === 'explore');
 
       if (mode === 'explore') {
-        document.getElementById('promptSub').innerText = `📖 අධ්‍යයන මාදිලිය (All Locations Study)`;
-        document.getElementById('promptTarget').innerText = `සිතියමේ සියලුම ස්ථාන ලකුණු කර ඇත`;
+        const catSelect = document.getElementById('categoryFilter');
+        const catLabel = catSelect?.options[catSelect.selectedIndex]?.text || '';
+        document.getElementById('promptSub').innerText = `📖 අධ්‍යයන මාදිලිය — ${catLabel}`;
+        document.getElementById('promptTarget').innerText = `සිතියමේ තෝරාගත් ස්ථාන ලකුණු කර ඇත`;
         document.getElementById('promptHint').innerText = "විභාග කරුණු කියවීමට ඕනෑම ස්ථානයක Pin එකක් හෝ ලේබලයක් ඔබන්න.";
         document.getElementById('exploreJumperContainer').style.display = 'block';
         updateScoreBadge();
@@ -779,14 +924,14 @@
       }
     }
 
-    // Explore Mode: Mark ALL locations with permanent Sinhala labels & interactive pin badges
+    // Explore Mode: Mark ALL filtered locations with permanent Sinhala labels & interactive pin badges
     function renderExploreMarkers() {
       clearMapLayers();
-      const locs = locationsDataset[currentMapKey]?.locations || [];
-      let filtered = locs;
-      if (currentSubject !== 'all') {
-        filtered = locs.filter(l => l.subject?.includes(currentSubject));
-      }
+      const filtered = getFilteredLocations();
+
+      const catSelect = document.getElementById('categoryFilter');
+      const catLabel = catSelect?.options[catSelect.selectedIndex]?.text || 'සියලුම ස්ථාන';
+      document.getElementById('promptSub').innerText = `📖 අධ්‍යයන මාදිලිය — ${catLabel} (${filtered.length})`;
 
       // Populate Quick Jump Dropdown
       const jumper = document.getElementById('exploreJumper');
@@ -798,6 +943,8 @@
         jumper.appendChild(opt);
       });
 
+      const latLngs = [];
+
       // Pin every location on the map with crisp permanent Sinhala text label
       filtered.forEach((loc, idx) => {
         const icon = L.divIcon({
@@ -808,6 +955,7 @@
         });
 
         const marker = L.marker([loc.coords.lat, loc.coords.lng], { icon: icon }).addTo(map);
+        latLngs.push([loc.coords.lat, loc.coords.lng]);
 
         // Bind Permanent Tooltip so the name is always visible directly above the pin!
         marker.bindTooltip(loc.name_si, {
@@ -824,7 +972,14 @@
         exploreMarkers.push(marker);
       });
 
-      fitCurrentMapBounds();
+      updateScoreBadge();
+
+      if (currentCategory !== 'all' && latLngs.length > 0) {
+        const bounds = L.latLngBounds(latLngs);
+        map.fitBounds(bounds.pad(0.3), { maxZoom: 6 });
+      } else {
+        fitCurrentMapBounds();
+      }
     }
 
     function showLocationDetails(loc) {
@@ -834,17 +989,23 @@
       document.getElementById('feedbackNotes').innerHTML = `<b style="color:#fbbf24;">${loc.category_si || ''}</b><br><br>${loc.description}<br><br>${loc.exam_points ? '<span style="color:#67e8f9;">' + loc.exam_points + '</span>' : ''}`;
       document.getElementById('nextBtn').style.display = 'none';
       drawer.style.display = 'block';
-      map.setView([loc.coords.lat, loc.coords.lng], Math.max(map.getZoom(), 9), { animate: true });
+      map.setView([loc.coords.lat, loc.coords.lng], Math.max(map.getZoom(), 6), { animate: true });
     }
 
     function jumpToExploreLocation() {
       const selectedId = document.getElementById('exploreJumper').value;
       if (!selectedId) return;
-      const locs = locationsDataset[currentMapKey]?.locations || [];
-      const target = locs.find(l => l.id === selectedId);
+      const allLocs = locationsDataset[currentMapKey]?.locations || [];
+      const target = allLocs.find(l => l.id === selectedId);
       if (target) {
         showLocationDetails(target);
       }
+    }
+
+    function onCategoryChange() {
+      currentCategory = document.getElementById('categoryFilter').value;
+      if (currentMode !== 'explore') startQuizSession();
+      else renderExploreMarkers();
     }
 
     function onSubjectChange() {
@@ -855,6 +1016,8 @@
 
     function onMapChange() {
       currentMapKey = document.getElementById('mapSelect').value;
+      currentCategory = 'all';
+      updateCategoryDropdown();
       fitCurrentMapBounds();
       if (currentMode !== 'explore') startQuizSession();
       else renderExploreMarkers();
