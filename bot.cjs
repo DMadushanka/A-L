@@ -72218,19 +72218,30 @@ function buildTermTestsGradeMenu(subCode) {
 
 👇 **ඔබට අවශ්‍ය ශ්‍රේණිය පහතින් තෝරන්න:**`;
 
+  const cleanGroupId = db.clean_group_id || '4322002704';
+  const topicLink = `https://t.me/c/${cleanGroupId}/${sub.topic_thread_id}`;
+
+  const inlineKeyboard = [];
+  if (allFiles.length > 0) {
+    inlineKeyboard.push([
+      { text: `🎓 13 ශ්‍රේණිය (Grade 13) [${gr13Files.length}]`, callback_data: `tt_gr_${subCode}_13` },
+      { text: `📖 12 ශ්‍රේණිය (Grade 12) [${gr12Files.length}]`, callback_data: `tt_gr_${subCode}_12` }
+    ]);
+    inlineKeyboard.push([
+      { text: `📂 සියලුම ප්‍රශ්න පත්‍ර (All Papers) [${allFiles.length}]`, callback_data: `tt_gr_${subCode}_all` }
+    ]);
+  } else {
+    inlineKeyboard.push([
+      { text: `🚀 ${sub.name} Topic Thread එක වෙත යන්න (#${sub.topic_thread_id}) ↗️`, url: topicLink }
+    ]);
+  }
+
+  inlineKeyboard.push([
+    { text: '🔙 සියලුම විෂයයන් (All Subjects)', callback_data: 'tt_main' }
+  ]);
+
   const keyboard = {
-    inline_keyboard: [
-      [
-        { text: `🎓 13 ශ්‍රේණිය (Grade 13) [${gr13Files.length}]`, callback_data: `tt_gr_${subCode}_13` },
-        { text: `📖 12 ශ්‍රේණිය (Grade 12) [${gr12Files.length}]`, callback_data: `tt_gr_${subCode}_12` }
-      ],
-      [
-        { text: `📂 සියලුම ප්‍රශ්න පත්‍ර (All Papers) [${allFiles.length}]`, callback_data: `tt_gr_${subCode}_all` }
-      ],
-      [
-        { text: '🔙 සියලුම විෂයයන් (All Subjects)', callback_data: 'tt_main' }
-      ]
-    ]
+    inline_keyboard: inlineKeyboard
   };
 
   return { text, keyboard };
