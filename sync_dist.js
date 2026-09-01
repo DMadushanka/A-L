@@ -30,6 +30,8 @@ const coreFiles = [
   'past_papers_archive_db.json',
   'model_papers_manager.js',
   'model_papers_archive_db.json',
+  'term_tests_manager.js',
+  'term_tests_archive_db.json',
   'map_app.html',
   'db.js',
   'mermaid_utils.js',

@@ -1,0 +1,83 @@
+{
+  "group_id": -1004322002704,
+  "clean_group_id": "4322002704",
+  "subjects": {
+    "si": {
+      "name": "සිංහල",
+      "icon": "📜",
+      "tag": "Sinhala",
+      "topic_thread_id": 4210,
+      "files": {}
+    },
+    "bc": {
+      "name": "බෞද්ධ ශිෂ්ටාචාරය",
+      "icon": "☸️",
+      "tag": "Buddhist_Civilization",
+      "topic_thread_id": 4215,
+      "files": {}
+    },
+    "hist": {
+      "name": "ඉතිහාසය",
+      "icon": "🏛️",
+      "tag": "History",
+      "topic_thread_id": 4220,
+      "files": {}
+    },
+    "pl": {
+      "name": "දේශපාලන විද්‍යාව",
+      "icon": "⚖️",
+      "tag": "Political_Science",
+      "topic_thread_id": 4217,
+      "files": {}
+    },
+    "geo": {
+      "name": "භූගෝල විද්‍යාව",
+      "icon": "🌍",
+      "tag": "Geography",
+      "topic_thread_id": 4216,
+      "files": {}
+    },
+    "bs": {
+      "name": "ව්‍යාපාර අධ්‍යයනය",
+      "icon": "💼",
+      "tag": "Business_Studies",
+      "topic_thread_id": 4221,
+      "files": {}
+    },
+    "agri": {
+      "name": "කෘෂි විද්‍යාව",
+      "icon": "🌾",
+      "tag": "Agricultural_Science",
+      "topic_thread_id": 5490,
+      "files": {}
+    },
+    "md": {
+      "name": "සන්නිවේදනය හා මාධ්‍ය අධ්‍යයනය",
+      "icon": "📡",
+      "tag": "Media_Studies",
+      "topic_thread_id": 4225,
+      "files": {}
+    },
+    "dr": {
+      "name": "නාට්‍ය හා රංග කලාව",
+      "icon": "🎭",
+      "tag": "Drama_and_Theatre",
+      "topic_thread_id": 4222,
+      "files": {}
+    },
+    "mu": {
+      "name": "සංගීතය",
+      "icon": "🎵",
+      "tag": "Music",
+      "topic_thread_id": 4223,
+      "files": {}
+    },
+    "dn": {
+      "name": "නැටුම්",
+      "icon": "💃",
+      "tag": "Dancing",
+      "topic_thread_id": 4224,
+      "files": {}
+    }
+  }
+}

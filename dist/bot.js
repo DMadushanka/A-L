@@ -88,6 +88,16 @@ import {
   buildModelPaperDirectMessage,
   formatModelPaperCaption
 } from './model_papers_manager.js';
+import {
+  loadTermTestsDb,
+  normalizeTermTestSubject,
+  getSubjectByThreadId as getTtSubjectByThreadId,
+  buildTermTestsSubjectsMenu,
+  buildTermTestsGradeMenu,
+  buildTermTestsListMenu,
+  buildTermTestDirectMessage,
+  formatTermTestCaption
+} from './term_tests_manager.js';
 
 // Load environment variables
 dotenv.config();
@@ -6271,6 +6281,67 @@ bot.onText(/^\/(model_papers|model_paper|modelpapers|modelpaper|models|model)(?:
   }).catch(e => console.error('Error sending model papers subjects menu:', e.message));
 });
 
+// Command: /term or /terms or /termtest or /termtests (Interactive Term Test Papers Navigation)
+bot.onText(/^\/(term_tests|term_test|termtests|termtest|terms|term)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(.*))?$/i, async (msg, match) => {
+  if (!await enforceDirectAccessControl(msg)) return;
+  const chatId = msg.chat.id;
+  const { threadId, topicSubject } = getThreadContext(msg);
+  const replyOpts = {
+    reply_to_message_id: msg.message_id,
+    ...(threadId ? { message_thread_id: threadId } : {})
+  };
+
+  const rawArg1 = (match[2] || match[3] || '').trim();
+  const rawArg2 = (match[4] || '').trim();
+
+  let subCode = null;
+  let queryTerm = null;
+
+  // Check if rawArg1 is a subject alias
+  const directSub = normalizeTermTestSubject(rawArg1);
+  if (directSub) {
+    subCode = directSub;
+    queryTerm = rawArg2;
+  } else if (rawArg1) {
+    // rawArg1 is a search keyword (e.g. 13, 12, 2026, 3rd, western)
+    queryTerm = rawArg2 ? `${rawArg1} ${rawArg2}` : rawArg1;
+    subCode = normalizeTermTestSubject(topicSubject) || getTtSubjectByThreadId(threadId);
+  }
+
+  // Auto-detect topic thread subject if not specified
+  if (!subCode && threadId) {
+    subCode = normalizeTermTestSubject(topicSubject) || getTtSubjectByThreadId(threadId);
+  }
+
+  // 1. Direct Search / Grade / Term / Year query: /term <subject> <query> or /term <query> inside topic
+  if (subCode && queryTerm) {
+    const res = buildTermTestDirectMessage(subCode, queryTerm);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending direct query term test:', e.message));
+  }
+
+  // 2. Subject specified: /term <subject> or inside topic thread -> Show Grade Selection Menu
+  if (subCode) {
+    const res = buildTermTestsGradeMenu(subCode);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending subject term tests grade menu:', e.message));
+  }
+
+  // 3. No arguments outside topic: /term -> Show 11-Subject Picker Menu
+  const res = buildTermTestsSubjectsMenu();
+  return bot.sendMessage(chatId, res.text, {
+    parse_mode: 'Markdown',
+    reply_markup: res.keyboard,
+    ...replyOpts
+  }).catch(e => console.error('Error sending term tests subjects menu:', e.message));
+});
+
 // Command: /marking or /markings or /marking_scheme (Interactive Marking Schemes Navigation)
 bot.onText(/^\/(marking_scheme|markingscheme|markings|marking)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
   if (!await enforceDirectAccessControl(msg)) return;
@@ -6349,6 +6420,76 @@ bot.on('callback_query', async (query) => {
   }
 
   try {
+    // Term Test Papers Navigation Callback Queries
+    if (data === 'tt_main') {
+      await safeAnswerCallback(query.id);
+      const res = buildTermTestsSubjectsMenu();
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('tt_sub_')) {
+      const subCode = data.replace('tt_sub_', '');
+      await safeAnswerCallback(query.id);
+      const res = buildTermTestsGradeMenu(subCode);
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('tt_gr_')) {
+      const parts = data.split('_'); // ['tt', 'gr', subCode, grade]
+      const subCode = parts[2];
+      const grade = parts[3] || 'all';
+      await safeAnswerCallback(query.id);
+      const res = buildTermTestsListMenu(subCode, grade);
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('tt_cached_')) {
+      const parts = data.split('_'); // ['tt', 'cached', subCode, fileIndex]
+      const subCode = parts[2];
+      const fileIndex = parseInt(parts[3], 10);
+      const db = loadTermTestsDb();
+      const sub = db.subjects?.[subCode];
+      const files = Object.values(sub?.files || {});
+      const matchFile = files[fileIndex];
+
+      if (matchFile && matchFile.file_id) {
+        await safeAnswerCallback(query.id, '📥 PDF ගොනුව එවමින් පවතී...');
+        const caption = formatTermTestCaption(subCode, matchFile);
+        return bot.sendDocument(chatId, matchFile.file_id, {
+          caption: caption,
+          parse_mode: 'HTML',
+          ...(threadId ? { message_thread_id: threadId } : {})
+        }).catch(err => {
+          console.error('Error sending cached term test PDF:', err.message);
+          safeAnswerCallback(query.id, '⚠️ PDF ගොනුව යැවීමේදී දෝෂයක් සිදු විය.');
+        });
+      } else {
+        await safeAnswerCallback(query.id, '⚠️ අදාළ PDF ගොනුව හමු නොවීය.');
+      }
+      return;
+    }
+
     // Model Papers Navigation Callback Queries
     if (data === 'mp_main') {
       await safeAnswerCallback(query.id);

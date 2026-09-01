@@ -134,8 +134,9 @@ export function buildPastPapersSubjectsMenu() {
         { text: '💃 නැටුම් (Dancing)', callback_data: 'pp_sub_dn' }
       ],
       [
-        { text: '📝 ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers)', callback_data: 'mp_main' },
-        { text: '📑 ලකුණු දීමේ පටිපාටි (Marking Schemes)', callback_data: 'mark_subjects' }
+        { text: '📝 Model Papers', callback_data: 'mp_main' },
+        { text: '🏫 Term Tests', callback_data: 'tt_main' },
+        { text: '📑 Marking Schemes', callback_data: 'mark_subjects' }
       ]
     ]
   };
