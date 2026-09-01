@@ -77,6 +77,7 @@ const coreFiles = [
   'setup_requirements.bat',
   'login_notebooklm.bat',
   'install_background_bot.bat',
+  'start_bot.bat',
   'package.json',
   'package-lock.json',
   '.env',
