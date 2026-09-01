@@ -1,0 +1,1284 @@
+{
+  "group_id": -1004322002704,
+  "clean_group_id": "4322002704",
+  "subjects": {
+    "si": {
+      "name": "සිංහල",
+      "icon": "📜",
+      "tag": "Sinhala",
+      "topic_thread_id": 4210,
+      "files": {
+        "2026 Sinhala Language & Literature Past Paper Sinhala Medium.pdf": {
+          "year": "2026",
+          "medium": "Sinhala_Medium",
+          "filename": "2026 Sinhala Language & Literature Past Paper Sinhala Medium.pdf",
+          "message_id": 8026,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH1pqlm8sytBesAlOuoedkyzr3SA5zwAC6xwAAoLYuFTje8nzVJF8ez0E",
+          "message_link": "https://t.me/c/4322002704/8026",
+          "thread_id": 4210,
+          "rel_path": "past_papers\\Sinhala Language & Literature\\Sinhala_Medium\\2026 Sinhala Language & Literature Past Paper Sinhala Medium.pdf"
+        },
+        "2025 Sinhala Language & Literature Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Sinhala Language & Literature Past Paper Sinhala Medium.pdf",
+          "message_id": 8028,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH1xqlm85r5G6dzAGTlB_LkCe7UOhMgAC7BwAAoLYuFTa9QPWJiiZ9j0E",
+          "message_link": "https://t.me/c/4322002704/8028",
+          "thread_id": 4210,
+          "rel_path": "past_papers\\Sinhala Language & Literature\\Sinhala_Medium\\2025 Sinhala Language & Literature Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Sinhala Language & Literature Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Sinhala Language & Literature Past Paper Sinhala Medium.pdf",
+          "message_id": 8029,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH11qlm8_0XDBkO7SO7n4bTkSB_4NbAAC7RwAAoLYuFRArFNjJwEXYT0E",
+          "message_link": "https://t.me/c/4322002704/8029",
+          "thread_id": 4210,
+          "rel_path": "past_papers\\Sinhala Language & Literature\\Sinhala_Medium\\2024 Sinhala Language & Literature Past Paper Sinhala Medium.pdf"
+        },
+        "2023 Sinhala Language & Literature Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 Sinhala Language & Literature Past Paper Sinhala Medium.pdf",
+          "message_id": 8031,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH19qlm9Jf59QQrbkEW7eaOUtVEZEiQAC7xwAAoLYuFTSHpY5eV456T0E",
+          "message_link": "https://t.me/c/4322002704/8031",
+          "thread_id": 4210,
+          "rel_path": "past_papers\\Sinhala Language & Literature\\Sinhala_Medium\\2023 Sinhala Language & Literature Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Sinhala Language & Literature Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Sinhala Language & Literature Past Paper Sinhala Medium.pdf",
+          "message_id": 8032,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2Bqlm9Q7RTvzJ-siVopLIsRrdS0pQAC8BwAAoLYuFT5niwgAs_LmT0E",
+          "message_link": "https://t.me/c/4322002704/8032",
+          "thread_id": 4210,
+          "rel_path": "past_papers\\Sinhala Language & Literature\\Sinhala_Medium\\2022 Sinhala Language & Literature Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Sinhala Language & Literature Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Sinhala Language & Literature Past Paper Sinhala Medium.pdf",
+          "message_id": 8033,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2Fqlm9Wi8Xx3r3mJKJqZQlYMUgUvwAC8RwAAoLYuFTWFWENBwogND0E",
+          "message_link": "https://t.me/c/4322002704/8033",
+          "thread_id": 4210,
+          "rel_path": "past_papers\\Sinhala Language & Literature\\Sinhala_Medium\\2021 Sinhala Language & Literature Past Paper Sinhala Medium.pdf"
+        },
+        "2020 Sinhala Language & Literature Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 Sinhala Language & Literature Past Paper Sinhala Medium.pdf",
+          "message_id": 8034,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2Jqlm9dGme2XlfofpG8jYo9WNumCQAC8hwAAoLYuFQ8C0MK1hhAUz0E",
+          "message_link": "https://t.me/c/4322002704/8034",
+          "thread_id": 4210,
+          "rel_path": "past_papers\\Sinhala Language & Literature\\Sinhala_Medium\\2020 Sinhala Language & Literature Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "bc": {
+      "name": "බෞද්ධ ශිෂ්ටාචාරය",
+      "icon": "☸️",
+      "tag": "Buddhist_Civilization",
+      "topic_thread_id": 4215,
+      "files": {
+        "2026 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2026",
+          "medium": "Sinhala_Medium",
+          "filename": "2026 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8035,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2Nqlm9p5PMdLyFahkc9I7wV5BAofAAC8xwAAoLYuFQAAcohSQ8MWN09BA",
+          "message_link": "https://t.me/c/4322002704/8035",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2026 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2025 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8036,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2Rqlm90dTXNHXTwLL0ND4c2sysM-wAC9BwAAoLYuFQ-4TQhBCS6rT0E",
+          "message_link": "https://t.me/c/4322002704/8036",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2025 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8037,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2Vqlm96mEECrrg2e6py-Bq_2fBUQAAC9RwAAoLYuFTv6DcbP8rxKj0E",
+          "message_link": "https://t.me/c/4322002704/8037",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2024 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2023 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8038,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2Zqlm-IJ9lIh1J86x-OJpkrhzcEVAAC9hwAAoLYuFS-IUtw9vq2iD0E",
+          "message_link": "https://t.me/c/4322002704/8038",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2023 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8039,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2dqlm-O_Q4fZraC0yl8fdav_lzNdwAC9xwAAoLYuFQwhLzbaDVRXz0E",
+          "message_link": "https://t.me/c/4322002704/8039",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2022 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8040,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2hqlm-Th2uBTz8eygtnsDRYFemIwAAC-BwAAoLYuFTfohzcvpqooT0E",
+          "message_link": "https://t.me/c/4322002704/8040",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2021 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2020 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8041,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2lqlm-YP8onFa-3bbR2Hlxy6YLN6gAC-RwAAoLYuFR40Lb2ZBubAAE9BA",
+          "message_link": "https://t.me/c/4322002704/8041",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2020 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2018 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "filename": "2018 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8042,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2pqlm-yKUNwcAPzwSWz1wXG2mVNcgAC-hwAAoLYuFQguh3tZjyKiT0E",
+          "message_link": "https://t.me/c/4322002704/8042",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2018 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2017 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2017",
+          "medium": "Sinhala_Medium",
+          "filename": "2017 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8043,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2tqlm-5ESN7iUKZ26SwQ_mJHjrYEwAC-xwAAoLYuFRwNj4pXxXiyj0E",
+          "message_link": "https://t.me/c/4322002704/8043",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2017 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2016 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2016",
+          "medium": "Sinhala_Medium",
+          "filename": "2016 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8044,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH2xqlm_AIE2-Fk4OO2IzSzIo2YLWqAAC_BwAAoLYuFTBJ13fRTPY9D0E",
+          "message_link": "https://t.me/c/4322002704/8044",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2016 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        },
+        "2015 Buddhist Civilization Past Paper Sinhala Medium.pdf": {
+          "year": "2015",
+          "medium": "Sinhala_Medium",
+          "filename": "2015 Buddhist Civilization Past Paper Sinhala Medium.pdf",
+          "message_id": 8045,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH21qlm_JezpNht1u6Iw5VOWbPZbxGAAC_RwAAoLYuFQRB83jbMb1JD0E",
+          "message_link": "https://t.me/c/4322002704/8045",
+          "thread_id": 4215,
+          "rel_path": "past_papers\\Buddhist Civilization\\Sinhala_Medium\\2015 Buddhist Civilization Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "hist": {
+      "name": "ඉතිහාසය",
+      "icon": "🏛️",
+      "tag": "History",
+      "topic_thread_id": 4220,
+      "files": {
+        "2025 History Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8046,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH25qlm_O7Ma-AUIo8D8Nq0Vc-WSwHQAC_hwAAoLYuFQqbalUit647D0E",
+          "message_link": "https://t.me/c/4322002704/8046",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2025 History Past Paper Sinhala Medium.pdf"
+        },
+        "2024 History Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8047,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH29qlm_U0yOIaZ0M9Jk49K8ycnxqjAAC_xwAAoLYuFSxXCW-Ibbroz0E",
+          "message_link": "https://t.me/c/4322002704/8047",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2024 History Past Paper Sinhala Medium.pdf"
+        },
+        "2023 History Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8048,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3Bqlm_YwyYezGNXSFB0GkU9z59VaQACAh0AAoLYuFSiPj7xu7e2eT0E",
+          "message_link": "https://t.me/c/4322002704/8048",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2023 History Past Paper Sinhala Medium.pdf"
+        },
+        "2022 History Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8049,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3Fqlm_elvWvgrqV-Z4tei1CaaXyPQACAx0AAoLYuFSO63tBBZ_r3T0E",
+          "message_link": "https://t.me/c/4322002704/8049",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2022 History Past Paper Sinhala Medium.pdf"
+        },
+        "2021 History Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8050,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3Jqlm_jMWmULql2D7ebG239S1BMxwACBB0AAoLYuFS1Jl2HN4fhsz0E",
+          "message_link": "https://t.me/c/4322002704/8050",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2021 History Past Paper Sinhala Medium.pdf"
+        },
+        "2020 History Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8051,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3Nqlm_pCEOMwg7fxVB1XK1Kb89A1AACBR0AAoLYuFRgXmyXWV6A6j0E",
+          "message_link": "https://t.me/c/4322002704/8051",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2020 History Past Paper Sinhala Medium.pdf"
+        },
+        "2019 History Past Paper Sinhala Medium.pdf": {
+          "year": "2019",
+          "medium": "Sinhala_Medium",
+          "filename": "2019 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8052,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3RqlnACi6Y7YaIg8decDFOZiWXGEgACBx0AAoLYuFRRSr6eiphSGT0E",
+          "message_link": "https://t.me/c/4322002704/8052",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2019 History Past Paper Sinhala Medium.pdf"
+        },
+        "2018 History Past Paper Sinhala Medium.pdf": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "filename": "2018 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8053,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3VqlnAHoJjkuSnTTOAbaeg3ctWD7AACCB0AAoLYuFRYWir42IAXwD0E",
+          "message_link": "https://t.me/c/4322002704/8053",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2018 History Past Paper Sinhala Medium.pdf"
+        },
+        "2017 History Past Paper Sinhala Medium.pdf": {
+          "year": "2017",
+          "medium": "Sinhala_Medium",
+          "filename": "2017 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8054,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3ZqlnAMJC53sThCjNxRcoe3zbgV5gACCR0AAoLYuFRAzVLsAoFTDT0E",
+          "message_link": "https://t.me/c/4322002704/8054",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2017 History Past Paper Sinhala Medium.pdf"
+        },
+        "2016 History Past Paper Sinhala Medium.pdf": {
+          "year": "2016",
+          "medium": "Sinhala_Medium",
+          "filename": "2016 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8055,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3dqlnARmyeY77BA3aJn90axQvjUYQACCh0AAoLYuFQxyPM-CDwuqT0E",
+          "message_link": "https://t.me/c/4322002704/8055",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2016 History Past Paper Sinhala Medium.pdf"
+        },
+        "2015 History Past Paper Sinhala Medium.pdf": {
+          "year": "2015",
+          "medium": "Sinhala_Medium",
+          "filename": "2015 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8056,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3hqlnAXffpktf76vyORZA-7Bnjf-wACCx0AAoLYuFTkuclhYUfzjz0E",
+          "message_link": "https://t.me/c/4322002704/8056",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2015 History Past Paper Sinhala Medium.pdf"
+        },
+        "2013 History Past Paper Sinhala Medium.pdf": {
+          "year": "2013",
+          "medium": "Sinhala_Medium",
+          "filename": "2013 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8057,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3lqlnAcJNn6D1Gut_QKg8IAAbkmD2QAAgwdAAKC2LhUL8ifCr02jNA9BA",
+          "message_link": "https://t.me/c/4322002704/8057",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2013 History Past Paper Sinhala Medium.pdf"
+        },
+        "2012 History Past Paper Sinhala Medium.pdf": {
+          "year": "2012",
+          "medium": "Sinhala_Medium",
+          "filename": "2012 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8058,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3pqlnAiySkLXv2lWfCaQrLUOh2EvQACDR0AAoLYuFSiuTeCO01MlD0E",
+          "message_link": "https://t.me/c/4322002704/8058",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2012 History Past Paper Sinhala Medium.pdf"
+        },
+        "2010 History Past Paper Sinhala Medium.pdf": {
+          "year": "2010",
+          "medium": "Sinhala_Medium",
+          "filename": "2010 History Past Paper Sinhala Medium.pdf",
+          "message_id": 8060,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH3xqlnBZKfITM4GtOAganIqEi3hO2AACDh0AAoLYuFT5Fy0jHqFkQz0E",
+          "message_link": "https://t.me/c/4322002704/8060",
+          "thread_id": 4220,
+          "rel_path": "past_papers\\History\\Sinhala_Medium\\2010 History Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "pl": {
+      "name": "දේශපාලන විද්‍යාව",
+      "icon": "⚖️",
+      "tag": "Political_Science",
+      "topic_thread_id": 4217,
+      "files": {
+        "2026 Political Science Past Paper Sinhala Medium.pdf": {
+          "year": "2026",
+          "medium": "Sinhala_Medium",
+          "filename": "2026 Political Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8061,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH31qlnBfaps7PTrn3GXAJVrGurMzPgACDx0AAoLYuFSLEiJnZ5TT2T0E",
+          "message_link": "https://t.me/c/4322002704/8061",
+          "thread_id": 4217,
+          "rel_path": "past_papers\\Political Science\\Sinhala_Medium\\2026 Political Science Past Paper Sinhala Medium.pdf"
+        },
+        "2025 Political Science Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Political Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8062,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH35qlnB5z5Gpq5JxC-dkjtn1gmB1hwACEB0AAoLYuFRyudr4Pp5r8D0E",
+          "message_link": "https://t.me/c/4322002704/8062",
+          "thread_id": 4217,
+          "rel_path": "past_papers\\Political Science\\Sinhala_Medium\\2025 Political Science Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Political Science Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Political Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8063,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH39qlnB_edZKV_ehuYCGkE-M-GgY-QACER0AAoLYuFRE25SpDmmPfz0E",
+          "message_link": "https://t.me/c/4322002704/8063",
+          "thread_id": 4217,
+          "rel_path": "past_papers\\Political Science\\Sinhala_Medium\\2024 Political Science Past Paper Sinhala Medium.pdf"
+        },
+        "2023 Political Science Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 Political Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8064,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4BqlnCUs0wXdtEGBtmp4itxxoR3WgACEh0AAoLYuFTndKbIVjincT0E",
+          "message_link": "https://t.me/c/4322002704/8064",
+          "thread_id": 4217,
+          "rel_path": "past_papers\\Political Science\\Sinhala_Medium\\2023 Political Science Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Political Science Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Political Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8065,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4FqlnCYiQaqV_f8YzvT6O7hquu16gACEx0AAoLYuFRWmOdSSun1iT0E",
+          "message_link": "https://t.me/c/4322002704/8065",
+          "thread_id": 4217,
+          "rel_path": "past_papers\\Political Science\\Sinhala_Medium\\2022 Political Science Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Political Science Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Political Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8066,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4JqlnCdRBvYR9P2oLO4Jo8O3FsDrgACFB0AAoLYuFRLDIJ6-KG_Mz0E",
+          "message_link": "https://t.me/c/4322002704/8066",
+          "thread_id": 4217,
+          "rel_path": "past_papers\\Political Science\\Sinhala_Medium\\2021 Political Science Past Paper Sinhala Medium.pdf"
+        },
+        "2019 Political Science Past Paper Sinhala Medium.pdf": {
+          "year": "2019",
+          "medium": "Sinhala_Medium",
+          "filename": "2019 Political Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8067,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4NqlnCimabyWR65gc-PP5tOhDqqfAACFR0AAoLYuFRTdNa8vzdYHz0E",
+          "message_link": "https://t.me/c/4322002704/8067",
+          "thread_id": 4217,
+          "rel_path": "past_papers\\Political Science\\Sinhala_Medium\\2019 Political Science Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "geo": {
+      "name": "භූගෝල විද්‍යාව",
+      "icon": "🌍",
+      "tag": "Geography",
+      "topic_thread_id": 4216,
+      "files": {
+        "2025 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8068,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4RqlnConGf0omxD_pCGevibnYJL-gACFh0AAoLYuFRH_h0zqt-Iez0E",
+          "message_link": "https://t.me/c/4322002704/8068",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2025 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8069,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4VqlnCtXtddhmmlOo7ov7s9aPzl9QACFx0AAoLYuFTuX1589ROjvj0E",
+          "message_link": "https://t.me/c/4322002704/8069",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2024 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2023 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8070,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4ZqlnC2G13_OANY8xv3wxd1NldqdwACGB0AAoLYuFTUtDFfTVQCrz0E",
+          "message_link": "https://t.me/c/4322002704/8070",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2023 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8071,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4dqlnDJW-0Ws5whv4UDhFRas7CV8wACGR0AAoLYuFSEv-f4UWyDoj0E",
+          "message_link": "https://t.me/c/4322002704/8071",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2022 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8072,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4hqlnDPN5X1emOsHInU61gIe-mTAwACGh0AAoLYuFQcP2uNjPRzEz0E",
+          "message_link": "https://t.me/c/4322002704/8072",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2021 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2020 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8073,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4lqlnDaLGarDlrWXEEwLsJp1c7ICgACGx0AAoLYuFS7RjtxkMelzz0E",
+          "message_link": "https://t.me/c/4322002704/8073",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2020 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2019 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2019",
+          "medium": "Sinhala_Medium",
+          "filename": "2019 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8074,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4pqlnDgKj3TI8IiA-mMgvvAnUMP2gACHB0AAoLYuFSM-pAjyqPIwj0E",
+          "message_link": "https://t.me/c/4322002704/8074",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2019 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2018 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "filename": "2018 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8075,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4tqlnD6UCYid7mUfVK4wOBa-SAFwQACHR0AAoLYuFTiJjn5jkjqUj0E",
+          "message_link": "https://t.me/c/4322002704/8075",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2018 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2017 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2017",
+          "medium": "Sinhala_Medium",
+          "filename": "2017 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8076,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH4xqlnD_SeyVqUXfcqqVa17hSUDCKQACHh0AAoLYuFQpLVMGQh3wtD0E",
+          "message_link": "https://t.me/c/4322002704/8076",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2017 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2016 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2016",
+          "medium": "Sinhala_Medium",
+          "filename": "2016 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8077,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH41qlnEFeE3AybqjVsozENbC1HR58wACHx0AAoLYuFTB6ElKlHRsrT0E",
+          "message_link": "https://t.me/c/4322002704/8077",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2016 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2015 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2015",
+          "medium": "Sinhala_Medium",
+          "filename": "2015 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8078,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH45qlnEKfWaxVW7NG1kk0wH6SNLcTAACIB0AAoLYuFRwuXTFetTOcz0E",
+          "message_link": "https://t.me/c/4322002704/8078",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2015 Geography Past Paper Sinhala Medium.pdf"
+        },
+        "2012 Geography Past Paper Sinhala Medium.pdf": {
+          "year": "2012",
+          "medium": "Sinhala_Medium",
+          "filename": "2012 Geography Past Paper Sinhala Medium.pdf",
+          "message_id": 8079,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH49qlnEmuvcsXpupz7UIXbDTFwvBzgACIR0AAoLYuFS9hisY5UVCFD0E",
+          "message_link": "https://t.me/c/4322002704/8079",
+          "thread_id": 4216,
+          "rel_path": "past_papers\\Geography\\Sinhala_Medium\\2012 Geography Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "bs": {
+      "name": "ව්‍යාපාර අධ්‍යයනය",
+      "icon": "💼",
+      "tag": "Business_Studies",
+      "topic_thread_id": 4221,
+      "files": {
+        "2026 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2026",
+          "medium": "Sinhala_Medium",
+          "filename": "2026 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8080,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5BqlnEs5a4N0aufs0gW5Km0RPUsIQACIh0AAoLYuFQvSZUH18mHpD0E",
+          "message_link": "https://t.me/c/4322002704/8080",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2026 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2025 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8081,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5FqlnE5uRzpEWnr1301pUjGO8F8GwACIx0AAoLYuFScYM0uISVMkD0E",
+          "message_link": "https://t.me/c/4322002704/8081",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2025 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8082,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5JqlnFAoPP8V8N44wYAAdyjL7qawgoAAiQdAAKC2LhUTD4TCx1vwBs9BA",
+          "message_link": "https://t.me/c/4322002704/8082",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2024 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2023 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8083,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5NqlnFSLHO86Cdk3ayQu1IJxY3XBAACJR0AAoLYuFTgGo_Hs9GSWj0E",
+          "message_link": "https://t.me/c/4322002704/8083",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2023 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8084,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5RqlnFZs2s23ClXhpQESLqoM6eJHgACJh0AAoLYuFR5UM2YT8Jp4z0E",
+          "message_link": "https://t.me/c/4322002704/8084",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2022 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8085,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5VqlnFerF8SnI0Ko9ai2EZ7pd5ydQACJx0AAoLYuFTiCOob43thJz0E",
+          "message_link": "https://t.me/c/4322002704/8085",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2021 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2020 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8086,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5ZqlnFkfmcbid3gBe1iF4fXM2e2YwACKB0AAoLYuFRJDQQnJnAtQD0E",
+          "message_link": "https://t.me/c/4322002704/8086",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2020 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2017 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2017",
+          "medium": "Sinhala_Medium",
+          "filename": "2017 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8087,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5dqlnF_M1fckyZe4b8JM7ZIjf7VdwACKR0AAoLYuFTVumtfHTSVQj0E",
+          "message_link": "https://t.me/c/4322002704/8087",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2017 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2016 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2016",
+          "medium": "Sinhala_Medium",
+          "filename": "2016 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8088,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5hqlnGEKMzglUOcUY5r5PbWVYwrWAACKh0AAoLYuFTlKQXP4bNftD0E",
+          "message_link": "https://t.me/c/4322002704/8088",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2016 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2015 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2015",
+          "medium": "Sinhala_Medium",
+          "filename": "2015 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8089,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5lqlnGNuPhAYKL4rAAB53NkaOM-5v0AAisdAAKC2LhUzypwH26gL8M9BA",
+          "message_link": "https://t.me/c/4322002704/8089",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2015 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2014 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2014",
+          "medium": "Sinhala_Medium",
+          "filename": "2014 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8090,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5pqlnGTMo6eRow_gp81oQv-Mziq6wACLB0AAoLYuFRO1EAgUF9mgD0E",
+          "message_link": "https://t.me/c/4322002704/8090",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2014 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2013 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2013",
+          "medium": "Sinhala_Medium",
+          "filename": "2013 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8091,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5tqlnGcXkYYzRKjlIKDURnZ36a-6AACLR0AAoLYuFQPYOwfhTMrqj0E",
+          "message_link": "https://t.me/c/4322002704/8091",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2013 Business Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2011 Business Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2011",
+          "medium": "Sinhala_Medium",
+          "filename": "2011 Business Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8092,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH5xqlnGlZctbxAABmDSFoQvpkjFwLJAAAi4dAAKC2LhULkxifi1ku4c9BA",
+          "message_link": "https://t.me/c/4322002704/8092",
+          "thread_id": 4221,
+          "rel_path": "past_papers\\Business Studies\\Sinhala_Medium\\2011 Business Studies Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "agri": {
+      "name": "කෘෂි විද්‍යාව",
+      "icon": "🌾",
+      "tag": "Agricultural_Science",
+      "topic_thread_id": 5490,
+      "files": {
+        "2026 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2026",
+          "medium": "Sinhala_Medium",
+          "filename": "2026 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8093,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH51qlnHEqzfGurKyvF9iiEGbOgLocgACLx0AAoLYuFRvRq9Ac4QoPz0E",
+          "message_link": "https://t.me/c/4322002704/8093",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2026 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2025 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8094,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH55qlnHTpkjK8Ro3KB2aHnsmDhugBAACMB0AAoLYuFRlYULaRBKNMj0E",
+          "message_link": "https://t.me/c/4322002704/8094",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2025 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8095,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH59qlnHa7PRbAxnPrf8fUxY5l_flyAACMR0AAoLYuFR9os_w9rh5kT0E",
+          "message_link": "https://t.me/c/4322002704/8095",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2024 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2023 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8096,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6BqlnH4WP_GRnwyzocGcocjDU-PPAACMx0AAoLYuFQo-K2htyhZBD0E",
+          "message_link": "https://t.me/c/4322002704/8096",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2023 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8097,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6FqlnIAAS9eoeehrVLRYuo3tM969B4AAjQdAAKC2LhURHIqZywMakE9BA",
+          "message_link": "https://t.me/c/4322002704/8097",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2022 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8098,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6JqlnIGXpADnKHLC2YfhgKx9sxBZQACNR0AAoLYuFRpgdpBDaW1oj0E",
+          "message_link": "https://t.me/c/4322002704/8098",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2021 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2020 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8099,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6NqlnIO2BveONupEwxgqjWP1jVzeAACNh0AAoLYuFTCL1D5SB-6PD0E",
+          "message_link": "https://t.me/c/4322002704/8099",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2020 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2019 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2019",
+          "medium": "Sinhala_Medium",
+          "filename": "2019 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8100,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6RqlnIomS_hgblkfvM32_3vqKV3OAACNx0AAoLYuFSIJBXIX6uY4D0E",
+          "message_link": "https://t.me/c/4322002704/8100",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2019 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2018 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "filename": "2018 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8101,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6VqlnItJTmy4l4I1j632bKvYQPE-gACOB0AAoLYuFQ-iInAJFUx2D0E",
+          "message_link": "https://t.me/c/4322002704/8101",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2018 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2017 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2017",
+          "medium": "Sinhala_Medium",
+          "filename": "2017 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8102,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6ZqlnI0Erwc4kT_sM0cOu62HRgBvwACOR0AAoLYuFT3iO6CBH6E-D0E",
+          "message_link": "https://t.me/c/4322002704/8102",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2017 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2016 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2016",
+          "medium": "Sinhala_Medium",
+          "filename": "2016 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8103,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6dqlnI4LiH-guZFWxbNUD6Nh9cnCAACOh0AAoLYuFQrJircqu71Bj0E",
+          "message_link": "https://t.me/c/4322002704/8103",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2016 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2015 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2015",
+          "medium": "Sinhala_Medium",
+          "filename": "2015 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8104,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6hqlnJHaG5UbVYk2kPmP6-L_p_knwACOx0AAoLYuFSPm_MFmsimwD0E",
+          "message_link": "https://t.me/c/4322002704/8104",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2015 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2014 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2014",
+          "medium": "Sinhala_Medium",
+          "filename": "2014 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8105,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6lqlnJQpTLRggABKd7cLZyMt7eLmSIAAjwdAAKC2LhUVHTvzttCOqI9BA",
+          "message_link": "https://t.me/c/4322002704/8105",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2014 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2012 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2012",
+          "medium": "Sinhala_Medium",
+          "filename": "2012 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8106,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6pqlnJxg7Wgib0Dk9cQ1B54gpDMvgACPh0AAoLYuFSA_YroA3zlMz0E",
+          "message_link": "https://t.me/c/4322002704/8106",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2012 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2011 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2011",
+          "medium": "Sinhala_Medium",
+          "filename": "2011 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8107,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6tqlnJ5XeBHflFNs2eMnEdGJk_TTQACPx0AAoLYuFSisgtoe3jLWj0E",
+          "message_link": "https://t.me/c/4322002704/8107",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2011 Agricultural Science Past Paper Sinhala Medium.pdf"
+        },
+        "2010 Agricultural Science Past Paper Sinhala Medium.pdf": {
+          "year": "2010",
+          "medium": "Sinhala_Medium",
+          "filename": "2010 Agricultural Science Past Paper Sinhala Medium.pdf",
+          "message_id": 8108,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH6xqlnKd1IJWeF6ZwcQiWGXvcV7pfgACQB0AAoLYuFTQGfjC5aK8TT0E",
+          "message_link": "https://t.me/c/4322002704/8108",
+          "thread_id": 5490,
+          "rel_path": "past_papers\\Agricultural Science\\Sinhala_Medium\\2010 Agricultural Science Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "md": {
+      "name": "සන්නිවේදනය හා මාධ්‍ය අධ්‍යයනය",
+      "icon": "📡",
+      "tag": "Media_Studies",
+      "topic_thread_id": 4225,
+      "files": {
+        "2025 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8109,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH61qlnKiSC_ByVRe8N8xZsRwkW8x5AACQR0AAoLYuFRD6FovIAb_eT0E",
+          "message_link": "https://t.me/c/4322002704/8109",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2025 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8110,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH65qlnK9vqfNsypmaJui9KSh0vxrggACQh0AAoLYuFRmvIUyDNnW7D0E",
+          "message_link": "https://t.me/c/4322002704/8110",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2024 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2023 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8111,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH69qlnLizsMbyH_6iNbXz-9M7jCzzAACQx0AAoLYuFRd5SmvYic55T0E",
+          "message_link": "https://t.me/c/4322002704/8111",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2023 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8112,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7BqlnLpCZ8tgq-RizYUzZp4PWSp_QACRB0AAoLYuFRRR4-8Z6ehez0E",
+          "message_link": "https://t.me/c/4322002704/8112",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2022 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8113,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7FqlnLvEq7TVu2konLObmPw0SlpzAACRR0AAoLYuFQQbvCwi68Clz0E",
+          "message_link": "https://t.me/c/4322002704/8113",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2021 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2020 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8114,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7JqlnL1TiKXXDqC0a21DJThX_Al4gACRh0AAoLYuFTpcyiI3rDy9D0E",
+          "message_link": "https://t.me/c/4322002704/8114",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2020 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2019 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2019",
+          "medium": "Sinhala_Medium",
+          "filename": "2019 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8115,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7NqlnL7o4-dtVmfHPfBPgpeOoAWkgACRx0AAoLYuFQ0eH4CoIto-j0E",
+          "message_link": "https://t.me/c/4322002704/8115",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2019 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2018 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "filename": "2018 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8116,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7RqlnMAAZzqfbfpfefsrWksyG0JYRsAAkgdAAKC2LhUi4YKiBxwOh09BA",
+          "message_link": "https://t.me/c/4322002704/8116",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2018 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2016 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2016",
+          "medium": "Sinhala_Medium",
+          "filename": "2016 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8117,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7VqlnMFurRDvflvISCkTTmhMyt56gACSR0AAoLYuFT598JKzOeC_D0E",
+          "message_link": "https://t.me/c/4322002704/8117",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2016 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        },
+        "2015 Communication and Media Studies Past Paper Sinhala Medium.pdf": {
+          "year": "2015",
+          "medium": "Sinhala_Medium",
+          "filename": "2015 Communication and Media Studies Past Paper Sinhala Medium.pdf",
+          "message_id": 8118,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7ZqlnMKUXANrk-jsHswuYFNBY6hwAACSh0AAoLYuFQunSQYEjEGwT0E",
+          "message_link": "https://t.me/c/4322002704/8118",
+          "thread_id": 4225,
+          "rel_path": "past_papers\\Communication and Media Studies\\Sinhala_Medium\\2015 Communication and Media Studies Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "dr": {
+      "name": "නාට්‍ය හා රංග කලාව",
+      "icon": "🎭",
+      "tag": "Drama_and_Theatre",
+      "topic_thread_id": 4222,
+      "files": {
+        "2026 Drama and Theatre Past Paper Sinhala Medium.pdf": {
+          "year": "2026",
+          "medium": "Sinhala_Medium",
+          "filename": "2026 Drama and Theatre Past Paper Sinhala Medium.pdf",
+          "message_id": 8119,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7dqlnMQg2mhM357hOLr4y5R1tkugAACSx0AAoLYuFQdiirO6CYULj0E",
+          "message_link": "https://t.me/c/4322002704/8119",
+          "thread_id": 4222,
+          "rel_path": "past_papers\\Drama and Theatre\\Sinhala_Medium\\2026 Drama and Theatre Past Paper Sinhala Medium.pdf"
+        },
+        "2025 Drama and Theatre Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Drama and Theatre Past Paper Sinhala Medium.pdf",
+          "message_id": 8120,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7hqlnMUswwT5rW2pLuhiHrC_UeBoAACTB0AAoLYuFTscwQSZdSn1j0E",
+          "message_link": "https://t.me/c/4322002704/8120",
+          "thread_id": 4222,
+          "rel_path": "past_papers\\Drama and Theatre\\Sinhala_Medium\\2025 Drama and Theatre Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Drama and Theatre Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Drama and Theatre Past Paper Sinhala Medium.pdf",
+          "message_id": 8121,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7lqlnMbUBB4zGQjSf6PpqqvpFi15gACTR0AAoLYuFQFQGP88eWNkD0E",
+          "message_link": "https://t.me/c/4322002704/8121",
+          "thread_id": 4222,
+          "rel_path": "past_papers\\Drama and Theatre\\Sinhala_Medium\\2024 Drama and Theatre Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Drama and Theatre Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Drama and Theatre Past Paper Sinhala Medium.pdf",
+          "message_id": 8122,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7pqlnMhOHrz-QGTLS5mVClsYS3wIgACTh0AAoLYuFSsDgWXR1xBgD0E",
+          "message_link": "https://t.me/c/4322002704/8122",
+          "thread_id": 4222,
+          "rel_path": "past_papers\\Drama and Theatre\\Sinhala_Medium\\2022 Drama and Theatre Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Drama and Theatre Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Drama and Theatre Past Paper Sinhala Medium.pdf",
+          "message_id": 8123,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7tqlnMmEU2SMMwRRHFgc9T9NKiPpQACTx0AAoLYuFQ3_dYn8o5-LD0E",
+          "message_link": "https://t.me/c/4322002704/8123",
+          "thread_id": 4222,
+          "rel_path": "past_papers\\Drama and Theatre\\Sinhala_Medium\\2021 Drama and Theatre Past Paper Sinhala Medium.pdf"
+        },
+        "2020 Drama and Theatre Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 Drama and Theatre Past Paper Sinhala Medium.pdf",
+          "message_id": 8124,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH7xqlnNAHKtrOKizOf89hpIXNIMzMgACUB0AAoLYuFSyO1uADk6ACz0E",
+          "message_link": "https://t.me/c/4322002704/8124",
+          "thread_id": 4222,
+          "rel_path": "past_papers\\Drama and Theatre\\Sinhala_Medium\\2020 Drama and Theatre Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "mu": {
+      "name": "සංගීතය",
+      "icon": "🎵",
+      "tag": "Music",
+      "topic_thread_id": 4223,
+      "files": {
+        "2026 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2026",
+          "medium": "Sinhala_Medium",
+          "filename": "2026 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8125,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH71qlnNFQhhMhXzsTEeQJHLe3UafQwACUR0AAoLYuFRT4fuRz__cwj0E",
+          "message_link": "https://t.me/c/4322002704/8125",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2026 Music Past Paper Sinhala Medium.pdf"
+        },
+        "2025 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8126,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH75qlnNT8AeFZ9p1XkwtXA842lVsOgACUh0AAoLYuFRoOpDfGQe2OT0E",
+          "message_link": "https://t.me/c/4322002704/8126",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2025 Music Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8127,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH79qlnNc7xKWOWihs95ry-Hk_9jS8AACUx0AAoLYuFSfupvQNdmuPz0E",
+          "message_link": "https://t.me/c/4322002704/8127",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2024 Music Past Paper Sinhala Medium.pdf"
+        },
+        "2023 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8128,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8BqlnNgSDitHWqzQoCBPUjCI-tB6gACVB0AAoLYuFTyZv8uDYtzjz0E",
+          "message_link": "https://t.me/c/4322002704/8128",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2023 Music Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8129,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8FqlnNjIDeTyahccdReQhol9WBzXAACVR0AAoLYuFQ9NA5JZ9wxIj0E",
+          "message_link": "https://t.me/c/4322002704/8129",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2022 Music Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8130,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8JqlnNouvF6f75HjTZruh1O5dcOkAACVh0AAoLYuFShXm1idk2RyT0E",
+          "message_link": "https://t.me/c/4322002704/8130",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2021 Music Past Paper Sinhala Medium.pdf"
+        },
+        "2020 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8131,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8NqlnNynOM7xFNRu8uHZZPfrlqWnQACVx0AAoLYuFSVXtG7iTbE4j0E",
+          "message_link": "https://t.me/c/4322002704/8131",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2020 Music Past Paper Sinhala Medium.pdf"
+        },
+        "2018 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "filename": "2018 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8132,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8RqlnN4BgZFcteyRSomyO6tQVYUKAACWB0AAoLYuFQtrXFE4-jJSz0E",
+          "message_link": "https://t.me/c/4322002704/8132",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2018 Music Past Paper Sinhala Medium.pdf"
+        },
+        "2016 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2016",
+          "medium": "Sinhala_Medium",
+          "filename": "2016 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8133,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8VqlnOSuCrYmrbIlT4ZySbCCZDfegACWR0AAoLYuFTMPwu8EcPLDT0E",
+          "message_link": "https://t.me/c/4322002704/8133",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2016 Music Past Paper Sinhala Medium.pdf"
+        },
+        "2015 Music Past Paper Sinhala Medium.pdf": {
+          "year": "2015",
+          "medium": "Sinhala_Medium",
+          "filename": "2015 Music Past Paper Sinhala Medium.pdf",
+          "message_id": 8134,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8ZqlnOZ_GFPjkptcWtwXiGjL8FtywACWh0AAoLYuFRQhIqUf1iQ5j0E",
+          "message_link": "https://t.me/c/4322002704/8134",
+          "thread_id": 4223,
+          "rel_path": "past_papers\\Music\\Sinhala_Medium\\2015 Music Past Paper Sinhala Medium.pdf"
+        }
+      }
+    },
+    "dn": {
+      "name": "නැටුම්",
+      "icon": "💃",
+      "tag": "Dancing",
+      "topic_thread_id": 4224,
+      "files": {
+        "2026 Dancing Past Paper Sinhala Medium.pdf": {
+          "year": "2026",
+          "medium": "Sinhala_Medium",
+          "filename": "2026 Dancing Past Paper Sinhala Medium.pdf",
+          "message_id": 8135,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8dqlnOdjH-5kt26jWFb4irxBb3ANwACWx0AAoLYuFSlsCb1KXWADz0E",
+          "message_link": "https://t.me/c/4322002704/8135",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2026 Dancing Past Paper Sinhala Medium.pdf"
+        },
+        "2025 Dancing (baratha) Past Paper Sinhala Medium.pdf": {
+          "year": "2025",
+          "medium": "Sinhala_Medium",
+          "filename": "2025 Dancing (baratha) Past Paper Sinhala Medium.pdf",
+          "message_id": 8136,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8hqlnOiq6uqVaulszUunVAeJywXZgACXB0AAoLYuFTckJVMe9XviT0E",
+          "message_link": "https://t.me/c/4322002704/8136",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2025 Dancing (baratha) Past Paper Sinhala Medium.pdf"
+        },
+        "2024 Dancing Past Paper Sinhala Medium.pdf": {
+          "year": "2024",
+          "medium": "Sinhala_Medium",
+          "filename": "2024 Dancing Past Paper Sinhala Medium.pdf",
+          "message_id": 8137,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8lqlnOo9vLWFWakE85JgStG87LymwACXh0AAoLYuFQ3cZkLS1YqTT0E",
+          "message_link": "https://t.me/c/4322002704/8137",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2024 Dancing Past Paper Sinhala Medium.pdf"
+        },
+        "2023 Dancing Past Paper Sinhala Medium.pdf": {
+          "year": "2023",
+          "medium": "Sinhala_Medium",
+          "filename": "2023 Dancing Past Paper Sinhala Medium.pdf",
+          "message_id": 8138,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8pqlnOzyfM2zmtFp4RHCe1BDIpoHwACXx0AAoLYuFQFqrua6KBYNz0E",
+          "message_link": "https://t.me/c/4322002704/8138",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2023 Dancing Past Paper Sinhala Medium.pdf"
+        },
+        "2022 Dancing (baratha) Past Paper Sinhala Medium.pdf": {
+          "year": "2022",
+          "medium": "Sinhala_Medium",
+          "filename": "2022 Dancing (baratha) Past Paper Sinhala Medium.pdf",
+          "message_id": 8139,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8tqlnO49wZcP_zlFeRXWK8UjCfbSAACYB0AAoLYuFTyueKZB6PwaD0E",
+          "message_link": "https://t.me/c/4322002704/8139",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2022 Dancing (baratha) Past Paper Sinhala Medium.pdf"
+        },
+        "2021 Dancing Past Paper Sinhala Medium.pdf": {
+          "year": "2021",
+          "medium": "Sinhala_Medium",
+          "filename": "2021 Dancing Past Paper Sinhala Medium.pdf",
+          "message_id": 8140,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH8xqlnO-XnVpyHBZ7fVacu_vdAgrGwACYR0AAoLYuFSSE_3NrC64XD0E",
+          "message_link": "https://t.me/c/4322002704/8140",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2021 Dancing Past Paper Sinhala Medium.pdf"
+        },
+        "2020 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf",
+          "message_id": 8141,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH81qlnPCzQvIapt4l-bgh4igxdfcuQACYh0AAoLYuFRe8cOE8w56Pj0E",
+          "message_link": "https://t.me/c/4322002704/8141",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2020 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf"
+        },
+        "2020 Dancing (baratha) Past Paper Sinhala Medium.pdf": {
+          "year": "2020",
+          "medium": "Sinhala_Medium",
+          "filename": "2020 Dancing (baratha) Past Paper Sinhala Medium.pdf",
+          "message_id": 8142,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH85qlnPJ-GIlPUp3b0pyRkxtV1VUzwACYx0AAoLYuFS3KDaRloLRJz0E",
+          "message_link": "https://t.me/c/4322002704/8142",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2020 Dancing (baratha) Past Paper Sinhala Medium.pdf"
+        },
+        "2019 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf": {
+          "year": "2019",
+          "medium": "Sinhala_Medium",
+          "filename": "2019 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf",
+          "message_id": 8143,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH89qlnPP09zPwr7pdQT5WC1U5zOG-wACZB0AAoLYuFRc3BA1-xdeUz0E",
+          "message_link": "https://t.me/c/4322002704/8143",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2019 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf"
+        },
+        "2019 Dancing (baratha) Past Paper Sinhala Medium.pdf": {
+          "year": "2019",
+          "medium": "Sinhala_Medium",
+          "filename": "2019 Dancing (baratha) Past Paper Sinhala Medium.pdf",
+          "message_id": 8144,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH9BqlnPsoKFBJbBzNOZ5nKIuvfRZUgACZR0AAoLYuFScNWypBhG1Aj0E",
+          "message_link": "https://t.me/c/4322002704/8144",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2019 Dancing (baratha) Past Paper Sinhala Medium.pdf"
+        },
+        "2018 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf": {
+          "year": "2018",
+          "medium": "Sinhala_Medium",
+          "filename": "2018 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf",
+          "message_id": 8145,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH9FqlnPyuZHJBDnjupLnkpLR3LivfwACZx0AAoLYuFQo80W5aoHdHj0E",
+          "message_link": "https://t.me/c/4322002704/8145",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2018 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf"
+        },
+        "2017 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf": {
+          "year": "2017",
+          "medium": "Sinhala_Medium",
+          "filename": "2017 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf",
+          "message_id": 8146,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH9JqlnP4sIM61Ltt5KKx34msnWJRYQACaB0AAoLYuFRlOh_SgASFiD0E",
+          "message_link": "https://t.me/c/4322002704/8146",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2017 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf"
+        },
+        "2016 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf": {
+          "year": "2016",
+          "medium": "Sinhala_Medium",
+          "filename": "2016 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf",
+          "message_id": 8147,
+          "file_id": "BQACAgUAAyEGAAMBAZyHEAACH9NqlnQM-tO6o-oAAfg-8Z-rGm3lnxEAAmkdAAKC2LhU76_C4Oos3UA9BA",
+          "message_link": "https://t.me/c/4322002704/8147",
+          "thread_id": 4224,
+          "rel_path": "past_papers\\Dancing\\Sinhala_Medium\\2016 AL Dancing (Indigenous) Past Paper - Sinhala Medium.pdf"
+        }
+      }
+    }
+  }
+}

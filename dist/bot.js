@@ -70,6 +70,15 @@ import {
   buildMarkingYearsMenu,
   buildMarkingDirectYearMessage
 } from './marking_manager.js';
+import {
+  loadPastPapersDb,
+  normalizePastPaperSubject,
+  getSubjectByThreadId as getPpSubjectByThreadId,
+  buildPastPapersSubjectsMenu,
+  buildPastPapersYearsMenu,
+  buildPastPaperDirectYearMessage,
+  formatPastPaperCaption
+} from './past_papers_manager.js';
 
 // Load environment variables
 dotenv.config();
@@ -6131,6 +6140,67 @@ bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, asy
   }).catch(e => console.error('Error sending map hub message:', e.message));
 });
 
+// Command: /paper or /papers or /pastpaper or /pastpapers (Interactive Past Papers Navigation)
+bot.onText(/^\/(past_papers|past_paper|pastpapers|pastpaper|papers|paper)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
+  if (!await enforceDirectAccessControl(msg)) return;
+  const chatId = msg.chat.id;
+  const { threadId, topicSubject } = getThreadContext(msg);
+  const replyOpts = {
+    reply_to_message_id: msg.message_id,
+    ...(threadId ? { message_thread_id: threadId } : {})
+  };
+
+  const rawArg1 = (match[2] || match[3] || '').trim();
+  const rawArg2 = (match[4] || '').trim();
+
+  let subCode = null;
+  let year = null;
+
+  // Case A: User typed "/paper 2025" or "/paper 2024" directly
+  if (/^\d{4}$/.test(rawArg1)) {
+    year = rawArg1;
+    subCode = normalizePastPaperSubject(topicSubject) || getPpSubjectByThreadId(threadId);
+  } else if (rawArg1) {
+    subCode = normalizePastPaperSubject(rawArg1);
+    if (/^\d{4}$/.test(rawArg2)) {
+      year = rawArg2;
+    }
+  }
+
+  // Case B: If inside a specific forum topic thread and no subject explicitly given -> auto-detect
+  if (!subCode && threadId) {
+    subCode = normalizePastPaperSubject(topicSubject) || getPpSubjectByThreadId(threadId);
+  }
+
+  // 1. Direct Year query: /paper <subject> <year> or /paper <year> inside topic
+  if (subCode && year) {
+    const res = buildPastPaperDirectYearMessage(subCode, year);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending direct year past paper:', e.message));
+  }
+
+  // 2. Subject specified: /paper <subject> -> Directly show Year Navigation List (No Medium Selection needed!)
+  if (subCode) {
+    const res = buildPastPapersYearsMenu(subCode);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending subject past papers years menu:', e.message));
+  }
+
+  // 3. No arguments outside topic: /paper -> Show 11-Subject Picker Menu
+  const res = buildPastPapersSubjectsMenu();
+  return bot.sendMessage(chatId, res.text, {
+    parse_mode: 'Markdown',
+    reply_markup: res.keyboard,
+    ...replyOpts
+  }).catch(e => console.error('Error sending past papers subjects menu:', e.message));
+});
+
 // Command: /marking or /markings or /marking_scheme (Interactive Marking Schemes Navigation)
 bot.onText(/^\/(marking_scheme|markingscheme|markings|marking)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
   if (!await enforceDirectAccessControl(msg)) return;
@@ -6209,6 +6279,71 @@ bot.on('callback_query', async (query) => {
   }
 
   try {
+    // Past Papers Navigation Callback Queries
+    if (data === 'pp_main') {
+      await safeAnswerCallback(query.id);
+      const res = buildPastPapersSubjectsMenu();
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('pp_sub_')) {
+      const subCode = data.replace('pp_sub_', '');
+      await safeAnswerCallback(query.id);
+      const res = buildPastPapersYearsMenu(subCode);
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('pp_cached_')) {
+      const parts = data.split('_'); // ['pp', 'cached', subCode, year]
+      const subCode = parts[2];
+      const year = parts[3];
+      const db = loadPastPapersDb();
+      const sub = db.subjects?.[subCode];
+      const files = Object.values(sub?.files || {});
+      const matchFile = files.find(f => String(f.year) === String(year));
+
+      if (matchFile && matchFile.file_id) {
+        await safeAnswerCallback(query.id, '📥 PDF ගොනුව එවමින් පවතී...');
+        const caption = formatPastPaperCaption(subCode, matchFile);
+        return bot.sendDocument(chatId, matchFile.file_id, {
+          caption: caption,
+          parse_mode: 'HTML',
+          ...(threadId ? { message_thread_id: threadId } : {})
+        }).catch(err => {
+          console.error('Error sending cached past paper PDF:', err.message);
+          safeAnswerCallback(query.id, '⚠️ PDF ගොනුව යැවීමේදී දෝෂයක් සිදු විය.');
+        });
+      } else {
+        await safeAnswerCallback(query.id, '⚠️ අදාළ PDF ගොනුව හමු නොවීය.');
+      }
+      return;
+    }
+
+    if (data && data.startsWith('help_act_paper_')) {
+      const subCode = data.replace('help_act_paper_', '');
+      await safeAnswerCallback(query.id);
+      const res = buildPastPapersYearsMenu(subCode);
+      return bot.sendMessage(chatId, res.text, {
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard,
+        ...(threadId ? { message_thread_id: threadId } : {})
+      }).catch(() => { });
+    }
+
     // Marking Schemes Navigation Callback Queries
     if (data === 'mark_subjects') {
       await safeAnswerCallback(query.id);

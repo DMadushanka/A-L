@@ -26,6 +26,8 @@ const coreFiles = [
   'map_quiz_manager.js',
   'marking_manager.js',
   'markings_archive_db.json',
+  'past_papers_manager.js',
+  'past_papers_archive_db.json',
   'map_app.html',
   'db.js',
   'mermaid_utils.js',
