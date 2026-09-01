@@ -79,6 +79,15 @@ import {
   buildPastPaperDirectYearMessage,
   formatPastPaperCaption
 } from './past_papers_manager.js';
+import {
+  loadModelPapersDb,
+  normalizeModelPaperSubject,
+  getSubjectByThreadId as getMpSubjectByThreadId,
+  buildModelPapersSubjectsMenu,
+  buildModelPapersListMenu,
+  buildModelPaperDirectMessage,
+  formatModelPaperCaption
+} from './model_papers_manager.js';
 
 // Load environment variables
 dotenv.config();
@@ -6140,8 +6149,8 @@ bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, asy
   }).catch(e => console.error('Error sending map hub message:', e.message));
 });
 
-// Command: /paper or /papers or /pastpaper or /pastpapers (Interactive Past Papers Navigation)
-bot.onText(/^\/(past_papers|past_paper|pastpapers|pastpaper|papers|paper)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
+// Command: /paper or /papers or /pastpaper or /pastpapers or /passpaper (Interactive Past Papers Navigation)
+bot.onText(/^\/(pass_papers|pass_paper|passpapers|passpaper|past_papers|past_paper|pastpapers|pastpaper|papers|paper)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
   if (!await enforceDirectAccessControl(msg)) return;
   const chatId = msg.chat.id;
   const { threadId, topicSubject } = getThreadContext(msg);
@@ -6199,6 +6208,67 @@ bot.onText(/^\/(past_papers|past_paper|pastpapers|pastpaper|papers|paper)(?:_([a
     reply_markup: res.keyboard,
     ...replyOpts
   }).catch(e => console.error('Error sending past papers subjects menu:', e.message));
+});
+
+// Command: /model or /models or /modelpaper or /modelpapers (Interactive Model Papers Navigation)
+bot.onText(/^\/(model_papers|model_paper|modelpapers|modelpaper|models|model)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(.*))?$/i, async (msg, match) => {
+  if (!await enforceDirectAccessControl(msg)) return;
+  const chatId = msg.chat.id;
+  const { threadId, topicSubject } = getThreadContext(msg);
+  const replyOpts = {
+    reply_to_message_id: msg.message_id,
+    ...(threadId ? { message_thread_id: threadId } : {})
+  };
+
+  const rawArg1 = (match[2] || match[3] || '').trim();
+  const rawArg2 = (match[4] || '').trim();
+
+  let subCode = null;
+  let queryTerm = null;
+
+  // Check if rawArg1 is a subject alias
+  const directSub = normalizeModelPaperSubject(rawArg1);
+  if (directSub) {
+    subCode = directSub;
+    queryTerm = rawArg2;
+  } else if (rawArg1) {
+    // rawArg1 is a search keyword (e.g. 2026, uva, western)
+    queryTerm = rawArg2 ? `${rawArg1} ${rawArg2}` : rawArg1;
+    subCode = normalizeModelPaperSubject(topicSubject) || getMpSubjectByThreadId(threadId);
+  }
+
+  // Auto-detect topic thread subject if not specified
+  if (!subCode && threadId) {
+    subCode = normalizeModelPaperSubject(topicSubject) || getMpSubjectByThreadId(threadId);
+  }
+
+  // 1. Direct Search / Year / Province query: /model <subject> <query> or /model <query> inside topic
+  if (subCode && queryTerm) {
+    const res = buildModelPaperDirectMessage(subCode, queryTerm);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending direct query model paper:', e.message));
+  }
+
+  // 2. Subject specified: /model <subject> -> Directly show Model Papers List
+  if (subCode) {
+    const res = buildModelPapersListMenu(subCode);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending subject model papers list menu:', e.message));
+  }
+
+  // 3. No arguments outside topic: /model -> Show 11-Subject Picker Menu
+  const res = buildModelPapersSubjectsMenu();
+  return bot.sendMessage(chatId, res.text, {
+    parse_mode: 'Markdown',
+    reply_markup: res.keyboard,
+    ...replyOpts
+  }).catch(e => console.error('Error sending model papers subjects menu:', e.message));
 });
 
 // Command: /marking or /markings or /marking_scheme (Interactive Marking Schemes Navigation)
@@ -6279,6 +6349,60 @@ bot.on('callback_query', async (query) => {
   }
 
   try {
+    // Model Papers Navigation Callback Queries
+    if (data === 'mp_main') {
+      await safeAnswerCallback(query.id);
+      const res = buildModelPapersSubjectsMenu();
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('mp_sub_')) {
+      const subCode = data.replace('mp_sub_', '');
+      await safeAnswerCallback(query.id);
+      const res = buildModelPapersListMenu(subCode);
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('mp_cached_')) {
+      const parts = data.split('_'); // ['mp', 'cached', subCode, fileIndex]
+      const subCode = parts[2];
+      const fileIndex = parseInt(parts[3], 10);
+      const db = loadModelPapersDb();
+      const sub = db.subjects?.[subCode];
+      const files = Object.values(sub?.files || {});
+      const matchFile = files[fileIndex];
+
+      if (matchFile && matchFile.file_id) {
+        await safeAnswerCallback(query.id, '📥 PDF ගොනුව එවමින් පවතී...');
+        const caption = formatModelPaperCaption(subCode, matchFile);
+        return bot.sendDocument(chatId, matchFile.file_id, {
+          caption: caption,
+          parse_mode: 'HTML',
+          ...(threadId ? { message_thread_id: threadId } : {})
+        }).catch(err => {
+          console.error('Error sending cached model paper PDF:', err.message);
+          safeAnswerCallback(query.id, '⚠️ PDF ගොනුව යැවීමේදී දෝෂයක් සිදු විය.');
+        });
+      } else {
+        await safeAnswerCallback(query.id, '⚠️ අදාළ PDF ගොනුව හමු නොවීය.');
+      }
+      return;
+    }
+
     // Past Papers Navigation Callback Queries
     if (data === 'pp_main') {
       await safeAnswerCallback(query.id);

@@ -70934,15 +70934,15 @@ ${badge} **ලකුණු:** \`${score} / ${maxScore}\` (*${percentage}%*)
 }
 
 const _scriptDir$1 = (typeof __dirname !== 'undefined' && __dirname) ? __dirname : process.cwd();
-const DB_PATH$1 = path.resolve(_scriptDir$1, 'markings_archive_db.json');
+const DB_PATH$2 = path.resolve(_scriptDir$1, 'markings_archive_db.json');
 
 /**
  * Load the Markings Archive Database from disk
  */
 function loadMarkingsDb() {
   try {
-    if (fs.existsSync(DB_PATH$1)) {
-      const content = fs.readFileSync(DB_PATH$1, 'utf-8');
+    if (fs.existsSync(DB_PATH$2)) {
+      const content = fs.readFileSync(DB_PATH$2, 'utf-8');
       return JSON.parse(content);
     }
   } catch (err) {
@@ -71022,7 +71022,7 @@ function normalizeMarkingSubject(raw) {
 /**
  * Match subject code by Forum Topic Thread ID
  */
-function getSubjectByThreadId$1(threadId) {
+function getSubjectByThreadId$2(threadId) {
   if (!threadId) return null;
   const tid = parseInt(threadId, 10);
   const threadMap = {
@@ -71078,7 +71078,8 @@ function buildMarkingSubjectsMenu() {
         { text: '🌾 කෘෂි විද්‍යාව (Agriculture)', callback_data: 'mark_sub:agri' }
       ],
       [
-        { text: '📄 පසුගිය විභාග ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: 'pp_main' }
+        { text: '📄 පසුගිය විභාග ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: 'pp_main' },
+        { text: '📝 ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers)', callback_data: 'mp_main' }
       ]
     ]
   };
@@ -71145,7 +71146,7 @@ function buildMarkingMediumMenu(subCode) {
  * Helper to construct direct Telegram forum topic message link
  * Format: https://t.me/c/<clean_group_id>/<thread_id>/<message_id>
  */
-function getDirectMessageLink$1(file, sub, cleanGroupId = '4322002704') {
+function getDirectMessageLink$2(file, sub, cleanGroupId = '4322002704') {
   if (!file) return `https://t.me/c/${cleanGroupId}`;
   const threadId = file.thread_id || sub?.topic_thread_id;
   const msgId = file.message_id;
@@ -71206,7 +71207,7 @@ _පහතින් ඔබට අවශ්‍ය වර්ෂය මත Click �
   for (let i = 0; i < filtered.length; i += 2) {
     const row = [];
     const f1 = filtered[i];
-    const link1 = getDirectMessageLink$1(f1, sub, cleanGroupId);
+    const link1 = getDirectMessageLink$2(f1, sub, cleanGroupId);
     row.push({
       text: `📄 ${f1.year || 'Marking'} Scheme ↗️`,
       url: link1
@@ -71214,7 +71215,7 @@ _පහතින් ඔබට අවශ්‍ය වර්ෂය මත Click �
 
     if (i + 1 < filtered.length) {
       const f2 = filtered[i + 1];
-      const link2 = getDirectMessageLink$1(f2, sub, cleanGroupId);
+      const link2 = getDirectMessageLink$2(f2, sub, cleanGroupId);
       row.push({
         text: `📄 ${f2.year || 'Marking'} Scheme ↗️`,
         url: link2
@@ -71283,7 +71284,7 @@ function buildMarkingDirectYearMessage(subCode, year) {
 
   // Primary file (prefer Sinhala Medium)
   const primary = matchingFiles.find(f => f.medium === 'Sinhala_Medium') || matchingFiles[0];
-  const primaryLink = getDirectMessageLink$1(primary, sub, cleanGroupId);
+  const primaryLink = getDirectMessageLink$2(primary, sub, cleanGroupId);
 
   const mediumLabelMap = {
     'Sinhala_Medium': '🇱🇰 සිංහල මාධ්‍යය',
@@ -71314,7 +71315,7 @@ function buildMarkingDirectYearMessage(subCode, year) {
       const label = mediumLabelMap[f.medium] || f.medium;
       return {
         text: `${label} ↗️`,
-        url: getDirectMessageLink$1(f, sub, cleanGroupId)
+        url: getDirectMessageLink$2(f, sub, cleanGroupId)
       };
     });
     inlineKeyboard.push(medRow);
@@ -71331,26 +71332,26 @@ function buildMarkingDirectYearMessage(subCode, year) {
   };
 }
 
-const DB_PATH = path.resolve(process.cwd(), 'past_papers_archive_db.json');
+const DB_PATH$1 = path.resolve(process.cwd(), 'past_papers_archive_db.json');
 
-let cachedDb = null;
-let lastLoadTime = 0;
+let cachedDb$1 = null;
+let lastLoadTime$1 = 0;
 
 /**
  * Load the Past Papers database with caching
  */
 function loadPastPapersDb() {
   const now = Date.now();
-  if (cachedDb && (now - lastLoadTime) < 30000) {
-    return cachedDb;
+  if (cachedDb$1 && (now - lastLoadTime$1) < 30000) {
+    return cachedDb$1;
   }
 
   try {
-    if (fs.existsSync(DB_PATH)) {
-      const raw = fs.readFileSync(DB_PATH, 'utf8');
-      cachedDb = JSON.parse(raw);
-      lastLoadTime = now;
-      return cachedDb;
+    if (fs.existsSync(DB_PATH$1)) {
+      const raw = fs.readFileSync(DB_PATH$1, 'utf8');
+      cachedDb$1 = JSON.parse(raw);
+      lastLoadTime$1 = now;
+      return cachedDb$1;
     }
   } catch (err) {
     console.error('⚠️ [PastPapers] Error reading past_papers_archive_db.json:', err.message);
@@ -71388,7 +71389,7 @@ function normalizePastPaperSubject(input) {
 /**
  * Thread ID to subject code mapping
  */
-function getSubjectByThreadId(threadId) {
+function getSubjectByThreadId$1(threadId) {
   if (!threadId) return null;
   const tid = Number(threadId);
   const threadMap = {
@@ -71411,7 +71412,7 @@ function getSubjectByThreadId(threadId) {
  * Helper to construct direct Telegram forum topic message link
  * Format: https://t.me/c/<clean_group_id>/<thread_id>/<message_id>
  */
-function getDirectMessageLink(file, sub, cleanGroupId = '4322002704') {
+function getDirectMessageLink$1(file, sub, cleanGroupId = '4322002704') {
   if (!file) return `https://t.me/c/${cleanGroupId}`;
   const threadId = file.thread_id || sub?.topic_thread_id;
   const msgId = file.message_id;
@@ -71464,6 +71465,7 @@ function buildPastPapersSubjectsMenu() {
         { text: '💃 නැටුම් (Dancing)', callback_data: 'pp_sub_dn' }
       ],
       [
+        { text: '📝 ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers)', callback_data: 'mp_main' },
         { text: '📑 ලකුණු දීමේ පටිපාටි (Marking Schemes)', callback_data: 'mark_subjects' }
       ]
     ]
@@ -71510,7 +71512,7 @@ _පහතින් ඔබට අවශ්‍ය වර්ෂය මත Click �
   for (let i = 0; i < filtered.length; i += 2) {
     const row = [];
     const f1 = filtered[i];
-    const link1 = getDirectMessageLink(f1, sub, cleanGroupId);
+    const link1 = getDirectMessageLink$1(f1, sub, cleanGroupId);
     row.push({
       text: `📖 ${f1.year || 'Past'} Paper ↗️`,
       url: link1
@@ -71518,7 +71520,7 @@ _පහතින් ඔබට අවශ්‍ය වර්ෂය මත Click �
 
     if (i + 1 < filtered.length) {
       const f2 = filtered[i + 1];
-      const link2 = getDirectMessageLink(f2, sub, cleanGroupId);
+      const link2 = getDirectMessageLink$1(f2, sub, cleanGroupId);
       row.push({
         text: `📖 ${f2.year || 'Past'} Paper ↗️`,
         url: link2
@@ -71587,7 +71589,7 @@ function buildPastPaperDirectYearMessage(subCode, year) {
   }
 
   const primary = matchingFiles[0];
-  const primaryLink = getDirectMessageLink(primary, sub, cleanGroupId);
+  const primaryLink = getDirectMessageLink$1(primary, sub, cleanGroupId);
 
   const text =
 `${icon} *${sub.name} — ${year} Past Paper*
@@ -71643,6 +71645,404 @@ function formatPastPaperCaption(subCode, fileObj) {
 
 🎓 <b>A/L MCQ HUB</b> — උසස් පෙළ සජීවී වේදිකාව 🚀
 #PastPaper #${subTag} #AL_${year} #PastExamPaper`;
+}
+
+const DB_PATH = path.resolve(process.cwd(), 'model_papers_archive_db.json');
+
+let cachedDb = null;
+let lastLoadTime = 0;
+
+/**
+ * Load the Model Papers database with caching
+ */
+function loadModelPapersDb() {
+  const now = Date.now();
+  if (cachedDb && (now - lastLoadTime) < 30000) {
+    return cachedDb;
+  }
+
+  try {
+    if (fs.existsSync(DB_PATH)) {
+      const raw = fs.readFileSync(DB_PATH, 'utf8');
+      cachedDb = JSON.parse(raw);
+      lastLoadTime = now;
+      return cachedDb;
+    }
+  } catch (err) {
+    console.error('⚠️ [ModelPapers] Error reading model_papers_archive_db.json:', err.message);
+  }
+
+  return {
+    group_id: -1004322002704,
+    clean_group_id: "4322002704",
+    subjects: {}
+  };
+}
+
+/**
+ * Normalize subject codes and aliases for Model Papers
+ */
+function normalizeModelPaperSubject(input) {
+  if (!input) return null;
+  const s = String(input).trim().toLowerCase();
+
+  if (['si', 'sin', 'sinhala', 'sinhala_language', 'සිංහල', 'සිංහල භාෂාව', 'සිංහල සාහිත්‍යය'].includes(s)) return 'si';
+  if (['bc', 'buddhist', 'buddhist_civ', 'buddhist_civilization', 'බෞද්ධ', 'බෞද්ධ ශිෂ්ටාචාරය', 'ශිෂ්ටාචාරය'].includes(s)) return 'bc';
+  if (['agri', 'ag', 'agriculture', 'agricultural', 'agricultural_science', 'krushi', 'කෘෂි', 'කෘෂිකර්ම', 'කෘෂි විද්‍යාව'].includes(s)) return 'agri';
+  if (['hist', 'hi', 'history', 'ඉතිහාසය', 'ඉතිහාස', 'ශ්‍රී ලංකා ඉතිහාසය'].includes(s)) return 'hist';
+  if (['pl', 'pol', 'political', 'political_science', 'politics', 'දේශපාලන', 'දේශපාලන විද්‍යාව'].includes(s)) return 'pl';
+  if (['bs', 'bus', 'business', 'business_studies', 'commerce', 'ව්‍යාපාර', 'ව්‍යාපාර අධ්‍යයනය', 'වාණිජ'].includes(s)) return 'bs';
+  if (['geo', 'geog', 'geography', 'භූගෝල', 'භූගෝල විද්‍යාව'].includes(s)) return 'geo';
+  if (['md', 'media', 'mass_media', 'මාධ්‍ය', 'මාධ්‍ය අධ්‍යයනය', 'ජනමාධ්‍ය', 'ජනසන්නිවේදනය', 'සන්නිවේදන'].includes(s)) return 'md';
+  if (['dr', 'drama', 'theatre', 'නාට්‍ය', 'නාට්‍ය හා රංග කලාව', 'නාට්‍ය හා රංගකලාව', 'රංග කලාව'].includes(s)) return 'dr';
+  if (['mu', 'music', 'සංගීතය', 'සංගීත'].includes(s)) return 'mu';
+  if (['dn', 'dance', 'dancing', 'නැටුම්', 'නර්තනය', 'නර්තන'].includes(s)) return 'dn';
+
+  return null;
+}
+
+/**
+ * Thread ID to subject code mapping
+ */
+function getSubjectByThreadId(threadId) {
+  if (!threadId) return null;
+  const tid = Number(threadId);
+  const threadMap = {
+    4210: 'si',
+    4215: 'bc',
+    4216: 'geo',
+    4217: 'pl',
+    4220: 'hist',
+    4221: 'bs',
+    4222: 'dr',
+    4223: 'mu',
+    4224: 'dn',
+    4225: 'md',
+    5490: 'agri'
+  };
+  return threadMap[tid] || null;
+}
+
+/**
+ * Helper to construct direct Telegram forum topic message link
+ */
+function getDirectMessageLink(file, sub, cleanGroupId = '4322002704') {
+  if (!file) return `https://t.me/c/${cleanGroupId}`;
+  const threadId = file.thread_id || sub?.topic_thread_id;
+  const msgId = file.message_id;
+  if (threadId && msgId) {
+    return `https://t.me/c/${cleanGroupId}/${threadId}/${msgId}`;
+  }
+  if (msgId) {
+    return `https://t.me/c/${cleanGroupId}/${msgId}`;
+  }
+  if (threadId) {
+    return `https://t.me/c/${cleanGroupId}/${threadId}`;
+  }
+  return file.message_link || `https://t.me/c/${cleanGroupId}`;
+}
+
+/**
+ * Build 11-Subject Picker Menu for /model
+ */
+function buildModelPapersSubjectsMenu() {
+  const text =
+`📝 *A/L Model Papers — ආදර්ශ ප්‍රශ්න පත්‍ර මධ්‍යස්ථානය*
+━━━━━━━━━━━━━━━━━━━━━
+🎓 උසස් පෙළ විභාගයේ සියලුම ප්‍රධාන විෂයයන් සඳහා වන **පළාත් අධ්‍යාපන දෙපාර්තමේන්තු සහ ජාතික මට්ටමේ ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers)** අපගේ Telegram Group Topic තුළ අන්තර්ගත කර ඇත.
+
+👇 **ඔබට අවශ්‍ය විෂය පහතින් තෝරන්න:**`;
+
+  const keyboard = {
+    inline_keyboard: [
+      [
+        { text: '📜 සිංහල (Sinhala)', callback_data: 'mp_sub_si' },
+        { text: '☸️ බෞද්ධ ශිෂ්ටාචාරය (BC)', callback_data: 'mp_sub_bc' }
+      ],
+      [
+        { text: '🏛️ ඉතිහාසය (History)', callback_data: 'mp_sub_hist' },
+        { text: '⚖️ දේශපාලන විද්‍යාව (Pol Sci)', callback_data: 'mp_sub_pl' }
+      ],
+      [
+        { text: '🌍 භූගෝල විද්‍යාව (Geography)', callback_data: 'mp_sub_geo' },
+        { text: '💼 ව්‍යාපාර අධ්‍යයනය (BS)', callback_data: 'mp_sub_bs' }
+      ],
+      [
+        { text: '🌾 කෘෂි විද්‍යාව (Agri)', callback_data: 'mp_sub_agri' },
+        { text: '📡 මාධ්‍ය අධ්‍යයනය (Media)', callback_data: 'mp_sub_md' }
+      ],
+      [
+        { text: '🎭 නාට්‍ය හා රංග කලාව (Drama)', callback_data: 'mp_sub_dr' },
+        { text: '🎵 සංගීතය (Music)', callback_data: 'mp_sub_mu' }
+      ],
+      [
+        { text: '💃 නැටුම් (Dancing)', callback_data: 'mp_sub_dn' }
+      ],
+      [
+        { text: '📄 පසුගිය විභාග ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: 'pp_main' },
+        { text: '📑 ලකුණු දීමේ පටිපාටි (Marking Schemes)', callback_data: 'mark_subjects' }
+      ]
+    ]
+  };
+
+  return { text, keyboard };
+}
+
+/**
+ * Build Model Papers List for a subject (Sinhala Medium only)
+ * Inline URL buttons linking directly to topic messages.
+ */
+function buildModelPapersListMenu(subCode) {
+  const db = loadModelPapersDb();
+  const sub = db.subjects?.[subCode];
+
+  if (!sub) {
+    return buildModelPapersSubjectsMenu();
+  }
+
+  const cleanGroupId = db.clean_group_id || '4322002704';
+  const allFiles = Object.entries(sub.files || {}).map(([filename, file]) => ({
+    ...file,
+    file_key: filename
+  }));
+
+  // Sort by year DESC, then by province
+  const sorted = allFiles.sort((a, b) => {
+    const ya = parseInt(a.year || '0', 10);
+    const yb = parseInt(b.year || '0', 10);
+    if (ya !== yb) return yb - ya;
+    return (a.btn_title || '').localeCompare(b.btn_title || '');
+  });
+
+  const icon = sub.icon || '📝';
+  const text =
+`${icon} *${sub.name}*
+🌐 **🇱🇰 සිංහල මාධ්‍යය (Sinhala Medium)**
+━━━━━━━━━━━━━━━━━━━━━
+📂 **ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers) ලැයිස්තුව:**
+_පහතින් ඔබට අවශ්‍ය ප්‍රශ්න පත්‍රය මත Click කළ විට Group Forum Topic එක තුළ ඇති නිවැරදි Model Paper File එක වෙත සෘජුවම Navigation Jump වේ._`;
+
+  const inlineKeyboard = [];
+
+  // Group into 2-column layout
+  for (let i = 0; i < sorted.length; i += 2) {
+    const row = [];
+    const f1 = sorted[i];
+    const link1 = getDirectMessageLink(f1, sub, cleanGroupId);
+    const btnTitle1 = f1.btn_title ? `📖 ${f1.btn_title} ↗️` : `📖 ${f1.year || 'Model'} Paper ↗️`;
+    row.push({
+      text: btnTitle1,
+      url: link1
+    });
+
+    if (i + 1 < sorted.length) {
+      const f2 = sorted[i + 1];
+      const link2 = getDirectMessageLink(f2, sub, cleanGroupId);
+      const btnTitle2 = f2.btn_title ? `📖 ${f2.btn_title} ↗️` : `📖 ${f2.year || 'Model'} Paper ↗️`;
+      row.push({
+        text: btnTitle2,
+        url: link2
+      });
+    }
+    inlineKeyboard.push(row);
+  }
+
+  if (sorted.length === 0) {
+    const fallbackLink = `https://t.me/c/${cleanGroupId}/${sub.topic_thread_id}`;
+    inlineKeyboard.push([
+      { text: `💬 Topic Thread එක වෙත යන්න (#${sub.topic_thread_id}) ↗️`, url: fallbackLink }
+    ]);
+  }
+
+  // Navigation Back Buttons
+  inlineKeyboard.push([
+    { text: '🔙 සියලුම විෂයයන් (All Subjects)', callback_data: 'mp_main' }
+  ]);
+
+  return {
+    text,
+    keyboard: { inline_keyboard: inlineKeyboard }
+  };
+}
+
+/**
+ * Handle direct `/model <sub_code> <year/province>` query
+ */
+function buildModelPaperDirectMessage(subCode, queryTerm) {
+  const db = loadModelPapersDb();
+  const sub = db.subjects?.[subCode];
+
+  if (!sub) {
+    return buildModelPapersSubjectsMenu();
+  }
+
+  const cleanGroupId = db.clean_group_id || '4322002704';
+  const allFiles = Object.entries(sub.files || {}).map(([filename, file], index) => ({
+    ...file,
+    file_key: String(index),
+    orig_name: filename
+  }));
+
+  const q = String(queryTerm || '').trim().toLowerCase();
+
+  // Normalize search terms for provinces
+  const provinceAliasMap = {
+    'western': 'western', 'බස්නාහිර': 'western', 'wp': 'western',
+    'uva': 'uva', 'ඌව': 'uva',
+    'southern': 'southern', 'දකුණු': 'southern', 'sp': 'southern',
+    'sabaragamuwa': 'sabaragamuwa', 'සබරගමුව': 'sabaragamuwa',
+    'north western': 'north western', 'වයඹ': 'north western', 'nwp': 'north western', 'wayamba': 'north western',
+    'central': 'central', 'මධ්‍යම': 'central', 'cp': 'central',
+    'eastern': 'eastern', 'නැගෙනහිර': 'eastern', 'ep': 'eastern',
+    'north central': 'north central', 'උතුරු මැද': 'north central', 'ncp': 'north central'
+  };
+
+  const matchingFiles = allFiles.filter(f => {
+    const yearMatch = q.includes(String(f.year)) || String(f.year) === q;
+    const titleMatch = (f.display_title || '').toLowerCase().includes(q) || (f.btn_title || '').toLowerCase().includes(q) || (f.filename || '').toLowerCase().includes(q);
+    const provMatch = (f.province || '').toLowerCase().includes(q) || (f.province_si || '').includes(q);
+
+    // Check alias match
+    let aliasMatch = false;
+    for (const [alias, target] of Object.entries(provinceAliasMap)) {
+      if (q.includes(alias) && ((f.province || '').toLowerCase().includes(target) || (f.btn_title || '').toLowerCase().includes(target))) {
+        aliasMatch = true;
+        break;
+      }
+    }
+
+    return yearMatch || titleMatch || provMatch || aliasMatch;
+  });
+
+  const icon = sub.icon || '📝';
+
+  // Case 1: No match found
+  if (matchingFiles.length === 0) {
+    const topicLink = `https://t.me/c/${cleanGroupId}/${sub.topic_thread_id}`;
+    const text =
+`${icon} *${sub.name} — Model Papers*
+━━━━━━━━━━━━━━━━━━━━━
+ℹ️ "${queryTerm}" සෙවුමට ගැළපෙන ආදර්ශ ප්‍රශ්න පත්‍රයක් හමු නොවීය. අදාළ Group Forum Topic එක වෙත පිවිස සොයා බලන්න.
+
+📌 **Topic Thread:** \`${sub.name}\` (Thread: \`#${sub.topic_thread_id}\`)`;
+
+    const keyboard = {
+      inline_keyboard: [
+        [
+          { text: `🚀 Open ${sub.name} Topic ↗️`, url: topicLink }
+        ],
+        [
+          { text: `🔙 ${sub.name} සියලු Model Papers`, callback_data: `mp_sub_${subCode}` },
+          { text: '🔙 සියලුම විෂයයන් (All Subjects)', callback_data: 'mp_main' }
+        ]
+      ]
+    };
+    return { text, keyboard };
+  }
+
+  // Case 2: Exactly 1 match found -> Single Preview Card with Direct Jump and Download buttons
+  if (matchingFiles.length === 1) {
+    const f = matchingFiles[0];
+    const primaryLink = getDirectMessageLink(f, sub, cleanGroupId);
+    const provSi = f.province_si || (f.province ? f.province : 'ජාතික මට්ටමේ');
+
+    const text =
+`${icon} *${sub.name} — ${f.display_title || `${f.year} Model Paper`}*
+━━━━━━━━━━━━━━━━━━━━━
+📅 **වර්ෂය:** \`${f.year} A/L\`
+🏛️ **පළාත / මූලාශ්‍රය:** \`${provSi}\`
+📄 **ගොනු නාමය:** \`${f.filename}\`
+🌐 **භාෂා මාධ්‍යය:** \`🇱🇰 සිංහල මාධ්‍යය\`
+📌 **Group Forum Topic:** \`${sub.name}\` (Thread: \`#${sub.topic_thread_id}\`)
+
+👇 **පහත බොත්තම ඔබා Topic එක තුළ ඇති File එක වෙත සෘජුවම පිවිසෙන්න හෝ PDF එක මෙහිදීම ලබාගන්න:**`;
+
+    const inlineKeyboard = [
+      [
+        { text: `🚀 ${f.btn_title || f.year} Model Paper වෙත යන්න ↗️`, url: primaryLink }
+      ]
+    ];
+
+    if (f.file_id) {
+      inlineKeyboard.push([
+        { text: `📥 මෙම Chat එකට PDF එක එවන්න`, callback_data: `mp_cached_${subCode}_${f.file_key}` }
+      ]);
+    }
+
+    inlineKeyboard.push([
+      { text: `🔙 ${sub.name} සියලු Model Papers`, callback_data: `mp_sub_${subCode}` },
+      { text: '🔙 සියලුම විෂයයන් (All Subjects)', callback_data: 'mp_main' }
+    ]);
+
+    return {
+      text,
+      keyboard: { inline_keyboard: inlineKeyboard }
+    };
+  }
+
+  // Case 3: Multiple matches found (e.g. 2026 has multiple provinces) -> Filtered List Sub-menu
+  const text =
+`${icon} *${sub.name} — Model Papers (${queryTerm})*
+━━━━━━━━━━━━━━━━━━━━━
+📂 **සොයාගත් ආදර්ශ ප්‍රශ්න පත්‍ර (${matchingFiles.length}):**
+_පහතින් ඔබට අවශ්‍ය ප්‍රශ්න පත්‍රය මත Click කර Group Forum Topic එක තුළ ඇති File එක වෙත සෘජුවම පිවිසෙන්න:_`;
+
+  const inlineKeyboard = [];
+  for (let i = 0; i < matchingFiles.length; i += 2) {
+    const row = [];
+    const f1 = matchingFiles[i];
+    const link1 = getDirectMessageLink(f1, sub, cleanGroupId);
+    row.push({
+      text: `📖 ${f1.btn_title || f1.year} ↗️`,
+      url: link1
+    });
+
+    if (i + 1 < matchingFiles.length) {
+      const f2 = matchingFiles[i + 1];
+      const link2 = getDirectMessageLink(f2, sub, cleanGroupId);
+      row.push({
+        text: `📖 ${f2.btn_title || f2.year} ↗️`,
+        url: link2
+      });
+    }
+    inlineKeyboard.push(row);
+  }
+
+  inlineKeyboard.push([
+    { text: `🔙 ${sub.name} සියලු Model Papers`, callback_data: `mp_sub_${subCode}` },
+    { text: '🔙 සියලුම විෂයයන් (All Subjects)', callback_data: 'mp_main' }
+  ]);
+
+  return {
+    text,
+    keyboard: { inline_keyboard: inlineKeyboard }
+  };
+}
+
+/**
+ * Format document caption when sending cached PDF
+ */
+function formatModelPaperCaption(subCode, fileObj) {
+  const db = loadModelPapersDb();
+  const sub = db.subjects?.[subCode] || {};
+  const icon = sub.icon || '📝';
+  const subName = sub.name || 'උසස් පෙළ විෂය';
+  const subTag = sub.tag || subCode.toUpperCase();
+  const year = fileObj.year || 'A/L';
+  const provSi = fileObj.province_si || (fileObj.province ? fileObj.province : 'ජාතික මට්ටමේ');
+  const filename = fileObj.filename || `${year} Model Paper.pdf`;
+
+  return `<b>${icon} ${subName} — 📝 ආදර්ශ ප්‍රශ්න පත්‍රය (Model Paper)</b>
+━━━━━━━━━━━━━━━━━━━━
+📅 <b>වර්ෂය:</b> ${year} A/L
+🏛️ <b>පළාත / මූලාශ්‍රය:</b> ${provSi}
+🎯 <b>මාධ්‍යය:</b> 🇱🇰 සිංහල මාධ්‍යය
+📂 <b>ලිපිගොනුව:</b> <code>${filename}</code>
+
+💡 <i>ආදර්ශ ප්‍රශ්න පත්‍ර විසඳීමෙන් විභාග ප්‍රශ්න රටාව පිළිබඳ පුළුල් අවබෝධයක් හා පුහුණුවක් ලබාගන්න.</i>
+
+🎓 <b>A/L MCQ HUB</b> — උසස් පෙළ සජීවී වේදිකාව 🚀
+#ModelPaper #${subTag} #AL_${year} #ModelExamPaper`;
 }
 
 // Polyfill global crypto.getRandomValues for pkg / packaged Node environments
@@ -77386,8 +77786,8 @@ bot.onText(/^\/(map|maps|sithiyam|map_quiz|mapquiz)(?:@\w+)?(?:\s+(.*))?$/i, asy
   }).catch(e => console.error('Error sending map hub message:', e.message));
 });
 
-// Command: /paper or /papers or /pastpaper or /pastpapers (Interactive Past Papers Navigation)
-bot.onText(/^\/(past_papers|past_paper|pastpapers|pastpaper|papers|paper)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
+// Command: /paper or /papers or /pastpaper or /pastpapers or /passpaper (Interactive Past Papers Navigation)
+bot.onText(/^\/(pass_papers|pass_paper|passpapers|passpaper|past_papers|past_paper|pastpapers|pastpaper|papers|paper)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
   if (!await enforceDirectAccessControl(msg)) return;
   const chatId = msg.chat.id;
   const { threadId, topicSubject } = getThreadContext(msg);
@@ -77405,7 +77805,7 @@ bot.onText(/^\/(past_papers|past_paper|pastpapers|pastpaper|papers|paper)(?:_([a
   // Case A: User typed "/paper 2025" or "/paper 2024" directly
   if (/^\d{4}$/.test(rawArg1)) {
     year = rawArg1;
-    subCode = normalizePastPaperSubject(topicSubject) || getSubjectByThreadId(threadId);
+    subCode = normalizePastPaperSubject(topicSubject) || getSubjectByThreadId$1(threadId);
   } else if (rawArg1) {
     subCode = normalizePastPaperSubject(rawArg1);
     if (/^\d{4}$/.test(rawArg2)) {
@@ -77415,7 +77815,7 @@ bot.onText(/^\/(past_papers|past_paper|pastpapers|pastpaper|papers|paper)(?:_([a
 
   // Case B: If inside a specific forum topic thread and no subject explicitly given -> auto-detect
   if (!subCode && threadId) {
-    subCode = normalizePastPaperSubject(topicSubject) || getSubjectByThreadId(threadId);
+    subCode = normalizePastPaperSubject(topicSubject) || getSubjectByThreadId$1(threadId);
   }
 
   // 1. Direct Year query: /paper <subject> <year> or /paper <year> inside topic
@@ -77447,6 +77847,67 @@ bot.onText(/^\/(past_papers|past_paper|pastpapers|pastpaper|papers|paper)(?:_([a
   }).catch(e => console.error('Error sending past papers subjects menu:', e.message));
 });
 
+// Command: /model or /models or /modelpaper or /modelpapers (Interactive Model Papers Navigation)
+bot.onText(/^\/(model_papers|model_paper|modelpapers|modelpaper|models|model)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(.*))?$/i, async (msg, match) => {
+  if (!await enforceDirectAccessControl(msg)) return;
+  const chatId = msg.chat.id;
+  const { threadId, topicSubject } = getThreadContext(msg);
+  const replyOpts = {
+    reply_to_message_id: msg.message_id,
+    ...(threadId ? { message_thread_id: threadId } : {})
+  };
+
+  const rawArg1 = (match[2] || match[3] || '').trim();
+  const rawArg2 = (match[4] || '').trim();
+
+  let subCode = null;
+  let queryTerm = null;
+
+  // Check if rawArg1 is a subject alias
+  const directSub = normalizeModelPaperSubject(rawArg1);
+  if (directSub) {
+    subCode = directSub;
+    queryTerm = rawArg2;
+  } else if (rawArg1) {
+    // rawArg1 is a search keyword (e.g. 2026, uva, western)
+    queryTerm = rawArg2 ? `${rawArg1} ${rawArg2}` : rawArg1;
+    subCode = normalizeModelPaperSubject(topicSubject) || getSubjectByThreadId(threadId);
+  }
+
+  // Auto-detect topic thread subject if not specified
+  if (!subCode && threadId) {
+    subCode = normalizeModelPaperSubject(topicSubject) || getSubjectByThreadId(threadId);
+  }
+
+  // 1. Direct Search / Year / Province query: /model <subject> <query> or /model <query> inside topic
+  if (subCode && queryTerm) {
+    const res = buildModelPaperDirectMessage(subCode, queryTerm);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending direct query model paper:', e.message));
+  }
+
+  // 2. Subject specified: /model <subject> -> Directly show Model Papers List
+  if (subCode) {
+    const res = buildModelPapersListMenu(subCode);
+    return bot.sendMessage(chatId, res.text, {
+      parse_mode: 'Markdown',
+      reply_markup: res.keyboard,
+      ...replyOpts
+    }).catch(e => console.error('Error sending subject model papers list menu:', e.message));
+  }
+
+  // 3. No arguments outside topic: /model -> Show 11-Subject Picker Menu
+  const res = buildModelPapersSubjectsMenu();
+  return bot.sendMessage(chatId, res.text, {
+    parse_mode: 'Markdown',
+    reply_markup: res.keyboard,
+    ...replyOpts
+  }).catch(e => console.error('Error sending model papers subjects menu:', e.message));
+});
+
 // Command: /marking or /markings or /marking_scheme (Interactive Marking Schemes Navigation)
 bot.onText(/^\/(marking_scheme|markingscheme|markings|marking)(?:_([a-z0-9_]+))?(?:@\w+)?(?:\s+([a-z0-9_]+))?(?:\s+(\d{4}))?$/i, async (msg, match) => {
   if (!await enforceDirectAccessControl(msg)) return;
@@ -77466,7 +77927,7 @@ bot.onText(/^\/(marking_scheme|markingscheme|markings|marking)(?:_([a-z0-9_]+))?
   // Case A: User typed "/marking 2025" or "/marking 2024" directly
   if (/^\d{4}$/.test(rawArg1)) {
     year = rawArg1;
-    subCode = normalizeMarkingSubject(topicSubject) || getSubjectByThreadId$1(threadId);
+    subCode = normalizeMarkingSubject(topicSubject) || getSubjectByThreadId$2(threadId);
   } else if (rawArg1) {
     subCode = normalizeMarkingSubject(rawArg1);
     if (/^\d{4}$/.test(rawArg2)) {
@@ -77476,7 +77937,7 @@ bot.onText(/^\/(marking_scheme|markingscheme|markings|marking)(?:_([a-z0-9_]+))?
 
   // Case B: If inside a specific forum topic thread and no subject explicitly given -> auto-detect
   if (!subCode && threadId) {
-    subCode = normalizeMarkingSubject(topicSubject) || getSubjectByThreadId$1(threadId);
+    subCode = normalizeMarkingSubject(topicSubject) || getSubjectByThreadId$2(threadId);
   }
 
   // 1. Direct Year query: /marking <subject> <year>
@@ -77525,6 +77986,60 @@ bot.on('callback_query', async (query) => {
   }
 
   try {
+    // Model Papers Navigation Callback Queries
+    if (data === 'mp_main') {
+      await safeAnswerCallback(query.id);
+      const res = buildModelPapersSubjectsMenu();
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('mp_sub_')) {
+      const subCode = data.replace('mp_sub_', '');
+      await safeAnswerCallback(query.id);
+      const res = buildModelPapersListMenu(subCode);
+      return bot.editMessageText(res.text, {
+        chat_id: chatId,
+        message_id: messageId,
+        parse_mode: 'Markdown',
+        reply_markup: res.keyboard
+      }).catch(async () => {
+        await bot.sendMessage(chatId, res.text, { parse_mode: 'Markdown', reply_markup: res.keyboard, ...(threadId ? { message_thread_id: threadId } : {}) });
+      });
+    }
+
+    if (data && data.startsWith('mp_cached_')) {
+      const parts = data.split('_'); // ['mp', 'cached', subCode, fileIndex]
+      const subCode = parts[2];
+      const fileIndex = parseInt(parts[3], 10);
+      const db = loadModelPapersDb();
+      const sub = db.subjects?.[subCode];
+      const files = Object.values(sub?.files || {});
+      const matchFile = files[fileIndex];
+
+      if (matchFile && matchFile.file_id) {
+        await safeAnswerCallback(query.id, '📥 PDF ගොනුව එවමින් පවතී...');
+        const caption = formatModelPaperCaption(subCode, matchFile);
+        return bot.sendDocument(chatId, matchFile.file_id, {
+          caption: caption,
+          parse_mode: 'HTML',
+          ...(threadId ? { message_thread_id: threadId } : {})
+        }).catch(err => {
+          console.error('Error sending cached model paper PDF:', err.message);
+          safeAnswerCallback(query.id, '⚠️ PDF ගොනුව යැවීමේදී දෝෂයක් සිදු විය.');
+        });
+      } else {
+        await safeAnswerCallback(query.id, '⚠️ අදාළ PDF ගොනුව හමු නොවීය.');
+      }
+      return;
+    }
+
     // Past Papers Navigation Callback Queries
     if (data === 'pp_main') {
       await safeAnswerCallback(query.id);

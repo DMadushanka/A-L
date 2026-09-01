@@ -146,7 +146,8 @@ export function buildMarkingSubjectsMenu() {
         { text: '🌾 කෘෂි විද්‍යාව (Agriculture)', callback_data: 'mark_sub:agri' }
       ],
       [
-        { text: '📄 පසුගිය විභාග ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: 'pp_main' }
+        { text: '📄 පසුගිය විභාග ප්‍රශ්න පත්‍ර (Past Papers)', callback_data: 'pp_main' },
+        { text: '📝 ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers)', callback_data: 'mp_main' }
       ]
     ]
   };
