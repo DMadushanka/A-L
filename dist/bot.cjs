@@ -72998,10 +72998,14 @@ bot.setChatMenuButton({
 // Register Bot Command Autocomplete Registry for Telegram UI (Auto-shows when user types '/')
 const publicBotCommands = [
   { command: 'start', description: '🚀 ප්‍රධාන මෙනුව ආරම්භ කරන්න (Main Menu & Quiz Hub)' },
-  { command: 'map', description: '🗺️ Map Marking Hub (සිතියම් සලකුණු කිරීමේ පුහුණුව)' },
+  { command: 'paper', description: '📜 Past Papers (පසුගිය විභාග ප්‍රශ්න පත්‍ර Direct Jump)' },
+  { command: 'marking', description: '📝 Marking Schemes (නිල ලකුණු දීමේ පටිපාටි Direct Jump)' },
+  { command: 'model', description: '📑 Model Papers (ආදර්ශ හා පෙරහුරු ප්‍රශ්න පත්‍ර Direct Jump)' },
+  { command: 'term', description: '🏫 Term Test Papers (12 & 13 ශ්‍රේණි වාර විභාග ප්‍රශ්න පත්‍ර)' },
+  { command: 'map', description: '🗺️ Map Marking Hub (සිතියම් සලකුණු කිරීමේ පුහුණුව & Quiz)' },
   { command: 'ai', description: '🤖 AI Tutor & Study Notes (විෂය කරුණු / සටහන් ලබාගැනීම)' },
   { command: 'quiz', description: '🧩 Live MCQ Quiz (සජීවී MCQ ප්‍රශ්නාවලි තරඟය)' },
-  { command: 'paper', description: '📝 Model Exam Papers (ආදර්ශ පත්‍ර & Marking Schemes)' },
+  { command: 'normal_quiz', description: '🎯 50-MCQ Quizzes (4,800+ ප්‍රශ්න බැංකුවෙන් විභාග පුහුණුව)' },
   { command: 'audio', description: '🎙️ AI Audio Podcast (සවිස්තරාත්මක ශ්‍රව්‍ය පාඩම්)' },
   { command: 'voice', description: '🔊 Sinhala Voice Notes (සිංහල හඬ අධ්‍යයන සටහන්)' },
   { command: 'allnotes', description: '📚 Study Notes Library (විෂය සටහන් පුස්තකාලය)' },
@@ -73016,6 +73020,8 @@ const publicBotCommands = [
 const adminBotCommands = [
   ...publicBotCommands,
   { command: 'admin', description: '⚙️ Admin Dashboard & Control Panel' },
+  { command: 'pin_all_topics', description: '📌 Auto-Pin Updated Guides across all 11 Forum Topics' },
+  { command: 'pin_guide', description: '📌 Pin Updated Guide in Current Topic / Chat' },
   { command: 'quiz_schedule', description: '⏰ Configure Automated Quiz Schedules' },
   { command: 'morning_settings', description: '🌅 Configure Morning Wish Schedules' },
   { command: 'stop', description: '🛑 Stop Ongoing Quiz Session' }
@@ -74696,9 +74702,9 @@ function buildTopicPinnedInstruction(subCode) {
     aiExample: 'පාඩම පැහැදිලි කරන්න',
     quizExample: '20 mcqs',
     audioExample: 'විෂය කරුණු',
-    voiceExample: 'පාඩම් සාරාංශය',
-    paperExample: '2024 පසුගිය ප්‍රශ්න පත්‍රය'
-  };
+    voiceExample: 'පාඩම් සාරාංශය'};
+
+  const isMapSubject = (code === 'hist' || code === 'geo');
 
   const text =
     `📌 <b>${meta.icon} A/L MCQ HUB — ${meta.name} නිල උපදෙස් හා නීති මාලාව (Topic Guide)</b> 📌\n\n` +
@@ -74706,48 +74712,70 @@ function buildTopicPinnedInstruction(subCode) {
     `🔒 <b>විෂය සීමා කිරීම (Dedicated Subject AI Engine):</b>\n` +
     `මෙම Topic එක තුළ ඔබ විමසන සියලුම ප්‍රශ්න සඳහා පිළිතුරු සැපයෙන්නේ <b>${meta.name}</b> නිල NotebookLM AI සටහන් ඇසුරෙන් පමණි. කරුණාකර වෙනත් විෂයයන් වල ප්‍රශ්න මේ තුළ යොමු නොකර අදාළ Topic එක වෙත යොමු කරන්න.\n\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
-    `🚀 <b>භාවිත කළ හැකි ප්‍රධාන Commands සහ උදාහරණ:</b>\n\n` +
-    `🤖 <b>1. AI විෂය සටහන් හා ප්‍රශ්න (AI Tutor):</b>\n` +
-    `• <code>/ai ${meta.aiExample}</code>\n` +
-    `<i>(ඔබට ඇති ඕනෑම විෂය කරුණක්, විචාරයක් හෝ ගැටලුවක් සිංහලෙන් අසන්න.)</i>\n\n` +
-    `🧩 <b>2. සජීවී බහුවරණ තරඟ (Live Quiz Polls with 20s Timers):</b>\n` +
-    `• <code>/quiz ${meta.quizExample}</code>\n` +
-    `<i>(මාතෘකාව සහ ප්‍රශ්න ගණන ලබා දී සජීවී තරඟයක් අරඹන්න. Leaderboard & Winner Podiums හිමිවේ!)</i>\n\n` +
-    `🎙️ <b>3. සිංහල ශ්‍රව්‍ය පාඩම් (Sinhala Voice Notes):</b>\n` +
-    `• <code>/voice ${meta.voiceExample || meta.audioExample}</code>\n` +
-    `<i>(100% සිංහල ස්වභාවික හඬින් යුත් කෙටි ශ්‍රව්‍ය පාඩමක් ක්ෂණිකව ලබාගන්න.)</i>\n\n` +
-    `🎧 <b>4. AI Deep Dive Audio Podcast:</b>\n` +
-    `• <code>/audio ${meta.audioExample}</code>\n` +
-    `<i>(සම්පූර්ණ පාඩමම ආවරණය වන සවිස්තරාත්මක AI Podcast එකක් ලබාගන්න.)</i>\n\n` +
-    `📄 <b>5. පසුගිය හා ආදර්ශ විභාග ප්‍රශ්න පත්‍ර (Exam Papers & Marking Schemes):</b>\n` +
-    `• <code>/paper ${meta.paperExample}</code>\n` +
-    `<i>(Part I MCQ + Part II රචනා + Marking Scheme සමඟ Full PDF ලබාගන්න.)</i>\n\n` +
-    `📚 <b>6. සම්පූර්ණ විෂය නිර්දේශයේ PDF සටහන්:</b>\n` +
-    `• <code>/allnotes</code> (හෝ <code>/notes</code>)\n\n` +
-    `📸 <b>7. ඡායාරූප ප්‍රශ්න (Photo OCR):</b>\n` +
-    `• ඔබගේ පොතේ හෝ ප්‍රශ්න පත්‍රයේ ඡායාරූපයක් එවන්න. AI මඟින් ක්ෂණිකව කියවා විග්‍රහය ලබාදේ.\n\n` +
-    `🎙️ <b>8. හඬ ප්‍රශ්න (Voice Message):</b>\n` +
-    `• ඔබගේ ගැටලුව Voice Note එකක් ලෙස එවන්න. AI විසින් හඳුනාගෙන පිළිතුරු සපයනු ඇත.\n\n` +
+    `📚 <b>විභාග ප්‍රශ්න පත්‍ර හා ලකුණු දීමේ පටිපාටි (Exam Archives & Direct Jump):</b>\n\n` +
+    `📜 <b>1. පසුගිය විභාග ප්‍රශ්න පත්‍ර (Past Papers):</b>\n` +
+    `• <code>/paper</code> හෝ <code>/paper [වසර]</code> (උදා: <code>/paper 2024</code>)\n` +
+    `<i>(Part I & II ප්‍රශ්න පත්‍ර වෙත ඍජුවම Chat History Jump වීම හෝ PDF බාගත කිරීම.)</i>\n\n` +
+    `📝 <b>2. නිල ලකුණු දීමේ පටිපාටි (Marking Schemes):</b>\n` +
+    `• <code>/marking</code> හෝ <code>/marking [වසර]</code> (උදා: <code>/marking 2024</code>)\n` +
+    `<i>(සිංහල හා ඉංග්‍රීසි මාධ්‍ය නිල Marking Schemes වෙත සෘජු පිවිසුම.)</i>\n\n` +
+    `📑 <b>3. ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers):</b>\n` +
+    `• <code>/model</code> (උදා: <code>/model 2026</code> හෝ <code>/model western</code>)\n` +
+    `<i>(පළාත් අධ්‍යාපන දෙපාර්තමේන්තු හා අමාත්‍යාංශ ආදර්ශ ප්‍රශ්න පත්‍ර.)</i>\n\n` +
+    `🏫 <b>4. පාසල් වාර විභාග ප්‍රශ්න පත්‍ර (Term Test Papers):</b>\n` +
+    `• <code>/term</code> (උදා: <code>/term 13</code> හෝ <code>/term 12</code>)\n` +
+    `<i>(12 සහ 13 ශ්‍රේණි සඳහා 1st, 2nd, 3rd Term පළාත් ප්‍රශ්න පත්‍ර.)</i>\n\n` +
+    (isMapSubject ?
+    `🗺️ <b>5. සිතියම් සලකුණු කිරීමේ පුහුණුව (Map Marking Hub):</b>\n` +
+    `• <code>/map</code>\n` +
+    `<i>(විභාගයේ අනිවාර්ය සිතියම් ප්‍රශ්නයට 100% ලකුණු ලබාගැනීමට Mini App & Drills.)</i>\n\n` : '') +
     `━━━━━━━━━━━━━━━━━━━━\n` +
-    `⚠️ <b>වැදගත් නීති (Topic Rules):</b>\n` +
-    `1. මෙම Topic එක තුළ <b>${meta.name}</b> විෂයට අදාළ කරුණු පමණක් සාකච්ඡා කරන්න.\n` +
+    `🤖 <b>AI ගුරුතුමා සහ අධ්‍යයන පහසුකම් (AI Study Suite):</b>\n\n` +
+    `🤖 <b>• AI විෂය සටහන් හා විග්‍රහ:</b> <code>/ai ${meta.aiExample}</code>\n` +
+    `<i>(උසස් පෙළ ${meta.name} විෂය නිර්දේශයේ ඕනෑම සංකල්පයක් සිංහලෙන් අසන්න.)</i>\n\n` +
+    `🧩 <b>• සජීවී බහුවරණ තරඟ:</b> <code>/quiz ${meta.quizExample}</code>\n` +
+    `<i>(තත්පර 20 ක Timers සහිතව සජීවීව තරඟ කර Leaderboard ලකුණු දිනාගන්න.)</i>\n\n` +
+    `🎙️ <b>• සිංහල ශ්‍රව්‍ය පාඩම්:</b> <code>/voice ${meta.voiceExample || meta.audioExample}</code>\n` +
+    `<i>(100% ස්වභාවික සිංහල හඬින් යුත් කෙටි අධ්‍යයන සටහනක් ක්ෂණිකව ලබාගන්න.)</i>\n\n` +
+    `🎧 <b>• AI Deep Dive Audio:</b> <code>/audio ${meta.audioExample}</code>\n` +
+    `<i>(සම්පූර්ණ පාඩම ආවරණය වන දීර්ඝ AI Podcast එකක් ලබාගන්න.)</i>\n\n` +
+    `📚 <b>• Core Syllabus PDF:</b> <code>/allnotes</code>\n\n` +
+    `📸 <b>• ඡායාරූප ප්‍රශ්න (Photo OCR):</b> පොතේ හෝ ප්‍රශ්න පත්‍රයේ ඡායාරූපයක් එවන්න.\n\n` +
+    `━━━━━━━━━━━━━━━━━━━━\n` +
+    `⚠️ <b>Topic නීති (Rules):</b>\n` +
+    `1. මෙම Topic එක තුළ <b>${meta.name}</b> විෂයට අදාළ කරුණු පමණක් විමසන්න.\n` +
     `2. Spam කිරීමෙන් හෝ අසභ්‍ය පණිවිඩ යැවීමෙන් වළකින්න.\n` +
-    `3. වැඩිදුර විස්තර සඳහා <code>/help</code> භාවිත කරන්න.`;
+    `3. වැඩිදුර උපදෙස් සඳහා <code>/help</code> භාවිත කරන්න.`;
 
-  const keyboard = {
-    inline_keyboard: [
-      [
-        { text: `🎯 ${meta.name} Quiz අරඹන්න`, callback_data: `help_act_quiz_${code}` },
-        { text: `🎙️ Voice Note ලබාගන්න`, callback_data: `help_act_voice_${code}` }
-      ],
-      [
-        { text: `📄 Exam Paper ලබාගන්න`, callback_data: `help_act_paper_${code}` },
-        { text: `📖 සම්පූර්ණ Help බලන්න`, callback_data: `help_sub_${code}` }
-      ]
+  const inlineKeyboard = [
+    [
+      { text: '📜 Past Papers', callback_data: `pp_sub_${code}` },
+      { text: '📝 Marking Schemes', callback_data: `ms_sub_${code}` }
+    ],
+    [
+      { text: '📑 Model Papers', callback_data: `mp_sub_${code}` },
+      { text: '🏫 Term Tests (වාර විභාග)', callback_data: `tt_sub_${code}` }
     ]
-  };
+  ];
 
-  return { text, keyboard };
+  if (isMapSubject) {
+    inlineKeyboard.push([
+      { text: '🗺️ සිතියම් පුහුණුව (Map Hub)', callback_data: 'open_map_hub' },
+      { text: '🎯 Live Quiz අරඹන්න', callback_data: `help_act_quiz_${code}` }
+    ]);
+  } else {
+    inlineKeyboard.push([
+      { text: '🎯 Live Quiz අරඹන්න', callback_data: `help_act_quiz_${code}` },
+      { text: '🎙️ Voice Note ලබාගන්න', callback_data: `help_act_voice_${code}` }
+    ]);
+  }
+
+  inlineKeyboard.push([
+    { text: '📖 මෙම විෂයයේ සම්පූර්ණ Help', callback_data: `help_sub_${code}` },
+    { text: '🏛️ Main Help Guide', callback_data: 'help_main' }
+  ]);
+
+  return { text, keyboard: { inline_keyboard: inlineKeyboard } };
 }
 
 // Helper: Build Master Group Help Guide
@@ -74756,24 +74784,44 @@ function buildMainHelpGuide() {
     `🏛️ <b>A/L MCQ HUB — සම්පූර්ණ භාවිත උපදෙස් මාලාව (Master Guide)</b> 🌟\n\n` +
     `A/L MCQ HUB යනු උසස් පෙළ (A/L) සිසුන් සඳහාම නිර්මාණය කරන ලද ලංකාවේ ප්‍රමුඛතම AI අධ්‍යාපනික පද්ධතියයි. පහත දැක්වෙන්නේ Bot හි සියලුම පහසුකම් භාවිත කරන ආකාරයයි:\n\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
-    `🎯 <b>1. ප්‍රධාන පහසුකම් සහ Commands:</b>\n\n` +
+    `📚 <b>1. විභාග ප්‍රශ්න පත්‍ර හා Marking Schemes (Exam Archives):</b>\n\n` +
+    `📜 <b>/paper [වසර]</b> — පසුගිය විභාග ප්‍රශ්න පත්‍ර (Past Papers) Direct Chat Jump & Download.\n` +
+    `📝 <b>/marking [වසර]</b> — නිල ලකුණු දීමේ පටිපාටි (Marking Schemes) Sinhala & English Medium.\n` +
+    `📑 <b>/model [විමසුම]</b> — පළාත් හා දෙපාර්තමේන්තු ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers).\n` +
+    `🏫 <b>/term [ශ්‍රේණිය]</b> — 12 සහ 13 ශ්‍රේණි පාසල් වාර විභාග ප්‍රශ්න පත්‍ර (Term Test Papers).\n` +
+    `🗺️ <b>/map</b> — සිතියම් සලකුණු කිරීමේ පුහුණු මධ්‍යස්ථානය (Map Marking Mini App & Quizzes).\n\n` +
+    `━━━━━━━━━━━━━━━━━━━━\n` +
+    `🤖 <b>2. AI ගුරුතුමා සහ අධ්‍යයන පහසුකම් (AI Study Suite):</b>\n\n` +
     `🤖 <b>/ai [ප්‍රශ්නය]</b> — 100% නිල විෂය නිර්දේශයේ NotebookLM AI ගුරුතුමාගෙන් පිළිතුරු ලබා ගැනීම.\n` +
-    `🎯 <b>/normal_quiz</b> — 4,800+ MCQs අඩංගු විෂය ප්‍රශ්න බැංකුවෙන් 50-MCQ Sets තෝරා Live Quiz තරඟ පැවැත්වීම.\n` +
-    `🧩 <b>/quiz [මාතෘකාව] [ගණන] mcqs</b> — සජීවී බහුවරණ තරඟ (Live Polls with 20s Timers) පැවැත්වීම.\n` +
     `🎙️ <b>/voice [මාතෘකාව]</b> — ස්වභාවික සිංහල හඬින් යුත් Voice Study Notes ක්ෂණිකව ලබා ගැනීම.\n` +
     `🎧 <b>/audio [මාතෘකාව]</b> — සම්පූර්ණ විෂය කරුණු ආවරණය වන AI Deep Dive Audio Podcasts.\n` +
-    `📄 <b>/paper [වසර හෝ මාතෘකාව]</b> — පසුගිය සහ ආදර්ශ විභාග ප්‍රශ්න පත්‍ර (Part I + Part II + Marking Scheme) PDF ලබා ගැනීම.\n` +
     `📚 <b>/allnotes</b> — විෂය නිර්දේශයේ සියලුම ප්‍රධාන පාඩම් වල Core PDF Study Notes බාගත කිරීම.\n` +
-    `🎨 <b>/image [විස්තරය]</b> — විෂය කරුණු වලට අදාළ 4K Diagrams සහ සිතියම් සාදා ගැනීම.\n` +
+    `🎨 <b>/image [විස්තරය]</b> — විෂය කරුණු වලට අදාළ 4K Diagrams සහ සිතියම් සාදා ගැනීම.\n\n` +
+    `━━━━━━━━━━━━━━━━━━━━\n` +
+    `🧩 <b>3. ප්‍රශ්නාවලි සහ තරඟ (Live Quiz Competitions):</b>\n\n` +
+    `🎯 <b>/normal_quiz</b> — 4,800+ MCQs අඩංගු ප්‍රශ්න බැංකුවෙන් 50-MCQ Sets තෝරා විභාග පුහුණුවීම.\n` +
+    `🧩 <b>/quiz [මාතෘකාව] [ගණන] mcqs</b> — සජීවී බහුවරණ තරඟ (Live Polls with 20s Timers) පැවැත්වීම.\n` +
     `⏰ <b>/quiz_schedule</b> — දිනපතා Mega Quiz කාලසටහන් Stickers ලබා ගැනීම.\n` +
     `🏆 <b>/leaderboard</b> — Top 3 Winners සහ Top 20 All-Island ලකුණු පුවරුව බැලීම.\n\n` +
     `━━━━━━━━━━━━━━━━━━━━\n` +
-    `🎓 <b>2. Forum Topics පද්ධතිය සහ විෂය සීමා කිරීම (Topic Isolation):</b>\n` +
+    `🎓 <b>4. Forum Topics පද්ධතිය සහ විෂය සීමා කිරීම (Topic Isolation):</b>\n` +
     `අපගේ Telegram Group එක තුළ සෑම විෂයකටම වෙන්වූ Topic පවතී. ඔබ අසන ඕනෑම ප්‍රශ්නයක් එම විෂයට අදාළ Topic එක තුළ පමණක් යොමු කරන්න. Bot විසින් එම විෂයට වෙන්වූ NotebookLM AI වෙතින් පමණක් පිළිතුරු සපයයි.\n\n` +
-    `👇 <b>විෂය අනුව උපදෙස් හා උදාහරණ බැලීමට පහතින් තෝරන්න:</b>`;
+    `👇 <b>පහතින් විශේෂාංග හෝ විෂය තෝරා ක්ෂණිකව පිවිසෙන්න:</b>`;
 
   const keyboard = {
     inline_keyboard: [
+      [
+        { text: '🗺️ සිතියම් Hub (/map)', callback_data: 'open_map_hub' },
+        { text: '📝 Markings (/marking)', callback_data: 'ms_main' }
+      ],
+      [
+        { text: '📜 Past Papers (/paper)', callback_data: 'pp_main' },
+        { text: '📑 Model Papers (/model)', callback_data: 'mp_main' }
+      ],
+      [
+        { text: '🏫 Term Tests (/term)', callback_data: 'tt_main' },
+        { text: '🎯 50-MCQ Quizzes', callback_data: 'open_normal_quiz' }
+      ],
       [
         { text: '🇱🇰 සිංහල', callback_data: 'help_sub_si' },
         { text: '☸️ බෞද්ධ ශිෂ්ටාචාරය', callback_data: 'help_sub_bc' }
@@ -74808,53 +74856,87 @@ function buildMainHelpGuide() {
 function buildSubjectHelpGuide(subCode) {
   const code = normalizeSubjectCode(subCode) || 'si';
   const meta = getSubjectHelpText(code) || { name: 'A/L Subject', icon: '🎓' };
+  const isMapSubject = (code === 'hist' || code === 'geo');
 
   const text =
     `📖 <b>${meta.icon} A/L MCQ HUB — ${meta.name} උපදෙස් මාර්ගෝපදේශය (Help Guide)</b>\n\n` +
     `මෙම විෂය සඳහා A/L MCQ HUB හි සක්‍රීය සියලුම විශේෂාංග සහ නිවැරදි Commands පහත දැක්වේ:\n\n` +
-    `🤖 <b>1. AI විෂය සටහන් හා විග්‍රහ (AI Tutor):</b>\n` +
+    `📚 <b>1. විභාග ප්‍රශ්න පත්‍ර හා Marking Schemes:</b>\n` +
+    `• <code>/paper</code> — පසුගිය විභාග ප්‍රශ්න පත්‍ර (Past Papers Direct Jump)\n` +
+    `• <code>/marking</code> — නිල ලකුණු දීමේ පටිපාටි (Marking Schemes Direct Jump)\n` +
+    `• <code>/model</code> — පළාත් හා අමාත්‍යාංශ ආදර්ශ ප්‍රශ්න පත්‍ර (Model Papers)\n` +
+    `• <code>/term</code> — 12 සහ 13 ශ්‍රේණි වාර විභාග ප්‍රශ්න පත්‍ර (Term Tests)\n` +
+    (isMapSubject ? `• <code>/map</code> — සිතියම් සලකුණු කිරීමේ පුහුණු Mini App & Quiz\n` : '') +
+    `\n` +
+    `🤖 <b>2. AI විෂය සටහන් හා විග්‍රහ (AI Tutor):</b>\n` +
     `• <code>/ai ${meta.aiExample || 'පාඩම පැහැදිලි කරන්න'}</code>\n` +
     `<i>(උසස් පෙළ ${meta.name} විෂය නිර්දේශයේ ඕනෑම සංකල්පයක් පැහැදිලි කරවා ගැනීමට.)</i>\n\n` +
-    `🧩 <b>2. සජීවී බහුවරණ තරඟ (Live Quiz Polls):</b>\n` +
+    `🧩 <b>3. සජීවී බහුවරණ තරඟ (Live Quiz Polls):</b>\n` +
     `• <code>/quiz ${meta.quizExample || '20 mcqs'}</code>\n` +
     `<i>(තත්පර 20 ක Timer එක සහිතව ගෲප් එකේ මිතුරන් සමඟ තරඟ කිරීමට.)</i>\n\n` +
-    `🎙️ <b>3. සිංහල ශ්‍රව්‍ය පාඩම (Sinhala Voice Note):</b>\n` +
+    `🎙️ <b>4. සිංහල ශ්‍රව්‍ය පාඩම (Sinhala Voice Note):</b>\n` +
     `• <code>/voice ${meta.voiceExample || meta.audioExample || 'පාඩම'}</code>\n` +
     `<i>(100% ස්වභාවික සිංහල කටහඬින් යුත් අධ්‍යයන සටහනක් ක්ෂණිකව ලබා ගැනීමට.)</i>\n\n` +
-    `🎧 <b>4. AI Deep Dive Audio Podcast:</b>\n` +
+    `🎧 <b>5. AI Deep Dive Audio Podcast:</b>\n` +
     `• <code>/audio ${meta.audioExample || 'විෂය කරුණු'}</code>\n` +
     `<i>(සම්පූර්ණ පාඩම ආවරණය වන දීර්ඝ AI Podcast එකක් ලබා ගැනීමට.)</i>\n\n` +
-    `📄 <b>5. පසුගිය හා ආදර්ශ විභාග ප්‍රශ්න පත්‍ර (Exam Papers):</b>\n` +
-    `• <code>/paper ${meta.paperExample || 'පසුගිය ප්‍රශ්න පත්‍රය'}</code>\n` +
-    `<i>(MCQ + රචනා + Marking Scheme සහිත සම්පූර්ණ PDF ලබා ගැනීමට.)</i>\n\n` +
     `📚 <b>6. Core Syllabus PDF සටහන්:</b>\n` +
     `• <code>/allnotes ${code}</code> (හෝ <code>/notes</code>)\n\n` +
     `🔒 <b>මතක තබා ගන්න:</b> මෙම Topic එක තුළ ක්‍රියාත්මක වන්නේ <b>${meta.name}</b> NotebookLM AI සටහන් පමණි.`;
 
-  const keyboard = {
-    inline_keyboard: [
-      [
-        { text: `🎯 ${meta.name} Quiz අරඹන්න`, callback_data: `help_act_quiz_${code}` },
-        { text: `🎙️ Voice Note ලබාගන්න`, callback_data: `help_act_voice_${code}` }
-      ],
-      [
-        { text: `📄 Exam Paper ලබාගන්න`, callback_data: `help_act_paper_${code}` },
-        { text: `⬅️ ප්‍රධාන Help මෙනුව`, callback_data: 'help_main' }
-      ]
+  const keyboardRows = [
+    [
+      { text: '📜 Past Papers', callback_data: `pp_sub_${code}` },
+      { text: '📝 Marking Schemes', callback_data: `ms_sub_${code}` }
+    ],
+    [
+      { text: '📑 Model Papers', callback_data: `mp_sub_${code}` },
+      { text: '🏫 Term Tests', callback_data: `tt_sub_${code}` }
     ]
-  };
+  ];
 
-  return { text, keyboard };
+  if (isMapSubject) {
+    keyboardRows.push([
+      { text: '🗺️ සිතියම් පුහුණුව (Map Hub)', callback_data: 'open_map_hub' },
+      { text: `🎯 ${meta.name} Quiz`, callback_data: `help_act_quiz_${code}` }
+    ]);
+  } else {
+    keyboardRows.push([
+      { text: `🎯 ${meta.name} Quiz`, callback_data: `help_act_quiz_${code}` },
+      { text: `🎙️ Voice Note`, callback_data: `help_act_voice_${code}` }
+    ]);
+  }
+
+  keyboardRows.push([
+    { text: '⬅️ ප්‍රධාන Help මෙනුව', callback_data: 'help_main' }
+  ]);
+
+  return { text, keyboard: { inline_keyboard: keyboardRows } };
 }
 
-// Command: /pin_guide, /pin_topic, /pin_subject, /pin (Pin Subject Instructions or Group Announcement)
-bot.onText(/\/(pin_guide|pin_topic|pin_subject|pin_all_topics|guide|features)(?:_([a-z0-9_]+))?(?:@\w+)?\s*(.*)/i, async (msg, match) => {
+// 11 Topic Threads Registry for Auto-Pinning Across the Entire Forum
+const FORUM_TOPIC_REGISTRY = [
+  { code: 'si', threadId: 4210, name: 'සිංහල' },
+  { code: 'bc', threadId: 4215, name: 'බෞද්ධ ශිෂ්ටාචාරය' },
+  { code: 'geo', threadId: 4216, name: 'භූගෝල විද්‍යාව' },
+  { code: 'pl', threadId: 4217, name: 'දේශපාලන විද්‍යාව' },
+  { code: 'hist', threadId: 4220, name: 'ඉතිහාසය' },
+  { code: 'bs', threadId: 4221, name: 'ව්‍යාපාර අධ්‍යයනය' },
+  { code: 'dr', threadId: 4222, name: 'නාට්‍ය හා රංග කලාව' },
+  { code: 'mu', threadId: 4223, name: 'සංගීතය' },
+  { code: 'dn', threadId: 4224, name: 'නැටුම්' },
+  { code: 'md', threadId: 4225, name: 'මාධ්‍ය අධ්‍යයනය' },
+  { code: 'agri', threadId: 5490, name: 'කෘෂි විද්‍යාව' }
+];
+
+// Command: /pin_guide, /pin_topic, /pin_subject, /pin_all_topics, /pin_all, /pin (Pin Subject Instructions or Group Announcement)
+bot.onText(/\/(pin_all_topics|pin_all|pin_guide|pin_topic|pin_subject|guide|features)(?:_([a-z0-9_]+))?(?:@\w+)?\s*(.*)/i, async (msg, match) => {
   if (!await enforceDirectAccessControl(msg)) return;
   const chatId = msg.chat.id;
   const isGroup = msg.chat.type === 'group' || msg.chat.type === 'supergroup';
   const { threadId, topicSubject } = getThreadContext(msg);
-  const rawArg = (match[2] || match[3] || '').trim();
-  const subCode = normalizeSubjectCode(rawArg) || topicSubject;
+  const cmd = (match[1] || '').toLowerCase();
+  const rawArg = (match[2] || match[3] || '').trim().toLowerCase();
 
   const replyOpts = {
     reply_to_message_id: msg.message_id,
@@ -74865,7 +74947,53 @@ bot.onText(/\/(pin_guide|pin_topic|pin_subject|pin_all_topics|guide|features)(?:
     return bot.sendMessage(chatId, '⛔ **මෙම විධානය භාවිතා කළ හැක්කේ Bot Admin ට පමණි.**', replyOpts).catch(() => { });
   }
 
-  // If inside a subject topic or specific subject requested -> Pin Subject Instruction!
+  // Action A: Pin to ALL 11 Forum Topics in sequence! (/pin_all_topics or /pin_all or /pin all)
+  if (cmd === 'pin_all_topics' || cmd === 'pin_all' || rawArg === 'all' || rawArg === 'topics') {
+    const statusNotice = await bot.sendMessage(chatId, '⏳ **සියලුම Forum Topics (11) වෙත නවතම Pinned Guides යවමින් සහ Pin කරමින් පවතී...**', replyOpts).catch(() => null);
+
+    let successCount = 0;
+    for (const t of FORUM_TOPIC_REGISTRY) {
+      try {
+        const guide = buildTopicPinnedInstruction(t.code);
+        const sentMsg = await bot.sendMessage(chatId, guide.text, {
+          parse_mode: 'HTML',
+          reply_markup: guide.keyboard,
+          message_thread_id: t.threadId
+        });
+        if (isGroup && sentMsg && sentMsg.message_id) {
+          await bot.pinChatMessage(chatId, sentMsg.message_id, { disable_notification: true }).catch(() => { });
+        }
+        successCount++;
+        await new Promise(r => setTimeout(r, 600)); // Rate-limit safety
+      } catch (err) {
+        console.error(`Error auto-pinning topic ${t.code} (${t.threadId}):`, err.message);
+      }
+    }
+
+    // Also send & pin Master Guide to General / Main Topic
+    try {
+      const masterGuide = buildMainHelpGuide();
+      const sentMaster = await bot.sendMessage(chatId, masterGuide.text, {
+        parse_mode: 'HTML',
+        reply_markup: masterGuide.keyboard
+      });
+      if (isGroup && sentMaster && sentMaster.message_id) {
+        await bot.pinChatMessage(chatId, sentMaster.message_id, { disable_notification: true }).catch(() => { });
+      }
+    } catch (err) {
+      console.error('Error auto-pinning master guide:', err.message);
+    }
+
+    const doneMsg = `✅ **සාර්ථකයි! Forum Topics ${successCount}/11 ක් සහ General Main Guide එක අලුත්ම Features (/term, /paper, /model, /map, /marking) සහිතව සාර්ථකව Pin කරන ලදී!** 📌🚀`;
+    if (statusNotice && statusNotice.message_id) {
+      return bot.editMessageText(doneMsg, { chat_id: chatId, message_id: statusNotice.message_id, parse_mode: 'Markdown' }).catch(() => { });
+    } else {
+      return bot.sendMessage(chatId, doneMsg, { parse_mode: 'Markdown', ...replyOpts }).catch(() => { });
+    }
+  }
+
+  // Action B: Specific Subject requested or currently inside a forum topic thread
+  const subCode = normalizeSubjectCode(rawArg) || topicSubject;
   if (subCode) {
     const guide = buildTopicPinnedInstruction(subCode);
     try {
@@ -74875,7 +75003,7 @@ bot.onText(/\/(pin_guide|pin_topic|pin_subject|pin_all_topics|guide|features)(?:
         ...(threadId ? { message_thread_id: threadId } : {})
       });
       if (isGroup && sentMsg && sentMsg.message_id) {
-        bot.pinChatMessage(chatId, sentMsg.message_id, { disable_notification: false }).catch(() => { });
+        await bot.pinChatMessage(chatId, sentMsg.message_id, { disable_notification: false }).catch(() => { });
       }
     } catch (e) {
       console.error('Error pinning subject guide:', e.message);
@@ -74883,7 +75011,7 @@ bot.onText(/\/(pin_guide|pin_topic|pin_subject|pin_all_topics|guide|features)(?:
     return;
   }
 
-  // Otherwise, pin the general master announcement
+  // Action C: General Master Announcement (General / Default)
   const masterGuide = buildMainHelpGuide();
   try {
     const sentMsg = await bot.sendMessage(chatId, masterGuide.text, {
@@ -74892,7 +75020,7 @@ bot.onText(/\/(pin_guide|pin_topic|pin_subject|pin_all_topics|guide|features)(?:
       ...(threadId ? { message_thread_id: threadId } : {})
     });
     if (isGroup && sentMsg && sentMsg.message_id) {
-      bot.pinChatMessage(chatId, sentMsg.message_id, { disable_notification: false }).catch(() => { });
+      await bot.pinChatMessage(chatId, sentMsg.message_id, { disable_notification: false }).catch(() => { });
     }
   } catch (e) {
     console.error('Error in /pin_guide master:', e.message);
